@@ -1,7 +1,7 @@
 {
-  "name": "platform-whatsapp",
+  "name": "platform-gupshup",
   "$schema": "../../node_modules/nx/schemas/project-schema.json",
-  "sourceRoot": "apps/platform-whatsapp/src",
+  "sourceRoot": "apps/platform-gupshup/src",
   "projectType": "application",
   "targets": {
     "build": {
@@ -11,12 +11,12 @@
       "options": {
         "target": "node",
         "compiler": "tsc",
-        "outputPath": "dist/apps/platform-whatsapp",
-        "main": "apps/platform-whatsapp/src/main.ts",
-        "tsConfig": "apps/platform-whatsapp/tsconfig.app.json",
-        "assets": ["apps/platform-whatsapp/src/assets"],
+        "outputPath": "dist/apps/platform-gupshup",
+        "main": "apps/platform-gupshup/src/main.ts",
+        "tsConfig": "apps/platform-gupshup/tsconfig.app.json",
+        "assets": ["apps/platform-gupshup/src/assets"],
         "isolatedConfig": true,
-        "webpackConfig": "apps/platform-whatsapp/webpack.config.js"
+        "webpackConfig": "apps/platform-gupshup/webpack.config.js"
       },
       "configurations": {
         "development": {},
@@ -27,14 +27,14 @@
       "executor": "@nrwl/js:node",
       "defaultConfiguration": "development",
       "options": {
-        "buildTarget": "platform-whatsapp:build"
+        "buildTarget": "platform-gupshup:build"
       },
       "configurations": {
         "development": {
-          "buildTarget": "platform-whatsapp:build:development"
+          "buildTarget": "platform-gupshup:build:development"
         },
         "production": {
-          "buildTarget": "platform-whatsapp:build:production"
+          "buildTarget": "platform-gupshup:build:production"
         }
       }
     },
@@ -42,14 +42,14 @@
       "executor": "@nrwl/linter:eslint",
       "outputs": ["{options.outputFile}"],
       "options": {
-        "lintFilePatterns": ["apps/platform-whatsapp/**/*.ts"]
+        "lintFilePatterns": ["apps/platform-gupshup/**/*.ts"]
       }
     },
     "test": {
       "executor": "@nrwl/jest:jest",
       "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
       "options": {
-        "jestConfig": "apps/platform-whatsapp/jest.config.ts",
+        "jestConfig": "apps/platform-gupshup/jest.config.ts",
         "passWithNoTests": true
       },
       "configurations": {
