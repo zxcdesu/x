@@ -10,18 +10,18 @@ export class UserController {
   }
 
   findOne() {
-    return this.userService.create();
+    return this.userService.remove();
   }
 
   findAll() {
-    return this.userService.create();
+    return this.userService.findAll();
   }
 
   update() {
-    return this.userService.create();
+    return this.userService.update();
   }
 
   remove() {
-    return this.userService.create();
+    return this.userService.remove();
   }
 }

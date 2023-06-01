@@ -10,18 +10,18 @@ export class MailingController {
   }
 
   findOne() {
-    return this.mailingService.create();
+    return this.mailingService.findOne();
   }
 
   findAll() {
-    return this.mailingService.create();
+    return this.mailingService.findAll();
   }
 
   update() {
-    return this.mailingService.create();
+    return this.mailingService.update();
   }
 
   remove() {
-    return this.mailingService.create();
+    return this.mailingService.remove();
   }
 }

@@ -10,18 +10,18 @@ export class IntegrationController {
   }
 
   findOne() {
-    return this.integrationService.create();
+    return this.integrationService.findOne();
   }
 
   findAll() {
-    return this.integrationService.create();
+    return this.integrationService.findAll();
   }
 
   update() {
-    return this.integrationService.create();
+    return this.integrationService.update();
   }
 
   remove() {
-    return this.integrationService.create();
+    return this.integrationService.remove();
   }
 }
