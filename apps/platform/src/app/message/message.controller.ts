@@ -10,18 +10,18 @@ export class MessageController {
   }
 
   findOne() {
-    return this.messageService.create();
+    return this.messageService.findOne();
   }
 
   findAll() {
-    return this.messageService.create();
+    return this.messageService.findAll();
   }
 
   update() {
-    return this.messageService.create();
+    return this.messageService.update();
   }
 
   remove() {
-    return this.messageService.create();
+    return this.messageService.remove();
   }
 }
