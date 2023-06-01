@@ -1,7 +1,7 @@
 {
-  "name": "platform-webchat",
+  "name": "platform-web",
   "$schema": "../../node_modules/nx/schemas/project-schema.json",
-  "sourceRoot": "apps/platform-webchat/src",
+  "sourceRoot": "apps/platform-web/src",
   "projectType": "application",
   "targets": {
     "build": {
@@ -11,12 +11,12 @@
       "options": {
         "target": "node",
         "compiler": "tsc",
-        "outputPath": "dist/apps/platform-webchat",
-        "main": "apps/platform-webchat/src/main.ts",
-        "tsConfig": "apps/platform-webchat/tsconfig.app.json",
-        "assets": ["apps/platform-webchat/src/assets"],
+        "outputPath": "dist/apps/platform-web",
+        "main": "apps/platform-web/src/main.ts",
+        "tsConfig": "apps/platform-web/tsconfig.app.json",
+        "assets": ["apps/platform-web/src/assets"],
         "isolatedConfig": true,
-        "webpackConfig": "apps/platform-webchat/webpack.config.js"
+        "webpackConfig": "apps/platform-web/webpack.config.js"
       },
       "configurations": {
         "development": {},
@@ -27,14 +27,14 @@
       "executor": "@nrwl/js:node",
       "defaultConfiguration": "development",
       "options": {
-        "buildTarget": "platform-webchat:build"
+        "buildTarget": "platform-web:build"
       },
       "configurations": {
         "development": {
-          "buildTarget": "platform-webchat:build:development"
+          "buildTarget": "platform-web:build:development"
         },
         "production": {
-          "buildTarget": "platform-webchat:build:production"
+          "buildTarget": "platform-web:build:production"
         }
       }
     },
@@ -42,14 +42,14 @@
       "executor": "@nrwl/linter:eslint",
       "outputs": ["{options.outputFile}"],
       "options": {
-        "lintFilePatterns": ["apps/platform-webchat/**/*.ts"]
+        "lintFilePatterns": ["apps/platform-web/**/*.ts"]
       }
     },
     "test": {
       "executor": "@nrwl/jest:jest",
       "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
       "options": {
-        "jestConfig": "apps/platform-webchat/jest.config.ts",
+        "jestConfig": "apps/platform-web/jest.config.ts",
         "passWithNoTests": true
       },
       "configurations": {

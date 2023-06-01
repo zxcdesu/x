@@ -1,11 +1,11 @@
 /* eslint-disable */
 export default {
-  displayName: 'platform-webchat',
+  displayName: 'platform-web',
   preset: '../../jest.preset.js',
   testEnvironment: 'node',
   transform: {
     '^.+\\.[tj]s$': ['ts-jest', { tsconfig: '<rootDir>/tsconfig.spec.json' }],
   },
   moduleFileExtensions: ['ts', 'js', 'html'],
-  coverageDirectory: '../../coverage/apps/platform-webchat',
+  coverageDirectory: '../../coverage/apps/platform-web',
 };
