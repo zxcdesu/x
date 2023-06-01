@@ -1,0 +1,64 @@
+{
+  "name": "platform-instagram",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "apps/platform-instagram/src",
+  "projectType": "application",
+  "targets": {
+    "build": {
+      "executor": "@nrwl/webpack:webpack",
+      "outputs": ["{options.outputPath}"],
+      "defaultConfiguration": "production",
+      "options": {
+        "target": "node",
+        "compiler": "tsc",
+        "outputPath": "dist/apps/platform-instagram",
+        "main": "apps/platform-instagram/src/main.ts",
+        "tsConfig": "apps/platform-instagram/tsconfig.app.json",
+        "assets": ["apps/platform-instagram/src/assets"],
+        "isolatedConfig": true,
+        "webpackConfig": "apps/platform-instagram/webpack.config.js"
+      },
+      "configurations": {
+        "development": {},
+        "production": {}
+      }
+    },
+    "serve": {
+      "executor": "@nrwl/js:node",
+      "defaultConfiguration": "development",
+      "options": {
+        "buildTarget": "platform-instagram:build"
+      },
+      "configurations": {
+        "development": {
+          "buildTarget": "platform-instagram:build:development"
+        },
+        "production": {
+          "buildTarget": "platform-instagram:build:production"
+        }
+      }
+    },
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": ["apps/platform-instagram/**/*.ts"]
+      }
+    },
+    "test": {
+      "executor": "@nrwl/jest:jest",
+      "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
+      "options": {
+        "jestConfig": "apps/platform-instagram/jest.config.ts",
+        "passWithNoTests": true
+      },
+      "configurations": {
+        "ci": {
+          "ci": true,
+          "codeCoverage": true
+        }
+      }
+    }
+  },
+  "tags": []
+}
