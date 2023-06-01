@@ -14,7 +14,9 @@
     "skipLibCheck": true,
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
-    "paths": {}
+    "paths": {
+      "@platform/platform-type": ["libs/platform-type/src/index.ts"]
+    }
   },
   "exclude": ["node_modules", "tmp"]
 }
