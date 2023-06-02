@@ -1,0 +1,60 @@
+version: 3.9
+services:
+  platform:
+    build:
+      context: ./
+    command: npx nx run-many --parallel --all --target=serve
+    volumes:
+      - .:/usr/src/app
+      - /usr/src/app/node_modules
+    ports:
+      - 3000:3000
+    environment:
+      - PLATFORM=docker
+    networks:
+      - default
+    depends_on:
+      - postgres
+      - rabbitmq
+      - redis
+      - reverse-proxy
+
+  postgres:
+    image: postgres:15.2
+    environment:
+      POSTGRES_USER: root
+      POSTGRES_PASSWORD: pass
+    ports:
+      - 5432:5432
+
+  adminer:
+    image: adminer:latest
+    ports:
+      - 8080:8080
+    depends_on:
+      - postgres
+
+  rabbitmq:
+    image: rabbitmq:3.11.10-management
+    environment:
+      RABBITMQ_DEFAULT_USER: root
+      RABBITMQ_DEFAULT_PASS: pass
+    ports:
+      - 15672:15672
+    networks:
+      - default
+
+  redis:
+    image: redis:7.0
+    ports:
+      - 6379:6379
+
+  reverse-proxy:
+    image: cloudflare/cloudflared:latest
+    entrypoint: 'cloudflared tunnel --no-autoupdate run'
+    env_file:
+      - ./env/reverse-proxy.env
+
+networks:
+  default:
+  mongodb:
