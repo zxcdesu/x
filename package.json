@@ -18,7 +18,6 @@
     "@nx-tools/container-metadata": "5.0.0",
     "@nx-tools/nx-container": "5.0.1",
     "@nx-tools/nx-prisma": "5.0.1",
-    "@prisma/client": "4.15.0",
     "apollo-server-express": "3.12.0",
     "axios": "1.4.0",
     "class-transformer": "0.5.1",
