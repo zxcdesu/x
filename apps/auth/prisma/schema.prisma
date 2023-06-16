@@ -1,13 +1,53 @@
 generator client {
-  provider        = "prisma-client-js"
+  provider = "prisma-client-js"
 }
 
 datasource db {
-  provider = "sqlite"
-  url      = "file:./db.sql"
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
 }
 
-model Todo {
-  id String @id @default(cuid())
-  @@map("todos")
+model User {
+  id             Int           @id @default(autoincrement())
+  name           String
+  imageUrl       String?
+  email          String        @unique
+  emailConfirmed Boolean       @default(false)
+  phone          String?       @unique
+  phoneConfirmed Boolean       @default(false)
+  password       String
+  projects       ProjectUser[]
+  createdAt      DateTime      @default(now())
+  updatedAt      DateTime      @updatedAt
+}
+
+model Project {
+  id          Int           @id @default(autoincrement())
+  name        String
+  description String        @default("")
+  imageUrl    String?
+  users       ProjectUser[]
+  invites     Invite[]
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+}
+
+model Invite {
+  email     String
+  projectId Int
+  project   Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
+
+  @@id([projectId, email])
+  @@index([email])
+}
+
+model ProjectUser {
+  userId    Int
+  user      User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  projectId Int
+  project   Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
+
+  @@unique([projectId, userId])
+  @@index([userId])
+  @@index([projectId])
 }

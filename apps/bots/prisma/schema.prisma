@@ -1,13 +1,41 @@
 generator client {
-  provider        = "prisma-client-js"
+  provider = "prisma-client-js"
 }
 
 datasource db {
-  provider = "sqlite"
-  url      = "file:./db.sql"
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
 }
 
-model Todo {
-  id String @id @default(cuid())
-  @@map("todos")
+model Bot {
+  id          Int              @id @default(autoincrement())
+  projectId   Int
+  name        String
+  description String           @default("")
+  imageUrl    String?
+  version     String           @default("1.0.0")
+  flow        Json
+  containerId String?
+  createdAt   DateTime         @default(now())
+  updatedAt   DateTime         @updatedAt
+
+  @@unique([projectId, id])
+  @@index([projectId])
+}
+
+enum Category {
+  Other
+}
+
+model ChatbotTemplate {
+  id          Int      @id @default(autoincrement())
+  name        String
+  description String
+  imageUrl    String
+  category    Category @default(Other)
+  flow        Json
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([category])
 }

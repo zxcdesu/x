@@ -1,13 +1,22 @@
 generator client {
-  provider        = "prisma-client-js"
+  provider = "prisma-client-js"
 }
 
 datasource db {
-  provider = "sqlite"
-  url      = "file:./db.sql"
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
 }
 
-model Todo {
-  id String @id @default(cuid())
-  @@map("todos")
+model Wallet {
+  projectId      Int           @id
+  country        String
+  currency       String        @default("USD")
+  currentBalance Decimal       @default(0) @db.Decimal(15, 6)
+  subscription   Subscription?
+}
+
+model Subscription {
+  projectId Int      @id
+  wallet    Wallet   @relation(fields: [projectId], references: [projectId], onDelete: Cascade)
+  expiresAt DateTime
 }

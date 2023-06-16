@@ -1,13 +1,252 @@
 generator client {
-  provider        = "prisma-client-js"
+  provider = "prisma-client-js"
 }
 
 datasource db {
-  provider = "sqlite"
-  url      = "file:./db.sql"
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
 }
 
-model Todo {
-  id String @id @default(cuid())
-  @@map("todos")
+enum ChannelType {
+  Gupshup
+  Instagram
+  Telegram
+  Viber
+  Vkontakte
+  Web
+}
+
+enum ChannelStatus {
+  Connected
+  Failed
+}
+
+model Channel {
+  id           Int           @id @default(autoincrement())
+  projectId    Int
+  type         ChannelType
+  name         String
+  accountId    String
+  token        Json
+  status       ChannelStatus
+  failedReason String?
+  approval     Approval[]
+  chats        Chat[]
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+
+  @@unique([projectId, id])
+  @@index([projectId])
+}
+
+model Chat {
+  id          Int       @id @default(autoincrement())
+  projectId   Int
+  channelId   Int
+  channel     Channel   @relation(fields: [channelId], references: [id], onDelete: Cascade)
+  contactId   Int
+  contact     Contact   @relation(fields: [contactId], references: [id], onDelete: Cascade)
+  accountId   String
+  isNew       Boolean   @default(true)
+  unreadCount Int       @default(0)
+  messages    Message[]
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  @@unique([projectId, channelId, accountId])
+}
+
+enum MessageStatus {
+  Submitted
+  Delivered
+  Read
+  Failed
+}
+
+enum MessageFrom {
+  User
+  Bot
+  Customer
+}
+
+model Message {
+  id           Int           @id @default(autoincrement())
+  chatId       Int
+  chat         Chat          @relation(fields: [chatId], references: [id], onDelete: Cascade)
+  externalId   String
+  status       MessageStatus
+  failedReason String?
+  from         MessageFrom
+  content      Content[]
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+}
+
+model Content {
+  id          Int          @id @default(autoincrement())
+  messageId   Int
+  message     Message      @relation(fields: [messageId], references: [id], onDelete: Cascade)
+  text        String?
+  attachments Attachment[]
+  buttons     Json         @default("[]")
+}
+
+enum AttachmentType {
+  Audio
+  Document
+  Image
+  Video
+}
+
+model Attachment {
+  id        Int            @id @default(autoincrement())
+  contentId Int
+  content   Content        @relation(fields: [contentId], references: [id], onDelete: Cascade)
+  url       String
+  type      AttachmentType
+  name      String?
+
+  @@index([type])
+}
+
+model Hsm {
+  id          Int        @id @default(autoincrement())
+  projectId   Int
+  code        String
+  text        String
+  attachments Json       @default("[]")
+  buttons     Json       @default("[]")
+  approval    Approval[]
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+
+  @@unique([projectId, id])
+  @@unique([projectId, code])
+  @@index([projectId])
+}
+
+enum ApprovalStatus {
+  Submitted
+  Approved
+  Rejected
+}
+
+model Approval {
+  hsmId          Int
+  hsm            Hsm            @relation(fields: [hsmId], references: [id], onDelete: Cascade)
+  channelId      Int
+  channel        Channel        @relation(fields: [channelId], references: [id], onDelete: Cascade)
+  status         ApprovalStatus
+  rejectedReason String?
+  externalId     String?
+
+  @@id([channelId, hsmId])
+}
+
+enum AssigneeType {
+  User
+  Bot
+}
+
+model AssignedTo {
+  contactId Int          @id
+  contact   Contact      @relation(fields: [contactId], references: [id], onDelete: Cascade)
+  id        Int
+  type      AssigneeType @default(User)
+
+  @@unique([contactId, id])
+  @@index([id])
+  @@index([type])
+}
+
+enum ContactStatus {
+  Open
+  Closed
+}
+
+model Contact {
+  id           Int           @id @default(autoincrement())
+  projectId    Int
+  name         String        @default("")
+  description  String        @default("")
+  imageUrl     String?
+  assignedTo   AssignedTo?
+  priority     Int           @default(3)
+  status       ContactStatus
+  closedReason String?
+  chats        Chat[]
+  tags         ContactTag[]
+  customFields CustomField[]
+  history      History[]
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime?     @updatedAt
+  deletedAt    DateTime?
+
+  @@unique([projectId, id])
+  @@index([projectId])
+  @@index([priority])
+  @@index([status])
+  @@index([createdAt])
+  @@index([updatedAt])
+}
+
+enum HistoryEventType {
+  Create
+  Assign
+  Return
+  Close
+  Update
+  Remove
+}
+
+model History {
+  id        Int              @id @default(autoincrement())
+  contactId Int
+  contact   Contact          @relation(fields: [contactId], references: [id], onDelete: Cascade)
+  eventType HistoryEventType
+  payload   Json?
+  createdAt DateTime         @default(now())
+
+  @@index([contactId])
+  @@index([eventType])
+  @@index([createdAt])
+}
+
+model Tag {
+  id          Int          @id @default(autoincrement())
+  projectId   Int
+  name        String
+  description String       @default("")
+  color       String
+  parentId    Int?
+  parent      Tag?         @relation("parentAndChildren", fields: [parentId], references: [id], onDelete: SetNull)
+  children    Tag[]        @relation("parentAndChildren")
+  contacts    ContactTag[]
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+
+  @@unique([projectId, id])
+  @@unique([projectId, name])
+  @@index([projectId])
+}
+
+model ContactTag {
+  tagId     Int
+  tag       Tag     @relation(fields: [tagId], references: [id], onDelete: Cascade)
+  contactId Int
+  contact   Contact @relation(fields: [contactId], references: [id], onDelete: Cascade)
+
+  @@id([tagId, contactId])
+  @@index([tagId])
+  @@index([contactId])
+}
+
+model CustomField {
+  id        Int     @id @default(autoincrement())
+  contactId Int
+  contact   Contact @relation(fields: [contactId], references: [id], onDelete: Cascade)
+  name      String
+  value     String?
+
+  @@index([contactId])
 }

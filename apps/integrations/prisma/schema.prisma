@@ -1,13 +1,37 @@
 generator client {
-  provider        = "prisma-client-js"
+  provider = "prisma-client-js"
 }
 
 datasource db {
-  provider = "sqlite"
-  url      = "file:./db.sql"
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
 }
 
-model Todo {
-  id String @id @default(cuid())
-  @@map("todos")
+enum IntegrationType {
+  Amocrm
+  Bitrix
+}
+
+model Integration {
+  id        String          @id @default(uuid()) @db.Uuid
+  projectId Int
+  type      IntegrationType
+  accountId String
+  token     Json            @default("{}")
+
+  @@unique([projectId, id])
+}
+
+enum WebhookEventType {
+  ChatEvent
+  MessageEvent
+}
+
+model Webhook {
+  id        Int              @id @default(autoincrement())
+  projectId Int
+  eventType WebhookEventType
+  url       String
+
+  @@unique([projectId, id])
 }
