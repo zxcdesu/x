@@ -1,6 +1,7 @@
 import { AmqpConnection } from '@golevelup/nestjs-rabbitmq';
 import { UseGuards } from '@nestjs/common';
 import { Mutation, Query, Resolver } from '@nestjs/graphql';
+import { ApolloError } from 'apollo-server-express';
 import { BearerAuthDecorator } from '../auth/bearer-auth.decorator';
 import { BearerAuthGuard } from '../auth/bearer-auth.guard';
 import { BearerAuth } from '../auth/bearer-auth.interface';
@@ -10,11 +11,18 @@ export class UserResolver {
   constructor(private readonly amqpConnection: AmqpConnection) {}
 
   @Mutation(() => Boolean)
-  createUser() {
-    return this.amqpConnection.request({
+  async createUser() {
+    const { error, payload } = await this.amqpConnection.request<{
+      error: any;
+      payload: any;
+    }>({
       exchange: 'auth',
       routingKey: 'createUser',
     });
+    if (error) {
+      throw new ApolloError(error.message, undefined, error);
+    }
+    return payload;
   }
 
   @UseGuards(BearerAuthGuard)

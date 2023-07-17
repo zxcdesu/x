@@ -11,7 +11,7 @@ export const RabbitRPC: typeof GolevelupRabbitRPC = (config) =>
     ) => {
       const { replyTo, correlationId } = message.properties;
       if (replyTo) {
-        channel.publish('', replyTo, Buffer.from(JSON.stringify(error)), {
+        channel.publish('', replyTo, Buffer.from(JSON.stringify({ error })), {
           correlationId,
         });
         channel.ack(message);
