@@ -7,3 +7,10 @@ COPY package*.json ./
 RUN npm ci
 
 COPY . .
+
+ARG PRISMA
+RUN if [ -n "$PRISMA" ]; \
+    then \
+      rm -rf apps/${PRISMA}/prisma/generated && \
+      npx nx prisma-generate ${PRISMA}; \
+    fi

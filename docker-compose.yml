@@ -3,12 +3,17 @@ services:
   admin:
     build:
       context: ./
+      args:
+        PRISMA: admin
     command: npx nx run admin:serve
     volumes:
       - .:/usr/src/app
+      - /usr/src/app/admin/prisma/generated
       - /usr/src/app/node_modules
     environment:
       - PLATFORM=docker
+      - DATABASE_URL=postgres://root:pass@postgres:5432
+      - BROKER_URL=amqp://root:pass@rabbitmq:5672
     networks:
       - default
     depends_on:
@@ -20,12 +25,17 @@ services:
   auth:
     build:
       context: ./
+      args:
+        PRISMA: auth
     command: npx nx run auth:serve
     volumes:
       - .:/usr/src/app
+      - /usr/src/app/apps/auth/prisma/generated
       - /usr/src/app/node_modules
     environment:
       - PLATFORM=docker
+      - DATABASE_URL=postgres://root:pass@postgres:5432
+      - BROKER_URL=amqp://root:pass@rabbitmq:5672
     networks:
       - default
     depends_on:
@@ -45,6 +55,7 @@ services:
       - 3000:3000
     environment:
       - PLATFORM=docker
+      - BROKER_URL=amqp://root:pass@rabbitmq:5672
     networks:
       - default
     depends_on:
@@ -56,12 +67,17 @@ services:
   billing:
     build:
       context: ./
+      args:
+        PRISMA: billing
     command: npx nx run billing:serve
     volumes:
       - .:/usr/src/app
+      - /usr/src/app/billing/prisma/generated
       - /usr/src/app/node_modules
     environment:
       - PLATFORM=docker
+      - DATABASE_URL=postgres://root:pass@postgres:5432
+      - BROKER_URL=amqp://root:pass@rabbitmq:5672
     networks:
       - default
     depends_on:
@@ -73,12 +89,17 @@ services:
   bots:
     build:
       context: ./
+      args:
+        PRISMA: bots
     command: npx nx run bots:serve
     volumes:
       - .:/usr/src/app
+      - /usr/src/app/bots/prisma/generated
       - /usr/src/app/node_modules
     environment:
       - PLATFORM=docker
+      - DATABASE_URL=postgres://root:pass@postgres:5432
+      - BROKER_URL=amqp://root:pass@rabbitmq:5672
     networks:
       - default
     depends_on:
@@ -96,6 +117,7 @@ services:
       - /usr/src/app/node_modules
     environment:
       - PLATFORM=docker
+      - BROKER_URL=amqp://root:pass@rabbitmq:5672
     networks:
       - default
     depends_on:
@@ -115,6 +137,7 @@ services:
       - 3080:3000
     environment:
       - PLATFORM=docker
+      - BROKER_URL=amqp://root:pass@rabbitmq:5672
     networks:
       - default
     depends_on:
@@ -126,12 +149,17 @@ services:
   integrations:
     build:
       context: ./
+      args:
+        PRISMA: integrations
     command: npx nx run integrations:serve
     volumes:
       - .:/usr/src/app
+      - /usr/src/app/integrations/prisma/generated
       - /usr/src/app/node_modules
     environment:
       - PLATFORM=docker
+      - DATABASE_URL=postgres://root:pass@postgres:5432
+      - BROKER_URL=amqp://root:pass@rabbitmq:5672
     networks:
       - default
     depends_on:
@@ -143,12 +171,17 @@ services:
   mailings:
     build:
       context: ./
+      args:
+        PRISMA: mailings
     command: npx nx run mailings:serve
     volumes:
       - .:/usr/src/app
+      - /usr/src/app/mailings/prisma/generated
       - /usr/src/app/node_modules
     environment:
       - PLATFORM=docker
+      - DATABASE_URL=postgres://root:pass@postgres:5432
+      - BROKER_URL=amqp://root:pass@rabbitmq:5672
     networks:
       - default
     depends_on:
@@ -160,12 +193,17 @@ services:
   platform:
     build:
       context: ./
+      args:
+        PRISMA: platform
     command: npx nx run platform:serve
     volumes:
       - .:/usr/src/app
+      - /usr/src/app/platform/prisma/generated
       - /usr/src/app/node_modules
     environment:
       - PLATFORM=docker
+      - DATABASE_URL=postgres://root:pass@postgres:5432
+      - BROKER_URL=amqp://root:pass@rabbitmq:5672
     networks:
       - default
     depends_on:
@@ -183,6 +221,7 @@ services:
       - /usr/src/app/node_modules
     environment:
       - PLATFORM=docker
+      - BROKER_URL=amqp://root:pass@rabbitmq:5672
     networks:
       - default
     depends_on:
@@ -200,6 +239,7 @@ services:
       - /usr/src/app/node_modules
     environment:
       - PLATFORM=docker
+      - BROKER_URL=amqp://root:pass@rabbitmq:5672
     networks:
       - default
     depends_on:
@@ -217,6 +257,7 @@ services:
       - /usr/src/app/node_modules
     environment:
       - PLATFORM=docker
+      - BROKER_URL=amqp://root:pass@rabbitmq:5672
     networks:
       - default
     depends_on:
@@ -234,6 +275,7 @@ services:
       - /usr/src/app/node_modules
     environment:
       - PLATFORM=docker
+      - BROKER_URL=amqp://root:pass@rabbitmq:5672
     networks:
       - default
     depends_on:
@@ -251,6 +293,7 @@ services:
       - /usr/src/app/node_modules
     environment:
       - PLATFORM=docker
+      - BROKER_URL=amqp://root:pass@rabbitmq:5672
     networks:
       - default
     depends_on:
@@ -268,6 +311,7 @@ services:
       - /usr/src/app/node_modules
     environment:
       - PLATFORM=docker
+      - BROKER_URL=amqp://root:pass@rabbitmq:5672
     networks:
       - default
     depends_on:
@@ -314,4 +358,3 @@ services:
 
 networks:
   default:
-  mongodb:
