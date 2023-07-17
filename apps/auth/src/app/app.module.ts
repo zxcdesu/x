@@ -1,8 +1,8 @@
 import { RabbitMQModule } from '@golevelup/nestjs-rabbitmq';
 import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
-import { PrismaService } from 'apps/auth/prisma/prisma.service';
 import joi from 'joi';
+import { PrismaService } from '../../prisma/prisma.service';
 import { ProjectController } from './project/project.controller';
 import { ProjectService } from './project/project.service';
 import { UserController } from './user/user.controller';
@@ -30,7 +30,7 @@ import { UserService } from './user/user.service';
           },
         ],
         connectionInitOptions: {
-          wait: true,
+          wait: false,
         },
       }),
     }),

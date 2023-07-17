@@ -1,10 +1,7 @@
 import { RabbitMQModule } from '@golevelup/nestjs-rabbitmq';
-import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
 import { Module } from '@nestjs/common';
-import { ConfigModule } from '@nestjs/config';
-import { GraphQLModule } from '@nestjs/graphql';
-import { PassportModule } from '@nestjs/passport';
-import Joi from 'joi';
+import { ConfigModule, ConfigService } from '@nestjs/config';
+import joi from 'joi';
 import { BearerAuthStrategy } from './auth/bearer-auth.strategy';
 import { BotTemplateResolver } from './bot-template/bot-template.resolver';
 import { BotResolver } from './bot/bot.resolver';
@@ -24,28 +21,27 @@ import { WebhookResolver } from './webhook/webhook.resolver';
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
-      validationSchema: Joi.object({
-        PORT: Joi.number().port().default(3000),
+      validationSchema: joi.object({
+        BROKER_URL: joi.string().uri().required(),
       }),
     }),
-    RabbitMQModule.forRoot(RabbitMQModule, {
-      exchanges: [
-        {
-          name: 'backend',
-          type: 'topic',
+    RabbitMQModule.forRootAsync(RabbitMQModule, {
+      imports: [ConfigModule],
+      inject: [ConfigService],
+      useFactory: (configService: ConfigService) => ({
+        enableControllerDiscovery: true,
+        uri: configService.get<string>('BROKER_URL'),
+        exchanges: [
+          {
+            name: 'backend',
+            type: 'topic',
+          },
+        ],
+        connectionInitOptions: {
+          wait: false,
         },
-      ],
-      uri: 'amqp://localhost:5672',
-      connectionInitOptions: {
-        wait: false,
-      },
+      }),
     }),
-    GraphQLModule.forRoot<ApolloDriverConfig>({
-      driver: ApolloDriver,
-      autoSchemaFile: true,
-      playground: true,
-    }),
-    PassportModule,
   ],
   controllers: [],
   providers: [
