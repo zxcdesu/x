@@ -3,7 +3,9 @@ import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { GraphQLModule } from '@nestjs/graphql';
+import { PassportModule } from '@nestjs/passport';
 import Joi from 'joi';
+import { BearerAuthStrategy } from './auth/bearer-auth.strategy';
 import { BotTemplateResolver } from './bot-template/bot-template.resolver';
 import { BotResolver } from './bot/bot.resolver';
 import { ChannelResolver } from './channel/channel.resolver';
@@ -43,9 +45,11 @@ import { WebhookResolver } from './webhook/webhook.resolver';
       autoSchemaFile: true,
       playground: true,
     }),
+    PassportModule,
   ],
   controllers: [],
   providers: [
+    BearerAuthStrategy,
     BotResolver,
     BotTemplateResolver,
     ChannelResolver,
