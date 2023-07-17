@@ -8,7 +8,6 @@ export class UserController {
 
   @RabbitRPC({
     routingKey: 'createUser',
-    exchange: 'auth',
   })
   create() {
     return this.userService.create();
