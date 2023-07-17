@@ -100,24 +100,6 @@
       "options": {
         "schema": "apps/platform/prisma/schema.prisma"
       }
-    },
-    "container": {
-      "executor": "@nx-tools/nx-container:build",
-      "dependsOn": ["build"],
-      "options": {
-        "engine": "docker",
-        "metadata": {
-          "images": ["platform/platform"],
-          "load": true,
-          "tags": [
-            "type=schedule",
-            "type=ref,event=branch",
-            "type=ref,event=tag",
-            "type=ref,event=pr",
-            "type=sha,prefix=sha-"
-          ]
-        }
-      }
     }
   },
   "tags": []

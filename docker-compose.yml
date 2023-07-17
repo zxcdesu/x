@@ -1,14 +1,271 @@
-version: 3.9
+version: '3.9'
 services:
-  platform:
+  admin:
     build:
       context: ./
-    command: npx nx run-many --parallel --all --target=serve
+    command: npx nx run admin:serve
+    volumes:
+      - .:/usr/src/app
+      - /usr/src/app/node_modules
+    environment:
+      - PLATFORM=docker
+    networks:
+      - default
+    depends_on:
+      - postgres
+      - rabbitmq
+      - redis
+      - reverse-proxy
+
+  auth:
+    build:
+      context: ./
+    command: npx nx run auth:serve
+    volumes:
+      - .:/usr/src/app
+      - /usr/src/app/node_modules
+    environment:
+      - PLATFORM=docker
+    networks:
+      - default
+    depends_on:
+      - postgres
+      - rabbitmq
+      - redis
+      - reverse-proxy
+
+  backend:
+    build:
+      context: ./
+    command: npx nx run backend:serve
     volumes:
       - .:/usr/src/app
       - /usr/src/app/node_modules
     ports:
       - 3000:3000
+    environment:
+      - PLATFORM=docker
+    networks:
+      - default
+    depends_on:
+      - postgres
+      - rabbitmq
+      - redis
+      - reverse-proxy
+
+  billing:
+    build:
+      context: ./
+    command: npx nx run billing:serve
+    volumes:
+      - .:/usr/src/app
+      - /usr/src/app/node_modules
+    environment:
+      - PLATFORM=docker
+    networks:
+      - default
+    depends_on:
+      - postgres
+      - rabbitmq
+      - redis
+      - reverse-proxy
+
+  bots:
+    build:
+      context: ./
+    command: npx nx run bots:serve
+    volumes:
+      - .:/usr/src/app
+      - /usr/src/app/node_modules
+    environment:
+      - PLATFORM=docker
+    networks:
+      - default
+    depends_on:
+      - postgres
+      - rabbitmq
+      - redis
+      - reverse-proxy
+
+  bots-container:
+    build:
+      context: ./
+    command: npx nx run bots-container:serve
+    volumes:
+      - .:/usr/src/app
+      - /usr/src/app/node_modules
+    environment:
+      - PLATFORM=docker
+    networks:
+      - default
+    depends_on:
+      - postgres
+      - rabbitmq
+      - redis
+      - reverse-proxy
+
+  gateway:
+    build:
+      context: ./
+    command: npx nx run gateway:serve
+    volumes:
+      - .:/usr/src/app
+      - /usr/src/app/node_modules
+    ports:
+      - 3080:3000
+    environment:
+      - PLATFORM=docker
+    networks:
+      - default
+    depends_on:
+      - postgres
+      - rabbitmq
+      - redis
+      - reverse-proxy
+
+  integrations:
+    build:
+      context: ./
+    command: npx nx run integrations:serve
+    volumes:
+      - .:/usr/src/app
+      - /usr/src/app/node_modules
+    environment:
+      - PLATFORM=docker
+    networks:
+      - default
+    depends_on:
+      - postgres
+      - rabbitmq
+      - redis
+      - reverse-proxy
+
+  mailings:
+    build:
+      context: ./
+    command: npx nx run mailings:serve
+    volumes:
+      - .:/usr/src/app
+      - /usr/src/app/node_modules
+    environment:
+      - PLATFORM=docker
+    networks:
+      - default
+    depends_on:
+      - postgres
+      - rabbitmq
+      - redis
+      - reverse-proxy
+
+  platform:
+    build:
+      context: ./
+    command: npx nx run platform:serve
+    volumes:
+      - .:/usr/src/app
+      - /usr/src/app/node_modules
+    environment:
+      - PLATFORM=docker
+    networks:
+      - default
+    depends_on:
+      - postgres
+      - rabbitmq
+      - redis
+      - reverse-proxy
+
+  platform-gupshup:
+    build:
+      context: ./
+    command: npx nx run platform-gupshup:serve
+    volumes:
+      - .:/usr/src/app
+      - /usr/src/app/node_modules
+    environment:
+      - PLATFORM=docker
+    networks:
+      - default
+    depends_on:
+      - postgres
+      - rabbitmq
+      - redis
+      - reverse-proxy
+
+  platform-instagram:
+    build:
+      context: ./
+    command: npx nx run platform-instagram:serve
+    volumes:
+      - .:/usr/src/app
+      - /usr/src/app/node_modules
+    environment:
+      - PLATFORM=docker
+    networks:
+      - default
+    depends_on:
+      - postgres
+      - rabbitmq
+      - redis
+      - reverse-proxy
+
+  platform-telegram:
+    build:
+      context: ./
+    command: npx nx run platform-telegram:serve
+    volumes:
+      - .:/usr/src/app
+      - /usr/src/app/node_modules
+    environment:
+      - PLATFORM=docker
+    networks:
+      - default
+    depends_on:
+      - postgres
+      - rabbitmq
+      - redis
+      - reverse-proxy
+
+  platform-viber:
+    build:
+      context: ./
+    command: npx nx run platform-viber:serve
+    volumes:
+      - .:/usr/src/app
+      - /usr/src/app/node_modules
+    environment:
+      - PLATFORM=docker
+    networks:
+      - default
+    depends_on:
+      - postgres
+      - rabbitmq
+      - redis
+      - reverse-proxy
+
+  platform-vkontakte:
+    build:
+      context: ./
+    command: npx nx run platform-vkontakte:serve
+    volumes:
+      - .:/usr/src/app
+      - /usr/src/app/node_modules
+    environment:
+      - PLATFORM=docker
+    networks:
+      - default
+    depends_on:
+      - postgres
+      - rabbitmq
+      - redis
+      - reverse-proxy
+
+  platform-web:
+    build:
+      context: ./
+    command: npx nx run platform-web:serve
+    volumes:
+      - .:/usr/src/app
+      - /usr/src/app/node_modules
     environment:
       - PLATFORM=docker
     networks:
