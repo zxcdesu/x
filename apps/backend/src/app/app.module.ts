@@ -1,6 +1,9 @@
 import { RabbitMQModule } from '@golevelup/nestjs-rabbitmq';
+import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
 import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
+import { GraphQLModule } from '@nestjs/graphql';
+import { PassportModule } from '@nestjs/passport';
 import joi from 'joi';
 import { BearerAuthStrategy } from './auth/bearer-auth.strategy';
 import { BotTemplateResolver } from './bot-template/bot-template.resolver';
@@ -23,6 +26,7 @@ import { WebhookResolver } from './webhook/webhook.resolver';
       isGlobal: true,
       validationSchema: joi.object({
         BROKER_URL: joi.string().uri().required(),
+        PORT: joi.number().port().default(3000),
       }),
     }),
     RabbitMQModule.forRootAsync(RabbitMQModule, {
@@ -42,6 +46,12 @@ import { WebhookResolver } from './webhook/webhook.resolver';
         },
       }),
     }),
+    GraphQLModule.forRoot<ApolloDriverConfig>({
+      driver: ApolloDriver,
+      autoSchemaFile: true,
+      playground: true,
+    }),
+    PassportModule,
   ],
   controllers: [],
   providers: [

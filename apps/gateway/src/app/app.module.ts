@@ -9,6 +9,7 @@ import joi from 'joi';
       isGlobal: true,
       validationSchema: joi.object({
         BROKER_URL: joi.string().uri().required(),
+        PORT: joi.number().port().default(3000),
       }),
     }),
     RabbitMQModule.forRootAsync(RabbitMQModule, {
