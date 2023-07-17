@@ -1,4 +1,5 @@
 import { Module } from '@nestjs/common';
+import { PrismaService } from 'apps/platform/prisma/prisma.service';
 import { ChannelController } from './channel/channel.controller';
 import { ChannelService } from './channel/channel.service';
 import { ChatController } from './chat/chat.controller';
@@ -16,6 +17,12 @@ import { MessageService } from './message/message.service';
     ContactController,
     MessageController,
   ],
-  providers: [ChannelService, ChatService, ContactService, MessageService],
+  providers: [
+    PrismaService,
+    ChannelService,
+    ChatService,
+    ContactService,
+    MessageService,
+  ],
 })
 export class AppModule {}
