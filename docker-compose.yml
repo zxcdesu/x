@@ -8,10 +8,9 @@ services:
     command: npx nx run admin:serve
     volumes:
       - .:/usr/src/app
-      - /usr/src/app/admin/prisma/generated
+      - /usr/src/app/apps/admin/prisma/generated
       - /usr/src/app/node_modules
     environment:
-      - PLATFORM=docker
       - DATABASE_URL=postgres://root:pass@postgres:5432
       - BROKER_URL=amqp://root:pass@rabbitmq:5672
     networks:
@@ -20,7 +19,6 @@ services:
       - postgres
       - rabbitmq
       - redis
-      - reverse-proxy
 
   auth:
     build:
@@ -33,7 +31,6 @@ services:
       - /usr/src/app/apps/auth/prisma/generated
       - /usr/src/app/node_modules
     environment:
-      - PLATFORM=docker
       - DATABASE_URL=postgres://root:pass@postgres:5432
       - BROKER_URL=amqp://root:pass@rabbitmq:5672
     networks:
@@ -42,7 +39,6 @@ services:
       - postgres
       - rabbitmq
       - redis
-      - reverse-proxy
 
   backend:
     build:
@@ -54,7 +50,6 @@ services:
     ports:
       - 3000:3000
     environment:
-      - PLATFORM=docker
       - BROKER_URL=amqp://root:pass@rabbitmq:5672
     networks:
       - default
@@ -72,10 +67,9 @@ services:
     command: npx nx run billing:serve
     volumes:
       - .:/usr/src/app
-      - /usr/src/app/billing/prisma/generated
+      - /usr/src/app/apps/billing/prisma/generated
       - /usr/src/app/node_modules
     environment:
-      - PLATFORM=docker
       - DATABASE_URL=postgres://root:pass@postgres:5432
       - BROKER_URL=amqp://root:pass@rabbitmq:5672
     networks:
@@ -84,7 +78,6 @@ services:
       - postgres
       - rabbitmq
       - redis
-      - reverse-proxy
 
   bots:
     build:
@@ -94,10 +87,9 @@ services:
     command: npx nx run bots:serve
     volumes:
       - .:/usr/src/app
-      - /usr/src/app/bots/prisma/generated
+      - /usr/src/app/apps/bots/prisma/generated
       - /usr/src/app/node_modules
     environment:
-      - PLATFORM=docker
       - DATABASE_URL=postgres://root:pass@postgres:5432
       - BROKER_URL=amqp://root:pass@rabbitmq:5672
     networks:
@@ -106,7 +98,6 @@ services:
       - postgres
       - rabbitmq
       - redis
-      - reverse-proxy
 
   bots-container:
     build:
@@ -116,7 +107,6 @@ services:
       - .:/usr/src/app
       - /usr/src/app/node_modules
     environment:
-      - PLATFORM=docker
       - BROKER_URL=amqp://root:pass@rabbitmq:5672
     networks:
       - default
@@ -124,7 +114,6 @@ services:
       - postgres
       - rabbitmq
       - redis
-      - reverse-proxy
 
   gateway:
     build:
@@ -136,7 +125,6 @@ services:
     ports:
       - 3080:3000
     environment:
-      - PLATFORM=docker
       - BROKER_URL=amqp://root:pass@rabbitmq:5672
     networks:
       - default
@@ -154,10 +142,9 @@ services:
     command: npx nx run integrations:serve
     volumes:
       - .:/usr/src/app
-      - /usr/src/app/integrations/prisma/generated
+      - /usr/src/app/apps/integrations/prisma/generated
       - /usr/src/app/node_modules
     environment:
-      - PLATFORM=docker
       - DATABASE_URL=postgres://root:pass@postgres:5432
       - BROKER_URL=amqp://root:pass@rabbitmq:5672
     networks:
@@ -166,7 +153,6 @@ services:
       - postgres
       - rabbitmq
       - redis
-      - reverse-proxy
 
   mailings:
     build:
@@ -176,10 +162,9 @@ services:
     command: npx nx run mailings:serve
     volumes:
       - .:/usr/src/app
-      - /usr/src/app/mailings/prisma/generated
+      - /usr/src/app/apps/mailings/prisma/generated
       - /usr/src/app/node_modules
     environment:
-      - PLATFORM=docker
       - DATABASE_URL=postgres://root:pass@postgres:5432
       - BROKER_URL=amqp://root:pass@rabbitmq:5672
     networks:
@@ -188,7 +173,6 @@ services:
       - postgres
       - rabbitmq
       - redis
-      - reverse-proxy
 
   platform:
     build:
@@ -198,10 +182,9 @@ services:
     command: npx nx run platform:serve
     volumes:
       - .:/usr/src/app
-      - /usr/src/app/platform/prisma/generated
+      - /usr/src/app/apps/platform/prisma/generated
       - /usr/src/app/node_modules
     environment:
-      - PLATFORM=docker
       - DATABASE_URL=postgres://root:pass@postgres:5432
       - BROKER_URL=amqp://root:pass@rabbitmq:5672
     networks:
@@ -210,7 +193,6 @@ services:
       - postgres
       - rabbitmq
       - redis
-      - reverse-proxy
 
   platform-gupshup:
     build:
@@ -220,7 +202,6 @@ services:
       - .:/usr/src/app
       - /usr/src/app/node_modules
     environment:
-      - PLATFORM=docker
       - BROKER_URL=amqp://root:pass@rabbitmq:5672
     networks:
       - default
@@ -228,7 +209,6 @@ services:
       - postgres
       - rabbitmq
       - redis
-      - reverse-proxy
 
   platform-instagram:
     build:
@@ -238,7 +218,6 @@ services:
       - .:/usr/src/app
       - /usr/src/app/node_modules
     environment:
-      - PLATFORM=docker
       - BROKER_URL=amqp://root:pass@rabbitmq:5672
     networks:
       - default
@@ -246,7 +225,6 @@ services:
       - postgres
       - rabbitmq
       - redis
-      - reverse-proxy
 
   platform-telegram:
     build:
@@ -256,7 +234,6 @@ services:
       - .:/usr/src/app
       - /usr/src/app/node_modules
     environment:
-      - PLATFORM=docker
       - BROKER_URL=amqp://root:pass@rabbitmq:5672
     networks:
       - default
@@ -264,7 +241,6 @@ services:
       - postgres
       - rabbitmq
       - redis
-      - reverse-proxy
 
   platform-viber:
     build:
@@ -274,7 +250,6 @@ services:
       - .:/usr/src/app
       - /usr/src/app/node_modules
     environment:
-      - PLATFORM=docker
       - BROKER_URL=amqp://root:pass@rabbitmq:5672
     networks:
       - default
@@ -282,7 +257,6 @@ services:
       - postgres
       - rabbitmq
       - redis
-      - reverse-proxy
 
   platform-vkontakte:
     build:
@@ -292,7 +266,6 @@ services:
       - .:/usr/src/app
       - /usr/src/app/node_modules
     environment:
-      - PLATFORM=docker
       - BROKER_URL=amqp://root:pass@rabbitmq:5672
     networks:
       - default
@@ -300,7 +273,6 @@ services:
       - postgres
       - rabbitmq
       - redis
-      - reverse-proxy
 
   platform-web:
     build:
@@ -310,7 +282,6 @@ services:
       - .:/usr/src/app
       - /usr/src/app/node_modules
     environment:
-      - PLATFORM=docker
       - BROKER_URL=amqp://root:pass@rabbitmq:5672
     networks:
       - default
@@ -318,7 +289,6 @@ services:
       - postgres
       - rabbitmq
       - redis
-      - reverse-proxy
 
   postgres:
     image: postgres:15.2
