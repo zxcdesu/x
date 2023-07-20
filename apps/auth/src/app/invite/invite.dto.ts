@@ -1,5 +1,5 @@
 import { IsEmail, IsInt } from 'class-validator';
-import { Prisma } from '../../../../prisma/generated';
+import { Prisma } from '../../../prisma/generated';
 
 export class CreateInviteDto implements Prisma.InviteUncheckedCreateInput {
   @IsEmail()
