@@ -3,6 +3,8 @@ import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import joi from 'joi';
 import { PrismaService } from '../../prisma/prisma.service';
+import { InviteController } from './invite/invite.controller';
+import { InviteService } from './invite/invite.service';
 import { ProjectController } from './project/project.controller';
 import { ProjectService } from './project/project.service';
 import { UserController } from './user/user.controller';
@@ -35,7 +37,7 @@ import { UserService } from './user/user.service';
       }),
     }),
   ],
-  controllers: [ProjectController, UserController],
-  providers: [PrismaService, ProjectService, UserService],
+  controllers: [InviteController, ProjectController, UserController],
+  providers: [PrismaService, InviteService, ProjectService, UserService],
 })
 export class AppModule {}
