@@ -1,5 +1,7 @@
+import { RabbitPayload } from '@golevelup/nestjs-rabbitmq';
 import { Controller, SerializeOptions } from '@nestjs/common';
 import { RabbitRPC } from '@platform/nestjs-rabbitmq';
+import { CreateUserDto, UpdateUserDto } from './user.dto';
 import { UserService } from './user.service';
 
 @Controller()
@@ -12,8 +14,8 @@ export class UserController {
   @SerializeOptions({
     // type: User
   })
-  create() {
-    return this.userService.create();
+  create(@RabbitPayload() payload: CreateUserDto) {
+    return this.userService.create(payload);
   }
 
   @RabbitRPC({
@@ -23,7 +25,7 @@ export class UserController {
     // type: User
   })
   findOne() {
-    return this.userService.remove();
+    return this.userService.findOne();
   }
 
   @RabbitRPC({
@@ -42,8 +44,8 @@ export class UserController {
   @SerializeOptions({
     // type: User
   })
-  update() {
-    return this.userService.update();
+  update(@RabbitPayload() payload: UpdateUserDto) {
+    return this.userService.update(payload);
   }
 
   @RabbitRPC({

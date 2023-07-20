@@ -1,8 +1,9 @@
 import { Injectable, NotImplementedException } from '@nestjs/common';
+import { CreateProjectDto, UpdateProjectDto } from './project.dto';
 
 @Injectable()
 export class ProjectService {
-  async create() {
+  async create(payload: CreateProjectDto) {
     throw new NotImplementedException();
   }
 
@@ -14,7 +15,7 @@ export class ProjectService {
     throw new NotImplementedException();
   }
 
-  async update() {
+  async update(payload: UpdateProjectDto) {
     throw new NotImplementedException();
   }
 

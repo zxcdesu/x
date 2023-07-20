@@ -1,6 +1,8 @@
 import { Controller, SerializeOptions } from '@nestjs/common';
 import { RabbitRPC } from '@platform/nestjs-rabbitmq';
 import { ProjectService } from './project.service';
+import { RabbitPayload } from '@golevelup/nestjs-rabbitmq';
+import { CreateProjectDto, UpdateProjectDto } from './project.dto';
 
 @Controller()
 export class ProjectController {
@@ -12,8 +14,8 @@ export class ProjectController {
   @SerializeOptions({
     // type: Project
   })
-  create() {
-    return this.projectService.create();
+  create(@RabbitPayload() payload: CreateProjectDto) {
+    return this.projectService.create(payload);
   }
 
   @RabbitRPC({
@@ -42,8 +44,8 @@ export class ProjectController {
   @SerializeOptions({
     // type: Project
   })
-  update() {
-    return this.projectService.update();
+  update(@RabbitPayload() payload: UpdateProjectDto) {
+    return this.projectService.update(payload);
   }
 
   @RabbitRPC({

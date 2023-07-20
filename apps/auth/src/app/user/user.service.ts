@@ -1,8 +1,9 @@
 import { Injectable, NotImplementedException } from '@nestjs/common';
+import { CreateUserDto, UpdateUserDto } from './user.dto';
 
 @Injectable()
 export class UserService {
-  async create() {
+  async create(payload: CreateUserDto) {
     throw new NotImplementedException();
   }
 
@@ -14,7 +15,7 @@ export class UserService {
     throw new NotImplementedException();
   }
 
-  async update() {
+  async update(payload: UpdateUserDto) {
     throw new NotImplementedException();
   }
 
