@@ -1,4 +1,4 @@
-import { Controller } from '@nestjs/common';
+import { Controller, SerializeOptions } from '@nestjs/common';
 import { RabbitRPC } from '@platform/nestjs-rabbitmq';
 import { UserService } from './user.service';
 
@@ -9,12 +9,18 @@ export class UserController {
   @RabbitRPC({
     routingKey: 'createUser',
   })
+  @SerializeOptions({
+    // type: User
+  })
   create() {
     return this.userService.create();
   }
 
   @RabbitRPC({
     routingKey: 'findOneUser',
+  })
+  @SerializeOptions({
+    // type: User
   })
   findOne() {
     return this.userService.remove();
@@ -23,6 +29,9 @@ export class UserController {
   @RabbitRPC({
     routingKey: 'findAllUsers',
   })
+  @SerializeOptions({
+    // type: User
+  })
   findAll() {
     return this.userService.findAll();
   }
@@ -30,12 +39,18 @@ export class UserController {
   @RabbitRPC({
     routingKey: 'updateUser',
   })
+  @SerializeOptions({
+    // type: User
+  })
   update() {
     return this.userService.update();
   }
 
   @RabbitRPC({
     routingKey: 'removeUser',
+  })
+  @SerializeOptions({
+    // type: User
   })
   remove() {
     return this.userService.remove();

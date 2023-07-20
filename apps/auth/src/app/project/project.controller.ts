@@ -1,4 +1,4 @@
-import { Controller } from '@nestjs/common';
+import { Controller, SerializeOptions } from '@nestjs/common';
 import { RabbitRPC } from '@platform/nestjs-rabbitmq';
 import { ProjectService } from './project.service';
 
@@ -9,12 +9,18 @@ export class ProjectController {
   @RabbitRPC({
     routingKey: 'createProject',
   })
+  @SerializeOptions({
+    // type: Project
+  })
   create() {
     return this.projectService.create();
   }
 
   @RabbitRPC({
     routingKey: 'findOneProject',
+  })
+  @SerializeOptions({
+    // type: Project
   })
   findOne() {
     return this.projectService.findOne();
@@ -23,6 +29,9 @@ export class ProjectController {
   @RabbitRPC({
     routingKey: 'findAllProjects',
   })
+  @SerializeOptions({
+    // type: Project
+  })
   findAll() {
     return this.projectService.findAll();
   }
@@ -30,12 +39,18 @@ export class ProjectController {
   @RabbitRPC({
     routingKey: 'updateProject',
   })
+  @SerializeOptions({
+    // type: Project
+  })
   update() {
     return this.projectService.update();
   }
 
   @RabbitRPC({
     routingKey: 'removeProject',
+  })
+  @SerializeOptions({
+    // type: Project
   })
   remove() {
     return this.projectService.remove();

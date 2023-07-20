@@ -1,6 +1,7 @@
 import { RabbitMQModule } from '@golevelup/nestjs-rabbitmq';
-import { Module } from '@nestjs/common';
+import { ClassSerializerInterceptor, Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
+import { APP_INTERCEPTOR } from '@nestjs/core';
 import joi from 'joi';
 import { PrismaService } from '../../prisma/prisma.service';
 import { InviteController } from './invite/invite.controller';
@@ -38,6 +39,15 @@ import { UserService } from './user/user.service';
     }),
   ],
   controllers: [InviteController, ProjectController, UserController],
-  providers: [PrismaService, InviteService, ProjectService, UserService],
+  providers: [
+    PrismaService,
+    {
+      provide: APP_INTERCEPTOR,
+      useClass: ClassSerializerInterceptor,
+    },
+    InviteService,
+    ProjectService,
+    UserService,
+  ],
 })
 export class AppModule {}
