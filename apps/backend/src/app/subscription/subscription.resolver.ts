@@ -1,57 +1,32 @@
-import { AmqpConnection } from '@golevelup/nestjs-rabbitmq';
 import { Mutation, Query, Resolver } from '@nestjs/graphql';
+import { SubscriptionRmq } from './subscription.rmq';
 
 @Resolver()
 export class SubscriptionResolver {
-  constructor(private readonly amqpConnection: AmqpConnection) {}
+  constructor(private readonly rmq: SubscriptionRmq) {}
 
-  @Mutation(() => Boolean, {
-    name: 'createSubscription',
-  })
-  create() {
-    return this.amqpConnection.request({
-      exchange: 'billing',
-      routingKey: 'createSubscription',
-    });
+  @Mutation(() => Boolean)
+  createSubscription() {
+    return this.rmq.create(undefined);
   }
 
-  @Query(() => Boolean, {
-    name: 'findOneSubscription',
-  })
-  findOne() {
-    return this.amqpConnection.request({
-      exchange: 'billing',
-      routingKey: 'findOneSubscription',
-    });
+  @Query(() => Boolean)
+  findOneSubscription() {
+    return this.rmq.findOne(undefined);
   }
 
-  @Query(() => Boolean, {
-    name: 'findAllSubscriptions',
-  })
-  findAll() {
-    return this.amqpConnection.request({
-      exchange: 'billing',
-      routingKey: 'findAllSubscriptions',
-    });
+  @Query(() => Boolean)
+  findAllSubscriptions() {
+    return this.rmq.findAll(undefined);
   }
 
-  @Mutation(() => Boolean, {
-    name: 'updateSubscription',
-  })
-  update() {
-    return this.amqpConnection.request({
-      exchange: 'billing',
-      routingKey: 'updateSubscription',
-    });
+  @Mutation(() => Boolean)
+  updateSubscription() {
+    return this.rmq.update(undefined);
   }
 
-  @Mutation(() => Boolean, {
-    name: 'removeSubscription',
-  })
-  remove() {
-    return this.amqpConnection.request({
-      exchange: 'billing',
-      routingKey: 'removeSubscription',
-    });
+  @Mutation(() => Boolean)
+  removeSubscription() {
+    return this.rmq.remove(undefined);
   }
 }

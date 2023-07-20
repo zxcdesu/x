@@ -1,57 +1,32 @@
-import { AmqpConnection } from '@golevelup/nestjs-rabbitmq';
 import { Mutation, Query, Resolver } from '@nestjs/graphql';
+import { WebhookRmq } from './webhook.rmq';
 
 @Resolver()
 export class WebhookResolver {
-  constructor(private readonly amqpConnection: AmqpConnection) {}
+  constructor(private readonly rmq: WebhookRmq) {}
 
-  @Mutation(() => Boolean, {
-    name: 'createWebhook',
-  })
-  create() {
-    return this.amqpConnection.request({
-      exchange: 'integrations',
-      routingKey: 'createWebhook',
-    });
+  @Mutation(() => Boolean)
+  createWebhook() {
+    return this.rmq.create(undefined);
   }
 
-  @Query(() => Boolean, {
-    name: 'findOneWebhook',
-  })
-  findOne() {
-    return this.amqpConnection.request({
-      exchange: 'integrations',
-      routingKey: 'findOneWebhook',
-    });
+  @Query(() => Boolean)
+  findOneWebhook() {
+    return this.rmq.findOne(undefined);
   }
 
-  @Query(() => Boolean, {
-    name: 'findAllWebhooks',
-  })
-  findAll() {
-    return this.amqpConnection.request({
-      exchange: 'integrations',
-      routingKey: 'findAllWebhooks',
-    });
+  @Query(() => Boolean)
+  findAllWebhooks() {
+    return this.rmq.findAll(undefined);
   }
 
-  @Mutation(() => Boolean, {
-    name: 'updateWebhook',
-  })
-  update() {
-    return this.amqpConnection.request({
-      exchange: 'integrations',
-      routingKey: 'updateWebhook',
-    });
+  @Mutation(() => Boolean)
+  updateWebhook() {
+    return this.rmq.update(undefined);
   }
 
-  @Mutation(() => Boolean, {
-    name: 'removeWebhook',
-  })
-  remove() {
-    return this.amqpConnection.request({
-      exchange: 'integrations',
-      routingKey: 'removeWebhook',
-    });
+  @Mutation(() => Boolean)
+  removeWebhook() {
+    return this.rmq.remove(undefined);
   }
 }

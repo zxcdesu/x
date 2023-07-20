@@ -1,57 +1,32 @@
-import { AmqpConnection } from '@golevelup/nestjs-rabbitmq';
 import { Mutation, Query, Resolver } from '@nestjs/graphql';
+import { ChatRmq } from './chat.rmq';
 
 @Resolver()
 export class ChatResolver {
-  constructor(private readonly amqpConnection: AmqpConnection) {}
+  constructor(private readonly rmq: ChatRmq) {}
 
-  @Mutation(() => Boolean, {
-    name: 'createChat',
-  })
-  create() {
-    return this.amqpConnection.request({
-      exchange: 'platform',
-      routingKey: 'createChat',
-    });
+  @Mutation(() => Boolean)
+  createChat() {
+    return this.rmq.create(undefined);
   }
 
-  @Query(() => Boolean, {
-    name: 'findOneChat',
-  })
-  findOne() {
-    return this.amqpConnection.request({
-      exchange: 'platform',
-      routingKey: 'findOneChat',
-    });
+  @Query(() => Boolean)
+  findOneChat() {
+    return this.rmq.findOne(undefined);
   }
 
-  @Query(() => Boolean, {
-    name: 'findAllChats',
-  })
-  findAll() {
-    return this.amqpConnection.request({
-      exchange: 'platform',
-      routingKey: 'findAllChats',
-    });
+  @Query(() => Boolean)
+  findAllChats() {
+    return this.rmq.findAll(undefined);
   }
 
-  @Mutation(() => Boolean, {
-    name: 'updateChat',
-  })
-  update() {
-    return this.amqpConnection.request({
-      exchange: 'platform',
-      routingKey: 'updateChat',
-    });
+  @Mutation(() => Boolean)
+  updateChat() {
+    return this.rmq.update(undefined);
   }
 
-  @Mutation(() => Boolean, {
-    name: 'removeChat',
-  })
-  remove() {
-    return this.amqpConnection.request({
-      exchange: 'platform',
-      routingKey: 'removeChat',
-    });
+  @Mutation(() => Boolean)
+  removeChat() {
+    return this.rmq.remove(undefined);
   }
 }

@@ -1,57 +1,32 @@
-import { AmqpConnection } from '@golevelup/nestjs-rabbitmq';
 import { Mutation, Query, Resolver } from '@nestjs/graphql';
+import { ChannelRmq } from './channel.rmq';
 
 @Resolver()
 export class ChannelResolver {
-  constructor(private readonly amqpConnection: AmqpConnection) {}
+  constructor(private readonly rmq: ChannelRmq) {}
 
-  @Mutation(() => Boolean, {
-    name: 'createChannel',
-  })
-  create() {
-    return this.amqpConnection.request({
-      exchange: 'platform',
-      routingKey: 'createChannel',
-    });
+  @Mutation(() => Boolean)
+  createChannel() {
+    return this.rmq.create(undefined);
   }
 
-  @Query(() => Boolean, {
-    name: 'findOneChannel',
-  })
-  findOne() {
-    return this.amqpConnection.request({
-      exchange: 'platform',
-      routingKey: 'findOneChannel',
-    });
+  @Query(() => Boolean)
+  findOneChannel() {
+    return this.rmq.findOne(undefined);
   }
 
-  @Query(() => Boolean, {
-    name: 'findAllChannels',
-  })
-  findAll() {
-    return this.amqpConnection.request({
-      exchange: 'platform',
-      routingKey: 'findAllChannels',
-    });
+  @Query(() => Boolean)
+  findAllChannels() {
+    return this.rmq.findAll(undefined);
   }
 
-  @Mutation(() => Boolean, {
-    name: 'updateChannel',
-  })
-  update() {
-    return this.amqpConnection.request({
-      exchange: 'platform',
-      routingKey: 'updateChannel',
-    });
+  @Mutation(() => Boolean)
+  updateChannel() {
+    return this.rmq.update(undefined);
   }
 
-  @Mutation(() => Boolean, {
-    name: 'removeChannel',
-  })
-  remove() {
-    return this.amqpConnection.request({
-      exchange: 'platform',
-      routingKey: 'removeChannel',
-    });
+  @Mutation(() => Boolean)
+  removeChannel() {
+    return this.rmq.remove(undefined);
   }
 }

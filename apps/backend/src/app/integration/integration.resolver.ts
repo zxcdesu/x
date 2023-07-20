@@ -1,57 +1,32 @@
-import { AmqpConnection } from '@golevelup/nestjs-rabbitmq';
 import { Mutation, Query, Resolver } from '@nestjs/graphql';
+import { IntegrationRmq } from './integration.rmq';
 
 @Resolver()
 export class IntegrationResolver {
-  constructor(private readonly amqpConnection: AmqpConnection) {}
+  constructor(private readonly rmq: IntegrationRmq) {}
 
-  @Mutation(() => Boolean, {
-    name: 'createIntegration',
-  })
-  create() {
-    return this.amqpConnection.request({
-      exchange: 'integration',
-      routingKey: 'createIntegration',
-    });
+  @Mutation(() => Boolean)
+  createIntegration() {
+    return this.rmq.create(undefined);
   }
 
-  @Query(() => Boolean, {
-    name: 'findOneIntegration',
-  })
-  findOne() {
-    return this.amqpConnection.request({
-      exchange: 'integration',
-      routingKey: 'findOneIntegration',
-    });
+  @Query(() => Boolean)
+  findOneIntegration() {
+    return this.rmq.findOne(undefined);
   }
 
-  @Query(() => Boolean, {
-    name: 'findAllIntegrations',
-  })
-  findAll() {
-    return this.amqpConnection.request({
-      exchange: 'integration',
-      routingKey: 'findAllIntegrations',
-    });
+  @Query(() => Boolean)
+  findAllIntegrations() {
+    return this.rmq.findAll(undefined);
   }
 
-  @Mutation(() => Boolean, {
-    name: 'updateIntegration',
-  })
-  update() {
-    return this.amqpConnection.request({
-      exchange: 'integration',
-      routingKey: 'updateIntegration',
-    });
+  @Mutation(() => Boolean)
+  updateIntegration() {
+    return this.rmq.update(undefined);
   }
 
-  @Mutation(() => Boolean, {
-    name: 'removeIntegration',
-  })
-  remove() {
-    return this.amqpConnection.request({
-      exchange: 'integration',
-      routingKey: 'removeIntegration',
-    });
+  @Mutation(() => Boolean)
+  removeIntegration() {
+    return this.rmq.remove(undefined);
   }
 }

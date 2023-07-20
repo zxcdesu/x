@@ -1,57 +1,32 @@
-import { AmqpConnection } from '@golevelup/nestjs-rabbitmq';
 import { Mutation, Query, Resolver } from '@nestjs/graphql';
+import { ContactRmq } from './contact.rmq';
 
 @Resolver()
 export class ContactResolver {
-  constructor(private readonly amqpConnection: AmqpConnection) {}
+  constructor(private readonly rmq: ContactRmq) {}
 
-  @Mutation(() => Boolean, {
-    name: 'createContact',
-  })
-  create() {
-    return this.amqpConnection.request({
-      exchange: 'platform',
-      routingKey: 'createContact',
-    });
+  @Mutation(() => Boolean)
+  createContact() {
+    return this.rmq.create(undefined);
   }
 
-  @Query(() => Boolean, {
-    name: 'findOneContact',
-  })
-  findOne() {
-    return this.amqpConnection.request({
-      exchange: 'platform',
-      routingKey: 'findOneContact',
-    });
+  @Query(() => Boolean)
+  findOneContact() {
+    return this.rmq.findOne(undefined);
   }
 
-  @Query(() => Boolean, {
-    name: 'findAllContacts',
-  })
-  findAll() {
-    return this.amqpConnection.request({
-      exchange: 'platform',
-      routingKey: 'findAllContacts',
-    });
+  @Query(() => Boolean)
+  findAllContacts() {
+    return this.rmq.findAll(undefined);
   }
 
-  @Mutation(() => Boolean, {
-    name: 'updateContact',
-  })
-  update() {
-    return this.amqpConnection.request({
-      exchange: 'platform',
-      routingKey: 'updateContact',
-    });
+  @Mutation(() => Boolean)
+  updateContact() {
+    return this.rmq.update(undefined);
   }
 
-  @Mutation(() => Boolean, {
-    name: 'removeContact',
-  })
-  remove() {
-    return this.amqpConnection.request({
-      exchange: 'platform',
-      routingKey: 'removeContact',
-    });
+  @Mutation(() => Boolean)
+  removeContact() {
+    return this.rmq.remove(undefined);
   }
 }

@@ -1,57 +1,32 @@
-import { AmqpConnection } from '@golevelup/nestjs-rabbitmq';
 import { Mutation, Query, Resolver } from '@nestjs/graphql';
+import { MailingRmq } from './mailing.rmq';
 
 @Resolver()
 export class MailingResolver {
-  constructor(private readonly amqpConnection: AmqpConnection) {}
+  constructor(private readonly rmq: MailingRmq) {}
 
-  @Mutation(() => Boolean, {
-    name: 'createMailing',
-  })
-  create() {
-    return this.amqpConnection.request({
-      exchange: 'mailing',
-      routingKey: 'createMailing',
-    });
+  @Mutation(() => Boolean)
+  createMailing() {
+    return this.rmq.create(undefined);
   }
 
-  @Query(() => Boolean, {
-    name: 'findOneMailing',
-  })
-  findOne() {
-    return this.amqpConnection.request({
-      exchange: 'mailing',
-      routingKey: 'findOneMailing',
-    });
+  @Query(() => Boolean)
+  findOneMailing() {
+    return this.rmq.findOne(undefined);
   }
 
-  @Query(() => Boolean, {
-    name: 'findAllMailings',
-  })
-  findAll() {
-    return this.amqpConnection.request({
-      exchange: 'mailing',
-      routingKey: 'findAllMailings',
-    });
+  @Query(() => Boolean)
+  findAllMailings() {
+    return this.rmq.findAll(undefined);
   }
 
-  @Mutation(() => Boolean, {
-    name: 'updateMailing',
-  })
-  update() {
-    return this.amqpConnection.request({
-      exchange: 'mailing',
-      routingKey: 'updateMailing',
-    });
+  @Mutation(() => Boolean)
+  updateMailing() {
+    return this.rmq.update(undefined);
   }
 
-  @Mutation(() => Boolean, {
-    name: 'removeMailing',
-  })
-  remove() {
-    return this.amqpConnection.request({
-      exchange: 'mailing',
-      routingKey: 'removeMailing',
-    });
+  @Mutation(() => Boolean)
+  removeMailing() {
+    return this.rmq.remove(undefined);
   }
 }

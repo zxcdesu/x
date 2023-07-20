@@ -1,57 +1,32 @@
-import { AmqpConnection } from '@golevelup/nestjs-rabbitmq';
 import { Mutation, Query, Resolver } from '@nestjs/graphql';
+import { WalletRmq } from './wallet.rmq';
 
 @Resolver()
 export class WalletResolver {
-  constructor(private readonly amqpConnection: AmqpConnection) {}
+  constructor(private readonly rmq: WalletRmq) {}
 
-  @Mutation(() => Boolean, {
-    name: 'createWallet',
-  })
-  create() {
-    return this.amqpConnection.request({
-      exchange: 'billing',
-      routingKey: 'createWallet',
-    });
+  @Mutation(() => Boolean)
+  createWallet() {
+    return this.rmq.create(undefined);
   }
 
-  @Query(() => Boolean, {
-    name: 'findOneWallet',
-  })
-  findOne() {
-    return this.amqpConnection.request({
-      exchange: 'billing',
-      routingKey: 'findOneWallet',
-    });
+  @Query(() => Boolean)
+  findOneWallet() {
+    return this.rmq.findOne(undefined);
   }
 
-  @Query(() => Boolean, {
-    name: 'findAllWallets',
-  })
-  findAll() {
-    return this.amqpConnection.request({
-      exchange: 'billing',
-      routingKey: 'findAllWallets',
-    });
+  @Query(() => Boolean)
+  findAllWallets() {
+    return this.rmq.findAll(undefined);
   }
 
-  @Mutation(() => Boolean, {
-    name: 'updateWallet',
-  })
-  update() {
-    return this.amqpConnection.request({
-      exchange: 'billing',
-      routingKey: 'updateWallet',
-    });
+  @Mutation(() => Boolean)
+  updateWallet() {
+    return this.rmq.update(undefined);
   }
 
-  @Mutation(() => Boolean, {
-    name: 'removeWallet',
-  })
-  remove() {
-    return this.amqpConnection.request({
-      exchange: 'billing',
-      routingKey: 'removeWallet',
-    });
+  @Mutation(() => Boolean)
+  removeWallet() {
+    return this.rmq.remove(undefined);
   }
 }

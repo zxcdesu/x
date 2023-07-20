@@ -1,75 +1,44 @@
-import { AmqpConnection } from '@golevelup/nestjs-rabbitmq';
 import { UseGuards } from '@nestjs/common';
-import { Mutation, Query, Resolver } from '@nestjs/graphql';
-import { ApolloError } from 'apollo-server-express';
+import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { BearerAuthDecorator } from '../auth/bearer-auth.decorator';
 import { BearerAuthGuard } from '../auth/bearer-auth.guard';
 import { BearerAuth } from '../auth/bearer-auth.interface';
+import { CreateUserDto, UpdateUserDto, User } from './user.dto';
+import { UserRmq } from './user.rmq';
 
 @Resolver()
 export class UserResolver {
-  constructor(private readonly amqpConnection: AmqpConnection) {}
+  constructor(private readonly rmq: UserRmq) {}
 
-  @Mutation(() => Boolean)
-  async createUser() {
-    const { error, payload } = await this.amqpConnection.request<{
-      error: any;
-      payload: any;
-    }>({
-      exchange: 'auth',
-      routingKey: 'createUser',
-    });
-    if (error) {
-      throw new ApolloError(error.message, undefined, error);
-    }
-    return payload;
+  @Mutation(() => User)
+  createUser(@Args() dto: CreateUserDto) {
+    return this.rmq.create(dto);
   }
 
   @UseGuards(BearerAuthGuard)
-  @Query(() => Boolean)
+  @Query(() => User)
   findOneUser(@BearerAuthDecorator() auth: BearerAuth) {
-    return this.amqpConnection.request({
-      exchange: 'auth',
-      routingKey: 'findOneUser',
-      payload: {
-        id: auth.id,
-      },
-    });
+    return this.rmq.findOne(auth.id);
   }
 
   @UseGuards(BearerAuthGuard)
-  @Query(() => Boolean)
+  @Query(() => [User])
   findAllUsers(@BearerAuthDecorator() auth: BearerAuth) {
-    return this.amqpConnection.request({
-      exchange: 'auth',
-      routingKey: 'findAllUsers',
-      payload: {
-        id: auth.id,
-      },
-    });
+    return this.rmq.findAll();
   }
 
   @UseGuards(BearerAuthGuard)
-  @Mutation(() => Boolean)
-  updateUser(@BearerAuthDecorator() auth: BearerAuth) {
-    return this.amqpConnection.request({
-      exchange: 'auth',
-      routingKey: 'updateUser',
-      payload: {
-        id: auth.id,
-      },
-    });
+  @Mutation(() => User)
+  updateUser(
+    @BearerAuthDecorator() auth: BearerAuth,
+    @Args() dto: UpdateUserDto,
+  ) {
+    return this.rmq.update({ id: auth.id, ...dto });
   }
 
   @UseGuards(BearerAuthGuard)
-  @Mutation(() => Boolean)
+  @Mutation(() => User)
   removeUser(@BearerAuthDecorator() auth: BearerAuth) {
-    return this.amqpConnection.request({
-      exchange: 'auth',
-      routingKey: 'removeUser',
-      payload: {
-        id: auth.id,
-      },
-    });
+    return this.rmq.remove(auth.id);
   }
 }
