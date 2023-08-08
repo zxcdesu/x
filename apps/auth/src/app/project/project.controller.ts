@@ -1,8 +1,15 @@
+import { RabbitPayload } from '@golevelup/nestjs-rabbitmq';
 import { Controller, SerializeOptions } from '@nestjs/common';
 import { RabbitRPC } from '@platform/nestjs-rabbitmq';
+import { UserId } from '../user/user.decorator';
+import {
+  CreateProjectDto,
+  FindOneProjectDto,
+  ProjectDto,
+  RemoveProjectDto,
+  UpdateProjectDto,
+} from './project.dto';
 import { ProjectService } from './project.service';
-import { RabbitPayload } from '@golevelup/nestjs-rabbitmq';
-import { CreateProjectDto, UpdateProjectDto } from './project.dto';
 
 @Controller()
 export class ProjectController {
@@ -12,49 +19,61 @@ export class ProjectController {
     routingKey: 'createProject',
   })
   @SerializeOptions({
-    // type: Project
+    type: ProjectDto,
   })
-  create(@RabbitPayload() payload: CreateProjectDto) {
-    return this.projectService.create(payload);
+  create(
+    @UserId() userId: number,
+    @RabbitPayload() payload: CreateProjectDto,
+  ): Promise<ProjectDto> {
+    return this.projectService.create(userId, payload);
   }
 
   @RabbitRPC({
     routingKey: 'findOneProject',
   })
   @SerializeOptions({
-    // type: Project
+    type: ProjectDto,
   })
-  findOne() {
-    return this.projectService.findOne();
+  findOne(
+    @UserId() userId: number,
+    @RabbitPayload() payload: FindOneProjectDto,
+  ): Promise<ProjectDto> {
+    return this.projectService.findOne(userId, payload);
   }
 
   @RabbitRPC({
     routingKey: 'findAllProjects',
   })
   @SerializeOptions({
-    // type: Project
+    type: ProjectDto,
   })
-  findAll() {
-    return this.projectService.findAll();
+  findAll(@UserId() userId: number): Promise<ProjectDto[]> {
+    return this.projectService.findAll(userId);
   }
 
   @RabbitRPC({
     routingKey: 'updateProject',
   })
   @SerializeOptions({
-    // type: Project
+    type: ProjectDto,
   })
-  update(@RabbitPayload() payload: UpdateProjectDto) {
-    return this.projectService.update(payload);
+  update(
+    @UserId() userId: number,
+    @RabbitPayload() payload: UpdateProjectDto,
+  ): Promise<ProjectDto> {
+    return this.projectService.update(userId, payload);
   }
 
   @RabbitRPC({
     routingKey: 'removeProject',
   })
   @SerializeOptions({
-    // type: Project
+    type: ProjectDto,
   })
-  remove() {
-    return this.projectService.remove();
+  remove(
+    @UserId() userId: number,
+    @RabbitPayload() payload: RemoveProjectDto,
+  ): Promise<ProjectDto> {
+    return this.projectService.remove(userId, payload);
   }
 }

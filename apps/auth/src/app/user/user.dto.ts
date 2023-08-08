@@ -8,7 +8,7 @@ import {
   IsUrl,
   Length,
 } from 'class-validator';
-import { Prisma } from '../../../prisma/generated';
+import { Prisma, User } from '../../../prisma/generated';
 
 export class CreateUserDto implements Prisma.UserUncheckedCreateInput {
   @IsString()
@@ -29,7 +29,36 @@ export class CreateUserDto implements Prisma.UserUncheckedCreateInput {
   password: string;
 }
 
+export class FindOneUserDto {
+  @IsInt()
+  id: number;
+}
+
 export class UpdateUserDto extends PartialType(CreateUserDto) {
   @IsInt()
   id: number;
+}
+
+export class RemoveUserDto extends FindOneUserDto {}
+
+export class UserDto implements User {
+  id: number;
+
+  name: string;
+
+  imageUrl: string;
+
+  email: string;
+
+  emailConfirmed: boolean;
+
+  phone: string;
+
+  phoneConfirmed: boolean;
+
+  password: string;
+
+  createdAt: Date;
+
+  updatedAt: Date;
 }

@@ -3,7 +3,7 @@ import { ClassSerializerInterceptor, Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { APP_INTERCEPTOR } from '@nestjs/core';
 import joi from 'joi';
-import { PrismaService } from '../../prisma/prisma.service';
+import { PrismaService } from './prisma.service';
 import { InviteController } from './invite/invite.controller';
 import { InviteService } from './invite/invite.service';
 import { ProjectController } from './project/project.controller';

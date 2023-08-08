@@ -1,25 +1,80 @@
-import { Injectable, NotImplementedException } from '@nestjs/common';
-import { CreateProjectDto, UpdateProjectDto } from './project.dto';
+import { Injectable } from '@nestjs/common';
+import { PrismaService } from '../prisma.service';
+import {
+  CreateProjectDto,
+  FindOneProjectDto,
+  RemoveProjectDto,
+  UpdateProjectDto,
+} from './project.dto';
 
 @Injectable()
 export class ProjectService {
-  async create(payload: CreateProjectDto) {
-    throw new NotImplementedException();
+  constructor(private readonly prismaService: PrismaService) {}
+
+  create(userId: number, payload: CreateProjectDto) {
+    return this.prismaService.project.create({
+      data: {
+        ...payload,
+        users: {
+          create: {
+            userId,
+          },
+        },
+      },
+    });
   }
 
-  async findOne() {
-    throw new NotImplementedException();
+  findOne(userId: number, payload: FindOneProjectDto) {
+    return this.prismaService.project.findFirstOrThrow({
+      where: {
+        id: payload.id,
+        users: {
+          some: {
+            userId,
+          },
+        },
+      },
+      include: {
+        users: {
+          where: {
+            userId,
+          },
+        },
+      },
+    });
   }
 
-  async findAll() {
-    throw new NotImplementedException();
+  findAll(userId: number) {
+    return this.prismaService.project.findMany({
+      where: {
+        users: {
+          some: {
+            userId,
+          },
+        },
+      },
+    });
   }
 
-  async update(payload: UpdateProjectDto) {
-    throw new NotImplementedException();
+  async update(userId: number, payload: UpdateProjectDto) {
+    await this.checkAccess(userId, payload);
+    return this.prismaService.project.update({
+      where: {
+        id: payload.id,
+      },
+      data: payload,
+    });
   }
 
-  async remove() {
-    throw new NotImplementedException();
+  async remove(userId: number, payload: RemoveProjectDto) {
+    await this.checkAccess(userId, payload);
+    return this.prismaService.project.delete({
+      where: payload,
+    });
+  }
+
+  private async checkAccess(userId: number, payload: FindOneProjectDto) {
+    await this.findOne(userId, payload);
+    // TODO: check access
   }
 }

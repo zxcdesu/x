@@ -1,9 +1,14 @@
-import { Injectable, NotImplementedException } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
+import { PrismaService } from '../prisma.service';
 import { CreateInviteDto } from './invite.dto';
 
 @Injectable()
 export class InviteService {
-  async create(payload: CreateInviteDto) {
-    throw new NotImplementedException();
+  constructor(private readonly prismaService: PrismaService) {}
+
+  create(payload: CreateInviteDto) {
+    return this.prismaService.invite.create({
+      data: payload,
+    });
   }
 }

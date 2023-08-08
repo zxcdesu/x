@@ -1,7 +1,13 @@
 import { RabbitPayload } from '@golevelup/nestjs-rabbitmq';
 import { Controller, SerializeOptions } from '@nestjs/common';
 import { RabbitRPC } from '@platform/nestjs-rabbitmq';
-import { CreateUserDto, UpdateUserDto } from './user.dto';
+import {
+  CreateUserDto,
+  FindOneUserDto,
+  RemoveUserDto,
+  UpdateUserDto,
+  UserDto,
+} from './user.dto';
 import { UserService } from './user.service';
 
 @Controller()
@@ -12,9 +18,9 @@ export class UserController {
     routingKey: 'createUser',
   })
   @SerializeOptions({
-    // type: User
+    type: UserDto,
   })
-  create(@RabbitPayload() payload: CreateUserDto) {
+  create(@RabbitPayload() payload: CreateUserDto): Promise<UserDto> {
     return this.userService.create(payload);
   }
 
@@ -22,29 +28,19 @@ export class UserController {
     routingKey: 'findOneUser',
   })
   @SerializeOptions({
-    // type: User
+    type: UserDto,
   })
-  findOne() {
-    return this.userService.findOne();
-  }
-
-  @RabbitRPC({
-    routingKey: 'findAllUsers',
-  })
-  @SerializeOptions({
-    // type: User
-  })
-  findAll() {
-    return this.userService.findAll();
+  findOne(@RabbitPayload() payload: FindOneUserDto): Promise<UserDto> {
+    return this.userService.findOne(payload);
   }
 
   @RabbitRPC({
     routingKey: 'updateUser',
   })
   @SerializeOptions({
-    // type: User
+    type: UserDto,
   })
-  update(@RabbitPayload() payload: UpdateUserDto) {
+  update(@RabbitPayload() payload: UpdateUserDto): Promise<UserDto> {
     return this.userService.update(payload);
   }
 
@@ -52,9 +48,9 @@ export class UserController {
     routingKey: 'removeUser',
   })
   @SerializeOptions({
-    // type: User
+    type: UserDto,
   })
-  remove() {
-    return this.userService.remove();
+  remove(@RabbitPayload() payload: RemoveUserDto): Promise<UserDto> {
+    return this.userService.remove(payload);
   }
 }
