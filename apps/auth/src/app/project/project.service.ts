@@ -1,13 +1,18 @@
 import { Injectable } from '@nestjs/common';
+import { TokenService } from '../auth/token.service';
 import { PrismaService } from '../prisma.service';
 import { CreateProjectDto } from './dto/create-project.dto';
 import { FindOneProjectDto } from './dto/find-one-project.dto';
 import { RemoveProjectDto } from './dto/remove-project.dto';
 import { UpdateProjectDto } from './dto/update-project.dto';
+import { ProjectTokenPayload } from './interfaces/project-token-payload.interface';
 
 @Injectable()
 export class ProjectService {
-  constructor(private readonly prismaService: PrismaService) {}
+  constructor(
+    private readonly prismaService: PrismaService,
+    private readonly tokenService: TokenService<ProjectTokenPayload>,
+  ) {}
 
   create(userId: number, payload: CreateProjectDto) {
     return this.prismaService.project.create({
@@ -19,7 +24,34 @@ export class ProjectService {
           },
         },
       },
+      include: {
+        users: {
+          where: {
+            userId,
+          },
+        },
+      },
     });
+  }
+
+  async signIn(userId: number, projectId: number) {
+    await this.prismaService.projectUser.findUniqueOrThrow({
+      where: {
+        projectId_userId: {
+          projectId,
+          userId,
+        },
+      },
+    });
+
+    return {
+      token: this.tokenService.sign({
+        id: userId,
+        project: {
+          id: projectId,
+        },
+      }),
+    };
   }
 
   findOne(userId: number, payload: FindOneProjectDto) {
@@ -51,6 +83,13 @@ export class ProjectService {
           },
         },
       },
+      include: {
+        users: {
+          where: {
+            userId,
+          },
+        },
+      },
     });
   }
 
@@ -61,6 +100,13 @@ export class ProjectService {
         id: payload.id,
       },
       data: payload,
+      include: {
+        users: {
+          where: {
+            userId,
+          },
+        },
+      },
     });
   }
 
@@ -68,6 +114,13 @@ export class ProjectService {
     await this.checkAccess(userId, payload);
     return this.prismaService.project.delete({
       where: payload,
+      include: {
+        users: {
+          where: {
+            userId,
+          },
+        },
+      },
     });
   }
 

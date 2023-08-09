@@ -3,9 +3,12 @@ import { ClassSerializerInterceptor, Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { APP_INTERCEPTOR } from '@nestjs/core';
 import joi from 'joi';
-import { PrismaService } from './prisma.service';
+import { TokenService } from './auth/token.service';
 import { InviteController } from './invite/invite.controller';
 import { InviteService } from './invite/invite.service';
+import { PrismaService } from './prisma.service';
+import { ProjectUserController } from './project-user/project-user.controller';
+import { ProjectUserService } from './project-user/project-user.service';
 import { ProjectController } from './project/project.controller';
 import { ProjectService } from './project/project.service';
 import { UserController } from './user/user.controller';
@@ -18,6 +21,7 @@ import { UserService } from './user/user.service';
       validationSchema: joi.object({
         DATABASE_URL: joi.string().uri().required(),
         BROKER_URL: joi.string().uri().required(),
+        SECRET: joi.string().required(),
       }),
     }),
     RabbitMQModule.forRootAsync(RabbitMQModule, {
@@ -38,15 +42,22 @@ import { UserService } from './user/user.service';
       }),
     }),
   ],
-  controllers: [InviteController, ProjectController, UserController],
+  controllers: [
+    InviteController,
+    ProjectController,
+    ProjectUserController,
+    UserController,
+  ],
   providers: [
     PrismaService,
     {
       provide: APP_INTERCEPTOR,
       useClass: ClassSerializerInterceptor,
     },
+    TokenService,
     InviteService,
     ProjectService,
+    ProjectUserService,
     UserService,
   ],
 })

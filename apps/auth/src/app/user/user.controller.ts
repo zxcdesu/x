@@ -1,9 +1,11 @@
 import { RabbitPayload } from '@golevelup/nestjs-rabbitmq';
 import { Controller, SerializeOptions } from '@nestjs/common';
 import { RabbitRPC } from '@platform/nestjs-rabbitmq';
+import { TokenDto } from '../auth/dto/token.dto';
 import { CreateUserDto } from './dto/create-user.dto';
 import { FindOneUserDto } from './dto/find-one-user.dto';
 import { RemoveUserDto } from './dto/remove-user.dto';
+import { SignInUserDto } from './dto/sign-in-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { UserDto } from './dto/user.dto';
 import { UserService } from './user.service';
@@ -20,6 +22,16 @@ export class UserController {
   })
   create(@RabbitPayload() payload: CreateUserDto): Promise<UserDto> {
     return this.userService.create(payload);
+  }
+
+  @RabbitRPC({
+    routingKey: 'signInUser',
+  })
+  @SerializeOptions({
+    type: TokenDto,
+  })
+  signIn(@RabbitPayload() payload: SignInUserDto): Promise<TokenDto> {
+    return this.userService.signIn(payload);
   }
 
   @RabbitRPC({

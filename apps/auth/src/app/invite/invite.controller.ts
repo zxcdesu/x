@@ -1,8 +1,7 @@
 import { RabbitPayload } from '@golevelup/nestjs-rabbitmq';
-import { Controller, SerializeOptions } from '@nestjs/common';
+import { Controller } from '@nestjs/common';
 import { RabbitRPC } from '@platform/nestjs-rabbitmq';
 import { CreateInviteDto } from './dto/create-invite.dto';
-import { InviteDto } from './dto/invite.dto';
 import { InviteService } from './invite.service';
 
 @Controller()
@@ -12,10 +11,7 @@ export class InviteController {
   @RabbitRPC({
     routingKey: 'createInvite',
   })
-  @SerializeOptions({
-    type: InviteDto,
-  })
-  create(@RabbitPayload() payload: CreateInviteDto): Promise<InviteDto> {
+  create(@RabbitPayload() payload: CreateInviteDto): Promise<void> {
     return this.inviteService.create(payload);
   }
 }
