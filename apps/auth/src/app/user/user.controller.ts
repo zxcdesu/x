@@ -1,7 +1,7 @@
 import { RabbitPayload } from '@golevelup/nestjs-rabbitmq';
 import { Controller, SerializeOptions } from '@nestjs/common';
 import { RabbitRPC } from '@platform/nestjs-rabbitmq';
-import { TokenDto } from '../auth/dto/token.dto';
+import { TokenDto } from '../token/dto/token.dto';
 import { CreateUserDto } from './dto/create-user.dto';
 import { FindOneUserDto } from './dto/find-one-user.dto';
 import { RemoveUserDto } from './dto/remove-user.dto';

@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { TokenService } from '../auth/token.service';
+import { TokenService } from '../token/token.service';
 import { PrismaService } from '../prisma.service';
 import { CreateProjectDto } from './dto/create-project.dto';
 import { FindOneProjectDto } from './dto/find-one-project.dto';
