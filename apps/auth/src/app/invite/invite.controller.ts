@@ -1,7 +1,8 @@
 import { RabbitPayload } from '@golevelup/nestjs-rabbitmq';
 import { Controller, SerializeOptions } from '@nestjs/common';
 import { RabbitRPC } from '@platform/nestjs-rabbitmq';
-import { CreateInviteDto, InviteDto } from './invite.dto';
+import { CreateInviteDto } from './dto/create-invite.dto';
+import { InviteDto } from './dto/invite.dto';
 import { InviteService } from './invite.service';
 
 @Controller()

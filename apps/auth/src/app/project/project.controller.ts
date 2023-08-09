@@ -2,13 +2,11 @@ import { RabbitPayload } from '@golevelup/nestjs-rabbitmq';
 import { Controller, SerializeOptions } from '@nestjs/common';
 import { RabbitRPC } from '@platform/nestjs-rabbitmq';
 import { UserId } from '../user/user.decorator';
-import {
-  CreateProjectDto,
-  FindOneProjectDto,
-  ProjectDto,
-  RemoveProjectDto,
-  UpdateProjectDto,
-} from './project.dto';
+import { CreateProjectDto } from './dto/create-project.dto';
+import { FindOneProjectDto } from './dto/find-one-project.dto';
+import { ProjectDto } from './dto/project.dto';
+import { RemoveProjectDto } from './dto/remove-project.dto';
+import { UpdateProjectDto } from './dto/update-project.dto';
 import { ProjectService } from './project.service';
 
 @Controller()

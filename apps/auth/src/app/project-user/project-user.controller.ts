@@ -3,7 +3,8 @@ import { Controller, SerializeOptions } from '@nestjs/common';
 import { RabbitRPC } from '@platform/nestjs-rabbitmq';
 import { ProjectId } from '../project/project.decorator';
 import { UserId } from '../user/user.decorator';
-import { ProjectUserDto, UpdateProjectUserDto } from './project-user.dto';
+import { ProjectUserDto } from './dto/project-user.dto';
+import { UpdateProjectUserDto } from './dto/update-project-user.dto';
 import { ProjectUserService } from './project-user.service';
 
 @Controller()
