@@ -33,6 +33,7 @@ services:
     environment:
       - DATABASE_URL=postgres://root:pass@postgres:5432
       - BROKER_URL=amqp://root:pass@rabbitmq:5672
+      - SECRET=secret
     networks:
       - default
     depends_on:
@@ -51,6 +52,7 @@ services:
       - 3000:3000
     environment:
       - BROKER_URL=amqp://root:pass@rabbitmq:5672
+      - SECRET=secret
     networks:
       - default
     depends_on:

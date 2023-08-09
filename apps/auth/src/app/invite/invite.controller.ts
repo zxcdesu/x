@@ -10,6 +10,7 @@ export class InviteController {
 
   @RabbitRPC({
     routingKey: 'createInvite',
+    exchange: 'auth',
   })
   create(@RabbitPayload() payload: CreateInviteDto): Promise<void> {
     return this.inviteService.create(payload);

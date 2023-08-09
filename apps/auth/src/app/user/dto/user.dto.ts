@@ -1,3 +1,4 @@
+import { Exclude } from 'class-transformer';
 import { User } from '../../prisma.service';
 
 export class UserDto implements User {
@@ -15,6 +16,7 @@ export class UserDto implements User {
 
   phoneConfirmed: boolean;
 
+  @Exclude()
   password: string;
 
   createdAt: Date;

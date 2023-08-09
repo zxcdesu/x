@@ -4,7 +4,7 @@ import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { GraphQLModule } from '@nestjs/graphql';
 import { PassportModule } from '@nestjs/passport';
-import { RmqModule } from '@platform/nestjs-rabbitmq';
+import { ERROR_FACTORY } from '@platform/nestjs-rabbitmq';
 import { ApolloError } from 'apollo-server-express';
 import joi from 'joi';
 import { BearerAuthStrategy } from './auth/bearer-auth.strategy';
@@ -67,13 +67,14 @@ import { WebhookRmq } from './webhook/webhook.rmq';
       playground: true,
     }),
     PassportModule,
-    RmqModule.register({
-      errorFactory: (error) => {
-        return new ApolloError(error?.message, undefined, error);
-      },
-    }),
   ],
   providers: [
+    {
+      provide: ERROR_FACTORY,
+      useValue: (error?: any) => {
+        return new ApolloError(error?.message, undefined, error);
+      },
+    },
     BearerAuthStrategy,
     BotResolver,
     BotTemplateResolver,

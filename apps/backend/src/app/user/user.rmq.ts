@@ -1,37 +1,43 @@
 import { Injectable } from '@nestjs/common';
 import { RmqService } from '@platform/nestjs-rabbitmq';
-import { CreateUserDto, UpdateUserDto, User } from './user.dto';
+import { TokenDto } from '../auth/token.dto';
+import { CreateUserDto } from './dto/create-user.dto';
+import { SignInUserDto } from './dto/sign-in-user.dto';
+import { UpdateUserDto } from './dto/update-user.dto';
+import { UserDto } from './dto/user.dto';
 
 @Injectable()
 export class UserRmq extends RmqService {
   private readonly exchange = 'auth';
 
   create(payload: CreateUserDto) {
-    return this.request<User>({
+    return this.request<UserDto>({
       exchange: this.exchange,
       routingKey: 'createUser',
       payload,
     });
   }
 
-  findOne(payload: number) {
-    return this.request<User>({
+  signIn(payload: SignInUserDto) {
+    return this.request<TokenDto>({
       exchange: this.exchange,
-      routingKey: 'findOneUser',
+      routingKey: 'signInUser',
       payload,
     });
   }
 
-  findAll(payload?: number[]) {
-    return this.request<User[]>({
+  findOne(id: number) {
+    return this.request<UserDto>({
       exchange: this.exchange,
-      routingKey: 'findAllUsers',
-      payload,
+      routingKey: 'findOneUser',
+      payload: {
+        id,
+      },
     });
   }
 
   update(payload: UpdateUserDto) {
-    return this.request<User>({
+    return this.request<UserDto>({
       exchange: this.exchange,
       routingKey: 'updateUser',
       payload,
@@ -39,7 +45,7 @@ export class UserRmq extends RmqService {
   }
 
   remove(payload: number) {
-    return this.request<User>({
+    return this.request<UserDto>({
       exchange: this.exchange,
       routingKey: 'removeUser',
       payload,

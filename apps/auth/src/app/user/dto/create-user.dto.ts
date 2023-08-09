@@ -19,6 +19,7 @@ export class CreateUserDto implements Prisma.UserUncheckedCreateInput {
   @IsEmail()
   email: string;
 
+  @IsOptional()
   @IsPhoneNumber()
   phone?: string;
 

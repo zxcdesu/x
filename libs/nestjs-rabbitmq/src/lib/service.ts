@@ -6,17 +6,18 @@ import { ErrorFactory } from './interfaces';
 export class RmqService {
   constructor(
     protected readonly amqpConnection: AmqpConnection,
-    @Inject(ERROR_FACTORY) protected readonly errorFactory: ErrorFactory,
+    @Inject(ERROR_FACTORY) private readonly errorFactory: ErrorFactory,
   ) {}
 
   protected async request<T>(requestOptions: RequestOptions): Promise<T> {
-    const { error, payload } = await this.amqpConnection.request<{
-      error?: any;
-      payload: T;
-    }>(requestOptions);
+    const { error, ...payload } = await this.amqpConnection.request<
+      T & {
+        error?: any;
+      }
+    >(requestOptions);
     if (error) {
       throw this.errorFactory(error);
     }
-    return payload;
+    return payload as T;
   }
 }
