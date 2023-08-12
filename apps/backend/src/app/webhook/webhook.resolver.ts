@@ -1,32 +1,56 @@
-import { Mutation, Query, Resolver } from '@nestjs/graphql';
+import { ParseIntPipe, UseGuards } from '@nestjs/common';
+import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
+import { BearerAuthDecorator } from '../auth/bearer-auth.decorator';
+import { BearerAuthGuard } from '../auth/bearer-auth.guard';
+import { BearerAuth } from '../auth/bearer-auth.interface';
+import { CreateWebhookDto } from './dto/create-webhook.dto';
+import { UpdateWebhookDto } from './dto/update-webhook.dto';
+import { WebhookDto } from './dto/webhook.dto';
 import { WebhookRmq } from './webhook.rmq';
 
 @Resolver()
 export class WebhookResolver {
   constructor(private readonly rmq: WebhookRmq) {}
 
-  @Mutation(() => Boolean)
-  createWebhook() {
-    return this.rmq.create(undefined);
+  @UseGuards(BearerAuthGuard)
+  @Mutation(() => WebhookDto)
+  createWebhook(
+    @BearerAuthDecorator() auth: BearerAuth,
+    @Args() payload: CreateWebhookDto,
+  ): Promise<WebhookDto> {
+    return this.rmq.create(auth.project.id, payload);
   }
 
-  @Query(() => Boolean)
-  findOneWebhook() {
-    return this.rmq.findOne(undefined);
+  @UseGuards(BearerAuthGuard)
+  @Query(() => WebhookDto)
+  webhookById(
+    @BearerAuthDecorator() auth: BearerAuth,
+    @Args('id', ParseIntPipe) id: number,
+  ): Promise<WebhookDto> {
+    return this.rmq.findOne(auth.project.id, id);
   }
 
-  @Query(() => Boolean)
-  findAllWebhooks() {
-    return this.rmq.findAll(undefined);
+  @UseGuards(BearerAuthGuard)
+  @Query(() => WebhookDto)
+  webhooks(@BearerAuthDecorator() auth: BearerAuth): Promise<WebhookDto[]> {
+    return this.rmq.findAll(auth.project.id);
   }
 
-  @Mutation(() => Boolean)
-  updateWebhook() {
-    return this.rmq.update(undefined);
+  @UseGuards(BearerAuthGuard)
+  @Mutation(() => WebhookDto)
+  updateWebhook(
+    @BearerAuthDecorator() auth: BearerAuth,
+    @Args() payload: UpdateWebhookDto,
+  ): Promise<WebhookDto> {
+    return this.rmq.update(auth.project.id, payload);
   }
 
-  @Mutation(() => Boolean)
-  removeWebhook() {
-    return this.rmq.remove(undefined);
+  @UseGuards(BearerAuthGuard)
+  @Mutation(() => WebhookDto)
+  removeWebhook(
+    @BearerAuthDecorator() auth: BearerAuth,
+    @Args('id', ParseIntPipe) id: number,
+  ): Promise<WebhookDto> {
+    return this.rmq.remove(auth.project.id, id);
   }
 }

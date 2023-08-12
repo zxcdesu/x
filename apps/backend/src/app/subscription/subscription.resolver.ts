@@ -1,32 +1,58 @@
-import { Mutation, Query, Resolver } from '@nestjs/graphql';
+import { ParseIntPipe, UseGuards } from '@nestjs/common';
+import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
+import { BearerAuthDecorator } from '../auth/bearer-auth.decorator';
+import { BearerAuthGuard } from '../auth/bearer-auth.guard';
+import { BearerAuth } from '../auth/bearer-auth.interface';
+import { CreateSubscriptionDto } from './dto/create-subscription.dto';
+import { SubscriptionDto } from './dto/subscription.dto';
+import { UpdateSubscriptionDto } from './dto/update-subscription.dto';
 import { SubscriptionRmq } from './subscription.rmq';
 
 @Resolver()
 export class SubscriptionResolver {
   constructor(private readonly rmq: SubscriptionRmq) {}
 
-  @Mutation(() => Boolean)
-  createSubscription() {
-    return this.rmq.create(undefined);
+  @UseGuards(BearerAuthGuard)
+  @Mutation(() => SubscriptionDto)
+  createSubscription(
+    @BearerAuthDecorator() auth: BearerAuth,
+    @Args() payload: CreateSubscriptionDto,
+  ): Promise<SubscriptionDto> {
+    return this.rmq.create(auth.project.id, payload);
   }
 
-  @Query(() => Boolean)
-  findOneSubscription() {
-    return this.rmq.findOne(undefined);
+  @UseGuards(BearerAuthGuard)
+  @Query(() => SubscriptionDto)
+  subscriptionById(
+    @BearerAuthDecorator() auth: BearerAuth,
+    @Args('id', ParseIntPipe) id: number,
+  ): Promise<SubscriptionDto> {
+    return this.rmq.findOne(auth.project.id, id);
   }
 
-  @Query(() => Boolean)
-  findAllSubscriptions() {
-    return this.rmq.findAll(undefined);
+  @UseGuards(BearerAuthGuard)
+  @Query(() => SubscriptionDto)
+  subscriptions(
+    @BearerAuthDecorator() auth: BearerAuth,
+  ): Promise<SubscriptionDto[]> {
+    return this.rmq.findAll(auth.project.id);
   }
 
-  @Mutation(() => Boolean)
-  updateSubscription() {
-    return this.rmq.update(undefined);
+  @UseGuards(BearerAuthGuard)
+  @Mutation(() => SubscriptionDto)
+  updateSubscription(
+    @BearerAuthDecorator() auth: BearerAuth,
+    @Args() payload: UpdateSubscriptionDto,
+  ): Promise<SubscriptionDto> {
+    return this.rmq.update(auth.project.id, payload);
   }
 
-  @Mutation(() => Boolean)
-  removeSubscription() {
-    return this.rmq.remove(undefined);
+  @UseGuards(BearerAuthGuard)
+  @Mutation(() => SubscriptionDto)
+  removeSubscription(
+    @BearerAuthDecorator() auth: BearerAuth,
+    @Args('id', ParseIntPipe) id: number,
+  ): Promise<SubscriptionDto> {
+    return this.rmq.remove(auth.project.id, id);
   }
 }

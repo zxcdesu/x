@@ -1,32 +1,56 @@
-import { Mutation, Query, Resolver } from '@nestjs/graphql';
+import { ParseIntPipe, UseGuards } from '@nestjs/common';
+import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
+import { BearerAuthDecorator } from '../auth/bearer-auth.decorator';
+import { BearerAuthGuard } from '../auth/bearer-auth.guard';
+import { BearerAuth } from '../auth/bearer-auth.interface';
 import { ChannelRmq } from './channel.rmq';
+import { ChannelDto } from './dto/channel.dto';
+import { CreateChannelDto } from './dto/create-channel.dto';
+import { UpdateChannelDto } from './dto/update-channel.dto';
 
 @Resolver()
 export class ChannelResolver {
   constructor(private readonly rmq: ChannelRmq) {}
 
-  @Mutation(() => Boolean)
-  createChannel() {
-    return this.rmq.create(undefined);
+  @UseGuards(BearerAuthGuard)
+  @Mutation(() => ChannelDto)
+  createChannel(
+    @BearerAuthDecorator() auth: BearerAuth,
+    @Args() payload: CreateChannelDto,
+  ): Promise<ChannelDto> {
+    return this.rmq.create(auth.project.id, payload);
   }
 
-  @Query(() => Boolean)
-  findOneChannel() {
-    return this.rmq.findOne(undefined);
+  @UseGuards(BearerAuthGuard)
+  @Query(() => ChannelDto)
+  channelById(
+    @BearerAuthDecorator() auth: BearerAuth,
+    @Args('id', ParseIntPipe) id: number,
+  ): Promise<ChannelDto> {
+    return this.rmq.findOne(auth.project.id, id);
   }
 
-  @Query(() => Boolean)
-  findAllChannels() {
-    return this.rmq.findAll(undefined);
+  @UseGuards(BearerAuthGuard)
+  @Query(() => ChannelDto)
+  channels(@BearerAuthDecorator() auth: BearerAuth): Promise<ChannelDto[]> {
+    return this.rmq.findAll(auth.project.id);
   }
 
-  @Mutation(() => Boolean)
-  updateChannel() {
-    return this.rmq.update(undefined);
+  @UseGuards(BearerAuthGuard)
+  @Mutation(() => ChannelDto)
+  updateChannel(
+    @BearerAuthDecorator() auth: BearerAuth,
+    @Args() payload: UpdateChannelDto,
+  ): Promise<ChannelDto> {
+    return this.rmq.update(auth.project.id, payload);
   }
 
-  @Mutation(() => Boolean)
-  removeChannel() {
-    return this.rmq.remove(undefined);
+  @UseGuards(BearerAuthGuard)
+  @Mutation(() => ChannelDto)
+  removeChannel(
+    @BearerAuthDecorator() auth: BearerAuth,
+    @Args('id', ParseIntPipe) id: number,
+  ): Promise<ChannelDto> {
+    return this.rmq.remove(auth.project.id, id);
   }
 }

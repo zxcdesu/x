@@ -1,47 +1,65 @@
 import { Injectable } from '@nestjs/common';
 import { RmqService } from '@platform/nestjs-rabbitmq';
+import { ChannelDto } from './dto/channel.dto';
+import { CreateChannelDto } from './dto/create-channel.dto';
+import { UpdateChannelDto } from './dto/update-channel.dto';
 
 @Injectable()
 export class ChannelRmq extends RmqService {
   private readonly exchange = 'platform';
 
-  create(payload: any) {
-    return this.request<any>({
+  create(projectId: number, payload: CreateChannelDto) {
+    return this.request<ChannelDto>({
       exchange: this.exchange,
       routingKey: 'createChannel',
-      payload,
+      payload: {
+        ...payload,
+        projectId,
+      },
     });
   }
 
-  findOne(payload: number) {
-    return this.request<any>({
+  findOne(projectId: number, id: number) {
+    return this.request<ChannelDto>({
       exchange: this.exchange,
       routingKey: 'findOneChannel',
-      payload,
+      payload: {
+        projectId,
+        id,
+      },
     });
   }
 
-  findAll(payload?: number[]) {
-    return this.request<any[]>({
+  findAll(projectId: number, ids?: number[]) {
+    return this.request<ChannelDto[]>({
       exchange: this.exchange,
       routingKey: 'findAllChannels',
-      payload,
+      payload: {
+        projectId,
+        ids,
+      },
     });
   }
 
-  update(payload: any) {
-    return this.request<any>({
+  update(projectId: number, payload: UpdateChannelDto) {
+    return this.request<ChannelDto>({
       exchange: this.exchange,
       routingKey: 'updateChannel',
-      payload,
+      payload: {
+        ...payload,
+        projectId,
+      },
     });
   }
 
-  remove(payload: number) {
-    return this.request<any>({
+  remove(projectId: number, id: number) {
+    return this.request<ChannelDto>({
       exchange: this.exchange,
       routingKey: 'removeChannel',
-      payload,
+      payload: {
+        projectId,
+        id,
+      },
     });
   }
 }

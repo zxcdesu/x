@@ -1,32 +1,50 @@
-import { Mutation, Query, Resolver } from '@nestjs/graphql';
+import { ParseIntPipe, UseGuards } from '@nestjs/common';
+import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
+import { BearerAuthGuard } from '../auth/bearer-auth.guard';
 import { BotTemplateRmq } from './bot-template.rmq';
+import { BotTemplateDto } from './dto/bot-template.dto';
+import { CreateBotTemplateDto } from './dto/create-bot-template.dto';
+import { UpdateBotTemplateDto } from './dto/update-bot-template.dto';
 
 @Resolver()
 export class BotTemplateResolver {
   constructor(private readonly rmq: BotTemplateRmq) {}
 
-  @Mutation(() => Boolean)
-  createBotTemplate() {
-    return this.rmq.create(undefined);
+  @UseGuards(BearerAuthGuard)
+  @Mutation(() => BotTemplateDto)
+  createBotTemplate(
+    @Args() payload: CreateBotTemplateDto,
+  ): Promise<BotTemplateDto> {
+    return this.rmq.create(payload);
   }
 
-  @Query(() => Boolean)
-  findOneBotTemplate() {
-    return this.rmq.findOne(undefined);
+  @UseGuards(BearerAuthGuard)
+  @Query(() => BotTemplateDto)
+  botTemplateById(
+    @Args('id', ParseIntPipe) id: number,
+  ): Promise<BotTemplateDto> {
+    return this.rmq.findOne(id);
   }
 
-  @Query(() => Boolean)
-  findAllBotTemplates() {
-    return this.rmq.findAll(undefined);
+  @UseGuards(BearerAuthGuard)
+  @Query(() => BotTemplateDto)
+  botTemplates(): Promise<BotTemplateDto[]> {
+    return this.rmq.findAll();
   }
 
-  @Mutation(() => Boolean)
-  updateBotTemplate() {
-    return this.rmq.update(undefined);
+  @UseGuards(BearerAuthGuard)
+  @Mutation(() => BotTemplateDto)
+  updateBotTemplate(
+    @Args() payload: UpdateBotTemplateDto,
+  ): Promise<BotTemplateDto> {
+    return this.rmq.update(payload);
   }
 
-  @Mutation(() => Boolean)
-  removeBotTemplate() {
-    return this.rmq.remove(undefined);
+  @UseGuards(BearerAuthGuard)
+  @Mutation(() => BotTemplateDto)
+  removeBotTemplate(
+    @Args('id', ParseIntPipe) id: number,
+  ): Promise<BotTemplateDto> {
+    return this.rmq.remove(id);
   }
 }

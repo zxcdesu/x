@@ -1,47 +1,56 @@
 import { Injectable } from '@nestjs/common';
 import { RmqService } from '@platform/nestjs-rabbitmq';
+import { BotTemplateDto } from './dto/bot-template.dto';
+import { CreateBotTemplateDto } from './dto/create-bot-template.dto';
+import { UpdateBotTemplateDto } from './dto/update-bot-template.dto';
 
 @Injectable()
 export class BotTemplateRmq extends RmqService {
   private readonly exchange = 'bots';
 
-  create(payload: any) {
-    return this.request<any>({
+  create(payload: CreateBotTemplateDto) {
+    return this.request<BotTemplateDto>({
       exchange: this.exchange,
       routingKey: 'createBotTemplate',
       payload,
     });
   }
 
-  findOne(payload: number) {
-    return this.request<any>({
+  findOne(id: number) {
+    return this.request<BotTemplateDto>({
       exchange: this.exchange,
       routingKey: 'findOneBotTemplate',
-      payload,
+      payload: {
+        id,
+      },
     });
   }
 
-  findAll(payload?: number[]) {
-    return this.request<any[]>({
+  findAll(ids?: number[]) {
+    return this.request<BotTemplateDto[]>({
       exchange: this.exchange,
       routingKey: 'findAllBotTemplates',
-      payload,
+      payload: {
+        ids,
+      },
     });
   }
 
-  update(payload: any) {
-    return this.request<any>({
+  update(payload: UpdateBotTemplateDto) {
+    return this.request<BotTemplateDto>({
       exchange: this.exchange,
       routingKey: 'updateBotTemplate',
       payload,
     });
   }
 
-  remove(payload: number) {
-    return this.request<any>({
+  remove(id: number) {
+    return this.request<BotTemplateDto>({
       exchange: this.exchange,
       routingKey: 'removeBotTemplate',
-      payload,
+      payload: {
+        id,
+      },
     });
   }
 }

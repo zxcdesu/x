@@ -1,47 +1,65 @@
 import { Injectable } from '@nestjs/common';
 import { RmqService } from '@platform/nestjs-rabbitmq';
+import { ChatDto } from './dto/chat.dto';
+import { CreateChatDto } from './dto/create-chat.dto';
+import { UpdateChatDto } from './dto/update-chat.dto';
 
 @Injectable()
 export class ChatRmq extends RmqService {
   private readonly exchange = 'platform';
 
-  create(payload: any) {
-    return this.request<any>({
+  create(projectId: number, payload: CreateChatDto) {
+    return this.request<ChatDto>({
       exchange: this.exchange,
       routingKey: 'createChat',
-      payload,
+      payload: {
+        ...payload,
+        projectId,
+      },
     });
   }
 
-  findOne(payload: number) {
-    return this.request<any>({
+  findOne(projectId: number, id: number) {
+    return this.request<ChatDto>({
       exchange: this.exchange,
       routingKey: 'findOneChat',
-      payload,
+      payload: {
+        projectId,
+        id,
+      },
     });
   }
 
-  findAll(payload?: number[]) {
-    return this.request<any[]>({
+  findAll(projectId: number, ids?: number[]) {
+    return this.request<ChatDto[]>({
       exchange: this.exchange,
       routingKey: 'findAllChats',
-      payload,
+      payload: {
+        projectId,
+        ids,
+      },
     });
   }
 
-  update(payload: any) {
-    return this.request<any>({
+  update(projectId: number, payload: UpdateChatDto) {
+    return this.request<ChatDto>({
       exchange: this.exchange,
       routingKey: 'updateChat',
-      payload,
+      payload: {
+        ...payload,
+        projectId,
+      },
     });
   }
 
-  remove(payload: number) {
-    return this.request<any>({
+  remove(projectId: number, id: number) {
+    return this.request<ChatDto>({
       exchange: this.exchange,
       routingKey: 'removeChat',
-      payload,
+      payload: {
+        projectId,
+        id,
+      },
     });
   }
 }

@@ -1,32 +1,56 @@
-import { Mutation, Query, Resolver } from '@nestjs/graphql';
+import { ParseIntPipe, UseGuards } from '@nestjs/common';
+import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
+import { BearerAuthDecorator } from '../auth/bearer-auth.decorator';
+import { BearerAuthGuard } from '../auth/bearer-auth.guard';
+import { BearerAuth } from '../auth/bearer-auth.interface';
+import { CreateWalletDto } from './dto/create-wallet.dto';
+import { WalletDto } from './dto/project.dto';
+import { UpdateWalletDto } from './dto/update-project.dto';
 import { WalletRmq } from './wallet.rmq';
 
 @Resolver()
 export class WalletResolver {
   constructor(private readonly rmq: WalletRmq) {}
 
-  @Mutation(() => Boolean)
-  createWallet() {
-    return this.rmq.create(undefined);
+  @UseGuards(BearerAuthGuard)
+  @Mutation(() => WalletDto)
+  createWallet(
+    @BearerAuthDecorator() auth: BearerAuth,
+    @Args() payload: CreateWalletDto,
+  ): Promise<WalletDto> {
+    return this.rmq.create(auth.project.id, payload);
   }
 
-  @Query(() => Boolean)
-  findOneWallet() {
-    return this.rmq.findOne(undefined);
+  @UseGuards(BearerAuthGuard)
+  @Query(() => WalletDto)
+  walletById(
+    @BearerAuthDecorator() auth: BearerAuth,
+    @Args('id', ParseIntPipe) id: number,
+  ): Promise<WalletDto> {
+    return this.rmq.findOne(auth.project.id, id);
   }
 
-  @Query(() => Boolean)
-  findAllWallets() {
-    return this.rmq.findAll(undefined);
+  @UseGuards(BearerAuthGuard)
+  @Query(() => WalletDto)
+  wallets(@BearerAuthDecorator() auth: BearerAuth): Promise<WalletDto[]> {
+    return this.rmq.findAll(auth.project.id);
   }
 
-  @Mutation(() => Boolean)
-  updateWallet() {
-    return this.rmq.update(undefined);
+  @UseGuards(BearerAuthGuard)
+  @Mutation(() => WalletDto)
+  updateWallet(
+    @BearerAuthDecorator() auth: BearerAuth,
+    @Args() payload: UpdateWalletDto,
+  ): Promise<WalletDto> {
+    return this.rmq.update(auth.project.id, payload);
   }
 
-  @Mutation(() => Boolean)
-  removeWallet() {
-    return this.rmq.remove(undefined);
+  @UseGuards(BearerAuthGuard)
+  @Mutation(() => WalletDto)
+  removeWallet(
+    @BearerAuthDecorator() auth: BearerAuth,
+    @Args('id', ParseIntPipe) id: number,
+  ): Promise<WalletDto> {
+    return this.rmq.remove(auth.project.id, id);
   }
 }

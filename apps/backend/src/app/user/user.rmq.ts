@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { RmqService } from '@platform/nestjs-rabbitmq';
-import { TokenDto } from '../auth/token.dto';
+import { TokenDto } from '../auth/dto/token.dto';
 import { CreateUserDto } from './dto/create-user.dto';
 import { SignInUserDto } from './dto/sign-in-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
@@ -44,11 +44,13 @@ export class UserRmq extends RmqService {
     });
   }
 
-  remove(payload: number) {
+  remove(id: number) {
     return this.request<UserDto>({
       exchange: this.exchange,
       routingKey: 'removeUser',
-      payload,
+      payload: {
+        id,
+      },
     });
   }
 }

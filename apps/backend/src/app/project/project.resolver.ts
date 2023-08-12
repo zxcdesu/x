@@ -1,32 +1,50 @@
-import { Mutation, Query, Resolver } from '@nestjs/graphql';
+import { UseGuards } from '@nestjs/common';
+import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
+import { BearerAuthDecorator } from '../auth/bearer-auth.decorator';
+import { BearerAuthGuard } from '../auth/bearer-auth.guard';
+import { BearerAuth } from '../auth/bearer-auth.interface';
+import { CreateProjectDto } from './dto/create-project.dto';
+import { ProjectDto } from './dto/project.dto';
+import { UpdateProjectDto } from './dto/update-project.dto';
 import { ProjectRmq } from './project.rmq';
 
 @Resolver()
 export class ProjectResolver {
   constructor(private readonly rmq: ProjectRmq) {}
 
-  @Mutation(() => Boolean)
-  createProject() {
-    return this.rmq.create(undefined);
+  @UseGuards(BearerAuthGuard)
+  @Mutation(() => ProjectDto)
+  createProject(
+    @BearerAuthDecorator() auth: BearerAuth,
+    @Args() payload: CreateProjectDto,
+  ): Promise<ProjectDto> {
+    return this.rmq.create(auth.id, payload);
   }
 
-  @Query(() => Boolean)
-  findOneProject() {
-    return this.rmq.findOne(undefined);
+  @UseGuards(BearerAuthGuard)
+  @Query(() => ProjectDto)
+  currentProject(@BearerAuthDecorator() auth: BearerAuth): Promise<ProjectDto> {
+    return this.rmq.findOne(auth.id, auth.project.id);
   }
 
-  @Query(() => Boolean)
-  findAllProjects() {
-    return this.rmq.findAll(undefined);
+  @UseGuards(BearerAuthGuard)
+  @Query(() => ProjectDto)
+  projects(@BearerAuthDecorator() auth: BearerAuth): Promise<ProjectDto[]> {
+    return this.rmq.findAll(auth.id);
   }
 
-  @Mutation(() => Boolean)
-  updateProject() {
-    return this.rmq.update(undefined);
+  @UseGuards(BearerAuthGuard)
+  @Mutation(() => ProjectDto)
+  updateProject(
+    @BearerAuthDecorator() auth: BearerAuth,
+    @Args() payload: UpdateProjectDto,
+  ): Promise<ProjectDto> {
+    return this.rmq.update(auth.id, payload);
   }
 
-  @Mutation(() => Boolean)
-  removeProject() {
-    return this.rmq.remove(undefined);
+  @UseGuards(BearerAuthGuard)
+  @Mutation(() => ProjectDto)
+  removeProject(@BearerAuthDecorator() auth: BearerAuth): Promise<ProjectDto> {
+    return this.rmq.remove(auth.id, auth.project.id);
   }
 }

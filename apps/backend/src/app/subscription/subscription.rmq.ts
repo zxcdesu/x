@@ -1,47 +1,65 @@
 import { Injectable } from '@nestjs/common';
 import { RmqService } from '@platform/nestjs-rabbitmq';
+import { CreateSubscriptionDto } from './dto/create-subscription.dto';
+import { SubscriptionDto } from './dto/subscription.dto';
+import { UpdateSubscriptionDto } from './dto/update-subscription.dto';
 
 @Injectable()
 export class SubscriptionRmq extends RmqService {
   private readonly exchange = 'billing';
 
-  create(payload: any) {
-    return this.request<any>({
+  create(projectId: number, payload: CreateSubscriptionDto) {
+    return this.request<SubscriptionDto>({
       exchange: this.exchange,
       routingKey: 'createSubscription',
-      payload,
+      payload: {
+        ...payload,
+        projectId,
+      },
     });
   }
 
-  findOne(payload: number) {
-    return this.request<any>({
+  findOne(projectId: number, id: number) {
+    return this.request<SubscriptionDto>({
       exchange: this.exchange,
       routingKey: 'findOneSubscription',
-      payload,
+      payload: {
+        projectId,
+        id,
+      },
     });
   }
 
-  findAll(payload?: number[]) {
-    return this.request<any[]>({
+  findAll(projectId: number, ids?: number[]) {
+    return this.request<SubscriptionDto[]>({
       exchange: this.exchange,
       routingKey: 'findAllSubscriptions',
-      payload,
+      payload: {
+        projectId,
+        ids,
+      },
     });
   }
 
-  update(payload: any) {
-    return this.request<any>({
+  update(projectId: number, payload: UpdateSubscriptionDto) {
+    return this.request<SubscriptionDto>({
       exchange: this.exchange,
       routingKey: 'updateSubscription',
-      payload,
+      payload: {
+        ...payload,
+        projectId,
+      },
     });
   }
 
-  remove(payload: number) {
-    return this.request<any>({
+  remove(projectId: number, id: number) {
+    return this.request<SubscriptionDto>({
       exchange: this.exchange,
       routingKey: 'removeSubscription',
-      payload,
+      payload: {
+        projectId,
+        id,
+      },
     });
   }
 }

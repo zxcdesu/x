@@ -2,7 +2,7 @@ import { RabbitMQModule } from '@golevelup/nestjs-rabbitmq';
 import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import joi from 'joi';
-import { PrismaService } from '../../prisma/prisma.service';
+import { PrismaService } from './prisma.service';
 import { BotTemplateController } from './bot-template/bot-template.controller';
 import { BotTemplateService } from './bot-template/bot-template.service';
 import { BotController } from './bot/bot.controller';
