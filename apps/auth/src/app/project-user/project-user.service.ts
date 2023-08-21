@@ -6,6 +6,15 @@ import { UpdateProjectUserDto } from './dto/update-project-user.dto';
 export class ProjectUserService {
   constructor(private readonly prismaService: PrismaService) {}
 
+  create(projectId: number, userId: number) {
+    return this.prismaService.projectUser.create({
+      data: {
+        projectId,
+        userId,
+      },
+    });
+  }
+
   findOne(projectId: number, userId: number) {
     return this.prismaService.projectUser.findUniqueOrThrow({
       where: {

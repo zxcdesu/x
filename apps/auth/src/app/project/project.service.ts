@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
-import { TokenService } from '../token/token.service';
 import { PrismaService } from '../prisma.service';
+import { ProjectUserService } from '../project-user/project-user.service';
+import { TokenService } from '../token/token.service';
 import { CreateProjectDto } from './dto/create-project.dto';
 import { FindOneProjectDto } from './dto/find-one-project.dto';
 import { RemoveProjectDto } from './dto/remove-project.dto';
@@ -12,6 +13,7 @@ export class ProjectService {
   constructor(
     private readonly prismaService: PrismaService,
     private readonly tokenService: TokenService<ProjectTokenPayload>,
+    private readonly projectUserService: ProjectUserService,
   ) {}
 
   create(userId: number, payload: CreateProjectDto) {
@@ -35,15 +37,7 @@ export class ProjectService {
   }
 
   async signIn(userId: number, projectId: number) {
-    await this.prismaService.projectUser.findUniqueOrThrow({
-      where: {
-        projectId_userId: {
-          projectId,
-          userId,
-        },
-      },
-    });
-
+    await this.projectUserService.findOne(projectId, userId);
     return {
       token: this.tokenService.sign({
         id: userId,

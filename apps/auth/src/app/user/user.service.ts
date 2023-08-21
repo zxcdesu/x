@@ -1,7 +1,8 @@
 import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { compare, hash } from 'bcrypt';
-import { TokenService } from '../token/token.service';
+import { InviteService } from '../invite/invite.service';
 import { PrismaService } from '../prisma.service';
+import { TokenService } from '../token/token.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { FindOneUserDto } from './dto/find-one-user.dto';
 import { RemoveUserDto } from './dto/remove-user.dto';
@@ -14,15 +15,11 @@ export class UserService {
   constructor(
     private readonly prismaService: PrismaService,
     private readonly tokenService: TokenService<UserTokenPayload>,
+    private readonly inviteService: InviteService,
   ) {}
 
   async create(payload: CreateUserDto) {
-    const invites = await this.prismaService.invite.findMany({
-      where: {
-        email: payload.email,
-      },
-    });
-
+    const invites = await this.inviteService.findAll(payload.email);
     return this.prismaService.user.create({
       data: {
         ...payload,
@@ -59,6 +56,14 @@ export class UserService {
   findOne(payload: FindOneUserDto) {
     return this.prismaService.user.findUniqueOrThrow({
       where: payload,
+    });
+  }
+
+  findOneByEmail(email: string) {
+    return this.prismaService.user.findUnique({
+      where: {
+        email,
+      },
     });
   }
 
