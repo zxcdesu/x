@@ -18,6 +18,8 @@ import { ChatResolver } from './chat/chat.resolver';
 import { ChatRmq } from './chat/chat.rmq';
 import { ContactResolver } from './contact/contact.resolver';
 import { ContactRmq } from './contact/contact.rmq';
+import { HsmResolver } from './hsm/hsm.resolver';
+import { HsmRmq } from './hsm/hsm.rmq';
 import { IntegrationResolver } from './integration/integration.resolver';
 import { IntegrationRmq } from './integration/integration.rmq';
 import { MailingResolver } from './mailing/mailing.resolver';
@@ -41,7 +43,8 @@ import { WebhookRmq } from './webhook/webhook.rmq';
       isGlobal: true,
       validationSchema: joi.object({
         BROKER_URL: joi.string().uri().required(),
-        PORT: joi.number().port().default(3000),
+        PORT: joi.number().port().default(4200),
+        SECRET: joi.string().required(),
       }),
     }),
     RabbitMQModule.forRootAsync(RabbitMQModule, {
@@ -81,6 +84,7 @@ import { WebhookRmq } from './webhook/webhook.rmq';
     ChannelResolver,
     ChatResolver,
     ContactResolver,
+    HsmResolver,
     IntegrationResolver,
     MailingResolver,
     MessageResolver,
@@ -94,6 +98,7 @@ import { WebhookRmq } from './webhook/webhook.rmq';
     ChannelRmq,
     ChatRmq,
     ContactRmq,
+    HsmRmq,
     IntegrationRmq,
     MailingRmq,
     MessageRmq,
