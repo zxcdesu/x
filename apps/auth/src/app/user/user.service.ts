@@ -13,7 +13,7 @@ import { FindOneUserDto } from './dto/find-one-user.dto';
 import { RemoveUserDto } from './dto/remove-user.dto';
 import { SignInUserDto } from './dto/sign-in-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
-import { UserTokenPayload } from './interfaces/user-token-payload.interface';
+import { UserTokenPayload } from './user-token-payload.interface';
 
 @Injectable()
 export class UserService {

@@ -1,8 +1,9 @@
 import { UseGuards } from '@nestjs/common';
-import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
+import { Args, Int, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { BearerAuthDecorator } from '../auth/bearer-auth.decorator';
 import { BearerAuthGuard } from '../auth/bearer-auth.guard';
 import { BearerAuth } from '../auth/bearer-auth.interface';
+import { TokenDto } from '../auth/dto/token.dto';
 import { CreateProjectDto } from './dto/create-project.dto';
 import { ProjectDto } from './dto/project.dto';
 import { UpdateProjectDto } from './dto/update-project.dto';
@@ -22,13 +23,22 @@ export class ProjectResolver {
   }
 
   @UseGuards(BearerAuthGuard)
-  @Query(() => ProjectDto)
-  currentProject(@BearerAuthDecorator() auth: BearerAuth): Promise<ProjectDto> {
-    return this.rmq.findOne(auth.id, auth.project.id);
+  @Mutation(() => TokenDto)
+  signInProject(
+    @BearerAuthDecorator() auth: BearerAuth,
+    @Args('id', { type: () => Int }) id: number,
+  ): Promise<TokenDto> {
+    return this.rmq.signIn(auth.id, id);
   }
 
   @UseGuards(BearerAuthGuard)
   @Query(() => ProjectDto)
+  project(@BearerAuthDecorator() auth: BearerAuth): Promise<ProjectDto> {
+    return this.rmq.findOne(auth.id, auth.project.id);
+  }
+
+  @UseGuards(BearerAuthGuard)
+  @Query(() => [ProjectDto])
   projects(@BearerAuthDecorator() auth: BearerAuth): Promise<ProjectDto[]> {
     return this.rmq.findAll(auth.id);
   }
@@ -39,7 +49,7 @@ export class ProjectResolver {
     @BearerAuthDecorator() auth: BearerAuth,
     @Args() payload: UpdateProjectDto,
   ): Promise<ProjectDto> {
-    return this.rmq.update(auth.id, payload);
+    return this.rmq.update(auth.id, auth.project.id, payload);
   }
 
   @UseGuards(BearerAuthGuard)

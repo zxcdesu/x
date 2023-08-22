@@ -6,7 +6,7 @@ import { CreateProjectDto } from './dto/create-project.dto';
 import { FindOneProjectDto } from './dto/find-one-project.dto';
 import { RemoveProjectDto } from './dto/remove-project.dto';
 import { UpdateProjectDto } from './dto/update-project.dto';
-import { ProjectTokenPayload } from './interfaces/project-token-payload.interface';
+import { ProjectTokenPayload } from './project-token-payload.interface';
 
 @Injectable()
 export class ProjectService {

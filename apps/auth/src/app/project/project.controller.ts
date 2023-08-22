@@ -61,9 +61,9 @@ export class ProjectController {
     routingKey: 'findAllProjects',
     exchange: 'auth',
   })
-  @SerializeOptions({
-    type: ProjectDto,
-  })
+  // @SerializeOptions({
+  //   type: ProjectDto,
+  // })
   findAll(@UserId() userId: number): Promise<ProjectDto[]> {
     return this.projectService.findAll(userId);
   }

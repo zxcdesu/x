@@ -10,14 +10,14 @@ export class RmqService {
   ) {}
 
   protected async request<T>(requestOptions: RequestOptions): Promise<T> {
-    const { error, ...payload } = await this.amqpConnection.request<
+    const payload = await this.amqpConnection.request<
       T & {
         error?: any;
       }
     >(requestOptions);
-    if (error) {
-      throw this.errorFactory(error);
+    if (payload.error) {
+      throw this.errorFactory(payload.error);
     }
-    return payload as T;
+    return payload;
   }
 }

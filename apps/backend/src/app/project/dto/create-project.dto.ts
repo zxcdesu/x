@@ -4,4 +4,10 @@ import { ArgsType, Field } from '@nestjs/graphql';
 export class CreateProjectDto {
   @Field(() => String)
   name: string;
+
+  @Field(() => String, { nullable: true })
+  description?: string;
+
+  @Field(() => String, { nullable: true })
+  imageUrl?: string;
 }
