@@ -55,10 +55,10 @@ import { UserService } from './user/user.service';
       provide: APP_INTERCEPTOR,
       useClass: ClassSerializerInterceptor,
     },
-    TokenService,
     InviteService,
     ProjectService,
     ProjectUserService,
+    TokenService,
     UserService,
   ],
 })

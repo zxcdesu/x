@@ -1,4 +1,9 @@
-import { Injectable, UnauthorizedException } from '@nestjs/common';
+import {
+  Inject,
+  Injectable,
+  UnauthorizedException,
+  forwardRef,
+} from '@nestjs/common';
 import { compare, hash } from 'bcrypt';
 import { InviteService } from '../invite/invite.service';
 import { PrismaService } from '../prisma.service';
@@ -15,6 +20,7 @@ export class UserService {
   constructor(
     private readonly prismaService: PrismaService,
     private readonly tokenService: TokenService<UserTokenPayload>,
+    @Inject(forwardRef(() => InviteService))
     private readonly inviteService: InviteService,
   ) {}
 

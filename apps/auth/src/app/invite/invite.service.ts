@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Inject, Injectable, forwardRef } from '@nestjs/common';
 import { PrismaService } from '../prisma.service';
 import { ProjectUserService } from '../project-user/project-user.service';
 import { UserService } from '../user/user.service';
@@ -8,6 +8,7 @@ import { CreateInviteDto } from './dto/create-invite.dto';
 export class InviteService {
   constructor(
     private readonly prismaService: PrismaService,
+    @Inject(forwardRef(() => UserService))
     private readonly userService: UserService,
     private readonly projectUserService: ProjectUserService,
   ) {}
