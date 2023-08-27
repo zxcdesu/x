@@ -12,7 +12,7 @@ export class InviteController {
     routingKey: 'createInvite',
     exchange: 'auth',
   })
-  create(@RabbitPayload() payload: CreateInviteDto): Promise<void> {
+  create(@RabbitPayload() payload: CreateInviteDto): Promise<boolean> {
     return this.inviteService.create(payload);
   }
 }

@@ -22,6 +22,7 @@ export class InviteService {
         data: payload,
       });
     }
+    return true;
   }
 
   findAll(email: string) {

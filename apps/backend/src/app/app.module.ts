@@ -22,10 +22,14 @@ import { HsmResolver } from './hsm/hsm.resolver';
 import { HsmRmq } from './hsm/hsm.rmq';
 import { IntegrationResolver } from './integration/integration.resolver';
 import { IntegrationRmq } from './integration/integration.rmq';
+import { InviteResolver } from './invite/invite.controller';
+import { InviteRmq } from './invite/invite.rmq';
 import { MailingResolver } from './mailing/mailing.resolver';
 import { MailingRmq } from './mailing/mailing.rmq';
 import { MessageResolver } from './message/message.resolver';
 import { MessageRmq } from './message/message.rmq';
+import { ProjectUserResolver } from './project-user/project-user.controller';
+import { ProjectUserRmq } from './project-user/project-user.rmq';
 import { ProjectResolver } from './project/project.resolver';
 import { ProjectRmq } from './project/project.rmq';
 import { SubscriptionResolver } from './subscription/subscription.resolver';
@@ -86,9 +90,11 @@ import { WebhookRmq } from './webhook/webhook.rmq';
     ContactResolver,
     HsmResolver,
     IntegrationResolver,
+    InviteResolver,
     MailingResolver,
     MessageResolver,
     ProjectResolver,
+    ProjectUserResolver,
     SubscriptionResolver,
     UserResolver,
     WalletResolver,
@@ -100,9 +106,11 @@ import { WebhookRmq } from './webhook/webhook.rmq';
     ContactRmq,
     HsmRmq,
     IntegrationRmq,
+    InviteRmq,
     MailingRmq,
     MessageRmq,
     ProjectRmq,
+    ProjectUserRmq,
     SubscriptionRmq,
     UserRmq,
     WalletRmq,
