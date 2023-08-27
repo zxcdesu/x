@@ -1,7 +1,7 @@
 import { RabbitPayload } from '@golevelup/nestjs-rabbitmq';
 import { Controller, SerializeOptions } from '@nestjs/common';
 import { RabbitRPC } from '@platform/nestjs-rabbitmq';
-import { TokenDto } from '../token/dto/token.dto';
+import { JwtDto } from '../jwt/dto/jwt.dto';
 import { CreateUserDto } from './dto/create-user.dto';
 import { FindOneUserDto } from './dto/find-one-user.dto';
 import { RemoveUserDto } from './dto/remove-user.dto';
@@ -30,9 +30,9 @@ export class UserController {
     exchange: 'auth',
   })
   @SerializeOptions({
-    type: TokenDto,
+    type: JwtDto,
   })
-  signIn(@RabbitPayload() payload: SignInUserDto): Promise<TokenDto> {
+  signIn(@RabbitPayload() payload: SignInUserDto): Promise<JwtDto> {
     return this.userService.signIn(payload);
   }
 

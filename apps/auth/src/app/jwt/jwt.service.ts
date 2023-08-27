@@ -3,7 +3,7 @@ import { ConfigService } from '@nestjs/config';
 import { sign, verify } from 'jsonwebtoken';
 
 @Injectable()
-export class TokenService<T extends object> {
+export class JwtService<T extends object> {
   constructor(private readonly configService: ConfigService) {}
 
   sign(payload: T) {

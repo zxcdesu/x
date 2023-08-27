@@ -6,20 +6,20 @@ import {
 } from '@nestjs/common';
 import { compare, hash } from 'bcrypt';
 import { InviteService } from '../invite/invite.service';
+import { JwtService } from '../jwt/jwt.service';
 import { PrismaService } from '../prisma.service';
-import { TokenService } from '../token/token.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { FindOneUserDto } from './dto/find-one-user.dto';
 import { RemoveUserDto } from './dto/remove-user.dto';
 import { SignInUserDto } from './dto/sign-in-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
-import { UserTokenPayload } from './user-token-payload.interface';
+import { UserJwtPayload } from './user-jwt-payload.interface';
 
 @Injectable()
 export class UserService {
   constructor(
     private readonly prismaService: PrismaService,
-    private readonly tokenService: TokenService<UserTokenPayload>,
+    private readonly jwtService: JwtService<UserJwtPayload>,
     @Inject(forwardRef(() => InviteService))
     private readonly inviteService: InviteService,
   ) {}
@@ -50,7 +50,7 @@ export class UserService {
 
     if (await compare(payload.password, user.password)) {
       return {
-        token: this.tokenService.sign({
+        token: this.jwtService.sign({
           id: user.id,
         }),
       };

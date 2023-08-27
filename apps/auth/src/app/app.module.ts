@@ -5,12 +5,12 @@ import { APP_INTERCEPTOR } from '@nestjs/core';
 import joi from 'joi';
 import { InviteController } from './invite/invite.controller';
 import { InviteService } from './invite/invite.service';
+import { JwtService } from './jwt/jwt.service';
 import { PrismaService } from './prisma.service';
 import { ProjectUserController } from './project-user/project-user.controller';
 import { ProjectUserService } from './project-user/project-user.service';
 import { ProjectController } from './project/project.controller';
 import { ProjectService } from './project/project.service';
-import { TokenService } from './token/token.service';
 import { UserController } from './user/user.controller';
 import { UserService } from './user/user.service';
 
@@ -58,7 +58,7 @@ import { UserService } from './user/user.service';
     InviteService,
     ProjectService,
     ProjectUserService,
-    TokenService,
+    JwtService,
     UserService,
   ],
 })

@@ -1,7 +1,7 @@
 import { RabbitPayload } from '@golevelup/nestjs-rabbitmq';
 import { Controller, SerializeOptions } from '@nestjs/common';
 import { RabbitRPC } from '@platform/nestjs-rabbitmq';
-import { TokenDto } from '../token/dto/token.dto';
+import { JwtDto } from '../jwt/dto/jwt.dto';
 import { UserId } from '../user/user.decorator';
 import { CreateProjectDto } from './dto/create-project.dto';
 import { FindOneProjectDto } from './dto/find-one-project.dto';
@@ -34,12 +34,12 @@ export class ProjectController {
     exchange: 'auth',
   })
   @SerializeOptions({
-    type: TokenDto,
+    type: JwtDto,
   })
   signIn(
     @UserId() userId: number,
     @ProjectId() projectId: number,
-  ): Promise<TokenDto> {
+  ): Promise<JwtDto> {
     return this.projectService.signIn(userId, projectId);
   }
 
