@@ -11,7 +11,7 @@ services:
       - /usr/src/app/apps/admin/prisma/generated
       - /usr/src/app/node_modules
     environment:
-      - DATABASE_URL=postgres://root:pass@postgres:5432
+      - DATABASE_URL=postgres://root:pass@postgres:5432/admin
       - BROKER_URL=amqp://root:pass@rabbitmq:5672
     networks:
       - default
@@ -31,7 +31,7 @@ services:
       - /usr/src/app/apps/auth/prisma/generated
       - /usr/src/app/node_modules
     environment:
-      - DATABASE_URL=postgres://root:pass@postgres:5432
+      - DATABASE_URL=postgres://root:pass@postgres:5432/auth
       - BROKER_URL=amqp://root:pass@rabbitmq:5672
       - SECRET=secret
     networks:
@@ -72,7 +72,7 @@ services:
       - /usr/src/app/apps/billing/prisma/generated
       - /usr/src/app/node_modules
     environment:
-      - DATABASE_URL=postgres://root:pass@postgres:5432
+      - DATABASE_URL=postgres://root:pass@postgres:5432/billing
       - BROKER_URL=amqp://root:pass@rabbitmq:5672
     networks:
       - default
@@ -92,7 +92,7 @@ services:
       - /usr/src/app/apps/bots/prisma/generated
       - /usr/src/app/node_modules
     environment:
-      - DATABASE_URL=postgres://root:pass@postgres:5432
+      - DATABASE_URL=postgres://root:pass@postgres:5432/bots
       - BROKER_URL=amqp://root:pass@rabbitmq:5672
     networks:
       - default
@@ -147,7 +147,7 @@ services:
       - /usr/src/app/apps/integrations/prisma/generated
       - /usr/src/app/node_modules
     environment:
-      - DATABASE_URL=postgres://root:pass@postgres:5432
+      - DATABASE_URL=postgres://root:pass@postgres:5432/integrations
       - BROKER_URL=amqp://root:pass@rabbitmq:5672
     networks:
       - default
@@ -167,7 +167,7 @@ services:
       - /usr/src/app/apps/mailings/prisma/generated
       - /usr/src/app/node_modules
     environment:
-      - DATABASE_URL=postgres://root:pass@postgres:5432
+      - DATABASE_URL=postgres://root:pass@postgres:5432/mailings
       - BROKER_URL=amqp://root:pass@rabbitmq:5672
     networks:
       - default
@@ -187,7 +187,7 @@ services:
       - /usr/src/app/apps/platform/prisma/generated
       - /usr/src/app/node_modules
     environment:
-      - DATABASE_URL=postgres://root:pass@postgres:5432
+      - DATABASE_URL=postgres://root:pass@postgres:5432/platform
       - BROKER_URL=amqp://root:pass@rabbitmq:5672
     networks:
       - default
