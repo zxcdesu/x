@@ -54,6 +54,7 @@ model Chat {
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt
 
+  @@unique([projectId, id])
   @@unique([projectId, channelId, accountId])
 }
 
