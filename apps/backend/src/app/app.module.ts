@@ -40,6 +40,7 @@ import { WalletResolver } from './wallet/wallet.resolver';
 import { WalletRmq } from './wallet/wallet.rmq';
 import { WebhookResolver } from './webhook/webhook.resolver';
 import { WebhookRmq } from './webhook/webhook.rmq';
+import { PubSubService } from './pubsub.service';
 
 @Module({
   imports: [
@@ -76,6 +77,7 @@ import { WebhookRmq } from './webhook/webhook.rmq';
     PassportModule,
   ],
   providers: [
+    PubSubService,
     {
       provide: ERROR_FACTORY,
       useValue: (error?: any) => {
