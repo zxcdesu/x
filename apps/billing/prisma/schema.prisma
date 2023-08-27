@@ -20,4 +20,6 @@ model Subscription {
   projectId Int      @id
   wallet    Wallet   @relation(fields: [projectId], references: [projectId], onDelete: Cascade)
   expiresAt DateTime
+
+  @@index([expiresAt])
 }
