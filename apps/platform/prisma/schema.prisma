@@ -174,26 +174,27 @@ model AssignedTo {
 enum ContactStatus {
   Pending
   Processing
-  Closed
+  Resolved
+  Rejected
 }
 
 model Contact {
-  id           Int           @id @default(autoincrement())
-  projectId    Int
-  name         String        @default("")
-  description  String        @default("")
-  imageUrl     String?
-  assignedTo   AssignedTo?
-  priority     Int           @default(3)
-  status       ContactStatus
-  closedReason String?
-  chats        Chat[]
-  tags         ContactTag[]
-  customFields CustomField[]
-  history      History[]
-  createdAt    DateTime      @default(now())
-  updatedAt    DateTime?     @updatedAt
-  deletedAt    DateTime?
+  id             Int           @id @default(autoincrement())
+  projectId      Int
+  name           String        @default("")
+  description.   String        @default("")
+  imageUrl       String?
+  assignedTo     AssignedTo?
+  priority       Int           @default(3)
+  status         ContactStatus
+  rejectedReason String?
+  chats          Chat[]
+  tags           ContactTag[]
+  customFields.  CustomField[]
+  history        History[]
+  createdAt      DateTime      @default(now())
+  updatedAt      DateTime?     @updatedAt
+  deletedAt      DateTime?
 
   @@unique([projectId, id])
   @@index([projectId])
