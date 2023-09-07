@@ -55,7 +55,7 @@ model Chat {
   updatedAt   DateTime  @updatedAt
 
   @@unique([projectId, id])
-  @@unique([projectId, channelId, accountId])
+  @@unique([channelId, accountId])
 }
 
 enum MessageStatus {
@@ -65,23 +65,32 @@ enum MessageStatus {
   Failed
 }
 
-enum MessageFrom {
-  User
-  Bot
-  Customer
-}
-
 model Message {
   id           Int           @id @default(autoincrement())
   chatId       Int
   chat         Chat          @relation(fields: [chatId], references: [id], onDelete: Cascade)
+  content      Content[]
+  author       Author?
   externalId   String
   status       MessageStatus
   failedReason String?
-  from         MessageFrom
-  content      Content[]
   createdAt    DateTime      @default(now())
   updatedAt    DateTime      @updatedAt
+
+  @@unique([chatId, id])
+  @@index([externalId])
+}
+
+enum AuthorType {
+  User
+  Bot
+}
+
+model Author {
+  messageId   Int     @id
+  message     Message @relation(fields: [messageId], references: [id], onDelete: Cascade)
+  id          Int
+  type        AuthorType
 }
 
 model Content {
@@ -162,7 +171,8 @@ model AssignedTo {
 }
 
 enum ContactStatus {
-  Open
+  Pending
+  Processing
   Closed
 }
 

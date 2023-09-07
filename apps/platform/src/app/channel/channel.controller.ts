@@ -1,27 +1,73 @@
-import { Controller } from '@nestjs/common';
+import { RabbitPayload } from '@golevelup/nestjs-rabbitmq';
+import { Controller, ParseIntPipe, SerializeOptions } from '@nestjs/common';
+import { RabbitRPC } from '@platform/nestjs-rabbitmq';
 import { ChannelService } from './channel.service';
+import { ChannelDto } from './dto/channel.dto';
+import { CreateChannelDto } from './dto/create-channel.dto';
+import { UpdateChannelDto } from './dto/update-channel.dto';
 
 @Controller()
 export class ChannelController {
   constructor(private readonly channelService: ChannelService) {}
 
-  create() {
-    return this.channelService.create();
+  @RabbitRPC({
+    routingKey: 'createChannel',
+    exchange: 'platform',
+  })
+  @SerializeOptions({
+    type: ChannelDto,
+  })
+  create(@RabbitPayload() payload: CreateChannelDto) {
+    return this.channelService.create(payload);
   }
 
-  findOne() {
-    return this.channelService.findOne();
+  @RabbitRPC({
+    routingKey: 'findOneChannel',
+    exchange: 'platform',
+  })
+  @SerializeOptions({
+    type: ChannelDto,
+  })
+  findOne(
+    @RabbitPayload('projectId', ParseIntPipe) projectId: number,
+    @RabbitPayload('id', ParseIntPipe) id: number,
+  ) {
+    return this.channelService.findOne(projectId, id);
   }
 
-  findAll() {
-    return this.channelService.findAll();
+  @RabbitRPC({
+    routingKey: 'findAllChannels',
+    exchange: 'platform',
+  })
+  @SerializeOptions({
+    type: ChannelDto,
+  })
+  findAll(@RabbitPayload('projectId', ParseIntPipe) projectId: number) {
+    return this.channelService.findAll(projectId);
   }
 
-  update() {
-    return this.channelService.update();
+  @RabbitRPC({
+    routingKey: 'updateChannel',
+    exchange: 'platform',
+  })
+  @SerializeOptions({
+    type: ChannelDto,
+  })
+  update(@RabbitPayload() payload: UpdateChannelDto) {
+    return this.channelService.update(payload);
   }
 
-  remove() {
-    return this.channelService.remove();
+  @RabbitRPC({
+    routingKey: 'removeChannel',
+    exchange: 'platform',
+  })
+  @SerializeOptions({
+    type: ChannelDto,
+  })
+  remove(
+    @RabbitPayload('projectId', ParseIntPipe) projectId: number,
+    @RabbitPayload('id', ParseIntPipe) id: number,
+  ) {
+    return this.channelService.remove(projectId, id);
   }
 }

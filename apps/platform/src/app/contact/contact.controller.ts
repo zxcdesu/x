@@ -1,27 +1,72 @@
-import { Controller } from '@nestjs/common';
+import { RabbitPayload, RabbitRPC } from '@golevelup/nestjs-rabbitmq';
+import { Controller, ParseIntPipe, SerializeOptions } from '@nestjs/common';
 import { ContactService } from './contact.service';
+import { ContactDto } from './dto/contact.dto';
+import { CreateContactDto } from './dto/create-contact.dto';
+import { UpdateContactDto } from './dto/update-contact.dto';
 
 @Controller()
 export class ContactController {
   constructor(private readonly contactService: ContactService) {}
 
-  create() {
-    return this.contactService.create();
+  @RabbitRPC({
+    routingKey: 'createContact',
+    exchange: 'platform',
+  })
+  @SerializeOptions({
+    type: ContactDto,
+  })
+  create(@RabbitPayload() payload: CreateContactDto) {
+    return this.contactService.create(payload);
   }
 
-  findOne() {
-    return this.contactService.findOne();
+  @RabbitRPC({
+    routingKey: 'findOneContact',
+    exchange: 'platform',
+  })
+  @SerializeOptions({
+    type: ContactDto,
+  })
+  findOne(
+    @RabbitPayload('projectId', ParseIntPipe) projectId: number,
+    @RabbitPayload('id', ParseIntPipe) id: number,
+  ) {
+    return this.contactService.findOne(projectId, id);
   }
 
-  findAll() {
-    return this.contactService.findAll();
+  @RabbitRPC({
+    routingKey: 'findAllContacts',
+    exchange: 'platform',
+  })
+  @SerializeOptions({
+    type: ContactDto,
+  })
+  findAll(@RabbitPayload('projectId', ParseIntPipe) projectId: number) {
+    return this.contactService.findAll(projectId);
   }
 
-  update() {
-    return this.contactService.update();
+  @RabbitRPC({
+    routingKey: 'updateContact',
+    exchange: 'platform',
+  })
+  @SerializeOptions({
+    type: ContactDto,
+  })
+  update(@RabbitPayload() payload: UpdateContactDto) {
+    return this.contactService.update(payload);
   }
 
-  remove() {
-    return this.contactService.remove();
+  @RabbitRPC({
+    routingKey: 'removeContact',
+    exchange: 'platform',
+  })
+  @SerializeOptions({
+    type: ContactDto,
+  })
+  remove(
+    @RabbitPayload('projectId', ParseIntPipe) projectId: number,
+    @RabbitPayload('id', ParseIntPipe) id: number,
+  ) {
+    return this.contactService.remove(projectId, id);
   }
 }
