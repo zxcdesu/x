@@ -182,7 +182,7 @@ model Contact {
   id             Int           @id @default(autoincrement())
   projectId      Int
   name           String        @default("")
-  description.   String        @default("")
+  description    String        @default("")
   imageUrl       String?
   assignedTo     AssignedTo?
   priority       Int           @default(3)
@@ -190,7 +190,7 @@ model Contact {
   rejectedReason String?
   chats          Chat[]
   tags           ContactTag[]
-  customFields.  CustomField[]
+  customFields   CustomField[]
   history        History[]
   createdAt      DateTime      @default(now())
   updatedAt      DateTime?     @updatedAt
