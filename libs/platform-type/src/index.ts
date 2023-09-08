@@ -1,1 +1,1 @@
-export * from './lib/platform-type.module';
+export * from './lib/event-payload.interface';

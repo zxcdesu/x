@@ -2,6 +2,7 @@ import { RabbitMQModule } from '@golevelup/nestjs-rabbitmq';
 import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import joi from 'joi';
+import { EventController } from './event/event.controller';
 
 @Module({
   imports: [
@@ -29,7 +30,7 @@ import joi from 'joi';
       }),
     }),
   ],
-  controllers: [],
+  controllers: [EventController],
   providers: [],
 })
 export class AppModule {}
