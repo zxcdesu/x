@@ -1,7 +1,10 @@
 import { RabbitMQModule } from '@golevelup/nestjs-rabbitmq';
 import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
+import { ERROR_FACTORY } from '@platform/nestjs-rabbitmq';
 import joi from 'joi';
+import { PlatformRmq } from './platform/platform.rmq';
+import { WebhookController } from './webhook/webhook.controller';
 
 @Module({
   imports: [
@@ -16,21 +19,20 @@ import joi from 'joi';
       imports: [ConfigModule],
       inject: [ConfigService],
       useFactory: (configService: ConfigService) => ({
-        enableControllerDiscovery: true,
         uri: configService.get<string>('BROKER_URL'),
-        exchanges: [
-          {
-            name: 'gateway',
-            type: 'topic',
-          },
-        ],
         connectionInitOptions: {
           wait: false,
         },
       }),
     }),
   ],
-  controllers: [],
-  providers: [],
+  controllers: [WebhookController],
+  providers: [
+    {
+      provide: ERROR_FACTORY,
+      useValue: (error: any) => error,
+    },
+    PlatformRmq,
+  ],
 })
 export class AppModule {}
