@@ -4,8 +4,6 @@ import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { GraphQLModule } from '@nestjs/graphql';
 import { PassportModule } from '@nestjs/passport';
-import { ERROR_FACTORY } from '@platform/nestjs-rabbitmq';
-import { ApolloError } from 'apollo-server-express';
 import joi from 'joi';
 import { BearerAuthStrategy } from './auth/bearer-auth.strategy';
 import { BotTemplateResolver } from './bot-template/bot-template.resolver';
@@ -18,6 +16,7 @@ import { ChatResolver } from './chat/chat.resolver';
 import { ChatRmq } from './chat/chat.rmq';
 import { ContactResolver } from './contact/contact.resolver';
 import { ContactRmq } from './contact/contact.rmq';
+import { ErrorFactoryService } from './error-factory.service';
 import { HsmResolver } from './hsm/hsm.resolver';
 import { HsmRmq } from './hsm/hsm.rmq';
 import { IntegrationResolver } from './integration/integration.resolver';
@@ -32,6 +31,7 @@ import { ProjectUserResolver } from './project-user/project-user.controller';
 import { ProjectUserRmq } from './project-user/project-user.rmq';
 import { ProjectResolver } from './project/project.resolver';
 import { ProjectRmq } from './project/project.rmq';
+import { PubSubService } from './pubsub.service';
 import { SubscriptionResolver } from './subscription/subscription.resolver';
 import { SubscriptionRmq } from './subscription/subscription.rmq';
 import { UserResolver } from './user/user.resolver';
@@ -40,7 +40,6 @@ import { WalletResolver } from './wallet/wallet.resolver';
 import { WalletRmq } from './wallet/wallet.rmq';
 import { WebhookResolver } from './webhook/webhook.resolver';
 import { WebhookRmq } from './webhook/webhook.rmq';
-import { PubSubService } from './pubsub.service';
 
 @Module({
   imports: [
@@ -78,12 +77,6 @@ import { PubSubService } from './pubsub.service';
   ],
   providers: [
     PubSubService,
-    {
-      provide: ERROR_FACTORY,
-      useValue: (error?: any) => {
-        return new ApolloError(error?.message, undefined, error);
-      },
-    },
     BearerAuthStrategy,
     BotResolver,
     BotTemplateResolver,
@@ -101,22 +94,23 @@ import { PubSubService } from './pubsub.service';
     UserResolver,
     WalletResolver,
     WebhookResolver,
-    BotRmq,
-    BotTemplateRmq,
-    ChannelRmq,
-    ChatRmq,
-    ContactRmq,
-    HsmRmq,
-    IntegrationRmq,
-    InviteRmq,
-    MailingRmq,
-    MessageRmq,
-    ProjectRmq,
-    ProjectUserRmq,
-    SubscriptionRmq,
-    UserRmq,
-    WalletRmq,
-    WebhookRmq,
+    ErrorFactoryService,
+    BotRmq.provide(ErrorFactoryService),
+    BotTemplateRmq.provide(ErrorFactoryService),
+    ChannelRmq.provide(ErrorFactoryService),
+    ChatRmq.provide(ErrorFactoryService),
+    ContactRmq.provide(ErrorFactoryService),
+    HsmRmq.provide(ErrorFactoryService),
+    IntegrationRmq.provide(ErrorFactoryService),
+    InviteRmq.provide(ErrorFactoryService),
+    MailingRmq.provide(ErrorFactoryService),
+    MessageRmq.provide(ErrorFactoryService),
+    ProjectRmq.provide(ErrorFactoryService),
+    ProjectUserRmq.provide(ErrorFactoryService),
+    SubscriptionRmq.provide(ErrorFactoryService),
+    UserRmq.provide(ErrorFactoryService),
+    WalletRmq.provide(ErrorFactoryService),
+    WebhookRmq.provide(ErrorFactoryService),
   ],
 })
 export class AppModule {}

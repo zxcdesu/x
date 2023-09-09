@@ -10,6 +10,7 @@ import { ChatRmq } from './chat/chat.rmq';
 import { ChatService } from './chat/chat.service';
 import { ContactController } from './contact/contact.controller';
 import { ContactService } from './contact/contact.service';
+import { ErrorFactoryService } from './error-factory.service';
 import { MessageController } from './message/message.controller';
 import { MessageRmq } from './message/message.rmq';
 import { MessageService } from './message/message.service';
@@ -50,13 +51,14 @@ import { PrismaService } from './prisma.service';
   ],
   providers: [
     PrismaService,
-    ChannelRmq,
     ChannelService,
-    ChatRmq,
     ChatService,
     ContactService,
-    MessageRmq,
     MessageService,
+    ErrorFactoryService,
+    ChannelRmq.provide(ErrorFactoryService),
+    ChatRmq.provide(ErrorFactoryService),
+    MessageRmq.provide(ErrorFactoryService),
   ],
 })
 export class AppModule {}

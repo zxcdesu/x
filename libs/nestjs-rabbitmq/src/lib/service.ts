@@ -1,12 +1,22 @@
 import { AmqpConnection } from '@golevelup/nestjs-rabbitmq';
-import { Inject } from '@nestjs/common';
-import { ERROR_FACTORY } from './constants';
+import { Provider, Type } from '@nestjs/common';
 import { ErrorFactory } from './interfaces';
 
 export class RmqService {
-  constructor(
+  static provide(errorFactory: Type<ErrorFactory>): Provider {
+    return {
+      provide: this,
+      useFactory: (
+        amqpConnection: AmqpConnection,
+        errorFactory: ErrorFactory,
+      ) => new this(amqpConnection, errorFactory),
+      inject: [AmqpConnection, errorFactory],
+    };
+  }
+
+  protected constructor(
     protected readonly amqpConnection: AmqpConnection,
-    @Inject(ERROR_FACTORY) private readonly errorFactory: ErrorFactory,
+    private readonly errorFactory: ErrorFactory,
   ) {}
 
   protected async request<T>(
@@ -18,7 +28,7 @@ export class RmqService {
       }
     >(...args);
     if (payload.error) {
-      throw this.errorFactory(payload.error);
+      throw this.errorFactory.errorFactory(payload.error);
     }
     return payload;
   }

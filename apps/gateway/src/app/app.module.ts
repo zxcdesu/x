@@ -1,8 +1,8 @@
 import { RabbitMQModule } from '@golevelup/nestjs-rabbitmq';
 import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
-import { ERROR_FACTORY } from '@platform/nestjs-rabbitmq';
 import joi from 'joi';
+import { ErrorFactoryService } from './error-factory.service';
 import { PlatformRmq } from './platform/platform.rmq';
 import { WebhookController } from './webhook/webhook.controller';
 
@@ -27,12 +27,6 @@ import { WebhookController } from './webhook/webhook.controller';
     }),
   ],
   controllers: [WebhookController],
-  providers: [
-    {
-      provide: ERROR_FACTORY,
-      useValue: (error: any) => error,
-    },
-    PlatformRmq,
-  ],
+  providers: [ErrorFactoryService, PlatformRmq.provide(ErrorFactoryService)],
 })
 export class AppModule {}

@@ -1,3 +1,3 @@
 export interface ErrorFactory {
-  (error?: any): Error;
+  errorFactory(error?: any): Error;
 }
