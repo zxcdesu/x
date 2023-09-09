@@ -10,7 +10,7 @@ export class JwtService<T extends object> {
     return sign(payload, this.configService.get('SECRET'));
   }
 
-  verify(token: string): T {
+  verify(token: string) {
     return verify(token, this.configService.get('SECRET')) as T;
   }
 }
