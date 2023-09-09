@@ -1,6 +1,6 @@
 export interface EventPayload<Q = unknown, B = unknown> {
   param: {
-    id: string;
+    channelId: string;
     platform: string;
   };
   query: Q;

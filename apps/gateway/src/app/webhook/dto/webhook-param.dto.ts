@@ -2,7 +2,7 @@ import { IsString } from 'class-validator';
 
 export class WebhookParam {
   @IsString()
-  id: string;
+  channelId: string;
 
   @IsString()
   platform: string;

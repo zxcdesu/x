@@ -6,7 +6,7 @@ import { WebhookParam } from './dto/webhook-param.dto';
 export class WebhookController {
   constructor(private readonly platformRmq: PlatformRmq) {}
 
-  @All(':id')
+  @All(':channelId')
   webhook(
     @Param() param: WebhookParam,
     @Query() query: unknown,
