@@ -17,11 +17,11 @@ export class MessageService {
     });
   }
 
-  async findOne(projectId: number, id: number) {
+  async findOne(chatId: number, id: number) {
     return this.prismaService.message.findUniqueOrThrow({
       where: {
-        projectId_id: {
-          projectId,
+        chatId_id: {
+          chatId,
           id,
         },
       },
@@ -39,8 +39,8 @@ export class MessageService {
   async update(payload: UpdateMessageDto) {
     return this.prismaService.message.update({
       where: {
-        projectId_id: {
-          projectId: payload.projectId,
+        chatId_id: {
+          chatId: payload.chatId,
           id: payload.id,
         },
       },
@@ -48,11 +48,11 @@ export class MessageService {
     });
   }
 
-  async remove(projectId: number, id: number) {
+  async remove(chatId: number, id: number) {
     return this.prismaService.message.delete({
       where: {
-        projectId_id: {
-          projectId,
+        chatId_id: {
+          chatId,
           id,
         },
       },

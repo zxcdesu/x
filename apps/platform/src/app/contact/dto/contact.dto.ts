@@ -17,6 +17,8 @@ export class ContactDto implements Contact {
 
   status: ContactStatus;
 
+  rejectedReason: string;
+
   closedReason: string;
 
   createdAt: Date;

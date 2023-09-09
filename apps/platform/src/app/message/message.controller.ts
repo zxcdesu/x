@@ -6,22 +6,22 @@ export class MessageController {
   constructor(private readonly messageService: MessageService) {}
 
   create() {
-    return this.messageService.create();
+    // return this.messageService.create();
   }
 
   findOne() {
-    return this.messageService.findOne();
+    // return this.messageService.findOne();
   }
 
   findAll() {
-    return this.messageService.findAll();
+    // return this.messageService.findAll();
   }
 
   update() {
-    return this.messageService.update();
+    // return this.messageService.update();
   }
 
   remove() {
-    return this.messageService.remove();
+    // return this.messageService.remove();
   }
 }

@@ -18,6 +18,7 @@ enum ChannelType {
 }
 
 enum ChannelStatus {
+  Connecting
   Connected
   Failed
 }

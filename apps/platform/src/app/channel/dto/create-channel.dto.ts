@@ -1,5 +1,11 @@
-import { Expose, Transform } from 'class-transformer';
-import { IsEnum, IsInt, IsNotEmpty, IsString } from 'class-validator';
+import { Transform } from 'class-transformer';
+import {
+  IsDefined,
+  IsEnum,
+  IsInt,
+  IsNotEmpty,
+  IsString,
+} from 'class-validator';
 import { ChannelType, Prisma } from '../../prisma.service';
 
 export class CreateChannelDto
@@ -20,6 +26,6 @@ export class CreateChannelDto
   @IsNotEmpty()
   accountId: string;
 
-  @Expose()
+  @IsDefined()
   token: any;
 }

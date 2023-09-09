@@ -237,6 +237,7 @@ services:
       - /usr/src/app/node_modules
     environment:
       - BROKER_URL=amqp://root:pass@rabbitmq:5672
+      - GATEWAY_URL=https://gateway.xanede.su
     networks:
       - default
     depends_on:

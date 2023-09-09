@@ -1,7 +1,7 @@
 import { Exclude, Type } from 'class-transformer';
 import { Message, MessageStatus } from '../../prisma.service';
 import { ContentDto } from './content.dto';
-import { FromDto } from './from.dto';
+import { AuthorDto } from './author.dto';
 
 export class MessageDto implements Message {
   id: number;
@@ -16,8 +16,8 @@ export class MessageDto implements Message {
 
   failedReason: string;
 
-  @Type(() => FromDto)
-  from: FromDto;
+  @Type(() => AuthorDto)
+  author: AuthorDto;
 
   @Type(() => ContentDto)
   content: ContentDto[];

@@ -1,8 +1,8 @@
-import { ArgsType, Field, Int, PartialType } from '@nestjs/graphql';
+import { ArgsType, Field, Int, PickType } from '@nestjs/graphql';
 import { CreateChannelDto } from './create-channel.dto';
 
 @ArgsType()
-export class UpdateChannelDto extends PartialType(CreateChannelDto) {
+export class UpdateChannelDto extends PickType(CreateChannelDto, ['name']) {
   @Field(() => Int)
   id: number;
 }

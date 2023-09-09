@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { PrismaService } from '../prisma.service';
+import { ChannelStatus, PrismaService } from '../prisma.service';
 import { ChannelRmq } from './channel.rmq';
 import { CreateChannelDto } from './dto/create-channel.dto';
 import { UpdateChannelDto } from './dto/update-channel.dto';
@@ -12,16 +12,18 @@ export class ChannelService {
   ) {}
 
   async create(payload: CreateChannelDto) {
-    const { accountId, status, token, failedReason } =
-      await this.channelRmq.create(payload);
-    this.prismaService.channel.create({
+    const channel = await this.prismaService.channel.create({
       data: {
         ...payload,
-        accountId,
-        token,
-        status,
-        failedReason,
+        status: ChannelStatus.Connecting,
       },
+    });
+
+    return this.prismaService.channel.update({
+      where: {
+        id: channel.id,
+      },
+      data: await this.channelRmq.create(channel),
     });
   }
 
