@@ -1,7 +1,10 @@
 import { RabbitMQModule } from '@golevelup/nestjs-rabbitmq';
+import { HttpModule } from '@nestjs/axios';
 import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
-import joi from 'joi';
+import { default as Joi, default as joi } from 'joi';
+import { ChannelController } from './channel/channel.controller';
+import { ChannelService } from './channel/channel.service';
 import { EventController } from './event/event.controller';
 
 @Module({
@@ -10,6 +13,7 @@ import { EventController } from './event/event.controller';
       isGlobal: true,
       validationSchema: joi.object({
         BROKER_URL: joi.string().uri().required(),
+        GATEWAY_URL: Joi.string().uri().required(),
       }),
     }),
     RabbitMQModule.forRootAsync(RabbitMQModule, {
@@ -29,8 +33,11 @@ import { EventController } from './event/event.controller';
         },
       }),
     }),
+    HttpModule.register({
+      baseURL: 'https://api.telegram.org',
+    }),
   ],
-  controllers: [EventController],
-  providers: [],
+  controllers: [ChannelController, EventController],
+  providers: [ChannelService],
 })
 export class AppModule {}
