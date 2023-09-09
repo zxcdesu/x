@@ -27,7 +27,7 @@ export class BotTemplateResolver {
   }
 
   @UseGuards(BearerAuthGuard)
-  @Query(() => BotTemplateDto)
+  @Query(() => [BotTemplateDto])
   botTemplates(): Promise<BotTemplateDto[]> {
     return this.rmq.findAll();
   }

@@ -31,7 +31,7 @@ export class SubscriptionResolver {
   }
 
   @UseGuards(BearerAuthGuard)
-  @Query(() => SubscriptionDto)
+  @Query(() => [SubscriptionDto])
   subscriptions(
     @BearerAuthDecorator() auth: BearerAuth,
   ): Promise<SubscriptionDto[]> {

@@ -6,11 +6,11 @@ import { sign, verify } from 'jsonwebtoken';
 export class JwtService<T extends object> {
   constructor(private readonly configService: ConfigService) {}
 
-  sign(payload: T) {
+  sign(payload: T): string {
     return sign(payload, this.configService.get('SECRET'));
   }
 
-  verify(token: string) {
+  verify(token: string): T {
     return verify(token, this.configService.get('SECRET')) as T;
   }
 }

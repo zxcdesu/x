@@ -31,7 +31,7 @@ export class ChatResolver {
   }
 
   @UseGuards(BearerAuthGuard)
-  @Query(() => ChatDto)
+  @Query(() => [ChatDto])
   chats(@BearerAuthDecorator() auth: BearerAuth): Promise<ChatDto[]> {
     return this.rmq.findAll(auth.project.id);
   }

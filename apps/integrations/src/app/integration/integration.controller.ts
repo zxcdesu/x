@@ -1,27 +1,78 @@
-import { Controller } from '@nestjs/common';
+import { RabbitPayload } from '@golevelup/nestjs-rabbitmq';
+import {
+  Controller,
+  ParseIntPipe,
+  ParseUUIDPipe,
+  SerializeOptions,
+} from '@nestjs/common';
+import { RabbitRPC } from '@platform/nestjs-rabbitmq';
+import { CreateIntegrationDto } from './dto/create-integration.dto';
+import { IntegrationDto } from './dto/integration.dto';
+import { UpdateIntegrationDto } from './dto/update-integration.dto';
 import { IntegrationService } from './integration.service';
 
 @Controller()
 export class IntegrationController {
   constructor(private readonly integrationService: IntegrationService) {}
 
-  create() {
-    return this.integrationService.create();
+  @RabbitRPC({
+    routingKey: 'createIntegration',
+    exchange: 'billing',
+  })
+  @SerializeOptions({
+    type: IntegrationDto,
+  })
+  create(@RabbitPayload() payload: CreateIntegrationDto) {
+    return this.integrationService.create(payload);
   }
 
-  findOne() {
-    return this.integrationService.findOne();
+  @RabbitRPC({
+    routingKey: 'findOneIntegration',
+    exchange: 'integrations',
+  })
+  @SerializeOptions({
+    type: IntegrationDto,
+  })
+  findOne(
+    @RabbitPayload('projectId', ParseIntPipe) projectId: number,
+    @RabbitPayload('id', ParseUUIDPipe) id: string,
+  ) {
+    return this.integrationService.findOne(projectId, id);
   }
 
-  findAll() {
-    return this.integrationService.findAll();
+  @RabbitRPC({
+    routingKey: 'findAllIntegrations',
+    exchange: 'integrations',
+  })
+  @SerializeOptions({
+    type: IntegrationDto,
+  })
+  findAll(@RabbitPayload('projectId', ParseIntPipe) projectId: number) {
+    return this.integrationService.findAll(projectId);
   }
 
-  update() {
-    return this.integrationService.update();
+  @RabbitRPC({
+    routingKey: 'updateIntegration',
+    exchange: 'integrations',
+  })
+  @SerializeOptions({
+    type: IntegrationDto,
+  })
+  update(@RabbitPayload() payload: UpdateIntegrationDto) {
+    return this.integrationService.update(payload);
   }
 
-  remove() {
-    return this.integrationService.remove();
+  @RabbitRPC({
+    routingKey: 'removeIntegration',
+    exchange: 'integrations',
+  })
+  @SerializeOptions({
+    type: IntegrationDto,
+  })
+  remove(
+    @RabbitPayload('projectId', ParseIntPipe) projectId: number,
+    @RabbitPayload('id', ParseUUIDPipe) id: string,
+  ) {
+    return this.integrationService.remove(projectId, id);
   }
 }

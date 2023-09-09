@@ -1,24 +1,57 @@
-import { Injectable, NotImplementedException } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
+import { PrismaService } from '../prisma.service';
+import { CreateWebhookDto } from './dto/create-webhook.dto';
+import { UpdateWebhookDto } from './dto/update-webhook.dto';
 
 @Injectable()
 export class WebhookService {
-  async create() {
-    throw new NotImplementedException();
+  constructor(private readonly prismaService: PrismaService) {}
+
+  create(payload: CreateWebhookDto) {
+    return this.prismaService.webhook.create({
+      data: payload,
+    });
   }
 
-  async findOne() {
-    throw new NotImplementedException();
+  findOne(projectId: number, id: number) {
+    return this.prismaService.webhook.findUniqueOrThrow({
+      where: {
+        projectId_id: {
+          projectId,
+          id,
+        },
+      },
+    });
   }
 
-  async findAll() {
-    throw new NotImplementedException();
+  findAll(projectId: number) {
+    return this.prismaService.webhook.findMany({
+      where: {
+        projectId,
+      },
+    });
   }
 
-  async update() {
-    throw new NotImplementedException();
+  update(payload: UpdateWebhookDto) {
+    return this.prismaService.webhook.update({
+      where: {
+        projectId_id: {
+          projectId: payload.projectId,
+          id: payload.id,
+        },
+      },
+      data: payload,
+    });
   }
 
-  async remove() {
-    throw new NotImplementedException();
+  remove(projectId: number, id: number) {
+    return this.prismaService.webhook.delete({
+      where: {
+        projectId_id: {
+          projectId,
+          id,
+        },
+      },
+    });
   }
 }

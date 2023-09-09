@@ -1,27 +1,56 @@
-import { Controller } from '@nestjs/common';
+import { RabbitPayload } from '@golevelup/nestjs-rabbitmq';
+import { Controller, ParseIntPipe, SerializeOptions } from '@nestjs/common';
+import { RabbitRPC } from '@platform/nestjs-rabbitmq';
+import { CreateSubscriptionDto } from './dto/create-subscription.dto';
+import { SubscriptionDto } from './dto/subscription.dto';
+import { UpdateSubscriptionDto } from './dto/update-subscription.dto';
 import { SubscriptionService } from './subscription.service';
 
 @Controller()
 export class SubscriptionController {
   constructor(private readonly subscriptionService: SubscriptionService) {}
 
-  create() {
-    return this.subscriptionService.create();
+  @RabbitRPC({
+    routingKey: 'createWallet',
+    exchange: 'billing',
+  })
+  @SerializeOptions({
+    type: SubscriptionDto,
+  })
+  create(@RabbitPayload() payload: CreateSubscriptionDto) {
+    return this.subscriptionService.create(payload);
   }
 
-  findOne() {
-    return this.subscriptionService.findOne();
+  @RabbitRPC({
+    routingKey: 'findOneWallet',
+    exchange: 'billing',
+  })
+  @SerializeOptions({
+    type: SubscriptionDto,
+  })
+  findOne(@RabbitPayload('projectId', ParseIntPipe) projectId: number) {
+    return this.subscriptionService.findOne(projectId);
   }
 
-  findAll() {
-    return this.subscriptionService.findAll();
+  @RabbitRPC({
+    routingKey: 'updateWallet',
+    exchange: 'billing',
+  })
+  @SerializeOptions({
+    type: SubscriptionDto,
+  })
+  update(@RabbitPayload() payload: UpdateSubscriptionDto) {
+    return this.subscriptionService.update(payload);
   }
 
-  update() {
-    return this.subscriptionService.update();
-  }
-
-  remove() {
-    return this.subscriptionService.remove();
+  @RabbitRPC({
+    routingKey: 'removeWallet',
+    exchange: 'billing',
+  })
+  @SerializeOptions({
+    type: SubscriptionDto,
+  })
+  remove(@RabbitPayload('projectId', ParseIntPipe) projectId: number) {
+    return this.subscriptionService.remove(projectId);
   }
 }

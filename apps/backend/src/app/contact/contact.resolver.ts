@@ -31,7 +31,7 @@ export class ContactResolver {
   }
 
   @UseGuards(BearerAuthGuard)
-  @Query(() => ContactDto)
+  @Query(() => [ContactDto])
   contacts(@BearerAuthDecorator() auth: BearerAuth): Promise<ContactDto[]> {
     return this.rmq.findAll(auth.project.id);
   }

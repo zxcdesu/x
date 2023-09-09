@@ -31,7 +31,7 @@ export class HsmResolver {
   }
 
   @UseGuards(BearerAuthGuard)
-  @Query(() => HsmDto)
+  @Query(() => [HsmDto])
   hsm(@BearerAuthDecorator() auth: BearerAuth): Promise<HsmDto[]> {
     return this.rmq.findAll(auth.project.id);
   }

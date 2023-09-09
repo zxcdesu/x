@@ -31,7 +31,7 @@ export class ChannelResolver {
   }
 
   @UseGuards(BearerAuthGuard)
-  @Query(() => ChannelDto)
+  @Query(() => [ChannelDto])
   channels(@BearerAuthDecorator() auth: BearerAuth): Promise<ChannelDto[]> {
     return this.rmq.findAll(auth.project.id);
   }

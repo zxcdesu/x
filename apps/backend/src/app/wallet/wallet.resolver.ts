@@ -31,7 +31,7 @@ export class WalletResolver {
   }
 
   @UseGuards(BearerAuthGuard)
-  @Query(() => WalletDto)
+  @Query(() => [WalletDto])
   wallets(@BearerAuthDecorator() auth: BearerAuth): Promise<WalletDto[]> {
     return this.rmq.findAll(auth.project.id);
   }

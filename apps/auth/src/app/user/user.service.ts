@@ -25,7 +25,7 @@ export class UserService {
   ) {}
 
   async create(payload: CreateUserDto) {
-    const invites = await this.inviteService.findAll(payload.email);
+    const invites = await this.inviteService.findAllByEmail(payload.email);
     return this.prismaService.user.create({
       data: {
         ...payload,

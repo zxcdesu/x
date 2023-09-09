@@ -118,7 +118,10 @@ export class ProjectService {
     });
   }
 
-  private async checkAccess(userId: number, payload: FindOneProjectDto) {
+  private async checkAccess(
+    userId: number,
+    payload: FindOneProjectDto,
+  ): Promise<void> {
     await this.findOne(userId, payload);
     // TODO: check access
   }

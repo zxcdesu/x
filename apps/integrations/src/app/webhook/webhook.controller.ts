@@ -1,27 +1,72 @@
-import { Controller } from '@nestjs/common';
+import { RabbitPayload, RabbitRPC } from '@golevelup/nestjs-rabbitmq';
+import { Controller, ParseIntPipe, SerializeOptions } from '@nestjs/common';
+import { CreateWebhookDto } from '../webhook/dto/create-webhook.dto';
+import { UpdateWebhookDto } from '../webhook/dto/update-webhook.dto';
+import { WebhookDto } from '../webhook/dto/webhook.dto';
 import { WebhookService } from './webhook.service';
 
 @Controller()
 export class WebhookController {
   constructor(private readonly webhookService: WebhookService) {}
 
-  create() {
-    return this.webhookService.create();
+  @RabbitRPC({
+    routingKey: 'createWebhook',
+    exchange: 'integrations',
+  })
+  @SerializeOptions({
+    type: WebhookDto,
+  })
+  create(@RabbitPayload() payload: CreateWebhookDto) {
+    return this.webhookService.create(payload);
   }
 
-  findOne() {
-    return this.webhookService.findOne();
+  @RabbitRPC({
+    routingKey: 'findOneWebhook',
+    exchange: 'integrations',
+  })
+  @SerializeOptions({
+    type: WebhookDto,
+  })
+  findOne(
+    @RabbitPayload('projectId', ParseIntPipe) projectId: number,
+    @RabbitPayload('id', ParseIntPipe) id: number,
+  ) {
+    return this.webhookService.findOne(projectId, id);
   }
 
-  findAll() {
-    return this.webhookService.findAll();
+  @RabbitRPC({
+    routingKey: 'findAllWebhooks',
+    exchange: 'integrations',
+  })
+  @SerializeOptions({
+    type: WebhookDto,
+  })
+  findAll(@RabbitPayload('projectId', ParseIntPipe) projectId: number) {
+    return this.webhookService.findAll(projectId);
   }
 
-  update() {
-    return this.webhookService.update();
+  @RabbitRPC({
+    routingKey: 'updateWebhook',
+    exchange: 'integrations',
+  })
+  @SerializeOptions({
+    type: WebhookDto,
+  })
+  update(@RabbitPayload() payload: UpdateWebhookDto) {
+    return this.webhookService.update(payload);
   }
 
-  remove() {
-    return this.webhookService.remove();
+  @RabbitRPC({
+    routingKey: 'removeWebhook',
+    exchange: 'integrations',
+  })
+  @SerializeOptions({
+    type: WebhookDto,
+  })
+  remove(
+    @RabbitPayload('projectId', ParseIntPipe) projectId: number,
+    @RabbitPayload('id', ParseIntPipe) id: number,
+  ) {
+    return this.webhookService.remove(projectId, id);
   }
 }

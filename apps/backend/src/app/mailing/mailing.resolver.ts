@@ -31,7 +31,7 @@ export class MailingResolver {
   }
 
   @UseGuards(BearerAuthGuard)
-  @Query(() => MailingDto)
+  @Query(() => [MailingDto])
   mailings(@BearerAuthDecorator() auth: BearerAuth): Promise<MailingDto[]> {
     return this.rmq.findAll(auth.project.id);
   }

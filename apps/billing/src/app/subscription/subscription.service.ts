@@ -1,24 +1,40 @@
-import { Injectable, NotImplementedException } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
+import { PrismaService } from '../prisma.service';
+import { CreateSubscriptionDto } from './dto/create-subscription.dto';
+import { UpdateSubscriptionDto } from './dto/update-subscription.dto';
 
 @Injectable()
 export class SubscriptionService {
-  async create() {
-    throw new NotImplementedException();
+  constructor(private readonly prismaService: PrismaService) {}
+
+  async create(payload: CreateSubscriptionDto) {
+    return this.prismaService.subscription.create({
+      data: payload,
+    });
   }
 
-  async findOne() {
-    throw new NotImplementedException();
+  async findOne(projectId: number) {
+    return this.prismaService.subscription.findUniqueOrThrow({
+      where: {
+        projectId,
+      },
+    });
   }
 
-  async findAll() {
-    throw new NotImplementedException();
+  async update(payload: UpdateSubscriptionDto) {
+    return this.prismaService.subscription.update({
+      where: {
+        projectId: payload.projectId,
+      },
+      data: payload,
+    });
   }
 
-  async update() {
-    throw new NotImplementedException();
-  }
-
-  async remove() {
-    throw new NotImplementedException();
+  async remove(projectId: number) {
+    return this.prismaService.subscription.delete({
+      where: {
+        projectId,
+      },
+    });
   }
 }

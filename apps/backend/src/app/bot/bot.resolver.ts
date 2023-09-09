@@ -31,7 +31,7 @@ export class BotResolver {
   }
 
   @UseGuards(BearerAuthGuard)
-  @Query(() => BotDto)
+  @Query(() => [BotDto])
   bots(@BearerAuthDecorator() auth: BearerAuth): Promise<BotDto[]> {
     return this.rmq.findAll(auth.project.id);
   }

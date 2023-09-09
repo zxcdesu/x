@@ -31,7 +31,7 @@ export class WebhookResolver {
   }
 
   @UseGuards(BearerAuthGuard)
-  @Query(() => WebhookDto)
+  @Query(() => [WebhookDto])
   webhooks(@BearerAuthDecorator() auth: BearerAuth): Promise<WebhookDto[]> {
     return this.rmq.findAll(auth.project.id);
   }

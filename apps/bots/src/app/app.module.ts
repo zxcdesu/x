@@ -1,12 +1,13 @@
 import { RabbitMQModule } from '@golevelup/nestjs-rabbitmq';
-import { Module } from '@nestjs/common';
+import { ClassSerializerInterceptor, Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
+import { APP_INTERCEPTOR } from '@nestjs/core';
 import joi from 'joi';
-import { PrismaService } from './prisma.service';
 import { BotTemplateController } from './bot-template/bot-template.controller';
 import { BotTemplateService } from './bot-template/bot-template.service';
 import { BotController } from './bot/bot.controller';
 import { BotService } from './bot/bot.service';
+import { PrismaService } from './prisma.service';
 
 @Module({
   imports: [
@@ -36,6 +37,14 @@ import { BotService } from './bot/bot.service';
     }),
   ],
   controllers: [BotController, BotTemplateController],
-  providers: [PrismaService, BotService, BotTemplateService],
+  providers: [
+    PrismaService,
+    {
+      provide: APP_INTERCEPTOR,
+      useClass: ClassSerializerInterceptor,
+    },
+    BotService,
+    BotTemplateService,
+  ],
 })
 export class AppModule {}

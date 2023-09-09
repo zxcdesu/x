@@ -42,7 +42,7 @@ export class MessageResolver {
   }
 
   @UseGuards(BearerAuthGuard)
-  @Query(() => MessageDto)
+  @Query(() => [MessageDto])
   messages(@BearerAuthDecorator() auth: BearerAuth): Promise<MessageDto[]> {
     return this.rmq.findAll(auth.project.id);
   }

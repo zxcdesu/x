@@ -31,7 +31,7 @@ export class IntegrationResolver {
   }
 
   @UseGuards(BearerAuthGuard)
-  @Query(() => IntegrationDto)
+  @Query(() => [IntegrationDto])
   integrations(
     @BearerAuthDecorator() auth: BearerAuth,
   ): Promise<IntegrationDto[]> {

@@ -13,7 +13,7 @@ export class InviteService {
     private readonly projectUserService: ProjectUserService,
   ) {}
 
-  async create(payload: CreateInviteDto) {
+  async create(payload: CreateInviteDto): Promise<boolean> {
     const user = await this.userService.findOneByEmail(payload.email);
     if (user) {
       await this.projectUserService.create(payload.projectId, user.id);
@@ -25,7 +25,7 @@ export class InviteService {
     return true;
   }
 
-  findAll(email: string) {
+  findAllByEmail(email: string) {
     return this.prismaService.invite.findMany({
       where: {
         email,
