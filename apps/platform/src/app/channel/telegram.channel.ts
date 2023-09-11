@@ -21,7 +21,7 @@ export class TelegramChannel extends AbstractChannel {
             };
           }),
           catchError(async (error) => {
-            console.error(error);
+            console.error(channel, error);
             return {
               status: ChannelStatus.Failed,
               failedReason: error?.response?.data?.description,
