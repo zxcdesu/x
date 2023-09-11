@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
+import { ChannelEvent } from '@platform/platform-type';
 import { ChannelStatus, PrismaService } from '../prisma.service';
-import { ChannelRmq } from './channel.rmq';
+import { ChannelRepository } from './channel.repository';
 import { CreateChannelDto } from './dto/create-channel.dto';
 import { UpdateChannelDto } from './dto/update-channel.dto';
 
@@ -8,7 +9,7 @@ import { UpdateChannelDto } from './dto/update-channel.dto';
 export class ChannelService {
   constructor(
     private readonly prismaService: PrismaService,
-    private readonly channelRmq: ChannelRmq,
+    private readonly channelRepository: ChannelRepository,
   ) {}
 
   async create(payload: CreateChannelDto) {
@@ -23,11 +24,11 @@ export class ChannelService {
       where: {
         id: channel.id,
       },
-      data: await this.channelRmq.create(channel),
+      data: await this.channelRepository.get(channel).create(channel),
     });
   }
 
-  async findOne(projectId: number, id: number) {
+  findOne(projectId: number, id: number) {
     return this.prismaService.channel.findUniqueOrThrow({
       where: {
         projectId_id: {
@@ -38,7 +39,7 @@ export class ChannelService {
     });
   }
 
-  async findAll(projectId: number) {
+  findAll(projectId: number) {
     return this.prismaService.channel.findMany({
       where: {
         projectId,
@@ -46,7 +47,7 @@ export class ChannelService {
     });
   }
 
-  async update(payload: UpdateChannelDto) {
+  update(payload: UpdateChannelDto) {
     return this.prismaService.channel.update({
       where: {
         projectId_id: {
@@ -58,7 +59,7 @@ export class ChannelService {
     });
   }
 
-  async remove(projectId: number, id: number) {
+  remove(projectId: number, id: number) {
     return this.prismaService.channel.delete({
       where: {
         projectId_id: {
@@ -67,5 +68,16 @@ export class ChannelService {
         },
       },
     });
+  }
+
+  async event(payload: ChannelEvent) {
+    const channel = await this.prismaService.channel.findUnique({
+      where: {
+        id: payload.param.channelId,
+      },
+    });
+    if (channel) {
+      return this.channelRepository.get(channel).event(channel, payload);
+    }
   }
 }

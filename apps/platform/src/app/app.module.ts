@@ -1,18 +1,18 @@
 import { RabbitMQModule } from '@golevelup/nestjs-rabbitmq';
+import { HttpModule } from '@nestjs/axios';
 import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
+import { ChannelEventRmq } from '@platform/platform-type';
 import joi from 'joi';
 import { ChannelController } from './channel/channel.controller';
-import { ChannelRmq } from './channel/channel.rmq';
+import { ChannelRepository } from './channel/channel.repository';
 import { ChannelService } from './channel/channel.service';
 import { ChatController } from './chat/chat.controller';
-import { ChatRmq } from './chat/chat.rmq';
 import { ChatService } from './chat/chat.service';
 import { ContactController } from './contact/contact.controller';
 import { ContactService } from './contact/contact.service';
 import { ErrorFactoryService } from './error-factory.service';
 import { MessageController } from './message/message.controller';
-import { MessageRmq } from './message/message.rmq';
 import { MessageService } from './message/message.service';
 import { PrismaService } from './prisma.service';
 
@@ -23,6 +23,7 @@ import { PrismaService } from './prisma.service';
       validationSchema: joi.object({
         DATABASE_URL: joi.string().uri().required(),
         BROKER_URL: joi.string().uri().required(),
+        GATEWAY_URL: joi.string().uri().required(),
       }),
     }),
     RabbitMQModule.forRootAsync(RabbitMQModule, {
@@ -42,6 +43,7 @@ import { PrismaService } from './prisma.service';
         },
       }),
     }),
+    HttpModule.register({}),
   ],
   controllers: [
     ChannelController,
@@ -51,14 +53,13 @@ import { PrismaService } from './prisma.service';
   ],
   providers: [
     PrismaService,
+    ChannelRepository,
     ChannelService,
     ChatService,
     ContactService,
     MessageService,
     ErrorFactoryService,
-    ChannelRmq.provide(ErrorFactoryService),
-    ChatRmq.provide(ErrorFactoryService),
-    MessageRmq.provide(ErrorFactoryService),
+    ChannelEventRmq.provide(ErrorFactoryService),
   ],
 })
 export class AppModule {}

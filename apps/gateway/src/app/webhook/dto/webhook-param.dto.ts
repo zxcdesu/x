@@ -1,9 +1,10 @@
-import { IsString } from 'class-validator';
+import { Transform } from 'class-transformer';
+import { IsInt } from 'class-validator';
 
 export class WebhookParam {
-  @IsString()
-  channelId: string;
-
-  @IsString()
-  platform: string;
+  @Transform(({ value }) => Number(value), {
+    toClassOnly: true,
+  })
+  @IsInt()
+  channelId: number;
 }

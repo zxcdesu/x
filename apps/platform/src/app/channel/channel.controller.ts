@@ -1,6 +1,7 @@
 import { RabbitPayload } from '@golevelup/nestjs-rabbitmq';
 import { Controller, ParseIntPipe, SerializeOptions } from '@nestjs/common';
 import { RabbitRPC } from '@platform/nestjs-rabbitmq';
+import { ChannelEvent, ChannelEventRmq } from '@platform/platform-type';
 import { ChannelService } from './channel.service';
 import { ChannelDto } from './dto/channel.dto';
 import { CreateChannelDto } from './dto/create-channel.dto';
@@ -69,5 +70,10 @@ export class ChannelController {
     @RabbitPayload('id', ParseIntPipe) id: number,
   ) {
     return this.channelService.remove(projectId, id);
+  }
+
+  @ChannelEventRmq.subscribe()
+  handleEvent(@RabbitPayload() payload: ChannelEvent) {
+    return this.channelService.event(payload);
   }
 }

@@ -2,14 +2,10 @@ import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../prisma.service';
 import { CreateChatDto } from './dto/create-chat.dto';
 import { UpdateChatDto } from './dto/update-chat.dto';
-import { ChatRmq } from './chat.rmq';
 
 @Injectable()
 export class ChatService {
-  constructor(
-    private readonly prismaService: PrismaService,
-    private readonly chatRmq: ChatRmq,
-  ) {}
+  constructor(private readonly prismaService: PrismaService) {}
 
   async create(payload: CreateChatDto) {
     return this.prismaService.chat.create({

@@ -1,10 +1,10 @@
 import { All, Body, Controller, Param, Query } from '@nestjs/common';
-import { PlatformRmq } from '../platform/platform.rmq';
+import { ChannelEventRmq } from '@platform/platform-type';
 import { WebhookParam } from './dto/webhook-param.dto';
 
-@Controller(':platform')
+@Controller()
 export class WebhookController {
-  constructor(private readonly platformRmq: PlatformRmq) {}
+  constructor(private readonly channelEventRmq: ChannelEventRmq) {}
 
   @All(':channelId')
   webhook(
@@ -12,10 +12,13 @@ export class WebhookController {
     @Query() query: unknown,
     @Body() body: unknown,
   ) {
-    return this.platformRmq.event(param.platform, {
-      param,
-      query,
-      body,
-    });
+    this.channelEventRmq
+      .event({
+        param,
+        query,
+        body,
+      })
+      .catch(console.error);
+    return 'ok';
   }
 }
