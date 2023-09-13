@@ -4,9 +4,7 @@ import { Channel, ChannelStatus, Prisma } from '../prisma.service';
 import { AbstractChannel } from './abstract.channel';
 
 export class TelegramChannel extends AbstractChannel {
-  async create(
-    channel: Channel,
-  ): Promise<Partial<Prisma.ChannelUncheckedUpdateInput>> {
+  async create(channel: Channel): Promise<Prisma.ChannelUncheckedUpdateInput> {
     return lastValueFrom(
       this.httpService
         .post(`https://api.telegram.org/bot${channel.token}/setWebhook`, {
