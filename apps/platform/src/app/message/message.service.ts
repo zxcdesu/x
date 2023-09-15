@@ -1,15 +1,32 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotImplementedException } from '@nestjs/common';
+import { ChannelRepository } from '../channel/channel.repository';
 import { PrismaService } from '../prisma.service';
 import { CreateMessageDto } from './dto/create-message.dto';
 import { UpdateMessageDto } from './dto/update-message.dto';
 
 @Injectable()
 export class MessageService {
-  constructor(private readonly prismaService: PrismaService) {}
+  constructor(
+    private readonly prismaService: PrismaService,
+    private readonly channelRepository: ChannelRepository,
+  ) {}
 
   async create(payload: CreateMessageDto) {
+    const chat = await this.prismaService.chat.findUniqueOrThrow({
+      where: {
+        projectId_id: {
+          projectId: payload.projectId,
+          id: payload.chatId,
+        },
+      },
+      include: {
+        channel: true,
+      },
+    });
     return this.prismaService.message.create({
-      data: payload,
+      data: await this.channelRepository
+        .get(chat.channel)
+        .sendMessage(chat, payload),
     });
   }
 
@@ -33,25 +50,10 @@ export class MessageService {
   }
 
   async update(payload: UpdateMessageDto) {
-    return this.prismaService.message.update({
-      where: {
-        chatId_id: {
-          chatId: payload.chatId,
-          id: payload.id,
-        },
-      },
-      data: payload,
-    });
+    throw new NotImplementedException();
   }
 
   async remove(chatId: number, id: number) {
-    return this.prismaService.message.delete({
-      where: {
-        chatId_id: {
-          chatId,
-          id,
-        },
-      },
-    });
+    throw new NotImplementedException();
   }
 }

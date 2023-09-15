@@ -1,15 +1,27 @@
 import { Injectable } from '@nestjs/common';
+import { ChannelRepository } from '../channel/channel.repository';
 import { PrismaService } from '../prisma.service';
 import { CreateChatDto } from './dto/create-chat.dto';
 import { UpdateChatDto } from './dto/update-chat.dto';
 
 @Injectable()
 export class ChatService {
-  constructor(private readonly prismaService: PrismaService) {}
+  constructor(
+    private readonly prismaService: PrismaService,
+    private readonly channelRepository: ChannelRepository,
+  ) {}
 
   async create(payload: CreateChatDto) {
+    const channel = await this.prismaService.channel.findUniqueOrThrow({
+      where: {
+        projectId_id: {
+          projectId: payload.projectId,
+          id: payload.channelId,
+        },
+      },
+    });
     return this.prismaService.chat.create({
-      data: payload,
+      data: await this.channelRepository.get(channel).initChat(payload),
     });
   }
 

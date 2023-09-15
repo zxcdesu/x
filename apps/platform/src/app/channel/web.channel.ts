@@ -1,19 +1,29 @@
-import { ChannelEvent } from '@platform/platform-type';
-import { Channel, Prisma } from '../prisma.service';
-import { AbstractChannel } from './abstract.channel';
 import { NotImplementedException } from '@nestjs/common';
+import { ChannelEvent } from '@platform/platform-type';
+import { CreateChatDto } from '../chat/dto/create-chat.dto';
+import { CreateMessageDto } from '../message/dto/create-message.dto';
+import { Chat, Prisma } from '../prisma.service';
+import { AbstractChannel } from './abstract.channel';
 
 export class WebChannel extends AbstractChannel {
-  create(
-    channel: Channel,
-  ): Promise<Partial<Prisma.ChannelUncheckedUpdateInput>> {
+  async init(): Promise<Partial<Prisma.ChannelUncheckedUpdateInput>> {
     throw new NotImplementedException();
   }
 
-  event(
-    channel: Channel,
-    payload: ChannelEvent<unknown, unknown>,
-  ): Promise<void> {
+  async handleEvent(event: ChannelEvent<unknown, unknown>): Promise<void> {
+    throw new NotImplementedException();
+  }
+
+  async initChat(
+    chat: CreateChatDto,
+  ): Promise<Prisma.ChatUncheckedCreateInput> {
+    return chat;
+  }
+
+  async sendMessage(
+    chat: Chat,
+    message: CreateMessageDto,
+  ): Promise<Prisma.MessageUncheckedCreateInput> {
     throw new NotImplementedException();
   }
 }

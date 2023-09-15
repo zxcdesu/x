@@ -1,16 +1,19 @@
+import { NotImplementedException } from '@nestjs/common';
 import { ChannelEvent } from '@platform/platform-type';
 import { catchError, lastValueFrom, map } from 'rxjs';
-import { Channel, ChannelStatus, Prisma } from '../prisma.service';
+import { CreateChatDto } from '../chat/dto/create-chat.dto';
+import { CreateMessageDto } from '../message/dto/create-message.dto';
+import { ChannelStatus, Chat, Prisma } from '../prisma.service';
 import { AbstractChannel } from './abstract.channel';
 
 export class TelegramChannel extends AbstractChannel {
-  async create(channel: Channel): Promise<Prisma.ChannelUncheckedUpdateInput> {
+  async init(): Promise<Prisma.ChannelUncheckedUpdateInput> {
     return lastValueFrom(
       this.httpService
-        .post(`https://api.telegram.org/bot${channel.token}/setWebhook`, {
+        .post(`https://api.telegram.org/bot${this.channel.token}/setWebhook`, {
           url: this.configService
             .get<string>('GATEWAY_URL')
-            .concat(`/${channel.id.toString()}`),
+            .concat(`/${this.channel.id.toString()}`),
         })
         .pipe(
           map(() => {
@@ -19,7 +22,7 @@ export class TelegramChannel extends AbstractChannel {
             };
           }),
           catchError(async (error) => {
-            console.error(channel, error);
+            console.error(this.channel, error);
             return {
               status: ChannelStatus.Failed,
               failedReason: error?.response?.data?.description,
@@ -29,10 +32,20 @@ export class TelegramChannel extends AbstractChannel {
     );
   }
 
-  async event(
-    channel: Channel,
-    payload: ChannelEvent<unknown, unknown>,
-  ): Promise<void> {
-    console.log(channel, payload);
+  async handleEvent(event: ChannelEvent<unknown, unknown>): Promise<void> {
+    console.log(this.channel, event);
+  }
+
+  async initChat(
+    chat: CreateChatDto,
+  ): Promise<Prisma.ChatUncheckedCreateInput> {
+    return chat;
+  }
+
+  async sendMessage(
+    chat: Chat,
+    message: CreateMessageDto,
+  ): Promise<Prisma.MessageUncheckedCreateInput> {
+    throw new NotImplementedException();
   }
 }

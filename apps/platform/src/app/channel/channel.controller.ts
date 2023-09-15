@@ -73,7 +73,7 @@ export class ChannelController {
   }
 
   @ChannelEventRmq.subscribe()
-  handleEvent(@RabbitPayload() payload: ChannelEvent) {
-    return this.channelService.event(payload);
+  handleEvent(@RabbitPayload() event: ChannelEvent) {
+    return this.channelService.handleEvent(event);
   }
 }

@@ -3,6 +3,9 @@ import { MessageStatus, Prisma } from '../../prisma.service';
 
 export class CreateMessageDto implements Prisma.MessageUncheckedCreateInput {
   @IsInt()
+  projectId: number;
+
+  @IsInt()
   chatId: number;
 
   @IsString()
@@ -17,7 +20,7 @@ export class CreateMessageDto implements Prisma.MessageUncheckedCreateInput {
 
   // @Type(() => Object)
   // @ValidateNested()
-  from?: any;
+  author?: any;
 
   // @Type(() => Object)
   // @ValidateNested()

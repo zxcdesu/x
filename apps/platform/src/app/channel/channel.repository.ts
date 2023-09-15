@@ -22,15 +22,16 @@ export class ChannelRepository
   [ChannelType.Web] = WebChannel;
 
   constructor(
-    private readonly httpService: HttpService,
     private readonly configService: ConfigService,
+    private readonly httpService: HttpService,
     private readonly prismaService: PrismaService,
   ) {}
 
   get(channel: Channel): AbstractChannel {
     return new this[channel.type](
-      this.httpService,
+      channel,
       this.configService,
+      this.httpService,
       this.prismaService,
     );
   }

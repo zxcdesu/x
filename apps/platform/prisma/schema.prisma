@@ -57,6 +57,9 @@ model Chat {
 
   @@unique([projectId, id])
   @@unique([channelId, accountId])
+  @@index([projectId])
+  @@index([channelId])
+  @@index([accountId])
 }
 
 enum MessageStatus {
@@ -79,6 +82,8 @@ model Message {
   updatedAt    DateTime      @updatedAt
 
   @@unique([chatId, id])
+  @@unique([chatId, externalId])
+  @@index([chatId])
   @@index([externalId])
 }
 
@@ -91,7 +96,7 @@ enum AuthorType {
 model Author {
   messageId   Int     @id
   message     Message @relation(fields: [messageId], references: [id], onDelete: Cascade)
-  id          Int
+  id          Int?
   type        AuthorType
 }
 

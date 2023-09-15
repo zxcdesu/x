@@ -24,7 +24,7 @@ export class ChannelService {
       where: {
         id: channel.id,
       },
-      data: await this.channelRepository.get(channel).create(channel),
+      data: await this.channelRepository.get(channel).init(),
     });
   }
 
@@ -70,14 +70,14 @@ export class ChannelService {
     });
   }
 
-  async event(payload: ChannelEvent) {
+  async handleEvent(payload: ChannelEvent) {
     const channel = await this.prismaService.channel.findUnique({
       where: {
         id: payload.param.channelId,
       },
     });
     if (channel) {
-      return this.channelRepository.get(channel).event(channel, payload);
+      return this.channelRepository.get(channel).handleEvent(payload);
     }
   }
 }
