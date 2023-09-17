@@ -4,6 +4,7 @@ import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { GraphQLModule } from '@nestjs/graphql';
 import { PassportModule } from '@nestjs/passport';
+import * as BackendType from '@platform/backend-type';
 import joi from 'joi';
 import { BearerAuthStrategy } from './auth/bearer-auth.strategy';
 import { BotTemplateResolver } from './bot-template/bot-template.resolver';
@@ -98,6 +99,8 @@ import { WebhookRmq } from './webhook/webhook.rmq';
     WalletResolver,
     WebhookResolver,
     ErrorFactoryService,
+    BackendType.ChatRmq.provide(ErrorFactoryService),
+    BackendType.MessageRmq.provide(ErrorFactoryService),
     BotRmq.provide(ErrorFactoryService),
     BotTemplateRmq.provide(ErrorFactoryService),
     ChannelRmq.provide(ErrorFactoryService),

@@ -1,5 +1,5 @@
 import { Controller } from '@nestjs/common';
-import { MessageRmq } from '@platform/platform-type';
+import { MessageRmq } from '@platform/backend-type';
 import { MessageDto } from './dto/message.dto';
 
 @Controller()

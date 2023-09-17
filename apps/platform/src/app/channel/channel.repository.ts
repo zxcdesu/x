@@ -1,7 +1,7 @@
 import { HttpService } from '@nestjs/axios';
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import { ChatRmq, MessageRmq } from '@platform/platform-type';
+import { ChatRmq, MessageRmq } from '@platform/backend-type';
 import { Channel, ChannelType, PrismaService } from '../prisma.service';
 import { AbstractChannel } from './abstract.channel';
 import { GupshupChannel } from './gupshup.channel';

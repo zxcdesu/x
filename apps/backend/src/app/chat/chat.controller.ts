@@ -1,5 +1,5 @@
 import { Controller } from '@nestjs/common';
-import { ChatRmq } from '@platform/platform-type';
+import { ChatRmq } from '@platform/backend-type';
 import { ChatDto } from './dto/chat.dto';
 
 @Controller()

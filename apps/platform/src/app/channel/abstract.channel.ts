@@ -1,6 +1,7 @@
 import { HttpService } from '@nestjs/axios';
 import { ConfigService } from '@nestjs/config';
-import { ChannelEvent, ChatRmq, MessageRmq } from '@platform/platform-type';
+import { ChatRmq, MessageRmq } from '@platform/backend-type';
+import { ChannelEvent } from '@platform/platform-type';
 import { plainToInstance } from 'class-transformer';
 import { ChatDto } from '../chat/dto/chat.dto';
 import { CreateChatDto } from '../chat/dto/create-chat.dto';
