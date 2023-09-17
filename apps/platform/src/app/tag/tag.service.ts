@@ -1,20 +1,20 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../prisma.service';
-import { CreateHsmDto } from './dto/create-hsm.dto';
-import { UpdateHsmDto } from './dto/update-hsm.dto';
+import { CreateTagDto } from './dto/create-tag.dto';
+import { UpdateTagDto } from './dto/update-tag.dto';
 
 @Injectable()
-export class HsmService {
+export class TagService {
   constructor(private readonly prismaService: PrismaService) {}
 
-  async create(payload: CreateHsmDto) {
-    return this.prismaService.hsm.create({
+  async create(payload: CreateTagDto) {
+    return this.prismaService.tag.create({
       data: payload,
     });
   }
 
   async findOne(projectId: number, id: number) {
-    return this.prismaService.hsm.findUniqueOrThrow({
+    return this.prismaService.tag.findUniqueOrThrow({
       where: {
         projectId_id: {
           projectId,
@@ -32,8 +32,8 @@ export class HsmService {
     });
   }
 
-  async update(payload: UpdateHsmDto) {
-    return this.prismaService.hsm.update({
+  async update(payload: UpdateTagDto) {
+    return this.prismaService.tag.update({
       where: {
         projectId_id: {
           projectId: payload.projectId,
@@ -45,7 +45,7 @@ export class HsmService {
   }
 
   async remove(projectId: number, id: number) {
-    return this.prismaService.hsm.delete({
+    return this.prismaService.tag.delete({
       where: {
         projectId_id: {
           projectId,

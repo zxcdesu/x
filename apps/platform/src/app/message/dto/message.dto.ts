@@ -14,7 +14,7 @@ export class MessageDto implements Message {
 
   status: MessageStatus;
 
-  failedReason: string;
+  failedReason: string | null;
 
   @Type(() => AuthorDto)
   author: AuthorDto;

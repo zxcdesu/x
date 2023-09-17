@@ -1,9 +1,15 @@
 import { NotImplementedException } from '@nestjs/common';
-import { ChannelEvent } from '@platform/platform-type';
+import { ChannelEvent, TelegramEvent } from '@platform/platform-type';
 import { catchError, lastValueFrom, map } from 'rxjs';
 import { CreateChatDto } from '../chat/dto/create-chat.dto';
 import { CreateMessageDto } from '../message/dto/create-message.dto';
-import { ChannelStatus, Chat, Prisma } from '../prisma.service';
+import {
+  AuthorType,
+  ChannelStatus,
+  Chat,
+  MessageStatus,
+  Prisma,
+} from '../prisma.service';
 import { AbstractChannel } from './abstract.channel';
 
 export class TelegramChannel extends AbstractChannel {
@@ -32,8 +38,25 @@ export class TelegramChannel extends AbstractChannel {
     );
   }
 
-  async handleEvent(event: ChannelEvent<unknown, unknown>): Promise<void> {
-    console.log(this.channel, event);
+  async handleEvent(
+    event: ChannelEvent<unknown, TelegramEvent>,
+  ): Promise<void> {
+    const message = event.body.edited_message ?? event.body.message;
+    await this.upsertMessage(
+      await this.upsertChat(message.chat.id.toString(), message.chat.username),
+      message.message_id.toString(),
+      {
+        create: {
+          text: message.text,
+        },
+      },
+      MessageStatus.Delivered,
+      {
+        create: {
+          type: AuthorType.Contact,
+        },
+      },
+    );
   }
 
   async initChat(

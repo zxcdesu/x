@@ -12,6 +12,7 @@ import { BotResolver } from './bot/bot.resolver';
 import { BotRmq } from './bot/bot.rmq';
 import { ChannelResolver } from './channel/channel.resolver';
 import { ChannelRmq } from './channel/channel.rmq';
+import { ChatController } from './chat/chat.controller';
 import { ChatResolver } from './chat/chat.resolver';
 import { ChatRmq } from './chat/chat.rmq';
 import { ContactResolver } from './contact/contact.resolver';
@@ -25,6 +26,7 @@ import { InviteResolver } from './invite/invite.controller';
 import { InviteRmq } from './invite/invite.rmq';
 import { MailingResolver } from './mailing/mailing.resolver';
 import { MailingRmq } from './mailing/mailing.rmq';
+import { MessageController } from './message/message.controller';
 import { MessageResolver } from './message/message.resolver';
 import { MessageRmq } from './message/message.rmq';
 import { ProjectUserResolver } from './project-user/project-user.controller';
@@ -75,6 +77,7 @@ import { WebhookRmq } from './webhook/webhook.rmq';
     }),
     PassportModule,
   ],
+  controllers: [ChatController, MessageController],
   providers: [
     PubSubService,
     BearerAuthStrategy,

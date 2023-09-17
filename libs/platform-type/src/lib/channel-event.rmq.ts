@@ -5,7 +5,7 @@ import { ChannelEvent } from './channel-event.interface';
 
 @Injectable()
 export class ChannelEventRmq extends RmqService {
-  static subscribe = () =>
+  static subscribeEvent = () =>
     RabbitSubscribe({
       exchange: 'platform',
       routingKey: 'event',

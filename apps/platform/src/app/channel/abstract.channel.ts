@@ -1,6 +1,6 @@
 import { HttpService } from '@nestjs/axios';
 import { ConfigService } from '@nestjs/config';
-import { ChannelEvent } from '@platform/platform-type';
+import { ChannelEvent, ChatRmq, MessageRmq } from '@platform/platform-type';
 import { plainToInstance } from 'class-transformer';
 import { ChatDto } from '../chat/dto/chat.dto';
 import { CreateChatDto } from '../chat/dto/create-chat.dto';
@@ -21,6 +21,8 @@ export abstract class AbstractChannel<Q = unknown, B = unknown> {
     protected readonly configService: ConfigService,
     protected readonly httpService: HttpService,
     protected readonly prismaService: PrismaService,
+    protected readonly chatRmq: ChatRmq,
+    protected readonly messageRmq: MessageRmq,
   ) {}
 
   abstract init(): Promise<Partial<Prisma.ChannelUncheckedUpdateInput>>;
@@ -36,8 +38,11 @@ export abstract class AbstractChannel<Q = unknown, B = unknown> {
     message: CreateMessageDto,
   ): Promise<Prisma.MessageUncheckedCreateInput>;
 
-  protected async upsertChat(accountId: string) {
-    return plainToInstance(
+  protected async upsertChat(
+    accountId: string,
+    name: string,
+  ): Promise<ChatDto> {
+    const chat = plainToInstance(
       ChatDto,
       await this.prismaService.chat.upsert({
         where: {
@@ -57,6 +62,7 @@ export abstract class AbstractChannel<Q = unknown, B = unknown> {
           contact: {
             create: {
               projectId: this.channel.projectId,
+              name,
               status: ContactStatus.Pending,
             },
           },
@@ -68,13 +74,19 @@ export abstract class AbstractChannel<Q = unknown, B = unknown> {
           },
         },
         include: {
+          contact: {
+            include: {
+              assignedTo: true,
+              customFields: true,
+              tags: true,
+            },
+          },
           messages: {
             orderBy: {
               id: 'desc',
             },
             take: 1,
             include: {
-              chat: true,
               content: {
                 orderBy: {
                   id: 'desc',
@@ -89,16 +101,18 @@ export abstract class AbstractChannel<Q = unknown, B = unknown> {
         },
       }),
     );
+    await this.chatRmq.chat(chat);
+    return chat;
   }
 
   protected async upsertMessage(
     chat: Chat,
     externalId: string,
-    content: Prisma.ContentCreateNestedManyWithoutMessageInput,
+    content: Prisma.ContentUncheckedCreateNestedManyWithoutMessageInput,
     status: MessageStatus,
     author: Prisma.AuthorUncheckedCreateNestedOneWithoutMessageInput,
-  ) {
-    return plainToInstance(
+  ): Promise<MessageDto> {
+    const message = plainToInstance(
       MessageDto,
       await this.prismaService.message.upsert({
         where: {
@@ -123,7 +137,6 @@ export abstract class AbstractChannel<Q = unknown, B = unknown> {
           updatedAt: new Date(),
         },
         include: {
-          chat: true,
           content: {
             orderBy: {
               id: 'desc',
@@ -136,5 +149,7 @@ export abstract class AbstractChannel<Q = unknown, B = unknown> {
         },
       }),
     );
+    await this.messageRmq.message(message);
+    return message;
   }
 }

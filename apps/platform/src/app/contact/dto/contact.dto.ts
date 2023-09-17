@@ -1,5 +1,8 @@
-import { Exclude } from 'class-transformer';
+import { Exclude, Type } from 'class-transformer';
 import { Contact, ContactStatus } from '../../prisma.service';
+import { TagDto } from '../../tag/dto/tag.dto';
+import { AssignedTo } from './assigned-to.dto';
+import { CustomField } from './custom-field.dto';
 
 export class ContactDto implements Contact {
   id: number;
@@ -11,19 +14,27 @@ export class ContactDto implements Contact {
 
   description: string;
 
-  imageUrl: string;
+  imageUrl: string | null;
 
   priority: number;
 
   status: ContactStatus;
 
-  rejectedReason: string;
-
-  closedReason: string;
+  rejectedReason: string | null;
 
   createdAt: Date;
 
   updatedAt: Date;
 
-  deletedAt: Date;
+  @Exclude()
+  deletedAt: Date | null;
+
+  @Type(() => AssignedTo)
+  assignedTo: AssignedTo | null;
+
+  @Type(() => CustomField)
+  customFields: CustomField[];
+
+  @Type(() => TagDto)
+  tags: TagDto[];
 }

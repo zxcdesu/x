@@ -15,6 +15,8 @@ import { ErrorFactoryService } from './error-factory.service';
 import { MessageController } from './message/message.controller';
 import { MessageService } from './message/message.service';
 import { PrismaService } from './prisma.service';
+import { TagController } from './tag/tag.controller';
+import { TagService } from './tag/tag.service';
 
 @Module({
   imports: [
@@ -50,6 +52,7 @@ import { PrismaService } from './prisma.service';
     ChatController,
     ContactController,
     MessageController,
+    TagController,
   ],
   providers: [
     PrismaService,
@@ -58,6 +61,7 @@ import { PrismaService } from './prisma.service';
     ChatService,
     ContactService,
     MessageService,
+    TagService,
     ErrorFactoryService,
     ChannelEventRmq.provide(ErrorFactoryService),
   ],

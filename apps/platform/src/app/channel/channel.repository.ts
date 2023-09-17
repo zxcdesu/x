@@ -1,6 +1,7 @@
 import { HttpService } from '@nestjs/axios';
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
+import { ChatRmq, MessageRmq } from '@platform/platform-type';
 import { Channel, ChannelType, PrismaService } from '../prisma.service';
 import { AbstractChannel } from './abstract.channel';
 import { GupshupChannel } from './gupshup.channel';
@@ -12,7 +13,7 @@ import { WebChannel } from './web.channel';
 
 @Injectable()
 export class ChannelRepository
-  implements Record<ChannelType, typeof AbstractChannel>
+  implements Record<ChannelType, typeof AbstractChannel<any, any>>
 {
   [ChannelType.Gupshup] = GupshupChannel;
   [ChannelType.Instagram] = InstagramChannel;
@@ -25,6 +26,8 @@ export class ChannelRepository
     private readonly configService: ConfigService,
     private readonly httpService: HttpService,
     private readonly prismaService: PrismaService,
+    private readonly chatRmq: ChatRmq,
+    private readonly messageRmq: MessageRmq,
   ) {}
 
   get(channel: Channel): AbstractChannel {
@@ -33,6 +36,8 @@ export class ChannelRepository
       this.configService,
       this.httpService,
       this.prismaService,
+      this.chatRmq,
+      this.messageRmq,
     );
   }
 }

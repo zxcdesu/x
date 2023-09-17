@@ -1,11 +1,11 @@
-import { Exclude, Expose, Type } from 'class-transformer';
+import { Exclude, Type } from 'class-transformer';
 import { IsOptional, IsString, ValidateNested } from 'class-validator';
 import { Content } from '../../prisma.service';
 import { AttachmentDto } from './attachment.dto';
 import { ButtonDto } from './button.dto';
 
 export class ContentDto implements Content {
-  @Expose()
+  @Exclude()
   id: number;
 
   @Exclude()

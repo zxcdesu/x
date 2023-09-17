@@ -72,7 +72,7 @@ export class ChannelController {
     return this.channelService.remove(projectId, id);
   }
 
-  @ChannelEventRmq.subscribe()
+  @ChannelEventRmq.subscribeEvent()
   handleEvent(@RabbitPayload() event: ChannelEvent) {
     return this.channelService.handleEvent(event);
   }
