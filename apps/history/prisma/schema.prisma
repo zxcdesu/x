@@ -1,0 +1,30 @@
+generator client {
+  provider = "prisma-client-js"
+  output   = "./generated"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum ContactHistoryEventType {
+  Create
+  Assign
+  Return
+  Close
+  Update
+  Remove
+}
+
+model ContactHistory {
+  id        Int                     @id @default(autoincrement())
+  contactId Int
+  eventType ContactHistoryEventType
+  payload   Json?
+  createdAt DateTime                @default(now())
+
+  @@index([contactId])
+  @@index([eventType])
+  @@index([createdAt])
+}

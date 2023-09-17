@@ -197,7 +197,6 @@ model Contact {
   chats          Chat[]
   tags           ContactTag[]
   customFields   CustomField[]
-  history        History[]
   createdAt      DateTime      @default(now())
   updatedAt      DateTime?     @updatedAt
   deletedAt      DateTime?
@@ -208,28 +207,6 @@ model Contact {
   @@index([status])
   @@index([createdAt])
   @@index([updatedAt])
-}
-
-enum HistoryEventType {
-  Create
-  Assign
-  Return
-  Close
-  Update
-  Remove
-}
-
-model History {
-  id        Int              @id @default(autoincrement())
-  contactId Int
-  contact   Contact          @relation(fields: [contactId], references: [id], onDelete: Cascade)
-  eventType HistoryEventType
-  payload   Json?
-  createdAt DateTime         @default(now())
-
-  @@index([contactId])
-  @@index([eventType])
-  @@index([createdAt])
 }
 
 model Tag {

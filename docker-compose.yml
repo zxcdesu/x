@@ -136,6 +136,25 @@ services:
       - redis
       - reverse-proxy
 
+  history:
+    build:
+      context: ./
+      args:
+        PRISMA: auth
+    command: npx nx run history:serve
+    volumes:
+      - .:/usr/src/app
+      - /usr/src/app/apps/history/prisma/generated
+      - /usr/src/app/node_modules
+    environment:
+      - DATABASE_URL=postgres://root:pass@postgres:5432/history
+      - BROKER_URL=amqp://root:pass@rabbitmq:5672
+    networks:
+      - default
+    depends_on:
+      - postgres
+      - rabbitmq
+
   integrations:
     build:
       context: ./
@@ -227,7 +246,7 @@ services:
     ports:
       - 6379:6379
 
-  reverse-proxy:
+  cloudflared:
     image: cloudflare/cloudflared:latest
     entrypoint: 'cloudflared tunnel --no-autoupdate run'
     env_file:
