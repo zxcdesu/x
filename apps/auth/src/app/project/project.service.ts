@@ -87,8 +87,7 @@ export class ProjectService {
     });
   }
 
-  async update(userId: number, payload: UpdateProjectDto) {
-    await this.checkAccess(userId, payload);
+  update(userId: number, payload: UpdateProjectDto) {
     return this.prismaService.project.update({
       where: {
         id: payload.id,
@@ -104,8 +103,7 @@ export class ProjectService {
     });
   }
 
-  async remove(userId: number, payload: RemoveProjectDto) {
-    await this.checkAccess(userId, payload);
+  remove(userId: number, payload: RemoveProjectDto) {
     return this.prismaService.project.delete({
       where: payload,
       include: {
@@ -116,13 +114,5 @@ export class ProjectService {
         },
       },
     });
-  }
-
-  private async checkAccess(
-    userId: number,
-    payload: FindOneProjectDto,
-  ): Promise<void> {
-    await this.findOne(userId, payload);
-    // TODO: check access
   }
 }

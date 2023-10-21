@@ -13,7 +13,7 @@ export class InviteService {
     private readonly projectUserService: ProjectUserService,
   ) {}
 
-  async create(payload: CreateInviteDto): Promise<boolean> {
+  async create(payload: CreateInviteDto) {
     const user = await this.userService.findOneByEmail(payload.email);
     if (user) {
       await this.projectUserService.create(payload.projectId, user.id);
