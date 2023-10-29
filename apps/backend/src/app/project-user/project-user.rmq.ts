@@ -5,11 +5,9 @@ import { ProjectUserDto } from './dto/project-user.dto';
 
 @Injectable()
 export class ProjectUserRmq extends RmqService {
-  private readonly exchange = 'auth';
-
   findOne(projectId: number, userId: number) {
     return this.request<ProjectUserDto>({
-      exchange: this.exchange,
+      exchange: 'auth',
       routingKey: 'findOneProjectUser',
       payload: {
         projectId,
@@ -20,7 +18,7 @@ export class ProjectUserRmq extends RmqService {
 
   findAll(projectId: number) {
     return this.request<ProjectUserDto[]>({
-      exchange: this.exchange,
+      exchange: 'auth',
       routingKey: 'findAllProjectUsers',
       payload: {
         projectId,
@@ -30,7 +28,7 @@ export class ProjectUserRmq extends RmqService {
 
   update(projectId: number, payload: UpdateProjectUserDto) {
     return this.request<ProjectUserDto>({
-      exchange: this.exchange,
+      exchange: 'auth',
       routingKey: 'updateProjectUser',
       payload: {
         ...payload,
@@ -41,7 +39,7 @@ export class ProjectUserRmq extends RmqService {
 
   remove(projectId: number, userId: number) {
     return this.request<ProjectUserDto>({
-      exchange: this.exchange,
+      exchange: 'auth',
       routingKey: 'removeProjectUser',
       payload: {
         projectId,

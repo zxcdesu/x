@@ -6,11 +6,9 @@ import { WebhookDto } from './dto/webhook.dto';
 
 @Injectable()
 export class WebhookRmq extends RmqService {
-  private readonly exchange = 'integrations';
-
   create(projectId: number, payload: CreateWebhookDto) {
     return this.request<WebhookDto>({
-      exchange: this.exchange,
+      exchange: 'integrations',
       routingKey: 'createWebhook',
       payload: {
         ...payload,
@@ -21,7 +19,7 @@ export class WebhookRmq extends RmqService {
 
   findOne(projectId: number, id: number) {
     return this.request<WebhookDto>({
-      exchange: this.exchange,
+      exchange: 'integrations',
       routingKey: 'findOneWebhook',
       payload: {
         projectId,
@@ -32,7 +30,7 @@ export class WebhookRmq extends RmqService {
 
   findAll(projectId: number, ids?: number[]) {
     return this.request<WebhookDto[]>({
-      exchange: this.exchange,
+      exchange: 'integrations',
       routingKey: 'findAllWebhooks',
       payload: {
         projectId,
@@ -43,7 +41,7 @@ export class WebhookRmq extends RmqService {
 
   update(projectId: number, payload: UpdateWebhookDto) {
     return this.request<WebhookDto>({
-      exchange: this.exchange,
+      exchange: 'integrations',
       routingKey: 'updateWebhook',
       payload: {
         ...payload,
@@ -54,7 +52,7 @@ export class WebhookRmq extends RmqService {
 
   remove(projectId: number, id: number) {
     return this.request<WebhookDto>({
-      exchange: this.exchange,
+      exchange: 'integrations',
       routingKey: 'removeWebhook',
       payload: {
         projectId,

@@ -1,7 +1,10 @@
-import { Exclude } from 'class-transformer';
+import { Exclude, Type } from 'class-transformer';
+import { CreateAttachmentDto } from '../../message/dto/create-attachment.dto';
+import { CreateButtonDto } from '../../message/dto/create-button.dto';
 import { Hsm } from '../../prisma.service';
+import { ApprovalDto } from './approval.dto';
 
-export class HsmDto implements Hsm {
+export class HsmDto implements Omit<Hsm, 'attachments' | 'buttons'> {
   id: number;
 
   @Exclude()
@@ -11,11 +14,16 @@ export class HsmDto implements Hsm {
 
   text: string;
 
-  attachments: any[];
+  @Type(() => CreateAttachmentDto)
+  attachments: CreateAttachmentDto[];
 
-  buttons: any[];
+  @Type(() => CreateButtonDto)
+  buttons: CreateButtonDto[];
 
   createdAt: Date;
 
   updatedAt: Date;
+
+  @Type(() => ApprovalDto)
+  approval?: ApprovalDto;
 }

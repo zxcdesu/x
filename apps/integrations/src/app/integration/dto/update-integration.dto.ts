@@ -8,8 +8,8 @@ import { IsUUID } from 'class-validator';
 import { CreateIntegrationDto } from './create-integration.dto';
 
 export class UpdateIntegrationDto extends IntersectionType(
-  PickType(CreateIntegrationDto, ['projectId']),
-  PartialType(OmitType(CreateIntegrationDto, ['projectId'])),
+  PickType(CreateIntegrationDto, ['projectId'] as const),
+  PartialType(OmitType(CreateIntegrationDto, ['projectId'] as const)),
 ) {
   @IsUUID()
   id: string;

@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../prisma.service';
 import { CreateContactDto } from './dto/create-contact.dto';
 import { UpdateContactDto } from './dto/update-contact.dto';
+import { ContactDto } from './dto/contact.dto';
 
 @Injectable()
 export class ContactService {
@@ -10,6 +11,15 @@ export class ContactService {
   async create(payload: CreateContactDto) {
     return this.prismaService.contact.create({
       data: payload,
+      include: {
+        assignedTo: true,
+        customFields: true,
+        tags: {
+          include: {
+            tag: true,
+          },
+        },
+      },
     });
   }
 
@@ -21,13 +31,31 @@ export class ContactService {
           id,
         },
       },
+      include: {
+        assignedTo: true,
+        customFields: true,
+        tags: {
+          include: {
+            tag: true,
+          },
+        },
+      },
     });
   }
 
   async findAll(projectId: number) {
-    return this.prismaService.channel.findMany({
+    return this.prismaService.contact.findMany({
       where: {
         projectId,
+      },
+      include: {
+        assignedTo: true,
+        customFields: true,
+        tags: {
+          include: {
+            tag: true,
+          },
+        },
       },
     });
   }
@@ -41,6 +69,15 @@ export class ContactService {
         },
       },
       data: payload,
+      include: {
+        assignedTo: true,
+        customFields: true,
+        tags: {
+          include: {
+            tag: true,
+          },
+        },
+      },
     });
   }
 
@@ -50,6 +87,15 @@ export class ContactService {
         projectId_id: {
           projectId,
           id,
+        },
+      },
+      include: {
+        assignedTo: true,
+        customFields: true,
+        tags: {
+          include: {
+            tag: true,
+          },
         },
       },
     });

@@ -6,11 +6,9 @@ import { UpdateIntegrationDto } from './dto/update-integration.dto';
 
 @Injectable()
 export class IntegrationRmq extends RmqService {
-  private readonly exchange = 'integrations';
-
   create(projectId: number, payload: CreateIntegrationDto) {
     return this.request<IntegrationDto>({
-      exchange: this.exchange,
+      exchange: 'integrations',
       routingKey: 'createIntegration',
       payload: {
         ...payload,
@@ -21,7 +19,7 @@ export class IntegrationRmq extends RmqService {
 
   findOne(projectId: number, id: number) {
     return this.request<IntegrationDto>({
-      exchange: this.exchange,
+      exchange: 'integrations',
       routingKey: 'findOneIntegration',
       payload: {
         projectId,
@@ -32,7 +30,7 @@ export class IntegrationRmq extends RmqService {
 
   findAll(projectId: number, ids?: number[]) {
     return this.request<IntegrationDto[]>({
-      exchange: this.exchange,
+      exchange: 'integrations',
       routingKey: 'findAllIntegrations',
       payload: {
         projectId,
@@ -43,7 +41,7 @@ export class IntegrationRmq extends RmqService {
 
   update(projectId: number, payload: UpdateIntegrationDto) {
     return this.request<IntegrationDto>({
-      exchange: this.exchange,
+      exchange: 'integrations',
       routingKey: 'updateIntegration',
       payload: {
         ...payload,
@@ -54,7 +52,7 @@ export class IntegrationRmq extends RmqService {
 
   remove(projectId: number, id: number) {
     return this.request<IntegrationDto>({
-      exchange: this.exchange,
+      exchange: 'integrations',
       routingKey: 'removeIntegration',
       payload: {
         projectId,

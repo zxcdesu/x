@@ -7,13 +7,17 @@ import { UpdateTagDto } from './dto/update-tag.dto';
 export class TagService {
   constructor(private readonly prismaService: PrismaService) {}
 
-  async create(payload: CreateTagDto) {
+  create(payload: CreateTagDto) {
     return this.prismaService.tag.create({
       data: payload,
+      include: {
+        children: true,
+        parent: true,
+      },
     });
   }
 
-  async findOne(projectId: number, id: number) {
+  findOne(projectId: number, id: number) {
     return this.prismaService.tag.findUniqueOrThrow({
       where: {
         projectId_id: {
@@ -21,18 +25,26 @@ export class TagService {
           id,
         },
       },
-    });
-  }
-
-  async findAll(projectId: number) {
-    return this.prismaService.channel.findMany({
-      where: {
-        projectId,
+      include: {
+        children: true,
+        parent: true,
       },
     });
   }
 
-  async update(payload: UpdateTagDto) {
+  findAll(projectId: number) {
+    return this.prismaService.tag.findMany({
+      where: {
+        projectId,
+      },
+      include: {
+        children: true,
+        parent: true,
+      },
+    });
+  }
+
+  update(payload: UpdateTagDto) {
     return this.prismaService.tag.update({
       where: {
         projectId_id: {
@@ -41,16 +53,24 @@ export class TagService {
         },
       },
       data: payload,
+      include: {
+        children: true,
+        parent: true,
+      },
     });
   }
 
-  async remove(projectId: number, id: number) {
+  remove(projectId: number, id: number) {
     return this.prismaService.tag.delete({
       where: {
         projectId_id: {
           projectId,
           id,
         },
+      },
+      include: {
+        children: true,
+        parent: true,
       },
     });
   }

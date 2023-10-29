@@ -24,7 +24,7 @@ export class ChannelService {
       where: {
         id: channel.id,
       },
-      data: await this.channelRepository.get(channel).init(),
+      data: await this.channelRepository.get(channel).initialize(),
     });
   }
 

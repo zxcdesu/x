@@ -6,11 +6,9 @@ import { UpdateSubscriptionDto } from './dto/update-subscription.dto';
 
 @Injectable()
 export class SubscriptionRmq extends RmqService {
-  private readonly exchange = 'billing';
-
   create(projectId: number, payload: CreateSubscriptionDto) {
     return this.request<SubscriptionDto>({
-      exchange: this.exchange,
+      exchange: 'billing',
       routingKey: 'createSubscription',
       payload: {
         ...payload,
@@ -21,7 +19,7 @@ export class SubscriptionRmq extends RmqService {
 
   findOne(projectId: number, id: number) {
     return this.request<SubscriptionDto>({
-      exchange: this.exchange,
+      exchange: 'billing',
       routingKey: 'findOneSubscription',
       payload: {
         projectId,
@@ -32,7 +30,7 @@ export class SubscriptionRmq extends RmqService {
 
   findAll(projectId: number, ids?: number[]) {
     return this.request<SubscriptionDto[]>({
-      exchange: this.exchange,
+      exchange: 'billing',
       routingKey: 'findAllSubscriptions',
       payload: {
         projectId,
@@ -43,7 +41,7 @@ export class SubscriptionRmq extends RmqService {
 
   update(projectId: number, payload: UpdateSubscriptionDto) {
     return this.request<SubscriptionDto>({
-      exchange: this.exchange,
+      exchange: 'billing',
       routingKey: 'updateSubscription',
       payload: {
         ...payload,
@@ -54,7 +52,7 @@ export class SubscriptionRmq extends RmqService {
 
   remove(projectId: number, id: number) {
     return this.request<SubscriptionDto>({
-      exchange: this.exchange,
+      exchange: 'billing',
       routingKey: 'removeSubscription',
       payload: {
         projectId,

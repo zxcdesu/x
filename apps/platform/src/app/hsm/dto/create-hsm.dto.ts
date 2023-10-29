@@ -1,3 +1,4 @@
+import { Type } from 'class-transformer';
 import {
   IsInt,
   IsNotEmpty,
@@ -5,9 +6,13 @@ import {
   IsOptional,
   IsString,
 } from 'class-validator';
+import { CreateAttachmentDto } from '../../message/dto/create-attachment.dto';
+import { CreateButtonDto } from '../../message/dto/create-button.dto';
 import { Prisma } from '../../prisma.service';
 
-export class CreateHsmDto implements Prisma.HsmUncheckedCreateInput {
+export class CreateHsmDto
+  implements Omit<Prisma.HsmUncheckedCreateInput, 'attachments' | 'buttons'>
+{
   @IsInt()
   projectId: number;
 
@@ -19,11 +24,13 @@ export class CreateHsmDto implements Prisma.HsmUncheckedCreateInput {
   @IsString()
   text: string;
 
+  @Type(() => CreateAttachmentDto)
   @IsOptional()
   @IsObject({ each: true })
-  attachments?: any[];
+  attachments?: CreateAttachmentDto[];
 
+  @Type(() => CreateButtonDto)
   @IsOptional()
   @IsObject({ each: true })
-  buttons?: any[];
+  buttons?: CreateButtonDto[];
 }

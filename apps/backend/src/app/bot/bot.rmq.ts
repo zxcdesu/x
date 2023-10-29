@@ -6,11 +6,9 @@ import { UpdateBotDto } from './dto/update-bot.dto';
 
 @Injectable()
 export class BotRmq extends RmqService {
-  private readonly exchange = 'bots';
-
   create(projectId: number, payload: CreateBotDto) {
     return this.request<BotDto>({
-      exchange: this.exchange,
+      exchange: 'bots',
       routingKey: 'createBot',
       payload: {
         ...payload,
@@ -21,7 +19,7 @@ export class BotRmq extends RmqService {
 
   findOne(projectId: number, id: number) {
     return this.request<BotDto>({
-      exchange: this.exchange,
+      exchange: 'bots',
       routingKey: 'findOneBot',
       payload: {
         projectId,
@@ -32,7 +30,7 @@ export class BotRmq extends RmqService {
 
   findAll(projectId: number, ids?: number[]) {
     return this.request<BotDto[]>({
-      exchange: this.exchange,
+      exchange: 'bots',
       routingKey: 'findAllBots',
       payload: {
         projectId,
@@ -43,7 +41,7 @@ export class BotRmq extends RmqService {
 
   update(projectId: number, payload: UpdateBotDto) {
     return this.request<BotDto>({
-      exchange: this.exchange,
+      exchange: 'bots',
       routingKey: 'updateBot',
       payload: {
         ...payload,
@@ -54,7 +52,7 @@ export class BotRmq extends RmqService {
 
   remove(projectId: number, id: number) {
     return this.request<BotDto>({
-      exchange: this.exchange,
+      exchange: 'bots',
       routingKey: 'removeBot',
       payload: {
         projectId,

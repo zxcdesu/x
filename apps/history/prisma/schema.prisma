@@ -8,23 +8,22 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-enum ContactHistoryEventType {
-  Create
-  Assign
-  Return
-  Close
-  Update
-  Remove
+enum EventType {
+  Contact
 }
 
-model ContactHistory {
+model Event {
   id        Int                     @id @default(autoincrement())
-  contactId Int
-  eventType ContactHistoryEventType
+  projectId Int?
+  userId    Int?
+  type      EventType
   payload   Json?
   createdAt DateTime                @default(now())
 
-  @@index([contactId])
-  @@index([eventType])
+  @@index([projectId])
+  @@index([userId])
+  @@index([type])
   @@index([createdAt])
+
+  @@unique([projectId, userId, id])
 }

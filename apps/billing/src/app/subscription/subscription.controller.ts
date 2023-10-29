@@ -11,7 +11,7 @@ export class SubscriptionController {
   constructor(private readonly subscriptionService: SubscriptionService) {}
 
   @RabbitRPC({
-    routingKey: 'createWallet',
+    routingKey: 'createSubscription',
     exchange: 'billing',
   })
   @SerializeOptions({
@@ -22,7 +22,7 @@ export class SubscriptionController {
   }
 
   @RabbitRPC({
-    routingKey: 'findOneWallet',
+    routingKey: 'findOneSubscription',
     exchange: 'billing',
   })
   @SerializeOptions({
@@ -33,7 +33,7 @@ export class SubscriptionController {
   }
 
   @RabbitRPC({
-    routingKey: 'updateWallet',
+    routingKey: 'updateSubscription',
     exchange: 'billing',
   })
   @SerializeOptions({
@@ -44,7 +44,7 @@ export class SubscriptionController {
   }
 
   @RabbitRPC({
-    routingKey: 'removeWallet',
+    routingKey: 'removeSubscription',
     exchange: 'billing',
   })
   @SerializeOptions({

@@ -6,11 +6,9 @@ import { UpdateWalletDto } from './dto/update-project.dto';
 
 @Injectable()
 export class WalletRmq extends RmqService {
-  private readonly exchange = 'billing';
-
   create(projectId: number, payload: CreateWalletDto) {
     return this.request<WalletDto>({
-      exchange: this.exchange,
+      exchange: 'billing',
       routingKey: 'createWallet',
       payload: {
         ...payload,
@@ -21,7 +19,7 @@ export class WalletRmq extends RmqService {
 
   findOne(projectId: number, id: number) {
     return this.request<WalletDto>({
-      exchange: this.exchange,
+      exchange: 'billing',
       routingKey: 'findOneWallet',
       payload: {
         projectId,
@@ -32,7 +30,7 @@ export class WalletRmq extends RmqService {
 
   findAll(projectId: number, ids?: number[]) {
     return this.request<WalletDto[]>({
-      exchange: this.exchange,
+      exchange: 'billing',
       routingKey: 'findAllWallets',
       payload: {
         projectId,
@@ -43,7 +41,7 @@ export class WalletRmq extends RmqService {
 
   update(projectId: number, payload: UpdateWalletDto) {
     return this.request<WalletDto>({
-      exchange: this.exchange,
+      exchange: 'billing',
       routingKey: 'updateWallet',
       payload: {
         ...payload,
@@ -54,7 +52,7 @@ export class WalletRmq extends RmqService {
 
   remove(projectId: number, id: number) {
     return this.request<WalletDto>({
-      exchange: this.exchange,
+      exchange: 'billing',
       routingKey: 'removeWallet',
       payload: {
         projectId,

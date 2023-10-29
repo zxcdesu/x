@@ -1,11 +1,8 @@
 import { Exclude } from 'class-transformer';
-import { AuthorType, Author } from '../../prisma.service';
+import { Author } from '../../prisma.service';
+import { CreateAuthorDto } from './create-author.dto';
 
-export class AuthorDto implements Author {
+export class AuthorDto extends CreateAuthorDto implements Author {
   @Exclude()
   messageId: number;
-
-  id: number;
-
-  type: AuthorType;
 }

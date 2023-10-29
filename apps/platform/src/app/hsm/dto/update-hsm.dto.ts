@@ -8,8 +8,8 @@ import { IsInt } from 'class-validator';
 import { CreateHsmDto } from './create-hsm.dto';
 
 export class UpdateHsmDto extends IntersectionType(
-  PickType(CreateHsmDto, ['projectId']),
-  PartialType(OmitType(CreateHsmDto, ['projectId'])),
+  PickType(CreateHsmDto, ['projectId'] as const),
+  PartialType(OmitType(CreateHsmDto, ['projectId'] as const)),
 ) {
   @IsInt()
   id: number;

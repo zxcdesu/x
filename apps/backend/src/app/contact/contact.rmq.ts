@@ -6,11 +6,9 @@ import { UpdateContactDto } from './dto/update-contact.dto';
 
 @Injectable()
 export class ContactRmq extends RmqService {
-  private readonly exchange = 'platform';
-
   create(projectId: number, payload: CreateContactDto) {
     return this.request<ContactDto>({
-      exchange: this.exchange,
+      exchange: 'platform',
       routingKey: 'createContact',
       payload: {
         ...payload,
@@ -21,7 +19,7 @@ export class ContactRmq extends RmqService {
 
   findOne(projectId: number, id: number) {
     return this.request<ContactDto>({
-      exchange: this.exchange,
+      exchange: 'platform',
       routingKey: 'findOneContact',
       payload: {
         projectId,
@@ -32,7 +30,7 @@ export class ContactRmq extends RmqService {
 
   findAll(projectId: number, ids?: number[]) {
     return this.request<ContactDto[]>({
-      exchange: this.exchange,
+      exchange: 'platform',
       routingKey: 'findAllContacts',
       payload: {
         projectId,
@@ -43,7 +41,7 @@ export class ContactRmq extends RmqService {
 
   update(projectId: number, payload: UpdateContactDto) {
     return this.request<ContactDto>({
-      exchange: this.exchange,
+      exchange: 'platform',
       routingKey: 'updateContact',
       payload: {
         ...payload,
@@ -54,7 +52,7 @@ export class ContactRmq extends RmqService {
 
   remove(projectId: number, id: number) {
     return this.request<ContactDto>({
-      exchange: this.exchange,
+      exchange: 'platform',
       routingKey: 'removeContact',
       payload: {
         projectId,

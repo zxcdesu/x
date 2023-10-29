@@ -81,10 +81,7 @@ model Message {
   createdAt    DateTime      @default(now())
   updatedAt    DateTime      @updatedAt
 
-  @@unique([chatId, id])
   @@unique([chatId, externalId])
-  @@index([chatId])
-  @@index([externalId])
 }
 
 enum AuthorType {
@@ -159,6 +156,7 @@ model Approval {
   externalId     String?
 
   @@id([channelId, hsmId])
+  @@unique([externalId])
 }
 
 enum AssigneeType {
@@ -208,7 +206,6 @@ model Contact {
   @@index([createdAt])
   @@index([updatedAt])
 }
-
 model Tag {
   id          Int          @id @default(autoincrement())
   projectId   Int

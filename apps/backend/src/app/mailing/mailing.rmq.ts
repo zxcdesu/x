@@ -6,11 +6,9 @@ import { UpdateMailingDto } from './dto/update-mailing.dto';
 
 @Injectable()
 export class MailingRmq extends RmqService {
-  private readonly exchange = 'mailings';
-
   create(projectId: number, payload: CreateMailingDto) {
     return this.request<MailingDto>({
-      exchange: this.exchange,
+      exchange: 'mailer',
       routingKey: 'createMailing',
       payload: {
         ...payload,
@@ -21,7 +19,7 @@ export class MailingRmq extends RmqService {
 
   findOne(projectId: number, id: number) {
     return this.request<MailingDto>({
-      exchange: this.exchange,
+      exchange: 'mailer',
       routingKey: 'findOneMailing',
       payload: {
         projectId,
@@ -32,7 +30,7 @@ export class MailingRmq extends RmqService {
 
   findAll(projectId: number, ids?: number[]) {
     return this.request<MailingDto[]>({
-      exchange: this.exchange,
+      exchange: 'mailer',
       routingKey: 'findAllMailings',
       payload: {
         projectId,
@@ -43,7 +41,7 @@ export class MailingRmq extends RmqService {
 
   update(projectId: number, payload: UpdateMailingDto) {
     return this.request<MailingDto>({
-      exchange: this.exchange,
+      exchange: 'mailer',
       routingKey: 'updateMailing',
       payload: {
         ...payload,
@@ -54,7 +52,7 @@ export class MailingRmq extends RmqService {
 
   remove(projectId: number, id: number) {
     return this.request<MailingDto>({
-      exchange: this.exchange,
+      exchange: 'mailer',
       routingKey: 'removeMailing',
       payload: {
         projectId,

@@ -6,11 +6,9 @@ import { UpdateHsmDto } from './dto/update-hsm.dto';
 
 @Injectable()
 export class HsmRmq extends RmqService {
-  private readonly exchange = 'platform';
-
   create(projectId: number, payload: CreateHsmDto) {
     return this.request<HsmDto>({
-      exchange: this.exchange,
+      exchange: 'platform',
       routingKey: 'createHsm',
       payload: {
         ...payload,
@@ -21,7 +19,7 @@ export class HsmRmq extends RmqService {
 
   findOne(projectId: number, id: number) {
     return this.request<HsmDto>({
-      exchange: this.exchange,
+      exchange: 'platform',
       routingKey: 'findOneHsm',
       payload: {
         projectId,
@@ -32,7 +30,7 @@ export class HsmRmq extends RmqService {
 
   findAll(projectId: number, ids?: number[]) {
     return this.request<HsmDto[]>({
-      exchange: this.exchange,
+      exchange: 'platform',
       routingKey: 'findAllHsm',
       payload: {
         projectId,
@@ -43,7 +41,7 @@ export class HsmRmq extends RmqService {
 
   update(projectId: number, payload: UpdateHsmDto) {
     return this.request<HsmDto>({
-      exchange: this.exchange,
+      exchange: 'platform',
       routingKey: 'updateHsm',
       payload: {
         ...payload,
@@ -54,7 +52,7 @@ export class HsmRmq extends RmqService {
 
   remove(projectId: number, id: number) {
     return this.request<HsmDto>({
-      exchange: this.exchange,
+      exchange: 'platform',
       routingKey: 'removeHsm',
       payload: {
         projectId,

@@ -6,11 +6,9 @@ import { UpdateChatDto } from './dto/update-chat.dto';
 
 @Injectable()
 export class ChatRmq extends RmqService {
-  private readonly exchange = 'platform';
-
   create(projectId: number, payload: CreateChatDto) {
     return this.request<ChatDto>({
-      exchange: this.exchange,
+      exchange: 'platform',
       routingKey: 'createChat',
       payload: {
         ...payload,
@@ -21,7 +19,7 @@ export class ChatRmq extends RmqService {
 
   findOne(projectId: number, id: number) {
     return this.request<ChatDto>({
-      exchange: this.exchange,
+      exchange: 'platform',
       routingKey: 'findOneChat',
       payload: {
         projectId,
@@ -32,7 +30,7 @@ export class ChatRmq extends RmqService {
 
   findAll(projectId: number, ids?: number[]) {
     return this.request<ChatDto[]>({
-      exchange: this.exchange,
+      exchange: 'platform',
       routingKey: 'findAllChats',
       payload: {
         projectId,
@@ -43,7 +41,7 @@ export class ChatRmq extends RmqService {
 
   update(projectId: number, payload: UpdateChatDto) {
     return this.request<ChatDto>({
-      exchange: this.exchange,
+      exchange: 'platform',
       routingKey: 'updateChat',
       payload: {
         ...payload,
@@ -54,7 +52,7 @@ export class ChatRmq extends RmqService {
 
   remove(projectId: number, id: number) {
     return this.request<ChatDto>({
-      exchange: this.exchange,
+      exchange: 'platform',
       routingKey: 'removeChat',
       payload: {
         projectId,

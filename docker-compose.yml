@@ -59,7 +59,15 @@ services:
       - postgres
       - rabbitmq
       - redis
-      - reverse-proxy
+      - cloudflared
+      - admin
+      - auth
+      - billing
+      - bots
+      - history
+      - integrations
+      - mailer
+      - platform
 
   billing:
     build:
@@ -100,6 +108,9 @@ services:
       - postgres
       - rabbitmq
       - redis
+      - bots-container
+      - history
+      - platform
 
   bots-container:
     build:
@@ -113,9 +124,7 @@ services:
     networks:
       - default
     depends_on:
-      - postgres
       - rabbitmq
-      - redis
 
   gateway:
     build:
@@ -131,10 +140,8 @@ services:
     networks:
       - default
     depends_on:
-      - postgres
       - rabbitmq
-      - redis
-      - reverse-proxy
+      - cloudflared
 
   history:
     build:
@@ -174,19 +181,20 @@ services:
       - postgres
       - rabbitmq
       - redis
+      - platform
 
-  mailings:
+  mailer:
     build:
       context: ./
       args:
-        PRISMA: mailings
-    command: npx nx run mailings:serve
+        PRISMA: mailer
+    command: npx nx run mailer:serve
     volumes:
       - .:/usr/src/app
-      - /usr/src/app/apps/mailings/prisma/generated
+      - /usr/src/app/apps/mailer/prisma/generated
       - /usr/src/app/node_modules
     environment:
-      - DATABASE_URL=postgres://root:pass@postgres:5432/mailings
+      - DATABASE_URL=postgres://root:pass@postgres:5432/mailer
       - BROKER_URL=amqp://root:pass@rabbitmq:5672
     networks:
       - default
@@ -194,6 +202,7 @@ services:
       - postgres
       - rabbitmq
       - redis
+      - platform
 
   platform:
     build:
@@ -250,7 +259,7 @@ services:
     image: cloudflare/cloudflared:latest
     entrypoint: 'cloudflared tunnel --no-autoupdate run'
     env_file:
-      - ./env/reverse-proxy.env
+      - ./env/cloudflared.env
 
 networks:
   default:

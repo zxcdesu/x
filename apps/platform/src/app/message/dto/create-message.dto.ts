@@ -1,28 +1,19 @@
-import { IsEnum, IsInt, IsOptional, IsString } from 'class-validator';
-import { MessageStatus, Prisma } from '../../prisma.service';
+import { Type } from 'class-transformer';
+import { IsInt, ValidateNested } from 'class-validator';
+import { Prisma } from '../../prisma.service';
+import { CreateContentDto } from './create-content.dto';
 
-export class CreateMessageDto implements Prisma.MessageUncheckedCreateInput {
-  @IsInt()
-  projectId: number;
-
+export class CreateMessageDto
+  implements
+    Omit<
+      Prisma.MessageUncheckedCreateInput,
+      'externalId' | 'status' | 'content'
+    >
+{
   @IsInt()
   chatId: number;
 
-  @IsString()
-  externalId: string;
-
-  @IsEnum(MessageStatus)
-  status: MessageStatus;
-
-  @IsOptional()
-  @IsString()
-  failedReason?: string;
-
-  // @Type(() => Object)
-  // @ValidateNested()
-  author?: any;
-
-  // @Type(() => Object)
-  // @ValidateNested()
-  content?: any;
+  @Type(() => CreateContentDto)
+  @ValidateNested()
+  content: CreateContentDto;
 }

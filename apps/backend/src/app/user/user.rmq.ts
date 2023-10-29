@@ -8,11 +8,9 @@ import { UserDto } from './dto/user.dto';
 
 @Injectable()
 export class UserRmq extends RmqService {
-  private readonly exchange = 'auth';
-
   create(payload: CreateUserDto) {
     return this.request<UserDto>({
-      exchange: this.exchange,
+      exchange: 'auth',
       routingKey: 'createUser',
       payload,
     });
@@ -20,7 +18,7 @@ export class UserRmq extends RmqService {
 
   signIn(payload: SignInUserDto) {
     return this.request<TokenDto>({
-      exchange: this.exchange,
+      exchange: 'auth',
       routingKey: 'signInUser',
       payload,
     });
@@ -28,7 +26,7 @@ export class UserRmq extends RmqService {
 
   findOne(id: number) {
     return this.request<UserDto>({
-      exchange: this.exchange,
+      exchange: 'auth',
       routingKey: 'findOneUser',
       payload: {
         id,
@@ -38,7 +36,7 @@ export class UserRmq extends RmqService {
 
   update(payload: UpdateUserDto) {
     return this.request<UserDto>({
-      exchange: this.exchange,
+      exchange: 'auth',
       routingKey: 'updateUser',
       payload,
     });
@@ -46,7 +44,7 @@ export class UserRmq extends RmqService {
 
   remove(id: number) {
     return this.request<UserDto>({
-      exchange: this.exchange,
+      exchange: 'auth',
       routingKey: 'removeUser',
       payload: {
         id,

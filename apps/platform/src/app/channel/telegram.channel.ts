@@ -13,7 +13,7 @@ import {
 import { AbstractChannel } from './abstract.channel';
 
 export class TelegramChannel extends AbstractChannel {
-  async init(): Promise<Prisma.ChannelUncheckedUpdateInput> {
+  async initialize(): Promise<Prisma.ChannelUncheckedUpdateInput> {
     return lastValueFrom(
       this.httpService
         .post(`https://api.telegram.org/bot${this.channel.token}/setWebhook`, {
@@ -59,16 +59,28 @@ export class TelegramChannel extends AbstractChannel {
     );
   }
 
-  async initChat(
+  async createChat(
     chat: CreateChatDto,
   ): Promise<Prisma.ChatUncheckedCreateInput> {
     return chat;
   }
 
-  async sendMessage(
+  async createMessage(
     chat: Chat,
     message: CreateMessageDto,
   ): Promise<Prisma.MessageUncheckedCreateInput> {
+    throw new NotImplementedException();
+  }
+
+  async updateMessage(
+    chat: Chat,
+    externalId: string,
+    message: unknown,
+  ): Promise<unknown> {
+    throw new NotImplementedException();
+  }
+
+  async removeMessage(chat: Chat, externalId: string): Promise<unknown> {
     throw new NotImplementedException();
   }
 }

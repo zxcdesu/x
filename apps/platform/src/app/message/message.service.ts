@@ -1,4 +1,4 @@
-import { Injectable, NotImplementedException } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { ChannelRepository } from '../channel/channel.repository';
 import { PrismaService } from '../prisma.service';
 import { CreateMessageDto } from './dto/create-message.dto';
@@ -11,11 +11,11 @@ export class MessageService {
     private readonly channelRepository: ChannelRepository,
   ) {}
 
-  async create(payload: CreateMessageDto) {
+  async create(projectId: number, payload: CreateMessageDto) {
     const chat = await this.prismaService.chat.findUniqueOrThrow({
       where: {
         projectId_id: {
-          projectId: payload.projectId,
+          projectId,
           id: payload.chatId,
         },
       },
@@ -23,37 +23,84 @@ export class MessageService {
         channel: true,
       },
     });
+
     return this.prismaService.message.create({
       data: await this.channelRepository
         .get(chat.channel)
-        .sendMessage(chat, payload),
+        .createMessage(chat, payload),
     });
   }
 
-  async findOne(chatId: number, id: number) {
-    return this.prismaService.message.findUniqueOrThrow({
+  async findAll(projectId: number, chatId: number) {
+    const { messages } = await this.prismaService.chat.findUniqueOrThrow({
       where: {
-        chatId_id: {
-          chatId,
-          id,
+        projectId_id: {
+          projectId,
+          id: chatId,
         },
       },
-    });
-  }
-
-  async findAll(projectId: number) {
-    return this.prismaService.channel.findMany({
-      where: {
-        projectId,
+      select: {
+        messages: true,
       },
     });
+
+    return messages;
   }
 
-  async update(payload: UpdateMessageDto) {
-    throw new NotImplementedException();
+  async update(projectId, payload: UpdateMessageDto) {
+    const chat = await this.prismaService.chat.findUniqueOrThrow({
+      where: {
+        projectId_id: {
+          projectId,
+          id: payload.chatId,
+        },
+      },
+      include: {
+        messages: {
+          where: {
+            id: payload.id,
+          },
+        },
+        channel: true,
+      },
+    });
+
+    return this.prismaService.message.update({
+      where: {
+        id: payload.id,
+      },
+      data: await this.channelRepository
+        .get(chat.channel)
+        .updateMessage(chat, chat.messages[0].externalId, payload),
+    });
   }
 
-  async remove(chatId: number, id: number) {
-    throw new NotImplementedException();
+  async remove(projectId: number, chatId: number, id: number) {
+    const chat = await this.prismaService.chat.findUniqueOrThrow({
+      where: {
+        projectId_id: {
+          projectId: projectId,
+          id: chatId,
+        },
+      },
+      include: {
+        messages: {
+          where: {
+            id,
+          },
+        },
+        channel: true,
+      },
+    });
+
+    await this.channelRepository
+      .get(chat.channel)
+      .removeMessage(chat, chat.messages[0].externalId);
+
+    return this.prismaService.message.delete({
+      where: {
+        id,
+      },
+    });
   }
 }

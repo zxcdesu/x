@@ -8,8 +8,8 @@ import { IsInt } from 'class-validator';
 import { CreateContactDto } from './create-contact.dto';
 
 export class UpdateContactDto extends IntersectionType(
-  PickType(CreateContactDto, ['projectId']),
-  PartialType(OmitType(CreateContactDto, ['projectId'])),
+  PickType(CreateContactDto, ['projectId'] as const),
+  PartialType(OmitType(CreateContactDto, ['projectId'] as const)),
 ) {
   @IsInt()
   id: number;

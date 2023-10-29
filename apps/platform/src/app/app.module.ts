@@ -2,7 +2,6 @@ import { RabbitMQModule } from '@golevelup/nestjs-rabbitmq';
 import { HttpModule } from '@nestjs/axios';
 import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
-import { ChatRmq, MessageRmq } from '@platform/backend-type';
 import { ChannelEventRmq } from '@platform/platform-type';
 import joi from 'joi';
 import { ChannelController } from './channel/channel.controller';
@@ -65,8 +64,6 @@ import { TagService } from './tag/tag.service';
     TagService,
     ErrorFactoryService,
     ChannelEventRmq.provide(ErrorFactoryService),
-    ChatRmq.provide(ErrorFactoryService),
-    MessageRmq.provide(ErrorFactoryService),
   ],
 })
 export class AppModule {}

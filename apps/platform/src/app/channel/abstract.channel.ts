@@ -1,6 +1,5 @@
 import { HttpService } from '@nestjs/axios';
 import { ConfigService } from '@nestjs/config';
-import { ChatRmq, MessageRmq } from '@platform/backend-type';
 import { ChannelEvent } from '@platform/platform-type';
 import { plainToInstance } from 'class-transformer';
 import { ChatDto } from '../chat/dto/chat.dto';
@@ -22,22 +21,28 @@ export abstract class AbstractChannel<Q = unknown, B = unknown> {
     protected readonly configService: ConfigService,
     protected readonly httpService: HttpService,
     protected readonly prismaService: PrismaService,
-    protected readonly chatRmq: ChatRmq,
-    protected readonly messageRmq: MessageRmq,
   ) {}
 
-  abstract init(): Promise<Partial<Prisma.ChannelUncheckedUpdateInput>>;
+  abstract initialize(): Promise<Partial<Prisma.ChannelUncheckedUpdateInput>>;
 
   abstract handleEvent(event: ChannelEvent<Q, B>): Promise<void>;
 
-  abstract initChat(
+  abstract createChat(
     chat: CreateChatDto,
   ): Promise<Prisma.ChatUncheckedCreateInput>;
 
-  abstract sendMessage(
+  abstract createMessage(
     chat: Chat,
     message: CreateMessageDto,
   ): Promise<Prisma.MessageUncheckedCreateInput>;
+
+  abstract updateMessage(
+    chat: Chat,
+    externalId: string,
+    message: unknown,
+  ): Promise<unknown>;
+
+  abstract removeMessage(chat: Chat, externalId: string): Promise<unknown>;
 
   protected async upsertChat(
     accountId: string,
@@ -83,26 +88,26 @@ export abstract class AbstractChannel<Q = unknown, B = unknown> {
             },
           },
           messages: {
-            orderBy: {
-              id: 'desc',
-            },
-            take: 1,
             include: {
               content: {
+                include: {
+                  attachments: true,
+                },
                 orderBy: {
                   id: 'desc',
                 },
                 take: 1,
-                include: {
-                  attachments: true,
-                },
               },
             },
+            orderBy: {
+              id: 'desc',
+            },
+            take: 1,
           },
         },
       }),
     );
-    await this.chatRmq.chat(chat);
+    // TODO: chat received
     return chat;
   }
 
@@ -139,18 +144,18 @@ export abstract class AbstractChannel<Q = unknown, B = unknown> {
         },
         include: {
           content: {
+            include: {
+              attachments: true,
+            },
             orderBy: {
               id: 'desc',
             },
             take: 1,
-            include: {
-              attachments: true,
-            },
           },
         },
       }),
     );
-    await this.messageRmq.message(message);
+    // TODO: message received
     return message;
   }
 }

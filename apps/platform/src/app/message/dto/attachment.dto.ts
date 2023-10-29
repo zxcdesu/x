@@ -1,16 +1,11 @@
 import { Exclude } from 'class-transformer';
-import { Attachment, AttachmentType } from '../../prisma.service';
+import { Attachment } from '../../prisma.service';
+import { CreateAttachmentDto } from './create-attachment.dto';
 
-export class AttachmentDto implements Attachment {
+export class AttachmentDto extends CreateAttachmentDto implements Attachment {
   @Exclude()
   id: number;
 
   @Exclude()
   contentId: number;
-
-  url: string;
-
-  type: AttachmentType;
-
-  name: string;
 }

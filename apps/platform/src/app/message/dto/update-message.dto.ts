@@ -8,8 +8,8 @@ import { IsInt } from 'class-validator';
 import { CreateMessageDto } from './create-message.dto';
 
 export class UpdateMessageDto extends IntersectionType(
-  PickType(CreateMessageDto, ['externalId']),
-  PartialType(OmitType(CreateMessageDto, ['externalId'])),
+  PickType(CreateMessageDto, ['chatId'] as const),
+  PartialType(OmitType(CreateMessageDto, ['chatId'] as const)),
 ) {
   @IsInt()
   id: number;

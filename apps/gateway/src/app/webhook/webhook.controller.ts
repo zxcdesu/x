@@ -1,6 +1,6 @@
 import { All, Body, Controller, Param, Query } from '@nestjs/common';
 import { ChannelEventRmq } from '@platform/platform-type';
-import { WebhookParam } from './dto/webhook-param.dto';
+import { WebhookParamDto } from './dto/webhook-param.dto';
 
 @Controller()
 export class WebhookController {
@@ -8,7 +8,7 @@ export class WebhookController {
 
   @All(':channelId')
   webhook(
-    @Param() param: WebhookParam,
+    @Param() param: WebhookParamDto,
     @Query() query: unknown,
     @Body() body: unknown,
   ) {

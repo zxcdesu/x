@@ -12,16 +12,49 @@ export class ChatService {
   ) {}
 
   async create(payload: CreateChatDto) {
-    const channel = await this.prismaService.channel.findUniqueOrThrow({
-      where: {
-        projectId_id: {
-          projectId: payload.projectId,
-          id: payload.channelId,
+    return this.prismaService.chat.create({
+      data: await this.channelRepository
+        .get(
+          await this.prismaService.channel.findUniqueOrThrow({
+            where: {
+              projectId_id: {
+                projectId: payload.projectId,
+                id: payload.channelId,
+              },
+            },
+          }),
+        )
+        .createChat(payload),
+      include: {
+        contact: {
+          include: {
+            assignedTo: true,
+            customFields: true,
+            tags: {
+              include: {
+                tag: true,
+              },
+            },
+          },
+        },
+        messages: {
+          include: {
+            content: {
+              include: {
+                attachments: true,
+              },
+              take: 1,
+              orderBy: {
+                id: 'desc',
+              },
+            },
+          },
+          take: 1,
+          orderBy: {
+            id: 'desc',
+          },
         },
       },
-    });
-    return this.prismaService.chat.create({
-      data: await this.channelRepository.get(channel).initChat(payload),
     });
   }
 
@@ -33,13 +66,73 @@ export class ChatService {
           id,
         },
       },
+      include: {
+        contact: {
+          include: {
+            assignedTo: true,
+            customFields: true,
+            tags: {
+              include: {
+                tag: true,
+              },
+            },
+          },
+        },
+        messages: {
+          include: {
+            content: {
+              include: {
+                attachments: true,
+              },
+              take: 1,
+              orderBy: {
+                id: 'desc',
+              },
+            },
+          },
+          take: 1,
+          orderBy: {
+            id: 'desc',
+          },
+        },
+      },
     });
   }
 
   async findAll(projectId: number) {
-    return this.prismaService.channel.findMany({
+    return this.prismaService.chat.findMany({
       where: {
         projectId,
+      },
+      include: {
+        contact: {
+          include: {
+            assignedTo: true,
+            customFields: true,
+            tags: {
+              include: {
+                tag: true,
+              },
+            },
+          },
+        },
+        messages: {
+          include: {
+            content: {
+              include: {
+                attachments: true,
+              },
+              take: 1,
+              orderBy: {
+                id: 'desc',
+              },
+            },
+          },
+          take: 1,
+          orderBy: {
+            id: 'desc',
+          },
+        },
       },
     });
   }
@@ -53,6 +146,36 @@ export class ChatService {
         },
       },
       data: payload,
+      include: {
+        contact: {
+          include: {
+            assignedTo: true,
+            customFields: true,
+            tags: {
+              include: {
+                tag: true,
+              },
+            },
+          },
+        },
+        messages: {
+          include: {
+            content: {
+              include: {
+                attachments: true,
+              },
+              take: 1,
+              orderBy: {
+                id: 'desc',
+              },
+            },
+          },
+          take: 1,
+          orderBy: {
+            id: 'desc',
+          },
+        },
+      },
     });
   }
 
@@ -62,6 +185,36 @@ export class ChatService {
         projectId_id: {
           projectId,
           id,
+        },
+      },
+      include: {
+        contact: {
+          include: {
+            assignedTo: true,
+            customFields: true,
+            tags: {
+              include: {
+                tag: true,
+              },
+            },
+          },
+        },
+        messages: {
+          include: {
+            content: {
+              include: {
+                attachments: true,
+              },
+              take: 1,
+              orderBy: {
+                id: 'desc',
+              },
+            },
+          },
+          take: 1,
+          orderBy: {
+            id: 'desc',
+          },
         },
       },
     });

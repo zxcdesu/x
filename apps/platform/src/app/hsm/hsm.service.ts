@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { PrismaService } from '../prisma.service';
+import { Prisma, PrismaService } from '../prisma.service';
 import { CreateHsmDto } from './dto/create-hsm.dto';
 import { UpdateHsmDto } from './dto/update-hsm.dto';
 
@@ -9,7 +9,14 @@ export class HsmService {
 
   async create(payload: CreateHsmDto) {
     return this.prismaService.hsm.create({
-      data: payload,
+      data: payload as unknown as Prisma.HsmCreateInput,
+      include: {
+        approval: {
+          include: {
+            channel: true,
+          },
+        },
+      },
     });
   }
 
@@ -21,6 +28,13 @@ export class HsmService {
           id,
         },
       },
+      include: {
+        approval: {
+          include: {
+            channel: true,
+          },
+        },
+      },
     });
   }
 
@@ -28,6 +42,13 @@ export class HsmService {
     return this.prismaService.channel.findMany({
       where: {
         projectId,
+      },
+      include: {
+        approval: {
+          include: {
+            channel: true,
+          },
+        },
       },
     });
   }
@@ -40,7 +61,14 @@ export class HsmService {
           id: payload.id,
         },
       },
-      data: payload,
+      data: payload as unknown as Prisma.HsmUpdateInput,
+      include: {
+        approval: {
+          include: {
+            channel: true,
+          },
+        },
+      },
     });
   }
 
@@ -50,6 +78,13 @@ export class HsmService {
         projectId_id: {
           projectId,
           id,
+        },
+      },
+      include: {
+        approval: {
+          include: {
+            channel: true,
+          },
         },
       },
     });

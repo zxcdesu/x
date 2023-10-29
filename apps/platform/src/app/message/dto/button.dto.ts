@@ -1,1 +1,3 @@
-export class ButtonDto {}
+import { CreateButtonDto } from './create-button.dto';
+
+export class ButtonDto extends CreateButtonDto {}

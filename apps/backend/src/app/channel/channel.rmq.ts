@@ -6,11 +6,9 @@ import { UpdateChannelDto } from './dto/update-channel.dto';
 
 @Injectable()
 export class ChannelRmq extends RmqService {
-  private readonly exchange = 'platform';
-
   create(projectId: number, payload: CreateChannelDto) {
     return this.request<ChannelDto>({
-      exchange: this.exchange,
+      exchange: 'platform',
       routingKey: 'createChannel',
       payload: {
         ...payload,
@@ -21,7 +19,7 @@ export class ChannelRmq extends RmqService {
 
   findOne(projectId: number, id: number) {
     return this.request<ChannelDto>({
-      exchange: this.exchange,
+      exchange: 'platform',
       routingKey: 'findOneChannel',
       payload: {
         projectId,
@@ -32,7 +30,7 @@ export class ChannelRmq extends RmqService {
 
   findAll(projectId: number, ids?: number[]) {
     return this.request<ChannelDto[]>({
-      exchange: this.exchange,
+      exchange: 'platform',
       routingKey: 'findAllChannels',
       payload: {
         projectId,
@@ -43,7 +41,7 @@ export class ChannelRmq extends RmqService {
 
   update(projectId: number, payload: UpdateChannelDto) {
     return this.request<ChannelDto>({
-      exchange: this.exchange,
+      exchange: 'platform',
       routingKey: 'updateChannel',
       payload: {
         ...payload,
@@ -54,7 +52,7 @@ export class ChannelRmq extends RmqService {
 
   remove(projectId: number, id: number) {
     return this.request<ChannelDto>({
-      exchange: this.exchange,
+      exchange: 'platform',
       routingKey: 'removeChannel',
       payload: {
         projectId,
