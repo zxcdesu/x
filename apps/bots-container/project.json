@@ -8,6 +8,7 @@
       "executor": "@nx/webpack:webpack",
       "outputs": ["{options.outputPath}"],
       "defaultConfiguration": "production",
+      "dependsOn": ["prisma-generate"],
       "options": {
         "target": "node",
         "compiler": "tsc",
@@ -16,7 +17,8 @@
         "tsConfig": "apps/bots-container/tsconfig.app.json",
         "assets": ["apps/bots-container/src/assets"],
         "isolatedConfig": true,
-        "webpackConfig": "apps/bots-container/webpack.config.js"
+        "webpackConfig": "apps/bots-container/webpack.config.js",
+        "generatePackageJson": true
       },
       "configurations": {
         "development": {},

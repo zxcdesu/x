@@ -8,6 +8,7 @@
       "executor": "@nx/webpack:webpack",
       "outputs": ["{options.outputPath}"],
       "defaultConfiguration": "production",
+      "dependsOn": ["prisma-generate"],
       "options": {
         "target": "node",
         "compiler": "tsc",
@@ -16,7 +17,8 @@
         "tsConfig": "apps/billing/tsconfig.app.json",
         "assets": ["apps/billing/src/assets"],
         "isolatedConfig": true,
-        "webpackConfig": "apps/billing/webpack.config.js"
+        "webpackConfig": "apps/billing/webpack.config.js",
+        "generatePackageJson": true
       },
       "configurations": {
         "development": {},
