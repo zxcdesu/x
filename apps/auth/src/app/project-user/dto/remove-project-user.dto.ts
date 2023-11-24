@@ -1,8 +1,6 @@
 import { IsInt } from 'class-validator';
 
-export class UpdateProjectUserDto {
+export class RemoveProjectUserDto {
   @IsInt()
   id: number;
-
-  // TODO: access
 }

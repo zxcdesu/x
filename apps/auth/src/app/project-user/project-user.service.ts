@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../prisma.service';
+import { RemoveProjectUserDto } from './dto/remove-project-user.dto';
 import { UpdateProjectUserDto } from './dto/update-project-user.dto';
 
 @Injectable()
@@ -50,23 +51,29 @@ export class ProjectUserService {
       where: {
         projectId_userId: {
           projectId,
-          userId,
+          userId: payload.id,
         },
       },
-      data: payload,
+      data: {
+        // TODO: access
+      },
       include: {
         user: true,
       },
     });
   }
 
-  async remove(projectId: number, userId: number) {
+  async remove(
+    projectId: number,
+    userId: number,
+    payload: RemoveProjectUserDto,
+  ) {
     await this.checkAccess(projectId, userId);
     return this.prismaService.projectUser.delete({
       where: {
         projectId_userId: {
           projectId,
-          userId,
+          userId: payload.id,
         },
       },
       include: {
@@ -77,6 +84,6 @@ export class ProjectUserService {
 
   private async checkAccess(projectId: number, userId: number): Promise<void> {
     await this.findOne(projectId, userId);
-    // TODO: check access
+    // TODO: access
   }
 }
