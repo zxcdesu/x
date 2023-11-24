@@ -1,9 +1,5 @@
-FROM docker.io/node:lts-alpine3.16
-
+FROM docker.io/node:lts-alpine
 WORKDIR /usr/src/app
-
 COPY package*.json ./
-
-RUN npm ci
-
+RUN npm install
 COPY . .
