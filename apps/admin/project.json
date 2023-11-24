@@ -28,6 +28,7 @@
     "serve": {
       "executor": "@nx/js:node",
       "defaultConfiguration": "development",
+      "dependsOn": ["prisma-generate", "prisma-push"],
       "options": {
         "buildTarget": "admin:build"
       },
