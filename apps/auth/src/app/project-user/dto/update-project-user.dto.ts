@@ -1,3 +1,1 @@
-export class UpdateProjectUserDto {
-  // access
-}
+export class UpdateProjectUserDto {}

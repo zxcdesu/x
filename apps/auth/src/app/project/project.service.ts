@@ -5,6 +5,7 @@ import { ProjectUserService } from '../project-user/project-user.service';
 import { CreateProjectDto } from './dto/create-project.dto';
 import { FindOneProjectDto } from './dto/find-one-project.dto';
 import { RemoveProjectDto } from './dto/remove-project.dto';
+import { SignInProjectDto } from './dto/sign-in-project.dto';
 import { UpdateProjectDto } from './dto/update-project.dto';
 import { ProjectJwtPayload } from './project-jwt-payload.interface';
 
@@ -34,18 +35,6 @@ export class ProjectService {
         },
       },
     });
-  }
-
-  async signIn(userId: number, projectId: number) {
-    await this.projectUserService.findOne(projectId, userId);
-    return {
-      token: this.jwtService.sign({
-        id: userId,
-        project: {
-          id: projectId,
-        },
-      }),
-    };
   }
 
   findOne(userId: number, payload: FindOneProjectDto) {
@@ -105,7 +94,9 @@ export class ProjectService {
 
   remove(userId: number, payload: RemoveProjectDto) {
     return this.prismaService.project.delete({
-      where: payload,
+      where: {
+        id: payload.id,
+      },
       include: {
         users: {
           where: {
@@ -114,5 +105,17 @@ export class ProjectService {
         },
       },
     });
+  }
+
+  async signIn(userId: number, payload: SignInProjectDto) {
+    await this.projectUserService.findOne(payload.id, userId);
+    return {
+      token: this.jwtService.sign({
+        id: userId,
+        project: {
+          id: payload.id,
+        },
+      }),
+    };
   }
 }

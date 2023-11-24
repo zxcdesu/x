@@ -41,27 +41,11 @@ export class UserService {
     });
   }
 
-  async signIn(payload: SignInUserDto) {
-    const user = await this.prismaService.user.findUniqueOrThrow({
-      where: {
-        email: payload.email,
-      },
-    });
-
-    if (await compare(payload.password, user.password)) {
-      return {
-        token: this.jwtService.sign({
-          id: user.id,
-        }),
-      };
-    } else {
-      throw new UnauthorizedException();
-    }
-  }
-
   findOne(payload: FindOneUserDto) {
     return this.prismaService.user.findUniqueOrThrow({
-      where: payload,
+      where: {
+        id: payload.id,
+      },
     });
   }
 
@@ -84,7 +68,27 @@ export class UserService {
 
   remove(payload: RemoveUserDto) {
     return this.prismaService.user.delete({
-      where: payload,
+      where: {
+        id: payload.id,
+      },
     });
+  }
+
+  async signIn(payload: SignInUserDto) {
+    const user = await this.prismaService.user.findUniqueOrThrow({
+      where: {
+        email: payload.email,
+      },
+    });
+
+    if (await compare(payload.password, user.password)) {
+      return {
+        token: this.jwtService.sign({
+          id: user.id,
+        }),
+      };
+    } else {
+      throw new UnauthorizedException();
+    }
   }
 }

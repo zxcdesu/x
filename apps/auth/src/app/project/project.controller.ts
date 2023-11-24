@@ -7,8 +7,8 @@ import { CreateProjectDto } from './dto/create-project.dto';
 import { FindOneProjectDto } from './dto/find-one-project.dto';
 import { ProjectDto } from './dto/project.dto';
 import { RemoveProjectDto } from './dto/remove-project.dto';
+import { SignInProjectDto } from './dto/sign-in-project.dto';
 import { UpdateProjectDto } from './dto/update-project.dto';
-import { ProjectId } from './project.decorator';
 import { ProjectService } from './project.service';
 
 @Controller()
@@ -27,20 +27,6 @@ export class ProjectController {
     @RabbitPayload() payload: CreateProjectDto,
   ): Promise<ProjectDto> {
     return this.projectService.create(userId, payload);
-  }
-
-  @RabbitRPC({
-    routingKey: 'signInProject',
-    exchange: 'auth',
-  })
-  @SerializeOptions({
-    type: JwtDto,
-  })
-  signIn(
-    @UserId() userId: number,
-    @ProjectId() projectId: number,
-  ): Promise<JwtDto> {
-    return this.projectService.signIn(userId, projectId);
   }
 
   @RabbitRPC({
@@ -94,5 +80,19 @@ export class ProjectController {
     @RabbitPayload() payload: RemoveProjectDto,
   ): Promise<ProjectDto> {
     return this.projectService.remove(userId, payload);
+  }
+
+  @RabbitRPC({
+    routingKey: 'signInProject',
+    exchange: 'auth',
+  })
+  @SerializeOptions({
+    type: JwtDto,
+  })
+  signIn(
+    @UserId() userId: number,
+    @RabbitPayload() payload: SignInProjectDto,
+  ): Promise<JwtDto> {
+    return this.projectService.signIn(userId, payload);
   }
 }
