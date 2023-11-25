@@ -18,17 +18,6 @@ export class ProjectRmq extends RmqService {
     });
   }
 
-  signIn(userId: number, projectId: number) {
-    return this.request<TokenDto>({
-      exchange: 'auth',
-      routingKey: 'signInProject',
-      payload: {
-        userId,
-        projectId,
-      },
-    });
-  }
-
   findOne(userId: number, id: number) {
     return this.request<ProjectDto>({
       exchange: 'auth',
@@ -40,13 +29,12 @@ export class ProjectRmq extends RmqService {
     });
   }
 
-  findAll(userId: number, ids?: number[]) {
+  findAll(userId: number) {
     return this.request<ProjectDto[]>({
       exchange: 'auth',
       routingKey: 'findAllProjects',
       payload: {
         userId,
-        ids,
       },
     });
   }
@@ -67,6 +55,17 @@ export class ProjectRmq extends RmqService {
     return this.request<ProjectDto>({
       exchange: 'auth',
       routingKey: 'removeProject',
+      payload: {
+        userId,
+        id,
+      },
+    });
+  }
+
+  signIn(userId: number, id: number) {
+    return this.request<TokenDto>({
+      exchange: 'auth',
+      routingKey: 'signInProject',
       payload: {
         userId,
         id,

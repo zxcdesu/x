@@ -19,11 +19,6 @@ export class UserResolver {
     return this.rmq.create(payload);
   }
 
-  @Mutation(() => TokenDto)
-  signIn(@Args() payload: SignInUserDto): Promise<TokenDto> {
-    return this.rmq.signIn(payload);
-  }
-
   @UseGuards(BearerAuthGuard)
   @Query(() => UserDto)
   user(@BearerAuthDecorator() auth: BearerAuth): Promise<UserDto> {
@@ -36,15 +31,17 @@ export class UserResolver {
     @BearerAuthDecorator() auth: BearerAuth,
     @Args() payload: UpdateUserDto,
   ): Promise<UserDto> {
-    return this.rmq.update({
-      ...payload,
-      id: auth.id,
-    });
+    return this.rmq.update(auth.id, payload);
   }
 
   @UseGuards(BearerAuthGuard)
   @Mutation(() => UserDto)
   removeUser(@BearerAuthDecorator() auth: BearerAuth): Promise<UserDto> {
     return this.rmq.remove(auth.id);
+  }
+
+  @Mutation(() => TokenDto)
+  signIn(@Args() payload: SignInUserDto): Promise<TokenDto> {
+    return this.rmq.signIn(payload);
   }
 }

@@ -23,15 +23,6 @@ export class ProjectResolver {
   }
 
   @UseGuards(BearerAuthGuard)
-  @Mutation(() => TokenDto)
-  signInProject(
-    @BearerAuthDecorator() auth: BearerAuth,
-    @Args('id', { type: () => Int }) id: number,
-  ): Promise<TokenDto> {
-    return this.rmq.signIn(auth.id, id);
-  }
-
-  @UseGuards(BearerAuthGuard)
   @Query(() => ProjectDto)
   project(@BearerAuthDecorator() auth: BearerAuth): Promise<ProjectDto> {
     return this.rmq.findOne(auth.id, auth.project.id);
@@ -56,5 +47,14 @@ export class ProjectResolver {
   @Mutation(() => ProjectDto)
   removeProject(@BearerAuthDecorator() auth: BearerAuth): Promise<ProjectDto> {
     return this.rmq.remove(auth.id, auth.project.id);
+  }
+
+  @UseGuards(BearerAuthGuard)
+  @Mutation(() => TokenDto)
+  signInProject(
+    @BearerAuthDecorator() auth: BearerAuth,
+    @Args('id', { type: () => Int }) id: number,
+  ): Promise<TokenDto> {
+    return this.rmq.signIn(auth.id, id);
   }
 }

@@ -16,14 +16,6 @@ export class UserRmq extends RmqService {
     });
   }
 
-  signIn(payload: SignInUserDto) {
-    return this.request<TokenDto>({
-      exchange: 'auth',
-      routingKey: 'signInUser',
-      payload,
-    });
-  }
-
   findOne(id: number) {
     return this.request<UserDto>({
       exchange: 'auth',
@@ -34,11 +26,14 @@ export class UserRmq extends RmqService {
     });
   }
 
-  update(payload: UpdateUserDto) {
+  update(id: number, payload: UpdateUserDto) {
     return this.request<UserDto>({
       exchange: 'auth',
       routingKey: 'updateUser',
-      payload,
+      payload: {
+        ...payload,
+        id,
+      },
     });
   }
 
@@ -49,6 +44,14 @@ export class UserRmq extends RmqService {
       payload: {
         id,
       },
+    });
+  }
+
+  signIn(payload: SignInUserDto) {
+    return this.request<TokenDto>({
+      exchange: 'auth',
+      routingKey: 'signInUser',
+      payload,
     });
   }
 }
