@@ -28,11 +28,11 @@ export class RmqService {
   ): Promise<T> {
     const payload = await this.amqpConnection.request<
       T & {
-        exception?: any;
+        error?: boolean;
       }
     >(...args);
-    if (payload?.exception) {
-      throw this.errorFactory.errorFactory(payload.exception);
+    if (payload?.error) {
+      throw this.errorFactory.errorFactory(payload);
     }
     return payload;
   }

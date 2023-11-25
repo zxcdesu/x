@@ -6,9 +6,21 @@ export const RabbitRPC: typeof GolevelupRabbitRPC = (config) =>
     errorHandler: (channel, message, error) => {
       const { replyTo, correlationId } = message.properties;
       if (replyTo) {
-        channel.publish('', replyTo, Buffer.from(JSON.stringify({ error })), {
-          correlationId,
-        });
+        channel.publish(
+          '',
+          replyTo,
+          Buffer.from(
+            JSON.stringify(
+              Object.assign(error, {
+                error: true,
+              }),
+              Object.getOwnPropertyNames(error),
+            ),
+          ),
+          {
+            correlationId,
+          },
+        );
         channel.ack(message);
       }
     },
