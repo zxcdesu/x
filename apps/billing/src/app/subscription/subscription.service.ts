@@ -7,13 +7,13 @@ import { UpdateSubscriptionDto } from './dto/update-subscription.dto';
 export class SubscriptionService {
   constructor(private readonly prismaService: PrismaService) {}
 
-  async create(payload: CreateSubscriptionDto) {
+  create(payload: CreateSubscriptionDto) {
     return this.prismaService.subscription.create({
       data: payload,
     });
   }
 
-  async findOne(projectId: number) {
+  findOne(projectId: number) {
     return this.prismaService.subscription.findUniqueOrThrow({
       where: {
         projectId,
@@ -21,7 +21,7 @@ export class SubscriptionService {
     });
   }
 
-  async update(payload: UpdateSubscriptionDto) {
+  update(payload: UpdateSubscriptionDto) {
     return this.prismaService.subscription.update({
       where: {
         projectId: payload.projectId,
@@ -30,7 +30,7 @@ export class SubscriptionService {
     });
   }
 
-  async remove(projectId: number) {
+  remove(projectId: number) {
     return this.prismaService.subscription.delete({
       where: {
         projectId,

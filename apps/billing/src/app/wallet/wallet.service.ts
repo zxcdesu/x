@@ -7,13 +7,13 @@ import { UpdateWalletDto } from './dto/update-wallet.dto';
 export class WalletService {
   constructor(private readonly prismaService: PrismaService) {}
 
-  async create(payload: CreateWalletDto) {
+  create(payload: CreateWalletDto) {
     return this.prismaService.wallet.create({
       data: payload,
     });
   }
 
-  async findOne(projectId: number) {
+  findOne(projectId: number) {
     return this.prismaService.wallet.findUniqueOrThrow({
       where: {
         projectId,
@@ -21,7 +21,7 @@ export class WalletService {
     });
   }
 
-  async update(payload: UpdateWalletDto) {
+  update(payload: UpdateWalletDto) {
     return this.prismaService.wallet.update({
       where: {
         projectId: payload.projectId,
@@ -30,7 +30,7 @@ export class WalletService {
     });
   }
 
-  async remove(projectId: number) {
+  remove(projectId: number) {
     return this.prismaService.wallet.delete({
       where: {
         projectId,
