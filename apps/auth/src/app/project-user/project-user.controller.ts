@@ -4,7 +4,6 @@ import { RabbitRPC } from '@platform/nestjs-rabbitmq';
 import { ProjectId } from '../project/project.decorator';
 import { UserId } from '../user/user.decorator';
 import { ProjectUserDto } from './dto/project-user.dto';
-import { RemoveProjectUserDto } from './dto/remove-project-user.dto';
 import { UpdateProjectUserDto } from './dto/update-project-user.dto';
 import { ProjectUserService } from './project-user.service';
 
@@ -62,8 +61,7 @@ export class ProjectUserController {
   remove(
     @ProjectId() projectId: number,
     @UserId() userId: number,
-    @RabbitPayload() payload: RemoveProjectUserDto,
   ): Promise<ProjectUserDto> {
-    return this.projectUserService.remove(projectId, userId, payload);
+    return this.projectUserService.remove(projectId, userId);
   }
 }
