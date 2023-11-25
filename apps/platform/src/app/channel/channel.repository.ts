@@ -1,3 +1,4 @@
+import { AmqpConnection } from '@golevelup/nestjs-rabbitmq';
 import { HttpService } from '@nestjs/axios';
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
@@ -22,6 +23,7 @@ export class ChannelRepository
   [ChannelType.Web] = WebChannel;
 
   constructor(
+    private readonly amqpConnection: AmqpConnection,
     private readonly configService: ConfigService,
     private readonly httpService: HttpService,
     private readonly prismaService: PrismaService,
@@ -30,6 +32,7 @@ export class ChannelRepository
   get(channel: Channel): AbstractChannel {
     return new this[channel.type](
       channel,
+      this.amqpConnection,
       this.configService,
       this.httpService,
       this.prismaService,

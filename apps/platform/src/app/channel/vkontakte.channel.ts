@@ -2,11 +2,12 @@ import { NotImplementedException } from '@nestjs/common';
 import { ChannelEvent } from '@platform/platform-type';
 import { CreateChatDto } from '../chat/dto/create-chat.dto';
 import { CreateMessageDto } from '../message/dto/create-message.dto';
+import { UpdateMessageDto } from '../message/dto/update-message.dto';
 import { Chat, Prisma } from '../prisma.service';
 import { AbstractChannel } from './abstract.channel';
 
 export class VkontakteChannel extends AbstractChannel {
-  async initialize(): Promise<Partial<Prisma.ChannelUncheckedUpdateInput>> {
+  async create(): Promise<Partial<Prisma.ChannelUncheckedUpdateInput>> {
     throw new NotImplementedException();
   }
 
@@ -17,7 +18,7 @@ export class VkontakteChannel extends AbstractChannel {
   async createChat(
     chat: CreateChatDto,
   ): Promise<Prisma.ChatUncheckedCreateInput> {
-    return chat;
+    throw new NotImplementedException();
   }
 
   async createMessage(
@@ -30,12 +31,12 @@ export class VkontakteChannel extends AbstractChannel {
   async updateMessage(
     chat: Chat,
     externalId: string,
-    message: unknown,
-  ): Promise<unknown> {
+    message: UpdateMessageDto,
+  ): Promise<Prisma.MessageUncheckedCreateInput> {
     throw new NotImplementedException();
   }
 
-  async removeMessage(chat: Chat, externalId: string): Promise<unknown> {
+  async removeMessage(chat: Chat, externalId: string): Promise<void> {
     throw new NotImplementedException();
   }
 }

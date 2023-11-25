@@ -5,6 +5,8 @@ export * from '../../prisma/generated';
 
 @Injectable()
 export class PrismaService extends PrismaClient implements OnModuleInit {
+  // TODO: prisma-redis-middleware
+
   async onModuleInit() {
     await this.$connect();
   }

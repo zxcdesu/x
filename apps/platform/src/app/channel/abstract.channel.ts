@@ -1,4 +1,6 @@
+import { AmqpConnection } from '@golevelup/nestjs-rabbitmq';
 import { HttpService } from '@nestjs/axios';
+import { Logger } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { ChannelEvent } from '@platform/platform-type';
 import { plainToInstance } from 'class-transformer';
@@ -6,6 +8,7 @@ import { ChatDto } from '../chat/dto/chat.dto';
 import { CreateChatDto } from '../chat/dto/create-chat.dto';
 import { CreateMessageDto } from '../message/dto/create-message.dto';
 import { MessageDto } from '../message/dto/message.dto';
+import { UpdateMessageDto } from '../message/dto/update-message.dto';
 import {
   Channel,
   Chat,
@@ -16,14 +19,17 @@ import {
 } from '../prisma.service';
 
 export abstract class AbstractChannel<Q = unknown, B = unknown> {
+  protected readonly logger = new Logger(this.constructor.name);
+
   constructor(
     protected readonly channel: Channel,
+    protected readonly amqpConnection: AmqpConnection,
     protected readonly configService: ConfigService,
     protected readonly httpService: HttpService,
     protected readonly prismaService: PrismaService,
   ) {}
 
-  abstract initialize(): Promise<Partial<Prisma.ChannelUncheckedUpdateInput>>;
+  abstract create(): Promise<Partial<Prisma.ChannelUncheckedUpdateInput>>;
 
   abstract handleEvent(event: ChannelEvent<Q, B>): Promise<void>;
 
@@ -39,12 +45,12 @@ export abstract class AbstractChannel<Q = unknown, B = unknown> {
   abstract updateMessage(
     chat: Chat,
     externalId: string,
-    message: unknown,
-  ): Promise<unknown>;
+    message: UpdateMessageDto,
+  ): Promise<Prisma.MessageUncheckedUpdateInput>;
 
-  abstract removeMessage(chat: Chat, externalId: string): Promise<unknown>;
+  abstract removeMessage(chat: Chat, externalId: string): Promise<void>;
 
-  protected async upsertChat(
+  protected async receiveChat(
     accountId: string,
     name: string,
   ): Promise<ChatDto> {
@@ -107,11 +113,15 @@ export abstract class AbstractChannel<Q = unknown, B = unknown> {
         },
       }),
     );
-    // TODO: chat received
+
+    await Promise.all([
+      this.amqpConnection.publish('backend', 'receiveChat', chat),
+      // this.amqpConnection.publish('integrations', 'receiveChat', chat),
+    ]);
     return chat;
   }
 
-  protected async upsertMessage(
+  protected async receiveMessage(
     chat: Chat,
     externalId: string,
     content: Prisma.ContentUncheckedCreateNestedManyWithoutMessageInput,
@@ -155,7 +165,11 @@ export abstract class AbstractChannel<Q = unknown, B = unknown> {
         },
       }),
     );
-    // TODO: message received
+
+    await Promise.all([
+      this.amqpConnection.publish('backend', 'receiveMessage', message),
+      // this.amqpConnection.publish('integrations', 'receiveMessage', message),
+    ]);
     return message;
   }
 }

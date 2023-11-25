@@ -17,8 +17,7 @@
     "paths": {
       "@platform/nestjs-graphql": ["libs/nestjs-graphql/src/index.ts"],
       "@platform/nestjs-rabbitmq": ["libs/nestjs-rabbitmq/src/index.ts"],
-      "@platform/platform-type": ["libs/platform-type/src/index.ts"],
-      "@platform/prisma-redis-cache": ["libs/prisma-redis-cache/src/index.ts"]
+      "@platform/platform-type": ["libs/platform-type/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]
