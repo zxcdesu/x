@@ -1,3 +1,5 @@
+import { registerEnumType } from '@nestjs/graphql';
+
 export const ChannelType = {
   Gupshup: 'Gupshup',
   Instagram: 'Instagram',
@@ -8,3 +10,7 @@ export const ChannelType = {
 } as const;
 
 export type ChannelType = (typeof ChannelType)[keyof typeof ChannelType];
+
+registerEnumType(ChannelType, {
+  name: 'ChannelType',
+});

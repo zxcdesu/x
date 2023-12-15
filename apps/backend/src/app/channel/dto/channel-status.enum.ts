@@ -1,3 +1,5 @@
+import { registerEnumType } from '@nestjs/graphql';
+
 export const ChannelStatus = {
   Connecting: 'Connecting',
   Connected: 'Connected',
@@ -5,3 +7,7 @@ export const ChannelStatus = {
 } as const;
 
 export type ChannelStatus = (typeof ChannelStatus)[keyof typeof ChannelStatus];
+
+registerEnumType(ChannelStatus, {
+  name: 'ChannelStatus',
+});

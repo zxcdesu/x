@@ -1,13 +1,6 @@
-import { Field, Int, ObjectType, registerEnumType } from '@nestjs/graphql';
-import { ChannelStatus, ChannelType } from '@platform/platform-type';
-
-registerEnumType(ChannelType, {
-  name: 'ChannelType',
-});
-
-registerEnumType(ChannelStatus, {
-  name: 'ChannelStatus',
-});
+import { Field, Int, ObjectType } from '@nestjs/graphql';
+import { ChannelStatus } from './channel-status.enum';
+import { ChannelType } from './channel-type.enum';
 
 @ObjectType()
 export class ChannelDto {
