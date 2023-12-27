@@ -50,6 +50,17 @@ export abstract class AbstractChannel<Q = unknown, B = unknown> {
 
   abstract removeMessage(chat: Chat, externalId: string): Promise<void>;
 
+  protected findChat(accountId: string) {
+    return this.prismaService.chat.findUniqueOrThrow({
+      where: {
+        channelId_accountId: {
+          channelId: this.channel.id,
+          accountId,
+        },
+      },
+    });
+  }
+
   protected async receiveChat(
     accountId: string,
     name: string,

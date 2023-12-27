@@ -39,6 +39,6 @@ export class ContactDto {
   @Field(() => [CustomFieldDto])
   customFields: CustomFieldDto[];
 
-  @Field(() => ContactTagDto)
+  @Field(() => [ContactTagDto])
   tags: ContactTagDto[];
 }

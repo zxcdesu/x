@@ -50,10 +50,7 @@ export class TelegramChannel extends AbstractChannel {
     const message = event.body.edited_message ?? event.body.message;
     if (message) {
       await this.receiveMessage(
-        await this.receiveChat(
-          message.chat.id.toString(),
-          message.chat.username,
-        ),
+        await this.findChat(message.chat.id.toString()),
         message.message_id.toString(),
         {
           create: {
@@ -67,6 +64,8 @@ export class TelegramChannel extends AbstractChannel {
           },
         },
       );
+
+      await this.receiveChat(message.chat.id.toString(), message.chat.username);
     }
   }
 
