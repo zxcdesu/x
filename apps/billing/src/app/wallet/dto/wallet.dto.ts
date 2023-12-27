@@ -1,5 +1,5 @@
 import { Exclude, Transform } from 'class-transformer';
-import { Decimal, Wallet } from '../../prisma.service';
+import { Prisma, Wallet } from '../../prisma.service';
 
 export class WalletDto implements Wallet {
   @Exclude()
@@ -12,5 +12,5 @@ export class WalletDto implements Wallet {
   @Transform(({ value }) => Number(value), {
     toPlainOnly: true,
   })
-  currentBalance: Decimal;
+  currentBalance: Prisma.Decimal;
 }

@@ -1,12 +1,10 @@
 import { registerEnumType } from '@nestjs/graphql';
 
-export const ChannelStatus = {
-  Connecting: 'Connecting',
-  Connected: 'Connected',
-  Failed: 'Failed',
-} as const;
-
-export type ChannelStatus = (typeof ChannelStatus)[keyof typeof ChannelStatus];
+export enum ChannelStatus {
+  Connecting = 'Connecting',
+  Connected = 'Connected',
+  Failed = 'Failed',
+}
 
 registerEnumType(ChannelStatus, {
   name: 'ChannelStatus',

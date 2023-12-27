@@ -1,8 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { RmqService } from '@platform/nestjs-rabbitmq';
 import { CreateWalletDto } from './dto/create-wallet.dto';
-import { WalletDto } from './dto/project.dto';
 import { UpdateWalletDto } from './dto/update-project.dto';
+import { WalletDto } from './dto/wallet.dto';
 
 @Injectable()
 export class WalletRmq extends RmqService {

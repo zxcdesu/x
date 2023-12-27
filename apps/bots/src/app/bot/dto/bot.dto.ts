@@ -12,7 +12,7 @@ export class BotDto implements Bot {
 
   description: string;
 
-  imageUrl: string;
+  imageUrl: string | null;
 
   version: string;
 

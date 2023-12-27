@@ -13,6 +13,7 @@ export class BearerAuthStrategy extends PassportStrategy(Strategy) {
 
   async validate(token: string) {
     try {
+      // TODO: связь с auth
       return verify(token, this.configService.get('SECRET')) as BearerAuth;
     } catch {
       throw new UnauthorizedException();

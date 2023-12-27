@@ -4,8 +4,8 @@ import { BearerAuthDecorator } from '../auth/bearer-auth.decorator';
 import { BearerAuthGuard } from '../auth/bearer-auth.guard';
 import { BearerAuth } from '../auth/bearer-auth.interface';
 import { CreateWalletDto } from './dto/create-wallet.dto';
-import { WalletDto } from './dto/project.dto';
 import { UpdateWalletDto } from './dto/update-project.dto';
+import { WalletDto } from './dto/wallet.dto';
 import { WalletRmq } from './wallet.rmq';
 
 @Resolver()

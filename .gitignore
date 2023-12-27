@@ -1,7 +1,6 @@
 node_modules
 /.idea
 /.fleet
-/.vscode
 dist
 /build
 /coverage

@@ -28,7 +28,7 @@ enum Category {
   Other
 }
 
-model ChatbotTemplate {
+model BotTemplate {
   id          Int      @id @default(autoincrement())
   name        String
   description String
