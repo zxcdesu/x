@@ -5,7 +5,7 @@ export class CreateAuthorDto
   implements Omit<Prisma.AuthorCreateInput, 'message'>
 {
   @IsInt()
-  id: number;
+  id: number | null;
 
   @IsEnum(AuthorType)
   type: AuthorType;

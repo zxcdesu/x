@@ -19,12 +19,13 @@ export class MessageRmq extends RmqService {
     });
   }
 
-  findOne(projectId: number, id: number) {
+  findOne(projectId: number, chatId: number, id: number) {
     return this.request<MessageDto>({
       exchange: this.exchange,
       routingKey: 'findOneMessage',
       payload: {
         projectId,
+        chatId,
         id,
       },
     });
@@ -52,12 +53,13 @@ export class MessageRmq extends RmqService {
     });
   }
 
-  remove(projectId: number, id: number) {
+  remove(projectId: number, chatId: number, id: number) {
     return this.request<MessageDto>({
       exchange: this.exchange,
       routingKey: 'removeMessage',
       payload: {
         projectId,
+        chatId,
         id,
       },
     });

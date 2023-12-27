@@ -1,4 +1,4 @@
-import { ParseIntPipe, UseGuards } from '@nestjs/common';
+import { UseGuards } from '@nestjs/common';
 import {
   Args,
   Int,
@@ -36,16 +36,17 @@ export class MessageResolver {
   @Query(() => MessageDto)
   messageById(
     @BearerAuthDecorator() auth: BearerAuth,
-    @Args('id', ParseIntPipe) id: number,
+    @Args('chatId', { type: () => Int }) chatId: number,
+    @Args('id', { type: () => Int }) id: number,
   ): Promise<MessageDto> {
-    return this.rmq.findOne(auth.project.id, id);
+    return this.rmq.findOne(auth.project.id, chatId, id);
   }
 
   @UseGuards(BearerAuthGuard)
   @Query(() => [MessageDto])
   messages(
     @BearerAuthDecorator() auth: BearerAuth,
-    @Args('chatId', ParseIntPipe) chatId: number,
+    @Args('chatId', { type: () => Int }) chatId: number,
   ): Promise<MessageDto[]> {
     return this.rmq.findAll(auth.project.id, chatId);
   }
@@ -63,19 +64,20 @@ export class MessageResolver {
   @Mutation(() => MessageDto)
   removeMessage(
     @BearerAuthDecorator() auth: BearerAuth,
-    @Args('id', ParseIntPipe) id: number,
+    @Args('chatId', { type: () => Int }) chatId: number,
+    @Args('id', { type: () => Int }) id: number,
   ): Promise<MessageDto> {
-    return this.rmq.remove(auth.project.id, id);
+    return this.rmq.remove(auth.project.id, chatId, id);
   }
 
   @UseGuards(BearerAuthGuard)
   @Subscription(() => MessageDto)
   async messageReceived(
     @BearerAuthDecorator() auth: BearerAuth,
-    @Args('id', { type: () => Int }) id: number,
+    @Args('chatId', { type: () => Int }) chatId: number,
   ) {
     return this.pubSubService.asyncIterator(
-      PubSubService.messageReceived(auth.project.id, id),
+      PubSubService.messageReceived(auth.project.id, chatId),
     );
   }
 }

@@ -3,8 +3,8 @@ import { AuthorType } from './author-type.enum';
 
 @ObjectType()
 export class AuthorDto {
-  @Field(() => Int)
-  id: number;
+  @Field(() => Int, { nullable: true })
+  id?: number;
 
   @Field(() => AuthorType)
   type: AuthorType;
