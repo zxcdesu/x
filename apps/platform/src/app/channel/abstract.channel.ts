@@ -95,6 +95,7 @@ export abstract class AbstractChannel<Q = unknown, B = unknown> {
           },
           messages: {
             include: {
+              author: true,
               content: {
                 include: {
                   attachments: true,
@@ -154,6 +155,7 @@ export abstract class AbstractChannel<Q = unknown, B = unknown> {
             updatedAt: new Date(),
           },
           include: {
+            author: true,
             content: {
               include: {
                 attachments: true,

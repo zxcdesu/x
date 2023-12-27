@@ -11,6 +11,6 @@ export class ContentDto {
   @Field(() => [AttachmentDto])
   attachments: AttachmentDto[];
 
-  @Field(() => ButtonDto)
+  @Field(() => [ButtonDto])
   buttons: ButtonDto[];
 }
