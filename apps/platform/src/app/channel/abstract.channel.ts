@@ -128,42 +128,47 @@ export abstract class AbstractChannel<Q = unknown, B = unknown> {
     status: MessageStatus,
     author: Prisma.AuthorUncheckedCreateNestedOneWithoutMessageInput,
   ): Promise<MessageDto> {
-    const message = plainToInstance(
-      MessageDto,
-      await this.prismaService.message.upsert({
-        where: {
-          chatId_externalId: {
-            chatId: chat.id,
+    const message = Object.assign(
+      plainToInstance(
+        MessageDto,
+        await this.prismaService.message.upsert({
+          where: {
+            chatId_externalId: {
+              chatId: chat.id,
+              externalId,
+            },
+          },
+          create: {
+            chat: {
+              connect: {
+                id: chat.id,
+              },
+            },
             externalId,
+            content,
+            status,
+            author,
           },
-        },
-        create: {
-          chat: {
-            connect: {
-              id: chat.id,
+          update: {
+            content,
+            updatedAt: new Date(),
+          },
+          include: {
+            content: {
+              include: {
+                attachments: true,
+              },
+              orderBy: {
+                id: 'desc',
+              },
+              take: 1,
             },
           },
-          externalId,
-          content,
-          status,
-          author,
-        },
-        update: {
-          content,
-          updatedAt: new Date(),
-        },
-        include: {
-          content: {
-            include: {
-              attachments: true,
-            },
-            orderBy: {
-              id: 'desc',
-            },
-            take: 1,
-          },
-        },
-      }),
+        }),
+      ),
+      {
+        projectId: chat.projectId,
+      },
     );
 
     await Promise.all([

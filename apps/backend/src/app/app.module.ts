@@ -5,6 +5,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { GraphQLModule } from '@nestjs/graphql';
 import { PassportModule } from '@nestjs/passport';
 import joi from 'joi';
+import mapObject from 'map-obj';
 import { BearerAuthStrategy } from './auth/bearer-auth.strategy';
 import { BotTemplateResolver } from './bot-template/bot-template.resolver';
 import { BotTemplateRmq } from './bot-template/bot-template.rmq';
@@ -74,6 +75,25 @@ import { WebhookRmq } from './webhook/webhook.rmq';
       driver: ApolloDriver,
       autoSchemaFile: true,
       playground: true,
+      subscriptions: {
+        'graphql-ws': true,
+      },
+      context: ({ req, extra, connectionParams }) =>
+        connectionParams
+          ? {
+              req: Object.assign(extra.request, {
+                headers: mapObject(
+                  connectionParams,
+                  (key, value) => [String(key).toLowerCase(), value],
+                  {
+                    deep: true,
+                  },
+                ),
+              }),
+            }
+          : {
+              req,
+            },
     }),
     PassportModule,
   ],
