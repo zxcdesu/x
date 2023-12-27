@@ -30,13 +30,13 @@ export class MessageRmq extends RmqService {
     });
   }
 
-  findAll(projectId: number, ids?: number[]) {
+  findAll(projectId: number, chatId: number) {
     return this.request<MessageDto[]>({
       exchange: this.exchange,
       routingKey: 'findAllMessages',
       payload: {
         projectId,
-        ids,
+        chatId,
       },
     });
   }

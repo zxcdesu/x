@@ -1,6 +1,6 @@
 import { ArgsType, Field } from '@nestjs/graphql';
-import { CreateAttachmentDto } from '../../message/dto/create-attachment.dto';
-import { CreateButtonDto } from '../../message/dto/create-button.dto';
+import { AttachmentDto } from '../../message/dto/attachment.dto';
+import { ButtonDto } from '../../message/dto/button.dto';
 
 @ArgsType()
 export class CreateHsmDto {
@@ -10,9 +10,9 @@ export class CreateHsmDto {
   @Field(() => String)
   text: string;
 
-  @Field(() => [CreateAttachmentDto])
-  attachments: CreateAttachmentDto[];
+  @Field(() => [AttachmentDto])
+  attachments: AttachmentDto[];
 
-  @Field(() => [CreateButtonDto])
-  buttons: CreateButtonDto[];
+  @Field(() => [ButtonDto])
+  buttons: ButtonDto[];
 }

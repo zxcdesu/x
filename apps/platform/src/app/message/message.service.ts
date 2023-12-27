@@ -40,14 +40,23 @@ export class MessageService {
         },
       },
       select: {
-        messages: true,
+        messages: {
+          include: {
+            author: true,
+            content: {
+              include: {
+                attachments: true,
+              },
+            },
+          },
+        },
       },
     });
 
     return messages;
   }
 
-  async update(projectId, payload: UpdateMessageDto) {
+  async update(projectId: number, payload: UpdateMessageDto) {
     const chat = await this.prismaService.chat.findUniqueOrThrow({
       where: {
         projectId_id: {
@@ -60,7 +69,16 @@ export class MessageService {
           where: {
             id: payload.id,
           },
+          include: {
+            author: true,
+            content: {
+              include: {
+                attachments: true,
+              },
+            },
+          },
         },
+
         channel: true,
       },
     });
@@ -87,6 +105,14 @@ export class MessageService {
         messages: {
           where: {
             id,
+          },
+          include: {
+            author: true,
+            content: {
+              include: {
+                attachments: true,
+              },
+            },
           },
         },
         channel: true,

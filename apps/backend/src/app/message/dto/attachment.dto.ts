@@ -1,9 +1,9 @@
 import { Field, InputType, ObjectType } from '@nestjs/graphql';
 import { AttachmentType } from './attachment-type.enum';
 
-@InputType('CreateAttachmentInput')
+@InputType('AttachmentInput')
 @ObjectType()
-export class CreateAttachmentDto {
+export class AttachmentDto {
   @Field(() => String)
   url: string;
 

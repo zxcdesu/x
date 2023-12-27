@@ -43,8 +43,11 @@ export class MessageResolver {
 
   @UseGuards(BearerAuthGuard)
   @Query(() => [MessageDto])
-  messages(@BearerAuthDecorator() auth: BearerAuth): Promise<MessageDto[]> {
-    return this.rmq.findAll(auth.project.id);
+  messages(
+    @BearerAuthDecorator() auth: BearerAuth,
+    @Args('chatId', ParseIntPipe) chatId: number,
+  ): Promise<MessageDto[]> {
+    return this.rmq.findAll(auth.project.id, chatId);
   }
 
   @UseGuards(BearerAuthGuard)

@@ -1,9 +1,9 @@
 import { Field, InputType, ObjectType } from '@nestjs/graphql';
 import { ButtonType } from './button-type.enum';
 
-@InputType('CreateButtonInput')
+@InputType('ButtonInput')
 @ObjectType()
-export class CreateButtonDto {
+export class ButtonDto {
   @Field(() => ButtonType)
   type: ButtonType;
 
