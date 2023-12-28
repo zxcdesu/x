@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { RmqService } from '@platform/nestjs-rabbitmq';
+import { AuthorDto } from './dto/author.dto';
 import { CreateMessageDto } from './dto/create-message.dto';
 import { MessageDto } from './dto/message.dto';
 import { UpdateMessageDto } from './dto/update-message.dto';
@@ -8,12 +9,13 @@ import { UpdateMessageDto } from './dto/update-message.dto';
 export class MessageRmq extends RmqService {
   private readonly exchange = 'platform';
 
-  create(projectId: number, payload: CreateMessageDto) {
+  create(projectId: number, author: AuthorDto, payload: CreateMessageDto) {
     return this.request<MessageDto>({
       exchange: this.exchange,
       routingKey: 'createMessage',
       payload: {
         ...payload,
+        author,
         projectId,
       },
     });

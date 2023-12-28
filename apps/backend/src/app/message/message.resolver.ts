@@ -11,6 +11,7 @@ import { BearerAuthDecorator } from '../auth/bearer-auth.decorator';
 import { BearerAuthGuard } from '../auth/bearer-auth.guard';
 import { BearerAuth } from '../auth/bearer-auth.interface';
 import { PubSubService } from '../pubsub.service';
+import { AuthorType } from './dto/author-type.enum';
 import { CreateMessageDto } from './dto/create-message.dto';
 import { MessageDto } from './dto/message.dto';
 import { UpdateMessageDto } from './dto/update-message.dto';
@@ -29,7 +30,14 @@ export class MessageResolver {
     @BearerAuthDecorator() auth: BearerAuth,
     @Args() payload: CreateMessageDto,
   ): Promise<MessageDto> {
-    return this.rmq.create(auth.project.id, payload);
+    return this.rmq.create(
+      auth.project.id,
+      {
+        id: auth.id,
+        type: AuthorType.User,
+      },
+      payload,
+    );
   }
 
   @UseGuards(BearerAuthGuard)

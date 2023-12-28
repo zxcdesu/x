@@ -92,19 +92,30 @@ export class TelegramChannel extends AbstractChannel {
               status: MessageStatus.Delivered,
               chatId: chat.id,
               externalId: data.result.message_id.toString(),
+              content: {
+                create: {
+                  text: message.content.text,
+                },
+              },
             };
           }),
-          catchError(async (error) => {
+          catchError((error): Promise<Prisma.MessageUncheckedCreateInput> => {
             this.logger.error({
               channel: this.channel,
+              chat,
               error,
             });
-            return {
+            return Promise.resolve({
               chatId: chat.id,
               externalId: randomUUID(),
               status: MessageStatus.Failed,
               failedReason: error?.response?.data?.description,
-            };
+              content: {
+                create: {
+                  text: message.content.text,
+                },
+              },
+            });
           }),
         ),
     );

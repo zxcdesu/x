@@ -25,9 +25,24 @@ export class MessageService {
     });
 
     return this.prismaService.message.create({
-      data: await this.channelRepository
-        .get(chat.channel)
-        .createMessage(chat, payload),
+      data: Object.assign(
+        {
+          author: {
+            create: payload.author,
+          },
+        },
+        await this.channelRepository
+          .get(chat.channel)
+          .createMessage(chat, payload),
+      ),
+      include: {
+        author: true,
+        content: {
+          include: {
+            attachments: true,
+          },
+        },
+      },
     });
   }
 
