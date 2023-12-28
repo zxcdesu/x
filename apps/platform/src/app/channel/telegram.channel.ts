@@ -1,5 +1,6 @@
 import { NotImplementedException } from '@nestjs/common';
 import { ChannelEvent, TelegramEvent } from '@platform/platform-type';
+import { randomUUID } from 'crypto';
 import { catchError, lastValueFrom, map } from 'rxjs';
 import { CreateChatDto } from '../chat/dto/create-chat.dto';
 import { CreateMessageDto } from '../message/dto/create-message.dto';
@@ -75,14 +76,14 @@ export class TelegramChannel extends AbstractChannel {
     return chat;
   }
 
-  async createMessage(
+  createMessage(
     chat: Chat,
     message: CreateMessageDto,
   ): Promise<Prisma.MessageUncheckedCreateInput> {
     return lastValueFrom(
       this.httpService
         .post(`https://api.telegram.org/bot${this.channel.token}/sendMessage`, {
-          chat_id: Number(chat.accountId),
+          chat_id: Number.parseInt(chat.accountId),
           text: message.content.text,
         })
         .pipe(
@@ -100,7 +101,7 @@ export class TelegramChannel extends AbstractChannel {
             });
             return {
               chatId: chat.id,
-              externalId: 'unknown',
+              externalId: randomUUID(),
               status: MessageStatus.Failed,
               failedReason: error?.response?.data?.description,
             };
