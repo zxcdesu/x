@@ -81,22 +81,16 @@ export class TelegramChannel extends AbstractChannel {
   ): Promise<Prisma.MessageUncheckedCreateInput> {
     return lastValueFrom(
       this.httpService
-        .post(
-          `https://api.telegram.org/bot${this.channel.token}/messages.sendMessage`,
-          {
-            random_id: Math.random(),
-            peer: chat.accountId,
-            message: message.content.text,
-          },
-        )
+        .post(`https://api.telegram.org/bot${this.channel.token}/sendMessage`, {
+          chat_id: Number(chat.accountId),
+          text: message.content.text,
+        })
         .pipe(
           map(({ data }) => {
-            console.log(data);
-
             return {
               status: MessageStatus.Delivered,
               chatId: chat.id,
-              externalId: 'unknown',
+              externalId: data.result.message_id.toString(),
             };
           }),
           catchError(async (error) => {
