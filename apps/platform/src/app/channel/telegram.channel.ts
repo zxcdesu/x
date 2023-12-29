@@ -70,10 +70,8 @@ export class TelegramChannel extends AbstractChannel {
     }
   }
 
-  async createChat(
-    chat: CreateChatDto,
-  ): Promise<Prisma.ChatUncheckedCreateInput> {
-    return chat;
+  createChat(chat: CreateChatDto): Promise<Prisma.ChatUncheckedCreateInput> {
+    return Promise.resolve(chat);
   }
 
   createMessage(
