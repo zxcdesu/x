@@ -41,6 +41,10 @@ export class MessageService {
           include: {
             attachments: true,
           },
+          orderBy: {
+            id: 'desc',
+          },
+          take: 1,
         },
       },
     });
@@ -62,6 +66,10 @@ export class MessageService {
               include: {
                 attachments: true,
               },
+              orderBy: {
+                id: 'desc',
+              },
+              take: 1,
             },
           },
         },
@@ -102,6 +110,10 @@ export class MessageService {
           include: {
             attachments: true,
           },
+          orderBy: {
+            id: 'desc',
+          },
+          take: 1,
         },
       },
     });
@@ -139,6 +151,10 @@ export class MessageService {
           include: {
             attachments: true,
           },
+          orderBy: {
+            id: 'desc',
+          },
+          take: 1,
         },
       },
     });
