@@ -84,27 +84,26 @@ export class MessageService {
           where: {
             id: payload.id,
           },
-          include: {
-            author: true,
-            content: {
-              include: {
-                attachments: true,
-              },
-            },
-          },
         },
-
         channel: true,
       },
     });
 
     return this.prismaService.message.update({
       where: {
-        id: payload.id,
+        id: chat.messages[0].id,
       },
       data: await this.channelRepository
         .get(chat.channel)
         .updateMessage(chat, chat.messages[0].externalId, payload),
+      include: {
+        author: true,
+        content: {
+          include: {
+            attachments: true,
+          },
+        },
+      },
     });
   }
 
@@ -112,7 +111,7 @@ export class MessageService {
     const chat = await this.prismaService.chat.findUniqueOrThrow({
       where: {
         projectId_id: {
-          projectId: projectId,
+          projectId,
           id: chatId,
         },
       },
@@ -120,14 +119,6 @@ export class MessageService {
         messages: {
           where: {
             id,
-          },
-          include: {
-            author: true,
-            content: {
-              include: {
-                attachments: true,
-              },
-            },
           },
         },
         channel: true,
@@ -140,7 +131,15 @@ export class MessageService {
 
     return this.prismaService.message.delete({
       where: {
-        id,
+        id: chat.messages[0].id,
+      },
+      include: {
+        author: true,
+        content: {
+          include: {
+            attachments: true,
+          },
+        },
       },
     });
   }
