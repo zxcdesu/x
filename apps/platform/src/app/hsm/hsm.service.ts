@@ -39,7 +39,7 @@ export class HsmService {
   }
 
   async findAll(projectId: number) {
-    return this.prismaService.channel.findMany({
+    return this.prismaService.hsm.findMany({
       where: {
         projectId,
       },

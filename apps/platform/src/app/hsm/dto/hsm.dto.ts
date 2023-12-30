@@ -25,5 +25,5 @@ export class HsmDto implements Omit<Hsm, 'attachments' | 'buttons'> {
   updatedAt: Date;
 
   @Type(() => ApprovalDto)
-  approval?: ApprovalDto;
+  approval: ApprovalDto[];
 }

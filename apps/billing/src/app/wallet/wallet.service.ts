@@ -21,6 +21,10 @@ export class WalletService {
     });
   }
 
+  findAll() {
+    return this.prismaService.wallet.findMany();
+  }
+
   update(payload: UpdateWalletDto) {
     return this.prismaService.wallet.update({
       where: {

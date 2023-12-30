@@ -1,8 +1,9 @@
 import { ParseIntPipe, UseGuards } from '@nestjs/common';
-import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
+import { Args, Mutation, Query, Resolver, Subscription } from '@nestjs/graphql';
 import { BearerAuthDecorator } from '../auth/bearer-auth.decorator';
 import { BearerAuthGuard } from '../auth/bearer-auth.guard';
 import { BearerAuth } from '../auth/bearer-auth.interface';
+import { PubSubService } from '../pubsub.service';
 import { ChatRmq } from './chat.rmq';
 import { ChatDto } from './dto/chat.dto';
 import { CreateChatDto } from './dto/create-chat.dto';
@@ -10,7 +11,10 @@ import { UpdateChatDto } from './dto/update-chat.dto';
 
 @Resolver()
 export class ChatResolver {
-  constructor(private readonly rmq: ChatRmq) {}
+  constructor(
+    private readonly rmq: ChatRmq,
+    private readonly pubSubService: PubSubService,
+  ) {}
 
   @UseGuards(BearerAuthGuard)
   @Mutation(() => ChatDto)
@@ -52,5 +56,13 @@ export class ChatResolver {
     @Args('id', ParseIntPipe) id: number,
   ): Promise<ChatDto> {
     return this.rmq.remove(auth.project.id, id);
+  }
+
+  @UseGuards(BearerAuthGuard)
+  @Subscription(() => ChatDto)
+  async chatReceived(@BearerAuthDecorator() auth: BearerAuth) {
+    return this.pubSubService.asyncIterator(
+      PubSubService.chatReceived(auth.project.id),
+    );
   }
 }

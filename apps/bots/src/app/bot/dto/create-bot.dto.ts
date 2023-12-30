@@ -1,6 +1,7 @@
 import { Type } from 'class-transformer';
 import {
   IsInt,
+  IsNotEmptyObject,
   IsOptional,
   IsSemVer,
   IsString,
@@ -30,6 +31,7 @@ export class CreateBotDto implements Prisma.BotUncheckedCreateInput {
   version?: string;
 
   @Type(() => Flow)
+  @IsNotEmptyObject()
   @ValidateNested()
   flow: any;
 }

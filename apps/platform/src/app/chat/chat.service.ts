@@ -39,6 +39,7 @@ export class ChatService {
         },
         messages: {
           include: {
+            author: true,
             content: {
               include: {
                 attachments: true,
@@ -49,10 +50,10 @@ export class ChatService {
               },
             },
           },
-          take: 1,
           orderBy: {
             id: 'desc',
           },
+          take: 1,
         },
       },
     });
@@ -80,20 +81,21 @@ export class ChatService {
         },
         messages: {
           include: {
+            author: true,
             content: {
               include: {
                 attachments: true,
               },
-              take: 1,
               orderBy: {
                 id: 'desc',
               },
+              take: 1,
             },
           },
-          take: 1,
           orderBy: {
             id: 'desc',
           },
+          take: 1,
         },
       },
     });
@@ -118,20 +120,21 @@ export class ChatService {
         },
         messages: {
           include: {
+            author: true,
             content: {
               include: {
                 attachments: true,
               },
-              take: 1,
               orderBy: {
                 id: 'desc',
               },
+              take: 1,
             },
           },
-          take: 1,
           orderBy: {
             id: 'desc',
           },
+          take: 1,
         },
       },
     });
@@ -160,20 +163,21 @@ export class ChatService {
         },
         messages: {
           include: {
+            author: true,
             content: {
               include: {
                 attachments: true,
               },
-              take: 1,
               orderBy: {
                 id: 'desc',
               },
+              take: 1,
             },
           },
-          take: 1,
           orderBy: {
             id: 'desc',
           },
+          take: 1,
         },
       },
     });
@@ -201,20 +205,21 @@ export class ChatService {
         },
         messages: {
           include: {
+            author: true,
             content: {
               include: {
                 attachments: true,
               },
-              take: 1,
               orderBy: {
                 id: 'desc',
               },
+              take: 1,
             },
           },
-          take: 1,
           orderBy: {
             id: 'desc',
           },
+          take: 1,
         },
       },
     });

@@ -17,7 +17,7 @@ export class IntegrationRmq extends RmqService {
     });
   }
 
-  findOne(projectId: number, id: number) {
+  findOne(projectId: number, id: string) {
     return this.request<IntegrationDto>({
       exchange: 'integrations',
       routingKey: 'findOneIntegration',
@@ -28,13 +28,12 @@ export class IntegrationRmq extends RmqService {
     });
   }
 
-  findAll(projectId: number, ids?: number[]) {
+  findAll(projectId: number) {
     return this.request<IntegrationDto[]>({
       exchange: 'integrations',
       routingKey: 'findAllIntegrations',
       payload: {
         projectId,
-        ids,
       },
     });
   }

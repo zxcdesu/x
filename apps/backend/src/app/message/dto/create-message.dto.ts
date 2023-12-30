@@ -1,7 +1,11 @@
-import { ArgsType, Field } from '@nestjs/graphql';
+import { ArgsType, Field, Int } from '@nestjs/graphql';
+import { ContentDto } from './content.dto';
 
 @ArgsType()
 export class CreateMessageDto {
-  @Field(() => String)
-  name: string;
+  @Field(() => Int)
+  chatId: number;
+
+  @Field(() => ContentDto)
+  content: ContentDto;
 }

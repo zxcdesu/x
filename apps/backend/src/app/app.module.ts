@@ -5,6 +5,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { GraphQLModule } from '@nestjs/graphql';
 import { PassportModule } from '@nestjs/passport';
 import joi from 'joi';
+import mapObject from 'map-obj';
 import { BearerAuthStrategy } from './auth/bearer-auth.strategy';
 import { BotTemplateResolver } from './bot-template/bot-template.resolver';
 import { BotTemplateRmq } from './bot-template/bot-template.rmq';
@@ -36,6 +37,8 @@ import { ProjectRmq } from './project/project.rmq';
 import { PubSubService } from './pubsub.service';
 import { SubscriptionResolver } from './subscription/subscription.resolver';
 import { SubscriptionRmq } from './subscription/subscription.rmq';
+import { TagResolver } from './tag/tag.resolver';
+import { TagRmq } from './tag/tag.rmq';
 import { UserResolver } from './user/user.resolver';
 import { UserRmq } from './user/user.rmq';
 import { WalletResolver } from './wallet/wallet.resolver';
@@ -74,6 +77,25 @@ import { WebhookRmq } from './webhook/webhook.rmq';
       driver: ApolloDriver,
       autoSchemaFile: true,
       playground: true,
+      subscriptions: {
+        'graphql-ws': true,
+      },
+      context: ({ req, extra, connectionParams }) =>
+        connectionParams
+          ? {
+              req: Object.assign(extra.request, {
+                headers: mapObject(
+                  connectionParams,
+                  (key, value) => [String(key).toLowerCase(), value],
+                  {
+                    deep: true,
+                  },
+                ),
+              }),
+            }
+          : {
+              req,
+            },
     }),
     PassportModule,
   ],
@@ -94,6 +116,7 @@ import { WebhookRmq } from './webhook/webhook.rmq';
     ProjectResolver,
     ProjectUserResolver,
     SubscriptionResolver,
+    TagResolver,
     UserResolver,
     WalletResolver,
     WebhookResolver,
@@ -111,6 +134,7 @@ import { WebhookRmq } from './webhook/webhook.rmq';
     ProjectRmq.provide(ErrorFactoryService),
     ProjectUserRmq.provide(ErrorFactoryService),
     SubscriptionRmq.provide(ErrorFactoryService),
+    TagRmq.provide(ErrorFactoryService),
     UserRmq.provide(ErrorFactoryService),
     WalletRmq.provide(ErrorFactoryService),
     WebhookRmq.provide(ErrorFactoryService),

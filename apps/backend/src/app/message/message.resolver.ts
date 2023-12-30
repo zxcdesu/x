@@ -1,4 +1,4 @@
-import { ParseIntPipe, UseGuards } from '@nestjs/common';
+import { UseGuards } from '@nestjs/common';
 import {
   Args,
   Int,
@@ -11,6 +11,7 @@ import { BearerAuthDecorator } from '../auth/bearer-auth.decorator';
 import { BearerAuthGuard } from '../auth/bearer-auth.guard';
 import { BearerAuth } from '../auth/bearer-auth.interface';
 import { PubSubService } from '../pubsub.service';
+import { AuthorType } from './dto/author-type.enum';
 import { CreateMessageDto } from './dto/create-message.dto';
 import { MessageDto } from './dto/message.dto';
 import { UpdateMessageDto } from './dto/update-message.dto';
@@ -29,22 +30,23 @@ export class MessageResolver {
     @BearerAuthDecorator() auth: BearerAuth,
     @Args() payload: CreateMessageDto,
   ): Promise<MessageDto> {
-    return this.rmq.create(auth.project.id, payload);
-  }
-
-  @UseGuards(BearerAuthGuard)
-  @Query(() => MessageDto)
-  messageById(
-    @BearerAuthDecorator() auth: BearerAuth,
-    @Args('id', ParseIntPipe) id: number,
-  ): Promise<MessageDto> {
-    return this.rmq.findOne(auth.project.id, id);
+    return this.rmq.create(
+      auth.project.id,
+      {
+        id: auth.id,
+        type: AuthorType.User,
+      },
+      payload,
+    );
   }
 
   @UseGuards(BearerAuthGuard)
   @Query(() => [MessageDto])
-  messages(@BearerAuthDecorator() auth: BearerAuth): Promise<MessageDto[]> {
-    return this.rmq.findAll(auth.project.id);
+  messages(
+    @BearerAuthDecorator() auth: BearerAuth,
+    @Args('chatId', { type: () => Int }) chatId: number,
+  ): Promise<MessageDto[]> {
+    return this.rmq.findAll(auth.project.id, chatId);
   }
 
   @UseGuards(BearerAuthGuard)
@@ -60,19 +62,20 @@ export class MessageResolver {
   @Mutation(() => MessageDto)
   removeMessage(
     @BearerAuthDecorator() auth: BearerAuth,
-    @Args('id', ParseIntPipe) id: number,
+    @Args('chatId', { type: () => Int }) chatId: number,
+    @Args('id', { type: () => Int }) id: number,
   ): Promise<MessageDto> {
-    return this.rmq.remove(auth.project.id, id);
+    return this.rmq.remove(auth.project.id, chatId, id);
   }
 
   @UseGuards(BearerAuthGuard)
   @Subscription(() => MessageDto)
   async messageReceived(
     @BearerAuthDecorator() auth: BearerAuth,
-    @Args('id', { type: () => Int }) id: number,
+    @Args('chatId', { type: () => Int }) chatId: number,
   ) {
     return this.pubSubService.asyncIterator(
-      PubSubService.messageReceived(auth.project.id, id),
+      PubSubService.messageReceived(auth.project.id, chatId),
     );
   }
 }

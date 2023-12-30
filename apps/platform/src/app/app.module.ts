@@ -12,6 +12,8 @@ import { ChatService } from './chat/chat.service';
 import { ContactController } from './contact/contact.controller';
 import { ContactService } from './contact/contact.service';
 import { ErrorFactoryService } from './error-factory.service';
+import { HsmController } from './hsm/hsm.controller';
+import { HsmService } from './hsm/hsm.service';
 import { MessageController } from './message/message.controller';
 import { MessageService } from './message/message.service';
 import { PrismaService } from './prisma.service';
@@ -51,6 +53,7 @@ import { TagService } from './tag/tag.service';
     ChannelController,
     ChatController,
     ContactController,
+    HsmController,
     MessageController,
     TagController,
   ],
@@ -60,6 +63,7 @@ import { TagService } from './tag/tag.service';
     ChannelService,
     ChatService,
     ContactService,
+    HsmService,
     MessageService,
     TagService,
     ErrorFactoryService,

@@ -27,5 +27,5 @@ export class CreateContactDto implements Prisma.ContactUncheckedCreateInput {
 
   @IsOptional()
   @IsString()
-  closedReason?: string;
+  rejectedReason?: string;
 }

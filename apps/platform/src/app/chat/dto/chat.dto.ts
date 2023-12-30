@@ -6,7 +6,8 @@ import { Chat } from '../../prisma.service';
 export class ChatDto implements Chat {
   id: number;
 
-  @Exclude()
+  // @Exclude()
+  // не скрываем, нужен на backend для подписки на чаты
   projectId: number;
 
   @Exclude()

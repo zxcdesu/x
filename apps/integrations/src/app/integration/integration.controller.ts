@@ -17,7 +17,7 @@ export class IntegrationController {
 
   @RabbitRPC({
     routingKey: 'createIntegration',
-    exchange: 'billing',
+    exchange: 'integrations',
   })
   @SerializeOptions({
     type: IntegrationDto,

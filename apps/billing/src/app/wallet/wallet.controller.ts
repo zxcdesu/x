@@ -33,6 +33,17 @@ export class WalletController {
   }
 
   @RabbitRPC({
+    routingKey: 'findAllWallets',
+    exchange: 'billing',
+  })
+  @SerializeOptions({
+    type: WalletDto,
+  })
+  findAll() {
+    return this.walletService.findAll();
+  }
+
+  @RabbitRPC({
     routingKey: 'updateWallet',
     exchange: 'billing',
   })

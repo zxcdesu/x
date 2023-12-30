@@ -21,6 +21,10 @@ export class SubscriptionService {
     });
   }
 
+  findAll() {
+    return this.prismaService.subscription.findMany();
+  }
+
   update(payload: UpdateSubscriptionDto) {
     return this.prismaService.subscription.update({
       where: {

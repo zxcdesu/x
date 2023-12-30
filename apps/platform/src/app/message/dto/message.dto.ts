@@ -1,12 +1,13 @@
 import { Exclude, Type } from 'class-transformer';
 import { Message, MessageStatus } from '../../prisma.service';
-import { ContentDto } from './content.dto';
 import { AuthorDto } from './author.dto';
+import { ContentDto } from './content.dto';
 
 export class MessageDto implements Message {
   id: number;
 
-  @Exclude()
+  // @Exclude()
+  // не скрываем, нужен на backend для подписки на сообщения чата
   chatId: number;
 
   @Exclude()

@@ -25,9 +25,28 @@ export class MessageService {
     });
 
     return this.prismaService.message.create({
-      data: await this.channelRepository
-        .get(chat.channel)
-        .createMessage(chat, payload),
+      data: Object.assign(
+        {
+          author: {
+            create: payload.author,
+          },
+        },
+        await this.channelRepository
+          .get(chat.channel)
+          .createMessage(chat, payload),
+      ),
+      include: {
+        author: true,
+        content: {
+          include: {
+            attachments: true,
+          },
+          orderBy: {
+            id: 'desc',
+          },
+          take: 1,
+        },
+      },
     });
   }
 
@@ -40,14 +59,27 @@ export class MessageService {
         },
       },
       select: {
-        messages: true,
+        messages: {
+          include: {
+            author: true,
+            content: {
+              include: {
+                attachments: true,
+              },
+              orderBy: {
+                id: 'desc',
+              },
+              take: 1,
+            },
+          },
+        },
       },
     });
 
     return messages;
   }
 
-  async update(projectId, payload: UpdateMessageDto) {
+  async update(projectId: number, payload: UpdateMessageDto) {
     const chat = await this.prismaService.chat.findUniqueOrThrow({
       where: {
         projectId_id: {
@@ -67,11 +99,23 @@ export class MessageService {
 
     return this.prismaService.message.update({
       where: {
-        id: payload.id,
+        id: chat.messages[0].id,
       },
       data: await this.channelRepository
         .get(chat.channel)
         .updateMessage(chat, chat.messages[0].externalId, payload),
+      include: {
+        author: true,
+        content: {
+          include: {
+            attachments: true,
+          },
+          orderBy: {
+            id: 'desc',
+          },
+          take: 1,
+        },
+      },
     });
   }
 
@@ -79,7 +123,7 @@ export class MessageService {
     const chat = await this.prismaService.chat.findUniqueOrThrow({
       where: {
         projectId_id: {
-          projectId: projectId,
+          projectId,
           id: chatId,
         },
       },
@@ -99,7 +143,19 @@ export class MessageService {
 
     return this.prismaService.message.delete({
       where: {
-        id,
+        id: chat.messages[0].id,
+      },
+      include: {
+        author: true,
+        content: {
+          include: {
+            attachments: true,
+          },
+          orderBy: {
+            id: 'desc',
+          },
+          take: 1,
+        },
       },
     });
   }

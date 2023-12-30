@@ -1,5 +1,5 @@
 import { ArgsType, Field } from '@nestjs/graphql';
-import { ChannelType } from '@platform/platform-type';
+import { ChannelType } from './channel-type.enum';
 
 @ArgsType()
 export class CreateChannelDto {
