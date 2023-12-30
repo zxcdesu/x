@@ -17,25 +17,20 @@ export class SubscriptionRmq extends RmqService {
     });
   }
 
-  findOne(projectId: number, id: number) {
+  findOne(projectId: number) {
     return this.request<SubscriptionDto>({
       exchange: 'billing',
       routingKey: 'findOneSubscription',
       payload: {
         projectId,
-        id,
       },
     });
   }
 
-  findAll(projectId: number, ids?: number[]) {
+  findAll() {
     return this.request<SubscriptionDto[]>({
       exchange: 'billing',
       routingKey: 'findAllSubscriptions',
-      payload: {
-        projectId,
-        ids,
-      },
     });
   }
 
@@ -50,13 +45,12 @@ export class SubscriptionRmq extends RmqService {
     });
   }
 
-  remove(projectId: number, id: number) {
+  remove(projectId: number) {
     return this.request<SubscriptionDto>({
       exchange: 'billing',
       routingKey: 'removeSubscription',
       payload: {
         projectId,
-        id,
       },
     });
   }

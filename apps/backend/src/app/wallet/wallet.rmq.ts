@@ -17,25 +17,20 @@ export class WalletRmq extends RmqService {
     });
   }
 
-  findOne(projectId: number, id: number) {
+  findOne(projectId: number) {
     return this.request<WalletDto>({
       exchange: 'billing',
       routingKey: 'findOneWallet',
       payload: {
         projectId,
-        id,
       },
     });
   }
 
-  findAll(projectId: number, ids?: number[]) {
+  findAll() {
     return this.request<WalletDto[]>({
       exchange: 'billing',
       routingKey: 'findAllWallets',
-      payload: {
-        projectId,
-        ids,
-      },
     });
   }
 
@@ -50,13 +45,12 @@ export class WalletRmq extends RmqService {
     });
   }
 
-  remove(projectId: number, id: number) {
+  remove(projectId: number) {
     return this.request<WalletDto>({
       exchange: 'billing',
       routingKey: 'removeWallet',
       payload: {
         projectId,
-        id,
       },
     });
   }
