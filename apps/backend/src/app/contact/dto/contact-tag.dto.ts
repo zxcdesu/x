@@ -1,8 +1,8 @@
 import { Field, ObjectType } from '@nestjs/graphql';
-import { TagDto } from '../../tag/dto/tag.dto';
+import { TagWithoutParentAndChildrenDto } from '../../tag/dto/tag-without-parent-and-children.dto';
 
 @ObjectType()
 export class ContactTagDto {
-  @Field(() => TagDto)
-  tag: TagDto;
+  @Field(() => TagWithoutParentAndChildrenDto)
+  tag: TagWithoutParentAndChildrenDto;
 }

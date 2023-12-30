@@ -27,8 +27,8 @@ export class MailingDto {
   @Field(() => MailingStatus)
   status: MailingStatus;
 
-  @Field(() => String)
-  scheduledAt: string;
+  @Field(() => String, { nullable: true })
+  scheduledAt?: string;
 
   @Field(() => String)
   createdAt: string;

@@ -9,12 +9,12 @@ import { UpdateTagDto } from './dto/update-tag.dto';
 import { TagRmq } from './tag.rmq';
 
 @Resolver()
-export class HsmResolver {
+export class TagResolver {
   constructor(private readonly rmq: TagRmq) {}
 
   @UseGuards(BearerAuthGuard)
   @Mutation(() => TagDto)
-  createHsm(
+  createTag(
     @BearerAuthDecorator() auth: BearerAuth,
     @Args() payload: CreateTagDto,
   ): Promise<TagDto> {
@@ -23,7 +23,7 @@ export class HsmResolver {
 
   @UseGuards(BearerAuthGuard)
   @Query(() => TagDto)
-  hsmById(
+  tagById(
     @BearerAuthDecorator() auth: BearerAuth,
     @Args('id', ParseIntPipe) id: number,
   ): Promise<TagDto> {
@@ -32,13 +32,13 @@ export class HsmResolver {
 
   @UseGuards(BearerAuthGuard)
   @Query(() => [TagDto])
-  hsm(@BearerAuthDecorator() auth: BearerAuth): Promise<TagDto[]> {
+  tags(@BearerAuthDecorator() auth: BearerAuth): Promise<TagDto[]> {
     return this.rmq.findAll(auth.project.id);
   }
 
   @UseGuards(BearerAuthGuard)
   @Mutation(() => TagDto)
-  updateHsm(
+  updateTag(
     @BearerAuthDecorator() auth: BearerAuth,
     @Args() payload: UpdateTagDto,
   ): Promise<TagDto> {
@@ -47,7 +47,7 @@ export class HsmResolver {
 
   @UseGuards(BearerAuthGuard)
   @Mutation(() => TagDto)
-  removeHsm(
+  removeTag(
     @BearerAuthDecorator() auth: BearerAuth,
     @Args('id', ParseIntPipe) id: number,
   ): Promise<TagDto> {

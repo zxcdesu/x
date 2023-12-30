@@ -1,29 +1,11 @@
-import { Field, Int, ObjectType } from '@nestjs/graphql';
-import { GraphQLJSONObject } from 'graphql-type-json';
+import { Field, ObjectType } from '@nestjs/graphql';
+import { TagWithoutParentAndChildrenDto } from './tag-without-parent-and-children.dto';
 
 @ObjectType()
-export class TagDto {
-  @Field(() => Int)
-  id: number;
+export class TagDto extends TagWithoutParentAndChildrenDto {
+  @Field(() => TagWithoutParentAndChildrenDto, { nullable: true })
+  parent?: TagWithoutParentAndChildrenDto;
 
-  @Field(() => String)
-  name: string;
-
-  @Field(() => String)
-  description: string;
-
-  @Field(() => String)
-  color: string;
-
-  @Field(() => GraphQLJSONObject, { nullable: true })
-  parent?: Omit<TagDto, 'parent' | 'children'>;
-
-  @Field(() => [GraphQLJSONObject])
-  children: Omit<TagDto, 'parent' | 'children'>[];
-
-  @Field(() => String)
-  createdAt: string;
-
-  @Field(() => String)
-  updatedAt: string;
+  @Field(() => [TagWithoutParentAndChildrenDto])
+  children: TagWithoutParentAndChildrenDto[];
 }
