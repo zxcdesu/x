@@ -30,16 +30,16 @@ export class TelegramChannel extends AbstractChannel {
               status: ChannelStatus.Connected,
             };
           }),
-          catchError(async (error) => {
+          catchError((error) => {
             this.logger.error({
               channel: this.channel,
               error,
             });
-            return {
+            return Promise.resolve({
               status: ChannelStatus.Failed,
               failedReason:
                 error?.response?.data?.description ?? error?.message,
-            };
+            });
           }),
         ),
     );
@@ -107,7 +107,8 @@ export class TelegramChannel extends AbstractChannel {
               chatId: chat.id,
               externalId: randomUUID(),
               status: MessageStatus.Failed,
-              failedReason: error?.response?.data?.description,
+              failedReason:
+                error?.response?.data?.description ?? error?.message,
               content: {
                 create: {
                   text: message.content.text,
