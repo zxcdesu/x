@@ -26,6 +26,6 @@ export class HsmDto {
   @Field(() => String)
   updatedAt: string;
 
-  @Field(() => ApprovalDto, { nullable: true })
-  approval?: ApprovalDto;
+  @Field(() => [ApprovalDto])
+  approval: ApprovalDto[];
 }

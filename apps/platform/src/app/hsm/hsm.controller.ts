@@ -35,7 +35,7 @@ export class HsmController {
   }
 
   @RabbitRPC({
-    routingKey: 'findAllHsms',
+    routingKey: 'findAllHsm',
     exchange: 'platform',
   })
   @SerializeOptions({
