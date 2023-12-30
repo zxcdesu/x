@@ -33,6 +33,17 @@ export class SubscriptionController {
   }
 
   @RabbitRPC({
+    routingKey: 'findAllSubscriptions',
+    exchange: 'billing',
+  })
+  @SerializeOptions({
+    type: SubscriptionDto,
+  })
+  findAll() {
+    return this.subscriptionService.findAll();
+  }
+
+  @RabbitRPC({
     routingKey: 'updateSubscription',
     exchange: 'billing',
   })

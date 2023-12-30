@@ -21,18 +21,6 @@ export class MessageRmq extends RmqService {
     });
   }
 
-  findOne(projectId: number, chatId: number, id: number) {
-    return this.request<MessageDto>({
-      exchange: this.exchange,
-      routingKey: 'findOneMessage',
-      payload: {
-        projectId,
-        chatId,
-        id,
-      },
-    });
-  }
-
   findAll(projectId: number, chatId: number) {
     return this.request<MessageDto[]>({
       exchange: this.exchange,

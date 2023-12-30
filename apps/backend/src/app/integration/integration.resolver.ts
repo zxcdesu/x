@@ -1,4 +1,4 @@
-import { ParseIntPipe, UseGuards } from '@nestjs/common';
+import { ParseIntPipe, ParseUUIDPipe, UseGuards } from '@nestjs/common';
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { BearerAuthDecorator } from '../auth/bearer-auth.decorator';
 import { BearerAuthGuard } from '../auth/bearer-auth.guard';
@@ -25,7 +25,7 @@ export class IntegrationResolver {
   @Query(() => IntegrationDto)
   integrationById(
     @BearerAuthDecorator() auth: BearerAuth,
-    @Args('id', ParseIntPipe) id: number,
+    @Args('id', ParseUUIDPipe) id: string,
   ): Promise<IntegrationDto> {
     return this.rmq.findOne(auth.project.id, id);
   }
