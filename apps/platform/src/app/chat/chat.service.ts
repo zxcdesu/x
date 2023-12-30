@@ -59,7 +59,7 @@ export class ChatService {
     });
   }
 
-  async findOne(projectId: number, id: number) {
+  findOne(projectId: number, id: number) {
     return this.prismaService.chat.findUniqueOrThrow({
       where: {
         projectId_id: {
@@ -101,7 +101,7 @@ export class ChatService {
     });
   }
 
-  async findAll(projectId: number) {
+  findAll(projectId: number) {
     return this.prismaService.chat.findMany({
       where: {
         projectId,
@@ -140,7 +140,7 @@ export class ChatService {
     });
   }
 
-  async update(payload: UpdateChatDto) {
+  update(payload: UpdateChatDto) {
     return this.prismaService.chat.update({
       where: {
         projectId_id: {
@@ -183,7 +183,7 @@ export class ChatService {
     });
   }
 
-  async remove(projectId: number, id: number) {
+  remove(projectId: number, id: number) {
     return this.prismaService.chat.delete({
       where: {
         projectId_id: {

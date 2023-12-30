@@ -7,7 +7,7 @@ import { UpdateContactDto } from './dto/update-contact.dto';
 export class ContactService {
   constructor(private readonly prismaService: PrismaService) {}
 
-  async create(payload: CreateContactDto) {
+  create(payload: CreateContactDto) {
     return this.prismaService.contact.create({
       data: payload,
       include: {
@@ -22,7 +22,7 @@ export class ContactService {
     });
   }
 
-  async findOne(projectId: number, id: number) {
+  findOne(projectId: number, id: number) {
     return this.prismaService.contact.findUniqueOrThrow({
       where: {
         projectId_id: {
@@ -42,7 +42,7 @@ export class ContactService {
     });
   }
 
-  async findAll(projectId: number) {
+  findAll(projectId: number) {
     return this.prismaService.contact.findMany({
       where: {
         projectId,
@@ -59,7 +59,7 @@ export class ContactService {
     });
   }
 
-  async update(payload: UpdateContactDto) {
+  update(payload: UpdateContactDto) {
     return this.prismaService.contact.update({
       where: {
         projectId_id: {
@@ -80,7 +80,7 @@ export class ContactService {
     });
   }
 
-  async remove(projectId: number, id: number) {
+  remove(projectId: number, id: number) {
     return this.prismaService.contact.delete({
       where: {
         projectId_id: {

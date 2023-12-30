@@ -70,7 +70,7 @@ export class MessageResolver {
 
   @UseGuards(BearerAuthGuard)
   @Subscription(() => MessageDto)
-  async messageReceived(
+  messageReceived(
     @BearerAuthDecorator() auth: BearerAuth,
     @Args('chatId', { type: () => Int }) chatId: number,
   ) {

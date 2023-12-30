@@ -19,9 +19,9 @@ export class MessageController {
   })
   create(
     @RabbitPayload('projectId', ParseIntPipe) projectId: number,
-    @RabbitPayload() createMessageDto: CreateMessageDto,
+    @RabbitPayload() payload: CreateMessageDto,
   ) {
-    return this.messageService.create(projectId, createMessageDto);
+    return this.messageService.create(projectId, payload);
   }
 
   @RabbitRPC({
@@ -47,9 +47,9 @@ export class MessageController {
   })
   update(
     @RabbitPayload('projectId', ParseIntPipe) projectId: number,
-    @RabbitPayload() updateMessageDto: UpdateMessageDto,
+    @RabbitPayload() payload: UpdateMessageDto,
   ) {
-    return this.messageService.update(projectId, updateMessageDto);
+    return this.messageService.update(projectId, payload);
   }
 
   @RabbitRPC({

@@ -60,7 +60,7 @@ export class ChatResolver {
 
   @UseGuards(BearerAuthGuard)
   @Subscription(() => ChatDto)
-  async chatReceived(@BearerAuthDecorator() auth: BearerAuth) {
+  chatReceived(@BearerAuthDecorator() auth: BearerAuth) {
     return this.pubSubService.asyncIterator(
       PubSubService.chatReceived(auth.project.id),
     );

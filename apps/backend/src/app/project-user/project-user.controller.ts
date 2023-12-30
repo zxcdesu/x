@@ -13,7 +13,7 @@ export class ProjectUserResolver {
 
   @UseGuards(BearerAuthGuard)
   @Query(() => ProjectUserDto)
-  async projectUserById(
+  projectUserById(
     @BearerAuthDecorator() auth: BearerAuth,
     @Args('userId', { type: () => Int }) userId: number,
   ): Promise<ProjectUserDto> {
@@ -22,7 +22,7 @@ export class ProjectUserResolver {
 
   @UseGuards(BearerAuthGuard)
   @Query(() => [ProjectUserDto])
-  async projectUsers(
+  projectUsers(
     @BearerAuthDecorator() auth: BearerAuth,
   ): Promise<ProjectUserDto[]> {
     return this.rmq.findAll(auth.project.id);
@@ -30,7 +30,7 @@ export class ProjectUserResolver {
 
   @UseGuards(BearerAuthGuard)
   @Mutation(() => ProjectUserDto)
-  async updateProjectUser(
+  updateProjectUser(
     @BearerAuthDecorator() auth: BearerAuth,
     @Args() payload: UpdateProjectUserDto,
   ): Promise<ProjectUserDto> {
@@ -39,7 +39,7 @@ export class ProjectUserResolver {
 
   @UseGuards(BearerAuthGuard)
   @Mutation(() => ProjectUserDto)
-  async removeProjectUser(
+  removeProjectUser(
     @BearerAuthDecorator() auth: BearerAuth,
     @Args('userId', { type: () => Int }) userId: number,
   ): Promise<ProjectUserDto> {

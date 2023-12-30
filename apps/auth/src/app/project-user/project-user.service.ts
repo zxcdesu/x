@@ -40,11 +40,7 @@ export class ProjectUserService {
     });
   }
 
-  async update(
-    projectId: number,
-    userId: number,
-    payload: UpdateProjectUserDto,
-  ) {
+  update(projectId: number, userId: number, payload: UpdateProjectUserDto) {
     return this.prismaService.projectUser.update({
       where: {
         projectId_userId: {
@@ -59,7 +55,7 @@ export class ProjectUserService {
     });
   }
 
-  async remove(projectId: number, userId: number) {
+  remove(projectId: number, userId: number) {
     return this.prismaService.projectUser.delete({
       where: {
         projectId_userId: {

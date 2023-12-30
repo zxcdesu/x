@@ -1,11 +1,13 @@
 import { Injectable, NotImplementedException } from '@nestjs/common';
 import { PrismaService } from '../prisma.service';
+import { CreateBotTemplateDto } from './dto/create-bot-template.dto';
+import { UpdateBotTemplate } from './dto/update-bot-template.dto';
 
 @Injectable()
 export class BotTemplateService {
   constructor(private readonly prismaService: PrismaService) {}
 
-  async create() {
+  async create(payload: CreateBotTemplateDto) {
     throw new NotImplementedException();
   }
 
@@ -21,11 +23,11 @@ export class BotTemplateService {
     return this.prismaService.botTemplate.findMany();
   }
 
-  async update() {
+  async update(payload: UpdateBotTemplate) {
     throw new NotImplementedException();
   }
 
-  async remove() {
+  async remove(id: number) {
     throw new NotImplementedException();
   }
 }

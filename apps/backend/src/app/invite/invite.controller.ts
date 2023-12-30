@@ -12,7 +12,7 @@ export class InviteResolver {
 
   @UseGuards(BearerAuthGuard)
   @Mutation(() => Boolean)
-  async createInvite(
+  createInvite(
     @BearerAuthDecorator() auth: BearerAuth,
     @Args() payload: CreateInviteDto,
   ): Promise<boolean> {
