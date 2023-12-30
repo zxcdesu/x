@@ -2,9 +2,9 @@ import { RabbitMQModule } from '@golevelup/nestjs-rabbitmq';
 import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import joi from 'joi';
-import { PrismaService } from './prisma.service';
 import { MailingController } from './mailing/mailing.controller';
 import { MailingService } from './mailing/mailing.service';
+import { PrismaService } from './prisma.service';
 
 @Module({
   imports: [
@@ -24,6 +24,10 @@ import { MailingService } from './mailing/mailing.service';
         exchanges: [
           {
             name: 'mailer',
+            type: 'topic',
+          },
+          {
+            name: 'mailer.worker',
             type: 'topic',
           },
         ],

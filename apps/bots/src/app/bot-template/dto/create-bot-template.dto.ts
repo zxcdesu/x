@@ -1,6 +1,7 @@
 import { Type } from 'class-transformer';
 import {
   IsEnum,
+  IsNotEmptyObject,
   IsOptional,
   IsString,
   IsUrl,
@@ -10,7 +11,7 @@ import { Flow } from '../../bot/dto/compiler/flow.dto';
 import { Category, Prisma } from '../../prisma.service';
 
 export class CreateBotTemplateDto
-  implements Prisma.BotTemplateUncheckedCreateInput
+  implements Omit<Prisma.BotTemplateUncheckedCreateInput, 'flow'>
 {
   @IsString()
   name: string;
@@ -26,6 +27,7 @@ export class CreateBotTemplateDto
   category?: Category;
 
   @Type(() => Flow)
+  @IsNotEmptyObject()
   @ValidateNested()
-  flow: any;
+  flow: Flow;
 }

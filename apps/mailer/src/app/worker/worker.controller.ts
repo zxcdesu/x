@@ -7,11 +7,10 @@ export class WorkerController {
   constructor(private readonly workerService: WorkerService) {}
 
   @RabbitSubscribe({
-    queue: 'mailer.worker',
-    routingKey: 'create',
-    exchange: 'mailer.worker',
+    routingKey: 'createWorker',
+    exchange: 'mailer',
   })
-  create(@RabbitPayload() payload: any) {
+  create(@RabbitPayload() payload: unknown) {
     return this.workerService.create(payload);
   }
 }

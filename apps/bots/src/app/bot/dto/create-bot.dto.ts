@@ -11,7 +11,9 @@ import {
 import { Prisma } from '../../prisma.service';
 import { Flow } from './compiler/flow.dto';
 
-export class CreateBotDto implements Prisma.BotUncheckedCreateInput {
+export class CreateBotDto
+  implements Omit<Prisma.BotUncheckedCreateInput, 'flow'>
+{
   @IsInt()
   projectId: number;
 
@@ -33,5 +35,5 @@ export class CreateBotDto implements Prisma.BotUncheckedCreateInput {
   @Type(() => Flow)
   @IsNotEmptyObject()
   @ValidateNested()
-  flow: any;
+  flow: Flow;
 }

@@ -2,7 +2,7 @@ import { Exclude, Type } from 'class-transformer';
 import { Bot } from '../../prisma.service';
 import { Flow } from './compiler/flow.dto';
 
-export class BotDto implements Bot {
+export class BotDto implements Omit<Bot, 'flow'> {
   id: number;
 
   @Exclude()
@@ -17,7 +17,7 @@ export class BotDto implements Bot {
   version: string;
 
   @Type(() => Flow)
-  flow: any;
+  flow: Flow;
 
   @Exclude()
   containerId: string;

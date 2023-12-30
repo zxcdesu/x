@@ -1,6 +1,6 @@
+import { AmqpConnection } from '@golevelup/nestjs-rabbitmq';
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../prisma.service';
-import { AmqpConnection } from '@golevelup/nestjs-rabbitmq';
 
 @Injectable()
 export class WorkerService {
@@ -9,14 +9,22 @@ export class WorkerService {
     private readonly amqpConnection: AmqpConnection,
   ) {}
 
-  async create(payload: any) {
-    await this.amqpConnection.createSubscriber(this.create.bind(this), {}, '');
+  create(payload: unknown) {
+    return this.amqpConnection.createSubscriber(
+      this.work.bind(this),
+      {
+        exchange: 'mailer.worker',
+        queue: 'mailer.worker.work',
+        routingKey: 'work',
+      },
+      'work',
+    );
   }
 
-  private async work(payload: any) {
+  private async work(payload: unknown) {
     const worker = await this.prismaService.mailingWorker.findUniqueOrThrow({
       where: {
-        id: payload.id,
+        id: 1,
       },
     });
   }

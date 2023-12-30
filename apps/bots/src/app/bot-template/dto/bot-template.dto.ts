@@ -1,6 +1,8 @@
+import { Type } from 'class-transformer';
+import { Flow } from '../../bot/dto/compiler/flow.dto';
 import { BotTemplate, Category } from '../../prisma.service';
 
-export class BotTemplateDto implements BotTemplate {
+export class BotTemplateDto implements Omit<BotTemplate, 'flow'> {
   id: number;
 
   name: string;
@@ -11,7 +13,8 @@ export class BotTemplateDto implements BotTemplate {
 
   category: Category;
 
-  flow: any;
+  @Type(() => Flow)
+  flow: Flow;
 
   createdAt: Date;
 

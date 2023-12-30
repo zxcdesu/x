@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { PrismaService } from '../prisma.service';
+import { Prisma, PrismaService } from '../prisma.service';
 import { CreateBotDto } from './dto/create-bot.dto';
 import { UpdateBotDto } from './dto/update-bot.dto';
 
@@ -9,7 +9,7 @@ export class BotService {
 
   create(payload: CreateBotDto) {
     return this.prismaService.bot.create({
-      data: payload,
+      data: payload as unknown as Prisma.BotCreateInput,
     });
   }
 
@@ -40,7 +40,7 @@ export class BotService {
           id: payload.id,
         },
       },
-      data: payload,
+      data: payload as unknown as Prisma.BotUpdateInput,
     });
   }
 

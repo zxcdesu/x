@@ -8,8 +8,8 @@ import { IsInt } from 'class-validator';
 import { CreateBotDto } from './create-bot.dto';
 
 export class UpdateBotDto extends IntersectionType(
-  PickType(CreateBotDto, ['projectId']),
-  PartialType(OmitType(CreateBotDto, ['projectId'])),
+  PickType(CreateBotDto, ['projectId'] as const),
+  PartialType(OmitType(CreateBotDto, ['projectId'] as const)),
 ) {
   @IsInt()
   id: number;

@@ -1,5 +1,5 @@
-import { Injectable, NotImplementedException } from '@nestjs/common';
-import { PrismaService } from '../prisma.service';
+import { Injectable } from '@nestjs/common';
+import { Prisma, PrismaService } from '../prisma.service';
 import { CreateBotTemplateDto } from './dto/create-bot-template.dto';
 import { UpdateBotTemplate } from './dto/update-bot-template.dto';
 
@@ -7,8 +7,10 @@ import { UpdateBotTemplate } from './dto/update-bot-template.dto';
 export class BotTemplateService {
   constructor(private readonly prismaService: PrismaService) {}
 
-  async create(payload: CreateBotTemplateDto) {
-    throw new NotImplementedException();
+  create(payload: CreateBotTemplateDto) {
+    return this.prismaService.botTemplate.create({
+      data: payload as unknown as Prisma.BotTemplateCreateInput,
+    });
   }
 
   findOne(id: number) {
@@ -23,11 +25,20 @@ export class BotTemplateService {
     return this.prismaService.botTemplate.findMany();
   }
 
-  async update(payload: UpdateBotTemplate) {
-    throw new NotImplementedException();
+  update(payload: UpdateBotTemplate) {
+    return this.prismaService.botTemplate.update({
+      where: {
+        id: payload.id,
+      },
+      data: payload as unknown as Prisma.BotTemplateUpdateInput,
+    });
   }
 
-  async remove(id: number) {
-    throw new NotImplementedException();
+  remove(id: number) {
+    return this.prismaService.botTemplate.delete({
+      where: {
+        id,
+      },
+    });
   }
 }
