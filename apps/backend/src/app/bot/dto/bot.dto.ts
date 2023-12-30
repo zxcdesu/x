@@ -12,8 +12,8 @@ export class BotDto {
   @Field(() => String)
   description: string;
 
-  @Field(() => String)
-  imageUrl: string | null;
+  @Field(() => String, { nullable: true })
+  imageUrl?: string;
 
   @Field(() => String)
   version: string;

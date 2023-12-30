@@ -1,6 +1,8 @@
 import { IntersectionType } from '@nestjs/mapped-types';
 import { Type } from 'class-transformer';
 import {
+  ArrayMinSize,
+  IsArray,
   IsNumber,
   IsOptional,
   IsString,
@@ -134,6 +136,7 @@ type Nodes =
 
 export class Flow {
   @Type(() => Edge)
+  @IsArray()
   @ValidateNested({ each: true })
   edges: Edge[];
 
@@ -154,10 +157,13 @@ export class Flow {
     },
     keepDiscriminatorProperty: true,
   })
+  @IsArray()
+  @ArrayMinSize(1)
   @ValidateNested({ each: true })
   nodes: Nodes[];
 
   @Type(() => Variable)
+  @IsArray()
   @ValidateNested({ each: true })
   variables: Variable[];
 }

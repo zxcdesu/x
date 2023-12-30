@@ -1,17 +1,24 @@
 import { Injectable, NotImplementedException } from '@nestjs/common';
+import { PrismaService } from '../prisma.service';
 
 @Injectable()
 export class BotTemplateService {
+  constructor(private readonly prismaService: PrismaService) {}
+
   async create() {
     throw new NotImplementedException();
   }
 
-  async findOne() {
-    throw new NotImplementedException();
+  findOne(id: number) {
+    return this.prismaService.botTemplate.findUniqueOrThrow({
+      where: {
+        id,
+      },
+    });
   }
 
-  async findAll() {
-    throw new NotImplementedException();
+  findAll() {
+    return this.prismaService.botTemplate.findMany();
   }
 
   async update() {
