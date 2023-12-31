@@ -1,6 +1,6 @@
 import { RabbitPayload } from '@golevelup/nestjs-rabbitmq';
 import { Controller, ParseIntPipe, SerializeOptions } from '@nestjs/common';
-import { RabbitRPC } from '@platform/nestjs-rabbitmq';
+import { RabbitRPC } from '@zxcdesu/nestjs-rabbitmq';
 import { BotService } from './bot.service';
 import { BotDto } from './dto/bot.dto';
 import { CreateBotDto } from './dto/create-bot.dto';

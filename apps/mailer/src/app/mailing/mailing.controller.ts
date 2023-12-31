@@ -1,10 +1,10 @@
-import { Controller, ParseIntPipe, SerializeOptions } from '@nestjs/common';
-import { RabbitRPC } from '@platform/nestjs-rabbitmq';
-import { MailingDto } from './dto/mailing.dto';
-import { MailingService } from './mailing.service';
 import { RabbitPayload } from '@golevelup/nestjs-rabbitmq';
+import { Controller, ParseIntPipe, SerializeOptions } from '@nestjs/common';
+import { RabbitRPC } from '@zxcdesu/nestjs-rabbitmq';
 import { CreateMailingDto } from './dto/create-mailing.dto';
+import { MailingDto } from './dto/mailing.dto';
 import { UpdateMailingDto } from './dto/update-mailing.dto';
+import { MailingService } from './mailing.service';
 
 @Controller()
 export class MailingController {

@@ -1,6 +1,6 @@
 import { RabbitPayload } from '@golevelup/nestjs-rabbitmq';
 import { Controller, ParseIntPipe, SerializeOptions } from '@nestjs/common';
-import { RabbitRPC } from '@platform/nestjs-rabbitmq';
+import { RabbitRPC } from '@zxcdesu/nestjs-rabbitmq';
 import { CreateEventDto } from './dto/create-event.dto';
 import { EventDto } from './dto/event.dto';
 import { EventService } from './event.service';

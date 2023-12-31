@@ -5,7 +5,7 @@ import {
   ParseUUIDPipe,
   SerializeOptions,
 } from '@nestjs/common';
-import { RabbitRPC } from '@platform/nestjs-rabbitmq';
+import { RabbitRPC } from '@zxcdesu/nestjs-rabbitmq';
 import { CreateIntegrationDto } from './dto/create-integration.dto';
 import { IntegrationDto } from './dto/integration.dto';
 import { UpdateIntegrationDto } from './dto/update-integration.dto';

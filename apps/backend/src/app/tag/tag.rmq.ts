@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { RmqService } from '@platform/nestjs-rabbitmq';
+import { RmqService } from '@zxcdesu/nestjs-rabbitmq';
 import { CreateTagDto } from './dto/create-tag.dto';
 import { TagDto } from './dto/tag.dto';
 import { UpdateTagDto } from './dto/update-tag.dto';

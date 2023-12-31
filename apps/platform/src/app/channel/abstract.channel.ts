@@ -2,7 +2,7 @@ import { AmqpConnection } from '@golevelup/nestjs-rabbitmq';
 import { HttpService } from '@nestjs/axios';
 import { Logger } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import { ChannelEvent } from '@platform/platform-type';
+import { ChannelEvent } from '@zxcdesu/platform-type';
 import { plainToInstance } from 'class-transformer';
 import { ChatDto } from '../chat/dto/chat.dto';
 import { CreateChatDto } from '../chat/dto/create-chat.dto';

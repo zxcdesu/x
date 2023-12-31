@@ -1,6 +1,6 @@
 import { RabbitPayload } from '@golevelup/nestjs-rabbitmq';
 import { Controller, ParseIntPipe, SerializeOptions } from '@nestjs/common';
-import { RabbitRPC } from '@platform/nestjs-rabbitmq';
+import { RabbitRPC } from '@zxcdesu/nestjs-rabbitmq';
 import { CreateSubscriptionDto } from './dto/create-subscription.dto';
 import { SubscriptionDto } from './dto/subscription.dto';
 import { UpdateSubscriptionDto } from './dto/update-subscription.dto';

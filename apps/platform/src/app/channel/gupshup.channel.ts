@@ -1,10 +1,10 @@
 import { NotImplementedException } from '@nestjs/common';
-import { ChannelEvent } from '@platform/platform-type';
+import { ChannelEvent } from '@zxcdesu/platform-type';
 import { CreateChatDto } from '../chat/dto/create-chat.dto';
 import { CreateMessageDto } from '../message/dto/create-message.dto';
+import { UpdateMessageDto } from '../message/dto/update-message.dto';
 import { Chat, Prisma } from '../prisma.service';
 import { AbstractChannel } from './abstract.channel';
-import { UpdateMessageDto } from '../message/dto/update-message.dto';
 
 export class GupshupChannel extends AbstractChannel {
   async create(): Promise<Partial<Prisma.ChannelUncheckedUpdateInput>> {

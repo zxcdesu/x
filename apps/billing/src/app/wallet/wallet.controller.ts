@@ -1,6 +1,6 @@
 import { RabbitPayload } from '@golevelup/nestjs-rabbitmq';
 import { Controller, ParseIntPipe, SerializeOptions } from '@nestjs/common';
-import { RabbitRPC } from '@platform/nestjs-rabbitmq';
+import { RabbitRPC } from '@zxcdesu/nestjs-rabbitmq';
 import { CreateWalletDto } from './dto/create-wallet.dto';
 import { UpdateWalletDto } from './dto/update-wallet.dto';
 import { WalletDto } from './dto/wallet.dto';

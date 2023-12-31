@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
-import { RmqService } from '@platform/nestjs-rabbitmq';
-import { UpdateProjectUserDto } from './dto/update-project-user.dto';
+import { RmqService } from '@zxcdesu/nestjs-rabbitmq';
 import { ProjectUserDto } from './dto/project-user.dto';
+import { UpdateProjectUserDto } from './dto/update-project-user.dto';
 
 @Injectable()
 export class ProjectUserRmq extends RmqService {

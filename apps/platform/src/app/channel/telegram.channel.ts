@@ -1,5 +1,5 @@
 import { NotImplementedException } from '@nestjs/common';
-import { ChannelEvent, TelegramEvent } from '@platform/platform-type';
+import { ChannelEvent, TelegramEvent } from '@zxcdesu/platform-type';
 import { randomUUID } from 'crypto';
 import { catchError, lastValueFrom, map } from 'rxjs';
 import { CreateChatDto } from '../chat/dto/create-chat.dto';

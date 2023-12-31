@@ -1,5 +1,5 @@
 import { All, Body, Controller, Param, Query } from '@nestjs/common';
-import { ChannelEventRmq } from '@platform/platform-type';
+import { ChannelEventRmq } from '@zxcdesu/platform-type';
 import { WebhookParamDto } from './dto/webhook-param.dto';
 
 @Controller()

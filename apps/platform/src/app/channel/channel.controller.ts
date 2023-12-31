@@ -1,7 +1,7 @@
 import { RabbitPayload } from '@golevelup/nestjs-rabbitmq';
 import { Controller, ParseIntPipe, SerializeOptions } from '@nestjs/common';
-import { RabbitRPC } from '@platform/nestjs-rabbitmq';
-import { ChannelEvent, ChannelEventRmq } from '@platform/platform-type';
+import { RabbitRPC } from '@zxcdesu/nestjs-rabbitmq';
+import { ChannelEvent, ChannelEventRmq } from '@zxcdesu/platform-type';
 import { ChannelService } from './channel.service';
 import { ChannelDto } from './dto/channel.dto';
 import { CreateChannelDto } from './dto/create-channel.dto';

@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { RmqService } from '@platform/nestjs-rabbitmq';
+import { RmqService } from '@zxcdesu/nestjs-rabbitmq';
 import { CreateHsmDto } from './dto/create-hsm.dto';
 import { HsmDto } from './dto/hsm.dto';
 import { UpdateHsmDto } from './dto/update-hsm.dto';

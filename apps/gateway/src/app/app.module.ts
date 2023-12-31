@@ -1,7 +1,7 @@
 import { RabbitMQModule } from '@golevelup/nestjs-rabbitmq';
 import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
-import { ChannelEventRmq } from '@platform/platform-type';
+import { ChannelEventRmq } from '@zxcdesu/platform-type';
 import joi from 'joi';
 import { ErrorFactoryService } from './error-factory.service';
 import { WebhookController } from './webhook/webhook.controller';

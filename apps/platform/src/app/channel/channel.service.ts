@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { ChannelEvent } from '@platform/platform-type';
+import { ChannelEvent } from '@zxcdesu/platform-type';
 import { ChannelStatus, PrismaService } from '../prisma.service';
 import { ChannelRepository } from './channel.repository';
 import { CreateChannelDto } from './dto/create-channel.dto';

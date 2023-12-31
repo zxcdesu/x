@@ -1,6 +1,6 @@
 import { RabbitPayload } from '@golevelup/nestjs-rabbitmq';
 import { Controller, ParseIntPipe, SerializeOptions } from '@nestjs/common';
-import { RabbitRPC } from '@platform/nestjs-rabbitmq';
+import { RabbitRPC } from '@zxcdesu/nestjs-rabbitmq';
 import { CreateWebhookDto } from '../webhook/dto/create-webhook.dto';
 import { UpdateWebhookDto } from '../webhook/dto/update-webhook.dto';
 import { WebhookDto } from '../webhook/dto/webhook.dto';
