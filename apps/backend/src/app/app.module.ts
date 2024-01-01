@@ -77,6 +77,7 @@ import { WebhookRmq } from './webhook/webhook.rmq';
       driver: ApolloDriver,
       autoSchemaFile: true,
       playground: true,
+      allowBatchedHttpRequests: true,
       subscriptions: {
         'graphql-ws': true,
       },
