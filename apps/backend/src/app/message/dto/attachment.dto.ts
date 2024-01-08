@@ -11,5 +11,5 @@ export class AttachmentDto {
   type: AttachmentType;
 
   @Field(() => String, { nullable: true })
-  name?: string;
+  name: string | null;
 }

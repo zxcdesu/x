@@ -6,5 +6,5 @@ export class CustomFieldDto {
   name: string;
 
   @Field(() => String, { nullable: true })
-  value: string;
+  value: string | null;
 }

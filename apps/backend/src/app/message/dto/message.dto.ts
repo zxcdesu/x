@@ -12,7 +12,7 @@ export class MessageDto {
   status: MessageStatus;
 
   @Field(() => String, { nullable: true })
-  failedReason?: string;
+  failedReason: string | null;
 
   @Field(() => AuthorDto)
   author: AuthorDto;

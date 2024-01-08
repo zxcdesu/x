@@ -11,8 +11,8 @@ export class ButtonDto {
   text: string;
 
   @Field(() => String, { nullable: true })
-  url?: string;
+  url: string | null;
 
   @Field(() => String, { nullable: true })
-  phone?: string;
+  phone: string | null;
 }

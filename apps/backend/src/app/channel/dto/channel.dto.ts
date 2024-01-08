@@ -17,7 +17,7 @@ export class ChannelDto {
   status: ChannelStatus;
 
   @Field(() => String, { nullable: true })
-  failedReason?: string;
+  failedReason: string | null;
 
   @Field(() => String)
   createdAt: string;

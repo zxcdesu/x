@@ -4,7 +4,7 @@ import { TagWithoutParentAndChildrenDto } from './tag-without-parent-and-childre
 @ObjectType()
 export class TagDto extends TagWithoutParentAndChildrenDto {
   @Field(() => TagWithoutParentAndChildrenDto, { nullable: true })
-  parent?: TagWithoutParentAndChildrenDto;
+  parent: TagWithoutParentAndChildrenDto | null;
 
   @Field(() => [TagWithoutParentAndChildrenDto])
   children: TagWithoutParentAndChildrenDto[];

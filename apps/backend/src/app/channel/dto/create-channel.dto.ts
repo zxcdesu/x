@@ -1,5 +1,6 @@
 import { ArgsType, Field } from '@nestjs/graphql';
 import { ChannelType } from './channel-type.enum';
+import { GraphQLJSON } from 'graphql-type-json';
 
 @ArgsType()
 export class CreateChannelDto {
@@ -12,6 +13,6 @@ export class CreateChannelDto {
   @Field(() => String)
   accountId: string;
 
-  @Field(() => String)
-  token: string;
+  @Field(() => GraphQLJSON)
+  token: any;
 }

@@ -9,10 +9,10 @@ export class ProjectDto {
   name: string;
 
   @Field(() => String, { nullable: true })
-  description?: string;
+  description: string | null;
 
   @Field(() => String, { nullable: true })
-  imageUrl?: string;
+  imageUrl: string | null;
 
   @Field(() => String)
   createdAt: string;

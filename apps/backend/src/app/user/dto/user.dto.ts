@@ -9,7 +9,7 @@ export class UserDto {
   name: string;
 
   @Field(() => String, { nullable: true })
-  imageUrl?: string;
+  imageUrl: string | null;
 
   @Field(() => String)
   email: string;
@@ -18,7 +18,7 @@ export class UserDto {
   emailConfirmed: boolean;
 
   @Field(() => String, { nullable: true })
-  phone?: string;
+  phone: string | null;
 
   @Field(() => Boolean)
   phoneConfirmed: boolean;

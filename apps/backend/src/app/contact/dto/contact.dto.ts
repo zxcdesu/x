@@ -16,7 +16,7 @@ export class ContactDto {
   description: string;
 
   @Field(() => String, { nullable: true })
-  imageUrl?: string;
+  imageUrl: string | null;
 
   @Field(() => Int)
   priority: number;
@@ -25,16 +25,16 @@ export class ContactDto {
   status: ContactStatus;
 
   @Field(() => String, { nullable: true })
-  rejectedReason?: string;
+  rejectedReason: string | null;
 
-  @Field(() => String, { nullable: true })
+  @Field(() => String)
   createdAt: string;
 
-  @Field(() => String, { nullable: true })
+  @Field(() => String)
   updatedAt: string;
 
   @Field(() => AssignedToDto, { nullable: true })
-  assignedTo?: AssignedToDto;
+  assignedTo: AssignedToDto | null;
 
   @Field(() => [CustomFieldDto])
   customFields: CustomFieldDto[];

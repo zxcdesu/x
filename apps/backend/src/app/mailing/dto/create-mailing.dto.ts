@@ -21,7 +21,7 @@ export class CreateMailingDto {
   @Field(() => [Int])
   hsmIds: number[];
 
-  @Field(() => MailingStatus)
+  @Field(() => MailingStatus, { nullable: true })
   status?: MailingStatus;
 
   @Field(() => String, { nullable: true })
