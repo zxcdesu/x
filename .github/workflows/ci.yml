@@ -41,4 +41,4 @@ jobs:
           password: ${{ secrets.DOCKER_HUB_ACCESS_TOKEN }}
 
       - name: Run commands for affected projects
-        run: npx nx affected --targets lint,test,container --parallel=3 --nxBail=true
+        run: npx nx affected --targets lint,test,container --parallel=3
