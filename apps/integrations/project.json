@@ -111,7 +111,7 @@
         "engine": "docker",
         "push": true,
         "metadata": {
-          "images": ["integrations"],
+          "images": ["xanede/integrations"],
           "load": true,
           "tags": [
             "type=schedule",

@@ -135,7 +135,7 @@
         "engine": "docker",
         "push": true,
         "metadata": {
-          "images": ["history"],
+          "images": ["xanede/history"],
           "load": true,
           "tags": [
             "type=schedule",

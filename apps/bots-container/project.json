@@ -68,7 +68,7 @@
         "engine": "docker",
         "push": true,
         "metadata": {
-          "images": ["bots-container"],
+          "images": ["xanede/bots-container"],
           "load": true,
           "tags": [
             "type=schedule",

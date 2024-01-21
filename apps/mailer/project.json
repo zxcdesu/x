@@ -111,7 +111,7 @@
         "engine": "docker",
         "push": true,
         "metadata": {
-          "images": ["mailer"],
+          "images": ["xanede/mailer"],
           "load": true,
           "tags": [
             "type=schedule",

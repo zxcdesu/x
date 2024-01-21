@@ -67,7 +67,7 @@
         "engine": "docker",
         "push": true,
         "metadata": {
-          "images": ["backend"],
+          "images": ["xanede/backend"],
           "load": true,
           "tags": [
             "type=schedule",

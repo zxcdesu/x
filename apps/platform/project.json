@@ -111,7 +111,7 @@
         "engine": "docker",
         "push": true,
         "metadata": {
-          "images": ["platform"],
+          "images": ["xanede/platform"],
           "load": true,
           "tags": [
             "type=schedule",

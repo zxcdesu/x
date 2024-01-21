@@ -67,7 +67,7 @@
         "engine": "docker",
         "push": true,
         "metadata": {
-          "images": ["gateway"],
+          "images": ["xanede/gateway"],
           "load": true,
           "tags": [
             "type=schedule",

@@ -111,7 +111,7 @@
         "engine": "docker",
         "push": true,
         "metadata": {
-          "images": ["auth"],
+          "images": ["xanede/auth"],
           "load": true,
           "tags": [
             "type=schedule",

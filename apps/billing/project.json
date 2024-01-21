@@ -111,7 +111,7 @@
         "engine": "docker",
         "push": true,
         "metadata": {
-          "images": ["billing"],
+          "images": ["xanede/billing"],
           "load": true,
           "tags": [
             "type=schedule",
