@@ -25,8 +25,6 @@ jobs:
       - run: npm ci
 
       - uses: nrwl/nx-set-shas@v3
-        env:
-          NX_BASE: origin/master
       # - run: git branch --track master origin/master
       # - run: npx nx affected -t lint,test,build --parallel=3
-      - run: npx nx affected -t lint,test --parallel=3
+      - run: npx nx affected -t lint,test --base=origin/master --parallel=3
