@@ -109,6 +109,7 @@
       "dependsOn": ["build"],
       "options": {
         "engine": "docker",
+        "push": true,
         "metadata": {
           "images": ["platform"],
           "load": true,

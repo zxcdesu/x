@@ -66,6 +66,7 @@
       "dependsOn": ["build"],
       "options": {
         "engine": "docker",
+        "push": true,
         "metadata": {
           "images": ["bots-container"],
           "load": true,
