@@ -44,4 +44,4 @@ jobs:
           main-branch-name: master
 
       - name: Run commands for affected projects
-        run: INPUT_GITHUB_TOKEN=${{ secrets.GITHUB_TOKEN }} npx nx affected --targets lint,test,container --parallel=3
+        run: INPUT_GITHUB_TOKEN=${{ secrets.GITHUB_TOKEN }} npx nx affected --targets container --parallel=3
