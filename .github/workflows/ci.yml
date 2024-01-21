@@ -22,8 +22,13 @@ jobs:
         with:
           node-version: 20
           cache: npm
-      - run: npm ci
+
+      - name: Installing dependencies
+        run: npm ci
 
       - uses: nrwl/nx-set-shas@v3
-      # - run: git branch --track master origin/master
-      - run: npx nx affected:build -t lint,test --base=origin/master~1 --head=origin/master --parallel=3
+        with:
+          main-branch-name: master
+
+      - name: Run commands for affected projects
+        run: npx nx affected --targets lint,test,build --parallel=3
