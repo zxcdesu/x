@@ -2,6 +2,7 @@ import { RabbitMQModule } from '@golevelup/nestjs-rabbitmq';
 import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import joi from 'joi';
+import { AppService } from './app.service';
 import { PrismaService } from './prisma.service';
 
 @Module({
@@ -32,6 +33,6 @@ import { PrismaService } from './prisma.service';
     }),
   ],
   controllers: [],
-  providers: [PrismaService],
+  providers: [PrismaService, AppService],
 })
 export class AppModule {}
