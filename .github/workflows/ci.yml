@@ -1,18 +1,14 @@
 name: CI
 
 on:
-  pull_request:
   push:
     branches:
       - master
+  pull_request:
 
 permissions:
   actions: read
   contents: read
-
-env:
-  NX_BASE: origin/master~1
-  NX_HEAD: origin/master
 
 jobs:
   ci:
@@ -30,6 +26,4 @@ jobs:
 
       - uses: nrwl/nx-set-shas@v3
       # - run: git branch --track master origin/master
-      # - run: npx nx affected -t lint,test,build --parallel=3
-      # - run: npx nx affected:build --base=origin/main~1 --head=origin/main
-      - run: npx nx affected -t lint,test --parallel=3
+      - run: npx nx affected:build -t lint,test --base=origin/master~1 --head=origin/master --parallel=3
