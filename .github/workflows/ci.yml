@@ -11,7 +11,7 @@ permissions:
   contents: read
 
 jobs:
-  main:
+  ci:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -25,6 +25,8 @@ jobs:
       - run: npm ci
 
       - uses: nrwl/nx-set-shas@v3
+        env:
+          NX_BASE: origin/master
       # - run: git branch --track master origin/master
       # - run: npx nx affected -t lint,test,build --parallel=3
       - run: npx nx affected -t lint,test --parallel=3
