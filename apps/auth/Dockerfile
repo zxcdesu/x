@@ -5,6 +5,7 @@ RUN apk add --no-cache libc6-compat
 WORKDIR /usr/src/app
 COPY dist/apps/auth/package*.json ./
 RUN npm install --only=production
+RUN npx prisma generate
 
 # Production image, copy all the files and run nest
 FROM docker.io/node:20.9-alpine as runner
