@@ -4,11 +4,9 @@ FROM docker.io/node:20.9-alpine as deps
 RUN apk add --no-cache libc6-compat
 WORKDIR /usr/src/app
 COPY dist/apps/auth/package*.json ./
-RUN npm install --only=production
-
-COPY apps/auth/prisma ./
-RUN npm install prisma
+COPY apps/auth/prisma ./prisma
 RUN npx prisma generate
+RUN npm install --only=production
 
 # Production image, copy all the files and run nest
 FROM docker.io/node:20.9-alpine as runner

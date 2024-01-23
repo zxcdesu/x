@@ -4,6 +4,8 @@ FROM docker.io/node:20.9-alpine as deps
 RUN apk add --no-cache libc6-compat
 WORKDIR /usr/src/app
 COPY dist/apps/bots/package*.json ./
+COPY apps/bots/prisma ./prisma
+RUN npx prisma generate
 RUN npm install --only=production
 
 # Production image, copy all the files and run nest
