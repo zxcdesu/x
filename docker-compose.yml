@@ -1,249 +1,61 @@
 version: '3.9'
 services:
-  admin:
-    build:
-      context: ./
-    command: npx nx run admin:serve
-    volumes:
-      - .:/usr/src/app
-      - /usr/src/app/apps/admin/prisma/generated
-      - /usr/src/app/node_modules
-    environment:
-      - DATABASE_URL=postgres://root:pass@postgres:5432/admin
-      - BROKER_URL=amqp://root:pass@rabbitmq:5672
-    networks:
-      - default
-    depends_on:
-      - postgres
-      - rabbitmq
-      - redis
-
-  auth:
-    build:
-      context: ./
-    command: npx nx run auth:serve
-    volumes:
-      - .:/usr/src/app
-      - /usr/src/app/apps/auth/prisma/generated
-      - /usr/src/app/node_modules
-    environment:
-      - DATABASE_URL=postgres://root:pass@postgres:5432/auth
-      - BROKER_URL=amqp://root:pass@rabbitmq:5672
-      - SECRET=secret
-    networks:
-      - default
-    depends_on:
-      - postgres
-      - rabbitmq
-      - redis
-
-  backend:
-    build:
-      context: ./
-    command: npx nx run backend:serve
-    volumes:
-      - .:/usr/src/app
-      - /usr/src/app/node_modules
-    ports:
-      - 3000:3000
-    environment:
-      - BROKER_URL=amqp://root:pass@rabbitmq:5672
-      - SECRET=secret
-    networks:
-      - default
-    depends_on:
-      - postgres
-      - rabbitmq
-      - redis
-      - cloudflared
-      - admin
-      - auth
-      - billing
-      - bots
-      - history
-      - integrations
-      - mailer
-      - platform
-
-  billing:
-    build:
-      context: ./
-    command: npx nx run billing:serve
-    volumes:
-      - .:/usr/src/app
-      - /usr/src/app/apps/billing/prisma/generated
-      - /usr/src/app/node_modules
-    environment:
-      - DATABASE_URL=postgres://root:pass@postgres:5432/billing
-      - BROKER_URL=amqp://root:pass@rabbitmq:5672
-    networks:
-      - default
-    depends_on:
-      - postgres
-      - rabbitmq
-      - redis
-
-  bots:
-    build:
-      context: ./
-    command: npx nx run bots:serve
-    volumes:
-      - .:/usr/src/app
-      - /usr/src/app/apps/bots/prisma/generated
-      - /usr/src/app/node_modules
-    environment:
-      - DATABASE_URL=postgres://root:pass@postgres:5432/bots
-      - BROKER_URL=amqp://root:pass@rabbitmq:5672
-    networks:
-      - default
-    depends_on:
-      - postgres
-      - rabbitmq
-      - redis
-      - bots-container
-      - history
-      - platform
-
-  bots-container:
-    build:
-      context: ./
-    command: npx nx run bots-container:serve
-    volumes:
-      - .:/usr/src/app
-      - /usr/src/app/node_modules
-    environment:
-      - BROKER_URL=amqp://root:pass@rabbitmq:5672
-    networks:
-      - default
-    depends_on:
-      - rabbitmq
-
-  gateway:
-    build:
-      context: ./
-    command: npx nx run gateway:serve
-    volumes:
-      - .:/usr/src/app
-      - /usr/src/app/node_modules
-    ports:
-      - 3080:3000
-    environment:
-      - BROKER_URL=amqp://root:pass@rabbitmq:5672
-    networks:
-      - default
-    depends_on:
-      - rabbitmq
-      - cloudflared
-
-  history:
-    build:
-      context: ./
-    command: npx nx run history:serve
-    volumes:
-      - .:/usr/src/app
-      - /usr/src/app/apps/history/prisma/generated
-      - /usr/src/app/node_modules
-    environment:
-      - DATABASE_URL=postgres://root:pass@postgres:5432/history
-      - BROKER_URL=amqp://root:pass@rabbitmq:5672
-    networks:
-      - default
-    depends_on:
-      - postgres
-      - rabbitmq
-
-  integrations:
-    build:
-      context: ./
-    command: npx nx run integrations:serve
-    volumes:
-      - .:/usr/src/app
-      - /usr/src/app/apps/integrations/prisma/generated
-      - /usr/src/app/node_modules
-    environment:
-      - DATABASE_URL=postgres://root:pass@postgres:5432/integrations
-      - BROKER_URL=amqp://root:pass@rabbitmq:5672
-    networks:
-      - default
-    depends_on:
-      - postgres
-      - rabbitmq
-      - redis
-      - platform
-
-  mailer:
-    build:
-      context: ./
-    command: npx nx run mailer:serve
-    volumes:
-      - .:/usr/src/app
-      - /usr/src/app/apps/mailer/prisma/generated
-      - /usr/src/app/node_modules
-    environment:
-      - DATABASE_URL=postgres://root:pass@postgres:5432/mailer
-      - BROKER_URL=amqp://root:pass@rabbitmq:5672
-    networks:
-      - default
-    depends_on:
-      - postgres
-      - rabbitmq
-      - redis
-      - platform
-
-  platform:
-    build:
-      context: ./
-    command: npx nx run platform:serve
-    volumes:
-      - .:/usr/src/app
-      - /usr/src/app/apps/platform/prisma/generated
-      - /usr/src/app/node_modules
-    environment:
-      - DATABASE_URL=postgres://root:pass@postgres:5432/platform
-      - BROKER_URL=amqp://root:pass@rabbitmq:5672
-      - GATEWAY_URL=https://gateway.xanede.su
-    networks:
-      - default
-    depends_on:
-      - postgres
-      - rabbitmq
-      - redis
-
-  postgres:
-    image: postgres:15.2
-    environment:
-      POSTGRES_USER: root
-      POSTGRES_PASSWORD: pass
-    ports:
-      - 5432:5432
-
   adminer:
-    image: adminer:latest
+    image: adminer
     ports:
       - 8080:8080
-    depends_on:
-      - postgres
+    networks:
+      - default
+
+  postgres:
+    image: postgres:16
+    environment:
+      POSTGRES_USER: root
+      POSTGRES_PASSWORD: 3ihNaKwj
+    ports:
+      - 5432:5432
+    networks:
+      - default
 
   rabbitmq:
-    image: rabbitmq:3.11.10-management
+    image: rabbitmq:3-management
     environment:
       RABBITMQ_DEFAULT_USER: root
-      RABBITMQ_DEFAULT_PASS: pass
+      RABBITMQ_DEFAULT_PASS: 3ihNaKwj
     ports:
+      - 5672:5672
       - 15672:15672
     networks:
       - default
 
   redis:
-    image: redis:7.0
+    image: redis:7
     ports:
       - 6379:6379
+    networks:
+      - default
+
+  minio:
+    image: quay.io/minio/minio
+    command: server --console-address ":9001" /data
+    volumes:
+      - /data
+    environment:
+      MINIO_ROOT_USER: root
+      MINIO_ROOT_PASSWORD: 3ihNaKwj
+    ports:
+      - 9000:9000
+      - 9001:9001
+    networks:
+      - default
 
   cloudflared:
-    image: cloudflare/cloudflared:latest
+    image: cloudflare/cloudflared
     entrypoint: 'cloudflared tunnel --no-autoupdate run'
     env_file:
-      - ./env/cloudflared.env
+      - .env
+    networks:
+      - default
 
 networks:
   default:

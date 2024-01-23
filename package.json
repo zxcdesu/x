@@ -2,7 +2,9 @@
   "name": "@zxcdesu/platform",
   "version": "0.0.0",
   "license": "MIT",
-  "scripts": {},
+  "scripts": {
+    "dev": "docker compose up -d && nx run-many --targets=serve --parallel=11"
+  },
   "private": true,
   "dependencies": {
     "@apollo/server": "4.9.5",

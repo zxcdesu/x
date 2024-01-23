@@ -52,7 +52,7 @@ import { WebhookRmq } from './webhook/webhook.rmq';
       isGlobal: true,
       validationSchema: joi.object({
         BROKER_URL: joi.string().uri().required(),
-        PORT: joi.number().port().default(3000),
+        PORT: joi.number().port().default(4200),
         SECRET: joi.string().required(),
       }),
     }),

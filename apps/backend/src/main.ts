@@ -18,7 +18,7 @@ async function bootstrap() {
 
   const configService = app.get(ConfigService);
 
-  await app.listen(configService.get<number>('PORT'));
+  await app.listen(configService.get<number>('PORT'), '0.0.0.0');
   Logger.log('🚀 Application is running');
 }
 

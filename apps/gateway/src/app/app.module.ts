@@ -12,7 +12,7 @@ import { WebhookController } from './webhook/webhook.controller';
       isGlobal: true,
       validationSchema: joi.object({
         BROKER_URL: joi.string().uri().required(),
-        PORT: joi.number().port().default(3000),
+        PORT: joi.number().port().default(4200),
       }),
     }),
     RabbitMQModule.forRootAsync(RabbitMQModule, {
