@@ -5,6 +5,8 @@ RUN apk add --no-cache libc6-compat
 WORKDIR /usr/src/app
 COPY dist/apps/auth/package*.json ./
 RUN npm install --only=production
+
+COPY apps/auth/prisma ./
 RUN npm install prisma
 RUN npx prisma generate
 
