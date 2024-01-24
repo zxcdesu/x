@@ -4,8 +4,6 @@ FROM docker.io/node:20.9-alpine as deps
 RUN apk add --no-cache libc6-compat
 WORKDIR /usr/src/app
 COPY dist/apps/mailer/package*.json ./
-COPY apps/mailer/prisma ./prisma
-RUN npx prisma generate
 RUN npm install --only=production
 
 # Production image, copy all the files and run nest
@@ -16,6 +14,7 @@ WORKDIR /usr/src/app
 COPY --from=deps /usr/src/app/node_modules ./node_modules
 COPY --from=deps /usr/src/app/package.json ./package.json
 COPY dist/apps/mailer .
+COPY apps/mailer/prisma/generated/libquery_engine-linux-musl-openssl-3.0.x.so.node /.prisma/client/libquery_engine-linux-musl-openssl-3.0.x.so.node
 RUN chown -R node:node .
 USER node
 CMD ["dumb-init", "node", "main.js"]
