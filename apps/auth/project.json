@@ -109,7 +109,7 @@
       "dependsOn": ["build"],
       "options": {
         "engine": "docker",
-        "push": false,
+        "push": true,
         "metadata": {
           "images": ["xanede/auth"],
           "load": true,
