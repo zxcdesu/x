@@ -4,6 +4,7 @@ import { RabbitRPC } from '@zxcdesu/nestjs-rabbitmq';
 import { CreateWebhookDto } from '../webhook/dto/create-webhook.dto';
 import { UpdateWebhookDto } from '../webhook/dto/update-webhook.dto';
 import { WebhookDto } from '../webhook/dto/webhook.dto';
+import { ReceiveWebhookDto } from './dto/receive-webhook.dto';
 import { WebhookService } from './webhook.service';
 
 @Controller()
@@ -69,5 +70,13 @@ export class WebhookController {
     @RabbitPayload('id', ParseIntPipe) id: number,
   ) {
     return this.webhookService.remove(projectId, id);
+  }
+
+  @RabbitRPC({
+    routingKey: 'receive',
+    exchange: 'integrations',
+  })
+  receive(@RabbitPayload() payload: ReceiveWebhookDto) {
+    return this.webhookService.receive(payload);
   }
 }

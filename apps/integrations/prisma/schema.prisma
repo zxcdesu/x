@@ -24,7 +24,7 @@ model Integration {
   @@unique([projectId, id])
 }
 
-enum WebhookEventType {
+enum WebhookType {
   ChatEvent
   MessageEvent
 }
@@ -32,8 +32,8 @@ enum WebhookEventType {
 model Webhook {
   id        Int              @id @default(autoincrement())
   projectId Int
-  eventType WebhookEventType
   url       String
+  type      WebhookType
 
   @@unique([projectId, id])
 }

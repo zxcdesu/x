@@ -1,11 +1,17 @@
+import { HttpService } from '@nestjs/axios';
 import { Injectable } from '@nestjs/common';
+import { lastValueFrom, retry, timer } from 'rxjs';
 import { PrismaService } from '../prisma.service';
 import { CreateWebhookDto } from './dto/create-webhook.dto';
+import { ReceiveWebhookDto } from './dto/receive-webhook.dto';
 import { UpdateWebhookDto } from './dto/update-webhook.dto';
 
 @Injectable()
 export class WebhookService {
-  constructor(private readonly prismaService: PrismaService) {}
+  constructor(
+    private readonly prismaService: PrismaService,
+    private readonly httpService: HttpService,
+  ) {}
 
   create(payload: CreateWebhookDto) {
     return this.prismaService.webhook.create({
@@ -53,5 +59,29 @@ export class WebhookService {
         },
       },
     });
+  }
+
+  async receive(payload: ReceiveWebhookDto) {
+    const webhooks = await this.prismaService.webhook.findMany({
+      where: {
+        projectId: payload.projectId,
+        type: payload.type,
+      },
+    });
+
+    await Promise.allSettled(
+      webhooks.map((webhook) => {
+        return lastValueFrom(
+          this.httpService.post(webhook.url, payload.value).pipe(
+            retry({
+              count: 5,
+              delay(_, retryCount) {
+                return timer(1000 * retryCount);
+              },
+            }),
+          ),
+        );
+      }),
+    );
   }
 }

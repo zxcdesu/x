@@ -128,7 +128,11 @@ export abstract class AbstractChannel<Q = unknown, B = unknown> {
 
     await Promise.all([
       this.amqpConnection.publish('backend', 'receiveChat', chat),
-      // this.amqpConnection.publish('integrations', 'receiveChat', chat),
+      this.amqpConnection.publish('integrations', 'receive', {
+        projectId: this.channel.projectId,
+        type: 'ChatEvent',
+        value: chat,
+      }),
     ]);
     return chat;
   }
@@ -186,7 +190,11 @@ export abstract class AbstractChannel<Q = unknown, B = unknown> {
 
     await Promise.all([
       this.amqpConnection.publish('backend', 'receiveMessage', message),
-      // this.amqpConnection.publish('integrations', 'receiveMessage', message),
+      this.amqpConnection.publish('integrations', 'receive', {
+        projectId: this.channel.projectId,
+        type: 'MessageEvent',
+        value: message,
+      }),
     ]);
     return message;
   }

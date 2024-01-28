@@ -1,10 +1,10 @@
 import { registerEnumType } from '@nestjs/graphql';
 
-export enum WebhookEventType {
+export enum WebhookType {
   ChatEvent = 'ChatEvent',
   MessageEvent = 'MessageEvent',
 }
 
-registerEnumType(WebhookEventType, {
-  name: 'WebhookEventType',
+registerEnumType(WebhookType, {
+  name: 'WebhookType',
 });

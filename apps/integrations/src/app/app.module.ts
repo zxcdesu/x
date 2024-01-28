@@ -1,10 +1,11 @@
 import { RabbitMQModule } from '@golevelup/nestjs-rabbitmq';
+import { HttpModule } from '@nestjs/axios';
 import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import joi from 'joi';
-import { PrismaService } from './prisma.service';
 import { IntegrationController } from './integration/integration.controller';
 import { IntegrationService } from './integration/integration.service';
+import { PrismaService } from './prisma.service';
 import { WebhookController } from './webhook/webhook.controller';
 import { WebhookService } from './webhook/webhook.service';
 
@@ -33,6 +34,12 @@ import { WebhookService } from './webhook/webhook.service';
           wait: false,
         },
       }),
+    }),
+    HttpModule.register({
+      headers: {
+        'User-Agent':
+          'Mozilla/5.0 (compatible; WebhookService/1.0; +https://en.wikipedia.org/wiki/Webhook)',
+      },
     }),
   ],
   controllers: [IntegrationController, WebhookController],

@@ -1,5 +1,5 @@
 import { Exclude } from 'class-transformer';
-import { Webhook, WebhookEventType } from '../../prisma.service';
+import { Webhook, WebhookType } from '../../prisma.service';
 
 export class WebhookDto implements Webhook {
   id: number;
@@ -7,7 +7,7 @@ export class WebhookDto implements Webhook {
   @Exclude()
   projectId: number;
 
-  eventType: WebhookEventType;
-
   url: string;
+
+  type: WebhookType;
 }
