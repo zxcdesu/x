@@ -20,6 +20,7 @@ export class BotTemplateDto {
   category: Category;
 
   @Field(() => GraphQLJSONObject)
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   flow: any;
 
   @Field(() => String)

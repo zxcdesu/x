@@ -11,5 +11,6 @@ export class CreateIntegrationDto {
   accountId: string;
 
   @Field(() => GraphQLJSON)
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   token: any;
 }

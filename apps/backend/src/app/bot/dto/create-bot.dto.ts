@@ -16,5 +16,6 @@ export class CreateBotDto {
   version?: string;
 
   @Field(() => GraphQLJSONObject)
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   flow: any;
 }

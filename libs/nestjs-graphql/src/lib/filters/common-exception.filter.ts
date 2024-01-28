@@ -4,6 +4,7 @@ import { ApolloError } from 'apollo-server-express';
 
 @Catch()
 export class CommonExceptionFilter {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   catch(exception: any, host: ArgumentsHost) {
     switch (host.getType<GqlContextType | 'rmq'>()) {
       case 'graphql':
