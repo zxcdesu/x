@@ -12,5 +12,5 @@ export class Variable {
   type: VariableType;
 
   @IsOptional()
-  value?: any;
+  value?: unknown;
 }

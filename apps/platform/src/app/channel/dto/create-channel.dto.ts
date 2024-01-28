@@ -27,5 +27,6 @@ export class CreateChannelDto
   accountId: string;
 
   @IsDefined()
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   token: any;
 }

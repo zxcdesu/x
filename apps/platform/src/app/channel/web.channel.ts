@@ -12,20 +12,27 @@ export class WebChannel extends AbstractChannel {
   }
 
   async handleEvent(event: ChannelEvent<unknown, unknown>): Promise<void> {
-    throw new NotImplementedException();
+    throw new NotImplementedException({
+      event,
+    });
   }
 
   async createChat(
     chat: CreateChatDto,
   ): Promise<Prisma.ChatUncheckedCreateInput> {
-    throw new NotImplementedException();
+    throw new NotImplementedException({
+      chat,
+    });
   }
 
   async createMessage(
     chat: Chat,
     message: CreateMessageDto,
   ): Promise<Prisma.MessageUncheckedCreateInput> {
-    throw new NotImplementedException();
+    throw new NotImplementedException({
+      chat,
+      message,
+    });
   }
 
   async updateMessage(
@@ -33,10 +40,17 @@ export class WebChannel extends AbstractChannel {
     externalId: string,
     message: UpdateMessageDto,
   ): Promise<Prisma.MessageUncheckedUpdateInput> {
-    throw new NotImplementedException();
+    throw new NotImplementedException({
+      chat,
+      externalId,
+      message,
+    });
   }
 
   async removeMessage(chat: Chat, externalId: string): Promise<void> {
-    throw new NotImplementedException();
+    throw new NotImplementedException({
+      chat,
+      externalId,
+    });
   }
 }

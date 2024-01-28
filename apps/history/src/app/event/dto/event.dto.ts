@@ -9,6 +9,7 @@ export class EventDto implements Event {
 
   type: EventType;
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   payload: any;
 
   createdAt: Date;

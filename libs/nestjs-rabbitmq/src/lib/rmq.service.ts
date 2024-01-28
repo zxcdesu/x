@@ -20,7 +20,7 @@ export class RmqService {
 
   protected constructor(
     protected readonly amqpConnection: AmqpConnection,
-    private readonly errorFactory: ErrorFactory,
+    private readonly errorFactory: ErrorFactory<unknown>,
   ) {}
 
   protected async request<T>(

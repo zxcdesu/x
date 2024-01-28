@@ -9,23 +9,5 @@ export class WorkerService {
     private readonly amqpConnection: AmqpConnection,
   ) {}
 
-  create(payload: unknown) {
-    return this.amqpConnection.createSubscriber(
-      this.work.bind(this),
-      {
-        exchange: 'mailer.worker',
-        queue: 'mailer.worker.work',
-        routingKey: 'work',
-      },
-      'work',
-    );
-  }
-
-  private async work(payload: unknown) {
-    const worker = await this.prismaService.mailingWorker.findUniqueOrThrow({
-      where: {
-        id: 1,
-      },
-    });
-  }
+  create() {}
 }

@@ -5,10 +5,14 @@ import { StopBotContainer } from './dto/stop-bot-container.dto';
 @Injectable()
 export class BotContainerService {
   async start(payload: StartBotContainer) {
-    throw new NotImplementedException();
+    throw new NotImplementedException({
+      payload,
+    });
   }
 
   async stop(payload: StopBotContainer) {
-    throw new NotImplementedException();
+    throw new NotImplementedException({
+      payload,
+    });
   }
 }

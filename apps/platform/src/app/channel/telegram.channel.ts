@@ -125,10 +125,17 @@ export class TelegramChannel extends AbstractChannel {
     externalId: string,
     message: UpdateMessageDto,
   ): Promise<Prisma.MessageUncheckedCreateInput> {
-    throw new NotImplementedException();
+    throw new NotImplementedException({
+      chat,
+      externalId,
+      message,
+    });
   }
 
   async removeMessage(chat: Chat, externalId: string): Promise<void> {
-    throw new NotImplementedException();
+    throw new NotImplementedException({
+      chat,
+      externalId,
+    });
   }
 }

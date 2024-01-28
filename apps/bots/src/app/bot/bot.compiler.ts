@@ -23,6 +23,7 @@ export class BotCompiler {
         case NodeType.AssignTag:
         case NodeType.Close:
           schema.nodes.push(
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
             Object.assign<typeof data, any>(data, {
               id,
               type,

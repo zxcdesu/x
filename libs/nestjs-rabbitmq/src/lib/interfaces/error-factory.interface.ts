@@ -1,3 +1,3 @@
-export interface ErrorFactory {
-  errorFactory<T = unknown>(error?: T): Error;
+export interface ErrorFactory<T = never> {
+  errorFactory(error?: T): Error;
 }

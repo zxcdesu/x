@@ -1,4 +1,4 @@
-import { RabbitPayload, RabbitSubscribe } from '@golevelup/nestjs-rabbitmq';
+import { RabbitSubscribe } from '@golevelup/nestjs-rabbitmq';
 import { Controller } from '@nestjs/common';
 import { WorkerService } from './worker.service';
 
@@ -10,7 +10,7 @@ export class WorkerController {
     routingKey: 'createWorker',
     exchange: 'mailer',
   })
-  create(@RabbitPayload() payload: unknown) {
-    return this.workerService.create(payload);
+  create() {
+    return this.workerService.create();
   }
 }

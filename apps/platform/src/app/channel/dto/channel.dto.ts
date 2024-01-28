@@ -15,6 +15,7 @@ export class ChannelDto implements Channel {
   accountId: string;
 
   @Exclude()
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   token: any;
 
   status: ChannelStatus;
