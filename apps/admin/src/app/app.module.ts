@@ -2,6 +2,8 @@ import { RabbitMQModule } from '@golevelup/nestjs-rabbitmq';
 import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import joi from 'joi';
+import { AdminController } from './admin/admin.controller';
+import { AdminService } from './admin/admin.service';
 import { PrismaService } from './prisma.service';
 
 @Module({
@@ -31,7 +33,7 @@ import { PrismaService } from './prisma.service';
       }),
     }),
   ],
-  controllers: [],
-  providers: [PrismaService],
+  controllers: [AdminController],
+  providers: [PrismaService, AdminService],
 })
 export class AppModule {}

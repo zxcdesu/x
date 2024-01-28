@@ -6,6 +6,7 @@ import { GraphQLModule } from '@nestjs/graphql';
 import { PassportModule } from '@nestjs/passport';
 import joi from 'joi';
 import mapObject from 'map-obj';
+import { AdminRmq } from './admin/admin.rmq';
 import { BearerAuthStrategy } from './auth/bearer-auth.strategy';
 import { BotTemplateResolver } from './bot-template/bot-template.resolver';
 import { BotTemplateRmq } from './bot-template/bot-template.rmq';
@@ -122,6 +123,7 @@ import { WebhookRmq } from './webhook/webhook.rmq';
     WalletResolver,
     WebhookResolver,
     ErrorFactoryService,
+    AdminRmq.provide(ErrorFactoryService),
     BotRmq.provide(ErrorFactoryService),
     BotTemplateRmq.provide(ErrorFactoryService),
     ChannelRmq.provide(ErrorFactoryService),
