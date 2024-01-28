@@ -16,10 +16,10 @@ import { WebhookController } from './webhook/webhook.controller';
       }),
     }),
     RabbitMQModule.forRootAsync(RabbitMQModule, {
-      imports: [ConfigModule],
       inject: [ConfigService],
       useFactory: (configService: ConfigService) => ({
         uri: configService.get<string>('BROKER_URL'),
+        prefetchCount: 1,
         connectionInitOptions: {
           wait: false,
         },
