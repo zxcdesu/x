@@ -9,8 +9,12 @@ import { ChannelRepository } from './channel/channel.repository';
 import { ChannelService } from './channel/channel.service';
 import { ChatController } from './chat/chat.controller';
 import { ChatService } from './chat/chat.service';
+import { ContactTagController } from './contact-tag/contact-tag.controller';
+import { ContactTagService } from './contact-tag/contact-tag.service';
 import { ContactController } from './contact/contact.controller';
 import { ContactService } from './contact/contact.service';
+import { CustomFieldController } from './custom-field/custom-field.controller';
+import { CustomFieldService } from './custom-field/custom-field.service';
 import { ErrorFactoryService } from './error-factory.service';
 import { HsmController } from './hsm/hsm.controller';
 import { HsmService } from './hsm/hsm.service';
@@ -53,6 +57,8 @@ import { TagService } from './tag/tag.service';
     ChannelController,
     ChatController,
     ContactController,
+    ContactTagController,
+    CustomFieldController,
     HsmController,
     MessageController,
     TagController,
@@ -63,6 +69,8 @@ import { TagService } from './tag/tag.service';
     ChannelService,
     ChatService,
     ContactService,
+    ContactTagService,
+    CustomFieldService,
     HsmService,
     MessageService,
     TagService,
