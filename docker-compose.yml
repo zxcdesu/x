@@ -18,7 +18,7 @@ services:
       - default
 
   rabbitmq:
-    image: rabbitmq:3-management
+    image: rabbitmq:3.11.10-management
     environment:
       RABBITMQ_DEFAULT_USER: root
       RABBITMQ_DEFAULT_PASS: 3ihNaKwj
