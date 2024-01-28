@@ -92,10 +92,10 @@ enum AuthorType {
 }
 
 model Author {
-  messageId   Int     @id
-  message     Message @relation(fields: [messageId], references: [id], onDelete: Cascade)
-  id          Int?
-  type        AuthorType
+  messageId Int        @id
+  message   Message    @relation(fields: [messageId], references: [id], onDelete: Cascade)
+  id        Int?
+  type      AuthorType
 }
 
 model Content {
@@ -207,6 +207,7 @@ model Contact {
   @@index([createdAt])
   @@index([updatedAt])
 }
+
 model Tag {
   id          Int          @id @default(autoincrement())
   projectId   Int

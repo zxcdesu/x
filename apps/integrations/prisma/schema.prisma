@@ -30,7 +30,7 @@ enum WebhookType {
 }
 
 model Webhook {
-  id        Int              @id @default(autoincrement())
+  id        Int         @id @default(autoincrement())
   projectId Int
   url       String
   type      WebhookType
