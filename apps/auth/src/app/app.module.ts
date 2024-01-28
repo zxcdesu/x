@@ -25,7 +25,6 @@ import { UserService } from './user/user.service';
       }),
     }),
     RabbitMQModule.forRootAsync(RabbitMQModule, {
-      imports: [ConfigModule],
       inject: [ConfigService],
       useFactory: (configService: ConfigService) => ({
         enableControllerDiscovery: true,

@@ -19,7 +19,6 @@ import { PrismaService } from './prisma.service';
       }),
     }),
     RabbitMQModule.forRootAsync(RabbitMQModule, {
-      imports: [ConfigModule],
       inject: [ConfigService],
       useFactory: (configService: ConfigService) => ({
         enableControllerDiscovery: true,
@@ -30,6 +29,7 @@ import { PrismaService } from './prisma.service';
             type: 'topic',
           },
         ],
+        prefetchCount: 1,
         connectionInitOptions: {
           wait: false,
         },

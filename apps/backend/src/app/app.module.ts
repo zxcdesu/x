@@ -58,7 +58,6 @@ import { WebhookRmq } from './webhook/webhook.rmq';
       }),
     }),
     RabbitMQModule.forRootAsync(RabbitMQModule, {
-      imports: [ConfigModule],
       inject: [ConfigService],
       useFactory: (configService: ConfigService) => ({
         enableControllerDiscovery: true,
@@ -69,6 +68,7 @@ import { WebhookRmq } from './webhook/webhook.rmq';
             type: 'topic',
           },
         ],
+        prefetchCount: 1,
         connectionInitOptions: {
           wait: false,
         },

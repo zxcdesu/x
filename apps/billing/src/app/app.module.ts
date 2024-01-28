@@ -19,7 +19,6 @@ import { WalletService } from './wallet/wallet.service';
       }),
     }),
     RabbitMQModule.forRootAsync(RabbitMQModule, {
-      imports: [ConfigModule],
       inject: [ConfigService],
       useFactory: (configService: ConfigService) => ({
         enableControllerDiscovery: true,
@@ -30,6 +29,7 @@ import { WalletService } from './wallet/wallet.service';
             type: 'topic',
           },
         ],
+        prefetchCount: 1,
         connectionInitOptions: {
           wait: false,
         },

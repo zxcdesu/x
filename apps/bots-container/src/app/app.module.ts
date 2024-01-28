@@ -14,7 +14,6 @@ import { BotContainerService } from './bot-container/bot-container.service';
       }),
     }),
     RabbitMQModule.forRootAsync(RabbitMQModule, {
-      imports: [ConfigModule],
       inject: [ConfigService],
       useFactory: (configService: ConfigService) => ({
         enableControllerDiscovery: true,
@@ -25,6 +24,7 @@ import { BotContainerService } from './bot-container/bot-container.service';
             type: 'topic',
           },
         ],
+        prefetchCount: 1,
         connectionInitOptions: {
           wait: false,
         },

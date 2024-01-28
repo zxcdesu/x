@@ -18,7 +18,6 @@ import { WebhookService } from './webhook/webhook.service';
       }),
     }),
     RabbitMQModule.forRootAsync(RabbitMQModule, {
-      imports: [ConfigModule],
       inject: [ConfigService],
       useFactory: (configService: ConfigService) => ({
         enableControllerDiscovery: true,
@@ -29,6 +28,7 @@ import { WebhookService } from './webhook/webhook.service';
             type: 'topic',
           },
         ],
+        prefetchCount: 1,
         connectionInitOptions: {
           wait: false,
         },
