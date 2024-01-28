@@ -1,16 +1,16 @@
-import { Event, EventType } from '../../prisma.service';
+import { History, HistoryType } from '../../prisma.service';
 
-export class EventDto implements Event {
+export class HistoryDto implements History {
   id: number;
 
   projectId: number;
 
   userId: number;
 
-  type: EventType;
+  type: HistoryType;
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  payload: any;
+  value: any;
 
   createdAt: Date;
 }
