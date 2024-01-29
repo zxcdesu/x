@@ -1,10 +1,15 @@
 import { RabbitMQModule } from '@golevelup/nestjs-rabbitmq';
-import { Module } from '@nestjs/common';
+import {
+  ClassSerializerInterceptor,
+  Module,
+  ValidationPipe,
+} from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import joi from 'joi';
 import { AdminController } from './admin/admin.controller';
 import { AdminService } from './admin/admin.service';
 import { PrismaService } from './prisma.service';
+import { APP_INTERCEPTOR, APP_PIPE } from '@nestjs/core';
 
 @Module({
   imports: [
@@ -34,6 +39,20 @@ import { PrismaService } from './prisma.service';
     }),
   ],
   controllers: [AdminController],
-  providers: [PrismaService, AdminService],
+  providers: [
+    PrismaService,
+    {
+      provide: APP_INTERCEPTOR,
+      useClass: ClassSerializerInterceptor,
+    },
+    {
+      provide: APP_PIPE,
+      useValue: new ValidationPipe({
+        whitelist: true,
+        transform: true,
+      }),
+    },
+    AdminService,
+  ],
 })
 export class AppModule {}

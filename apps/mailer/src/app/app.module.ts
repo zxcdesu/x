@@ -1,6 +1,11 @@
 import { RabbitMQModule } from '@golevelup/nestjs-rabbitmq';
-import { Module } from '@nestjs/common';
+import {
+  ClassSerializerInterceptor,
+  Module,
+  ValidationPipe,
+} from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
+import { APP_INTERCEPTOR, APP_PIPE } from '@nestjs/core';
 import joi from 'joi';
 import { MailingController } from './mailing/mailing.controller';
 import { MailingService } from './mailing/mailing.service';
@@ -38,6 +43,20 @@ import { PrismaService } from './prisma.service';
     }),
   ],
   controllers: [MailingController],
-  providers: [PrismaService, MailingService],
+  providers: [
+    PrismaService,
+    {
+      provide: APP_INTERCEPTOR,
+      useClass: ClassSerializerInterceptor,
+    },
+    {
+      provide: APP_PIPE,
+      useValue: new ValidationPipe({
+        whitelist: true,
+        transform: true,
+      }),
+    },
+    MailingService,
+  ],
 })
 export class AppModule {}

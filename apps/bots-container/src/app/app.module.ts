@@ -1,6 +1,11 @@
 import { RabbitMQModule } from '@golevelup/nestjs-rabbitmq';
-import { Module } from '@nestjs/common';
+import {
+  ClassSerializerInterceptor,
+  Module,
+  ValidationPipe,
+} from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
+import { APP_INTERCEPTOR, APP_PIPE } from '@nestjs/core';
 import joi from 'joi';
 import { BotContainerController } from './bot-container/bot-container.controller';
 import { BotContainerService } from './bot-container/bot-container.service';
@@ -32,6 +37,19 @@ import { BotContainerService } from './bot-container/bot-container.service';
     }),
   ],
   controllers: [BotContainerController],
-  providers: [BotContainerService],
+  providers: [
+    {
+      provide: APP_INTERCEPTOR,
+      useClass: ClassSerializerInterceptor,
+    },
+    {
+      provide: APP_PIPE,
+      useValue: new ValidationPipe({
+        whitelist: true,
+        transform: true,
+      }),
+    },
+    BotContainerService,
+  ],
 })
 export class AppModule {}

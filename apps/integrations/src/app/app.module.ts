@@ -1,7 +1,12 @@
 import { RabbitMQModule } from '@golevelup/nestjs-rabbitmq';
 import { HttpModule } from '@nestjs/axios';
-import { Module } from '@nestjs/common';
+import {
+  ClassSerializerInterceptor,
+  Module,
+  ValidationPipe,
+} from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
+import { APP_INTERCEPTOR, APP_PIPE } from '@nestjs/core';
 import joi from 'joi';
 import { IntegrationController } from './integration/integration.controller';
 import { IntegrationService } from './integration/integration.service';
@@ -43,6 +48,21 @@ import { WebhookService } from './webhook/webhook.service';
     }),
   ],
   controllers: [IntegrationController, WebhookController],
-  providers: [PrismaService, IntegrationService, WebhookService],
+  providers: [
+    PrismaService,
+    {
+      provide: APP_INTERCEPTOR,
+      useClass: ClassSerializerInterceptor,
+    },
+    {
+      provide: APP_PIPE,
+      useValue: new ValidationPipe({
+        whitelist: true,
+        transform: true,
+      }),
+    },
+    IntegrationService,
+    WebhookService,
+  ],
 })
 export class AppModule {}

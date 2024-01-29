@@ -1,7 +1,12 @@
 import { RabbitMQModule } from '@golevelup/nestjs-rabbitmq';
 import { HttpModule } from '@nestjs/axios';
-import { Module } from '@nestjs/common';
+import {
+  ClassSerializerInterceptor,
+  Module,
+  ValidationPipe,
+} from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
+import { APP_INTERCEPTOR, APP_PIPE } from '@nestjs/core';
 import { ChannelEventRmq } from '@zxcdesu/platform-type';
 import joi from 'joi';
 import { ChannelController } from './channel/channel.controller';
@@ -65,6 +70,17 @@ import { TagService } from './tag/tag.service';
   ],
   providers: [
     PrismaService,
+    {
+      provide: APP_INTERCEPTOR,
+      useClass: ClassSerializerInterceptor,
+    },
+    {
+      provide: APP_PIPE,
+      useValue: new ValidationPipe({
+        whitelist: true,
+        transform: true,
+      }),
+    },
     ChannelRepository,
     ChannelService,
     ChatService,

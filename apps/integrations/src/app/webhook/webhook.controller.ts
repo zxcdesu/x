@@ -73,10 +73,10 @@ export class WebhookController {
   }
 
   @RabbitRPC({
-    routingKey: 'receive',
+    routingKey: 'sendWebhooks',
     exchange: 'integrations',
   })
-  receive(@RabbitPayload() payload: ReceiveWebhookDto) {
-    return this.webhookService.receive(payload);
+  sendWebhooks(@RabbitPayload() payload: ReceiveWebhookDto) {
+    return this.webhookService.send(payload);
   }
 }

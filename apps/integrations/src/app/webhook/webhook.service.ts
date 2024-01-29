@@ -61,7 +61,7 @@ export class WebhookService {
     });
   }
 
-  async receive(payload: ReceiveWebhookDto) {
+  async send(payload: ReceiveWebhookDto) {
     const webhooks = await this.prismaService.webhook.findMany({
       where: {
         projectId: payload.projectId,

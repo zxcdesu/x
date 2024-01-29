@@ -1,7 +1,11 @@
 import { RabbitMQModule } from '@golevelup/nestjs-rabbitmq';
-import { ClassSerializerInterceptor, Module } from '@nestjs/common';
+import {
+  ClassSerializerInterceptor,
+  Module,
+  ValidationPipe,
+} from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
-import { APP_INTERCEPTOR } from '@nestjs/core';
+import { APP_INTERCEPTOR, APP_PIPE } from '@nestjs/core';
 import joi from 'joi';
 import { PrismaService } from './prisma.service';
 import { SubscriptionController } from './subscription/subscription.controller';
@@ -42,6 +46,13 @@ import { WalletService } from './wallet/wallet.service';
     {
       provide: APP_INTERCEPTOR,
       useClass: ClassSerializerInterceptor,
+    },
+    {
+      provide: APP_PIPE,
+      useValue: new ValidationPipe({
+        whitelist: true,
+        transform: true,
+      }),
     },
     SubscriptionService,
     WalletService,
