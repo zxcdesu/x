@@ -1,7 +1,7 @@
 import { RabbitPayload, RabbitSubscribe } from '@golevelup/nestjs-rabbitmq';
-import { Controller, ParseIntPipe } from '@nestjs/common';
+import { Controller } from '@nestjs/common';
 import { PubSubService } from '../pubsub.service';
-import { MessageDto } from './dto/message.dto';
+import { ReceiveMessageDto } from './dto/receive-message.dto';
 
 @Controller()
 export class MessageController {
@@ -11,15 +11,11 @@ export class MessageController {
     routingKey: 'receiveMessage',
     exchange: 'backend',
   })
-  receive(
-    @RabbitPayload('projectId', ParseIntPipe) projectId: number,
-    @RabbitPayload('chatId', ParseIntPipe) chatId: number,
-    @RabbitPayload() payload: MessageDto,
-  ) {
+  receive(@RabbitPayload() payload: ReceiveMessageDto) {
     this.pubSubService.publish(
-      PubSubService.messageReceived(projectId, chatId),
+      PubSubService.messageReceived(payload.projectId, payload.chatId),
       {
-        messageReceived: payload,
+        messageReceived: payload.message,
       },
     );
   }

@@ -6,8 +6,7 @@ import { ContentDto } from './content.dto';
 export class MessageDto implements Message {
   id: number;
 
-  // @Exclude()
-  // не скрываем, нужен на backend для подписки на сообщения чата
+  @Exclude()
   chatId: number;
 
   @Exclude()

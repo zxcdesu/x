@@ -50,23 +50,24 @@ export class TelegramChannel extends AbstractChannel {
   ): Promise<void> {
     const message = event.body.edited_message ?? event.body.message;
     if (message) {
-      await this.receiveMessage(
-        await this.findChat(message.chat.id.toString()),
-        message.message_id.toString(),
+      await this.saveAndPublish(
+        message.chat.id.toString(),
+        message.chat.username,
         {
-          create: {
-            text: message.text,
+          externalId: message.message_id.toString(),
+          content: {
+            create: {
+              text: message.text,
+            },
           },
-        },
-        MessageStatus.Delivered,
-        {
-          create: {
-            type: AuthorType.Contact,
+          status: MessageStatus.Delivered,
+          author: {
+            create: {
+              type: AuthorType.Contact,
+            },
           },
         },
       );
-
-      await this.receiveChat(message.chat.id.toString(), message.chat.username);
     }
   }
 

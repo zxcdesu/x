@@ -50,152 +50,155 @@ export abstract class AbstractChannel<Q = unknown, B = unknown> {
 
   abstract removeMessage(chat: Chat, externalId: string): Promise<void>;
 
-  protected findChat(accountId: string) {
-    return this.prismaService.chat.findUniqueOrThrow({
+  /**
+   * Сохранение и публикация полученного **внешнего** сообщения и чата
+   */
+  protected async saveAndPublish(
+    accountId: string,
+    name: string,
+    message: {
+      externalId: string;
+      content: Prisma.ContentUncheckedCreateNestedManyWithoutMessageInput;
+      status: MessageStatus;
+      author: Prisma.AuthorUncheckedCreateNestedOneWithoutMessageInput;
+    },
+  ) {
+    const chat = await this.saveChat(accountId, name);
+    const messageDto = plainToInstance(
+      MessageDto,
+      await this.saveMessage(chat.id, message),
+    );
+
+    const chatDto = plainToInstance(
+      ChatDto,
+      Object.assign(chat, {
+        messages: [messageDto],
+      }),
+    );
+
+    await Promise.all([
+      this.publishChat(chatDto),
+      this.publishMessage(chatDto, messageDto),
+    ]);
+  }
+
+  protected async publishChat(chat: ChatDto) {
+    await Promise.all([
+      this.amqpConnection.publish('backend', 'receiveChat', {
+        projectId: this.channel.projectId,
+        chat,
+      }),
+      this.amqpConnection.publish('integrations', 'sendWebhooks', {
+        projectId: this.channel.projectId,
+        channelId: this.channel.id,
+        type: 'ChatEvent',
+        value: chat,
+      }),
+    ]);
+  }
+
+  protected async publishMessage(chat: ChatDto, message: MessageDto) {
+    await Promise.all([
+      this.amqpConnection.publish('backend', 'receiveMessage', {
+        projectId: this.channel.projectId,
+        chatId: chat.id,
+        message,
+      }),
+      this.amqpConnection.publish('integrations', 'sendWebhooks', {
+        projectId: this.channel.projectId,
+        channelId: this.channel.id,
+        chatId: chat.id,
+        type: 'MessageEvent',
+        value: message,
+      }),
+    ]);
+  }
+
+  private async saveChat(accountId: string, name: string) {
+    return this.prismaService.chat.upsert({
       where: {
         channelId_accountId: {
           channelId: this.channel.id,
           accountId,
         },
       },
+      create: {
+        projectId: this.channel.projectId,
+        channel: {
+          connect: {
+            id: this.channel.id,
+          },
+        },
+        accountId,
+        contact: {
+          create: {
+            projectId: this.channel.projectId,
+            name,
+            status: ContactStatus.Pending,
+          },
+        },
+      },
+      update: {
+        isNew: false,
+        unreadCount: {
+          increment: 1,
+        },
+      },
+      include: {
+        contact: {
+          include: {
+            assignedTo: true,
+            customFields: true,
+            tags: true,
+          },
+        },
+      },
     });
   }
 
-  protected async receiveChat(
-    accountId: string,
-    name: string,
-  ): Promise<ChatDto> {
-    const chat = plainToInstance(
-      ChatDto,
-      await this.prismaService.chat.upsert({
-        where: {
-          channelId_accountId: {
-            channelId: this.channel.id,
-            accountId,
-          },
+  private async saveMessage(
+    chatId: number,
+    message: {
+      externalId: string;
+      content: Prisma.ContentUncheckedCreateNestedManyWithoutMessageInput;
+      status: MessageStatus;
+      author: Prisma.AuthorUncheckedCreateNestedOneWithoutMessageInput;
+    },
+  ) {
+    return this.prismaService.message.upsert({
+      where: {
+        chatId_externalId: {
+          chatId,
+          externalId: message.externalId,
         },
-        create: {
-          projectId: this.channel.projectId,
-          channel: {
-            connect: {
-              id: this.channel.id,
-            },
-          },
-          accountId,
-          contact: {
-            create: {
-              projectId: this.channel.projectId,
-              name,
-              status: ContactStatus.Pending,
-            },
-          },
-        },
-        update: {
-          isNew: false,
-          unreadCount: {
-            increment: 1,
-          },
-        },
-        include: {
-          contact: {
-            include: {
-              assignedTo: true,
-              customFields: true,
-              tags: true,
-            },
-          },
-          messages: {
-            include: {
-              author: true,
-              content: {
-                include: {
-                  attachments: true,
-                },
-                orderBy: {
-                  id: 'desc',
-                },
-                take: 1,
-              },
-            },
-            orderBy: {
-              id: 'desc',
-            },
-            take: 1,
-          },
-        },
-      }),
-    );
-
-    await Promise.all([
-      this.amqpConnection.publish('backend', 'receiveChat', chat),
-      this.amqpConnection.publish('integrations', 'receive', {
-        projectId: this.channel.projectId,
-        type: 'ChatEvent',
-        value: chat,
-      }),
-    ]);
-    return chat;
-  }
-
-  protected async receiveMessage(
-    chat: Chat,
-    externalId: string,
-    content: Prisma.ContentUncheckedCreateNestedManyWithoutMessageInput,
-    status: MessageStatus,
-    author: Prisma.AuthorUncheckedCreateNestedOneWithoutMessageInput,
-  ): Promise<MessageDto> {
-    const message = Object.assign(
-      plainToInstance(
-        MessageDto,
-        await this.prismaService.message.upsert({
-          where: {
-            chatId_externalId: {
-              chatId: chat.id,
-              externalId,
-            },
-          },
-          create: {
-            chat: {
-              connect: {
-                id: chat.id,
-              },
-            },
-            externalId,
-            content,
-            status,
-            author,
-          },
-          update: {
-            content,
-            updatedAt: new Date(),
-          },
-          include: {
-            author: true,
-            content: {
-              include: {
-                attachments: true,
-              },
-              orderBy: {
-                id: 'desc',
-              },
-              take: 1,
-            },
-          },
-        }),
-      ),
-      {
-        projectId: chat.projectId,
       },
-    );
-
-    await Promise.all([
-      this.amqpConnection.publish('backend', 'receiveMessage', message),
-      this.amqpConnection.publish('integrations', 'receive', {
-        projectId: this.channel.projectId,
-        type: 'MessageEvent',
-        value: message,
-      }),
-    ]);
-    return message;
+      create: {
+        chat: {
+          connect: {
+            id: chatId,
+          },
+        },
+        externalId: message.externalId,
+        content: message.content,
+        status: message.status,
+        author: message.author,
+      },
+      update: {
+        content: message.content,
+        updatedAt: new Date(),
+      },
+      include: {
+        author: true,
+        content: {
+          include: {
+            attachments: true,
+          },
+          orderBy: {
+            id: 'desc',
+          },
+          take: 1,
+        },
+      },
+    });
   }
 }
