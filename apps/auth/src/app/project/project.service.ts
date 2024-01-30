@@ -108,12 +108,13 @@ export class ProjectService {
   }
 
   async signIn(userId: number, payload: SignInProjectDto) {
-    await this.projectUserService.findOne(payload.id, userId);
+    const { roles } = await this.projectUserService.findOne(payload.id, userId);
     return {
       token: this.jwtService.sign({
         id: userId,
         project: {
           id: payload.id,
+          roles,
         },
       }),
     };

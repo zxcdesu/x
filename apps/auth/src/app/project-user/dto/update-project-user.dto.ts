@@ -1,3 +1,8 @@
+import { ArrayMinSize, IsEnum } from 'class-validator';
+import { RoleType } from '../../prisma.service';
+
 export class UpdateProjectUserDto {
-  // TODO: access
+  @IsEnum(RoleType, { each: true })
+  @ArrayMinSize(1)
+  roles: RoleType[];
 }

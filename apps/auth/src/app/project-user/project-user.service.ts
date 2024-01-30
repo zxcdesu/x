@@ -41,6 +41,7 @@ export class ProjectUserService {
   }
 
   update(projectId: number, userId: number, payload: UpdateProjectUserDto) {
+    const roles = new Set(payload.roles);
     return this.prismaService.projectUser.update({
       where: {
         projectId_userId: {
@@ -48,7 +49,9 @@ export class ProjectUserService {
           userId,
         },
       },
-      data: payload,
+      data: Object.assign(payload, {
+        roles: Array.from(roles.values()),
+      }),
       include: {
         user: true,
       },
