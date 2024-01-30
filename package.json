@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "license": "MIT",
   "scripts": {
-    "dev": "docker compose up -d && nx run-many --targets=serve --parallel=11"
+    "dev": "docker compose up -d && nx run-many --targets=serve --parallel=12"
   },
   "private": true,
   "dependencies": {
@@ -54,6 +54,8 @@
     "@nx/node": "17.1.3",
     "@nx/webpack": "17.1.3",
     "@nx/workspace": "17.1.3",
+    "@swc-node/register": "1.6.7",
+    "@swc/core": "1.3.85",
     "@types/amqplib": "0.10.4",
     "@types/bcrypt": "5.0.2",
     "@types/jest": "29.5.10",
