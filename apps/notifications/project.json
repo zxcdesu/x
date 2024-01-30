@@ -17,7 +17,8 @@
         "tsConfig": "apps/notifications/tsconfig.app.json",
         "assets": ["apps/notifications/src/assets"],
         "isolatedConfig": true,
-        "webpackConfig": "apps/notifications/webpack.config.js"
+        "webpackConfig": "apps/notifications/webpack.config.js",
+        "generatePackageJson": true
       },
       "configurations": {
         "development": {},
@@ -125,8 +126,9 @@
       "dependsOn": ["build"],
       "options": {
         "engine": "docker",
+        "push": true,
         "metadata": {
-          "images": ["notifications"],
+          "images": ["xanede/notifications"],
           "load": true,
           "tags": [
             "type=schedule",
