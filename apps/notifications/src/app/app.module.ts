@@ -1,4 +1,5 @@
 import { RabbitMQModule } from '@golevelup/nestjs-rabbitmq';
+import { HttpModule } from '@nestjs/axios';
 import {
   ClassSerializerInterceptor,
   Module,
@@ -16,6 +17,7 @@ import { PrismaService } from './prisma.service';
       validationSchema: joi.object({
         DATABASE_URL: joi.string().uri().required(),
         BROKER_URL: joi.string().uri().required(),
+        GATEWAY_URL: joi.string().uri().required(),
         TELEGRAM_BOT_TOKEN: joi.string().required(),
       }),
     }),
@@ -36,6 +38,7 @@ import { PrismaService } from './prisma.service';
         },
       }),
     }),
+    HttpModule.register({}),
   ],
   controllers: [],
   providers: [
