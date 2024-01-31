@@ -7,7 +7,6 @@ import {
 } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { APP_INTERCEPTOR, APP_PIPE } from '@nestjs/core';
-import { ChannelEventRmq } from '@zxcdesu/platform-type';
 import joi from 'joi';
 import { ChannelController } from './channel/channel.controller';
 import { ChannelRepository } from './channel/channel.repository';
@@ -20,7 +19,6 @@ import { ContactController } from './contact/contact.controller';
 import { ContactService } from './contact/contact.service';
 import { CustomFieldController } from './custom-field/custom-field.controller';
 import { CustomFieldService } from './custom-field/custom-field.service';
-import { ErrorFactoryService } from './error-factory.service';
 import { HsmController } from './hsm/hsm.controller';
 import { HsmService } from './hsm/hsm.service';
 import { MessageController } from './message/message.controller';
@@ -90,8 +88,6 @@ import { TagService } from './tag/tag.service';
     HsmService,
     MessageService,
     TagService,
-    ErrorFactoryService,
-    ChannelEventRmq.provide(ErrorFactoryService),
   ],
 })
 export class AppModule {}

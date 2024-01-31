@@ -1,5 +1,5 @@
 import { NotImplementedException } from '@nestjs/common';
-import { ChannelEvent } from '@zxcdesu/platform-type';
+import { WebhookPayload } from '@zxcdesu/platform-type';
 import { CreateChatDto } from '../chat/dto/create-chat.dto';
 import { CreateMessageDto } from '../message/dto/create-message.dto';
 import { UpdateMessageDto } from '../message/dto/update-message.dto';
@@ -11,7 +11,7 @@ export class VkontakteChannel extends AbstractChannel {
     throw new NotImplementedException();
   }
 
-  async handleEvent(event: ChannelEvent<unknown, unknown>): Promise<void> {
+  async handleWebhook(event: WebhookPayload<unknown, unknown>): Promise<void> {
     throw new NotImplementedException({
       event,
     });

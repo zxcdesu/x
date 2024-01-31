@@ -24,3 +24,27 @@ model Subscription {
 
   @@index([expiresAt])
 }
+
+enum PaymentProvider {
+  Yookassa
+}
+
+enum PaymentStatus {
+  Succeeded
+  Pending
+  Cancelled
+  Refunded
+}
+
+model Payment {
+  id         Int             @id @default(autoincrement())
+  projectId  Int
+  provider   PaymentProvider
+  status     PaymentStatus   @default(Pending)
+  externalId String?
+  expireAt   DateTime?
+
+  @@index([projectId])
+  @@index([externalId, provider])
+  @@index([expireAt, status])
+}

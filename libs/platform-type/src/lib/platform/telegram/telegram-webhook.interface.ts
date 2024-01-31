@@ -1,4 +1,4 @@
-export interface TelegramEvent {
+export interface TelegramWebhook {
   update_id: number;
   message?: {
     message_id: number;

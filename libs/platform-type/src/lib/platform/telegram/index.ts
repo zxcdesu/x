@@ -1,1 +1,1 @@
-export * from './telegram-event.interface';
+export * from './telegram-webhook.interface';

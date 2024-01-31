@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { ChannelEvent } from '@zxcdesu/platform-type';
+import { WebhookPayload } from '@zxcdesu/platform-type';
 import { ChannelStatus, PrismaService } from '../prisma.service';
 import { ChannelRepository } from './channel.repository';
 import { CreateChannelDto } from './dto/create-channel.dto';
@@ -70,14 +70,14 @@ export class ChannelService {
     });
   }
 
-  async handleEvent(payload: ChannelEvent) {
+  async handleWebhook(payload: WebhookPayload) {
     const channel = await this.prismaService.channel.findUnique({
       where: {
         id: payload.param.channelId,
       },
     });
     if (channel) {
-      return this.channelRepository.get(channel).handleEvent(payload);
+      return this.channelRepository.get(channel).handleWebhook(payload);
     }
   }
 }

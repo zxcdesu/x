@@ -1,7 +1,7 @@
 import { RabbitPayload } from '@golevelup/nestjs-rabbitmq';
 import { Controller, ParseIntPipe, SerializeOptions } from '@nestjs/common';
 import { RabbitRPC } from '@zxcdesu/nestjs-rabbitmq';
-import { ChannelEvent, ChannelEventRmq } from '@zxcdesu/platform-type';
+import { WebhookPayload } from '@zxcdesu/platform-type';
 import { ChannelService } from './channel.service';
 import { ChannelDto } from './dto/channel.dto';
 import { CreateChannelDto } from './dto/create-channel.dto';
@@ -72,8 +72,11 @@ export class ChannelController {
     return this.channelService.remove(projectId, id);
   }
 
-  @ChannelEventRmq.subscribeEvent()
-  handleEvent(@RabbitPayload() event: ChannelEvent) {
-    return this.channelService.handleEvent(event);
+  @RabbitRPC({
+    routingKey: 'handleWebhook',
+    exchange: 'platform',
+  })
+  handleWebhook(@RabbitPayload() event: WebhookPayload) {
+    return this.channelService.handleWebhook(event);
   }
 }

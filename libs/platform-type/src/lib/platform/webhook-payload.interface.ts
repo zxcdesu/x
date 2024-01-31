@@ -1,4 +1,4 @@
-export interface ChannelEvent<Q = unknown, B = unknown> {
+export interface WebhookPayload<Q = unknown, B = unknown> {
   param: {
     channelId: number;
   };

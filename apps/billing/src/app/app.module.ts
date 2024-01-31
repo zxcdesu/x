@@ -1,4 +1,5 @@
 import { RabbitMQModule } from '@golevelup/nestjs-rabbitmq';
+import { HttpModule } from '@nestjs/axios';
 import {
   ClassSerializerInterceptor,
   Module,
@@ -7,6 +8,9 @@ import {
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { APP_INTERCEPTOR, APP_PIPE } from '@nestjs/core';
 import joi from 'joi';
+import { PaymentController } from './payment/payment.controller';
+import { PaymentRepository } from './payment/payment.repository';
+import { PaymentService } from './payment/payment.service';
 import { PrismaService } from './prisma.service';
 import { SubscriptionController } from './subscription/subscription.controller';
 import { SubscriptionService } from './subscription/subscription.service';
@@ -20,6 +24,9 @@ import { WalletService } from './wallet/wallet.service';
       validationSchema: joi.object({
         DATABASE_URL: joi.string().uri().required(),
         BROKER_URL: joi.string().uri().required(),
+        YOOKASSA_SHOP_ID: joi.string().required(),
+        YOOKASSA_TOKEN: joi.string().required(),
+        YOOKASSA_REDIRECT_URL: joi.string().uri().required(),
       }),
     }),
     RabbitMQModule.forRootAsync(RabbitMQModule, {
@@ -39,8 +46,9 @@ import { WalletService } from './wallet/wallet.service';
         },
       }),
     }),
+    HttpModule.register({}),
   ],
-  controllers: [SubscriptionController, WalletController],
+  controllers: [PaymentController, SubscriptionController, WalletController],
   providers: [
     PrismaService,
     {
@@ -54,8 +62,10 @@ import { WalletService } from './wallet/wallet.service';
         transform: true,
       }),
     },
+    PaymentService,
     SubscriptionService,
     WalletService,
+    PaymentRepository,
   ],
 })
 export class AppModule {}

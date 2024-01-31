@@ -1,5 +1,5 @@
 import { NotImplementedException } from '@nestjs/common';
-import { ChannelEvent, TelegramEvent } from '@zxcdesu/platform-type';
+import { TelegramWebhook, WebhookPayload } from '@zxcdesu/platform-type';
 import { randomUUID } from 'crypto';
 import { catchError, lastValueFrom, map } from 'rxjs';
 import { CreateChatDto } from '../chat/dto/create-chat.dto';
@@ -45,8 +45,8 @@ export class TelegramChannel extends AbstractChannel {
     );
   }
 
-  async handleEvent(
-    event: ChannelEvent<unknown, TelegramEvent>,
+  async handleWebhook(
+    event: WebhookPayload<unknown, TelegramWebhook>,
   ): Promise<void> {
     const message = event.body.edited_message ?? event.body.message;
     if (message) {
