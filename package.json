@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "license": "MIT",
   "scripts": {
-    "dev": "docker compose up -d && nx run-many --targets=serve --parallel=12"
+    "dev": "docker compose up -d && nx run-many --targets=serve --parallel=100"
   },
   "private": true,
   "dependencies": {

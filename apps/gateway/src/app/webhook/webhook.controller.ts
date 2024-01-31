@@ -1,24 +1,41 @@
-import { All, Body, Controller, Param, Post, Query } from '@nestjs/common';
+import {
+  All,
+  Body,
+  Controller,
+  HttpCode,
+  Param,
+  Post,
+  Query,
+} from '@nestjs/common';
+import { IpDecorator } from '../safety/ip.decorator';
+import { YookassaService } from '../safety/yookassa.service';
 import { WebhookParamDto } from './dto/webhook-param.dto';
 import { WebhookService } from './webhook.service';
 
 @Controller()
 export class WebhookController {
-  constructor(private readonly webhookService: WebhookService) {}
+  constructor(
+    private readonly yookassaService: YookassaService,
+    private readonly webhookService: WebhookService,
+  ) {}
 
   @Post('yookassa')
-  handleYookassaWebhook(@Body() body: unknown) {
-    return this.webhookService.handle(
-      'billing',
-      {
-        provider: 'Yookassa',
-        value: body,
-      },
-      'handleWebhook',
-    );
+  @HttpCode(200)
+  handleYookassaWebhook(@IpDecorator() ip: string, @Body() body: unknown) {
+    if (this.yookassaService.check(ip)) {
+      return this.webhookService.handle(
+        'billing',
+        {
+          provider: 'Yookassa',
+          value: body,
+        },
+        'handleWebhook',
+      );
+    }
   }
 
   @Post('telegram')
+  @HttpCode(200)
   handleTelegramWebhook(@Body() body: unknown) {
     return this.webhookService.handle(
       'notifications',
@@ -31,6 +48,7 @@ export class WebhookController {
   }
 
   @All(':channelId')
+  @HttpCode(200)
   handleWebhook(
     @Param() param: WebhookParamDto,
     @Query() query: unknown,

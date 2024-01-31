@@ -5,17 +5,20 @@ import { CreatePaymentDto } from './dto/create-payment.dto';
 import { HandleWebhookDto } from './dto/handle-webhook.dto';
 import { PaymentDto } from './dto/payment.dto';
 
-type Event =
-  | 'payment.succeeded'
-  | 'payment.waiting_for_capture'
-  | 'payment.canceled'
-  | 'refund.succeeded';
-
 export class YookassaPayment extends AbstractPayment<unknown> {
   async create(
     payment: Payment,
     payload: CreatePaymentDto,
   ): Promise<PaymentDto> {
+    const wallet = await this.prismaService.wallet.findUniqueOrThrow({
+      where: {
+        projectId: payload.projectId,
+      },
+      select: {
+        currency: true,
+      },
+    });
+
     const response = await lastValueFrom(
       this.httpService.post<{
         id: string;
@@ -28,7 +31,7 @@ export class YookassaPayment extends AbstractPayment<unknown> {
         {
           amount: {
             value: payload.value,
-            currency: payload.currency,
+            currency: wallet.currency,
           },
           capture: true,
           confirmation: {
@@ -61,7 +64,11 @@ export class YookassaPayment extends AbstractPayment<unknown> {
 
   async handleWebhook(
     payload: HandleWebhookDto<{
-      event: Event;
+      event:
+        | 'payment.succeeded'
+        | 'payment.waiting_for_capture'
+        | 'payment.canceled'
+        | 'refund.succeeded';
       object: {
         id: string;
         income_amount: {
@@ -75,6 +82,10 @@ export class YookassaPayment extends AbstractPayment<unknown> {
         externalId: payload.value.object.id,
         provider: payload.provider,
       },
+      select: {
+        id: true,
+        projectId: true,
+      },
     });
 
     if (payment) {
@@ -84,7 +95,12 @@ export class YookassaPayment extends AbstractPayment<unknown> {
             id: payment.id,
           },
           data: {
-            status: this.getStatusFromEvent(payload.value.event),
+            status: {
+              'payment.succeeded': PaymentStatus.Succeeded,
+              'payment.waiting_for_capture': PaymentStatus.Pending,
+              'payment.canceled': PaymentStatus.Cancelled,
+              'refund.succeeded': PaymentStatus.Refunded,
+            }[payload.value.event],
           },
         });
 
@@ -101,22 +117,6 @@ export class YookassaPayment extends AbstractPayment<unknown> {
           });
         }
       });
-    }
-  }
-
-  private getStatusFromEvent(event: Event) {
-    switch (event) {
-      case 'payment.succeeded':
-        return PaymentStatus.Succeeded;
-
-      case 'payment.waiting_for_capture':
-        return PaymentStatus.Pending;
-
-      case 'payment.canceled':
-        return PaymentStatus.Cancelled;
-
-      case 'refund.succeeded':
-        return PaymentStatus.Refunded;
     }
   }
 }

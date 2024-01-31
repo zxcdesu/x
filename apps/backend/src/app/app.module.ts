@@ -31,6 +31,8 @@ import { MailingRmq } from './mailing/mailing.rmq';
 import { MessageController } from './message/message.controller';
 import { MessageResolver } from './message/message.resolver';
 import { MessageRmq } from './message/message.rmq';
+import { PaymentResolver } from './payment/payment.resolver';
+import { PaymentRmq } from './payment/payment.rmq';
 import { ProjectUserResolver } from './project-user/project-user.controller';
 import { ProjectUserRmq } from './project-user/project-user.rmq';
 import { ProjectResolver } from './project/project.resolver';
@@ -115,6 +117,7 @@ import { WebhookRmq } from './webhook/webhook.rmq';
     InviteResolver,
     MailingResolver,
     MessageResolver,
+    PaymentResolver,
     ProjectResolver,
     ProjectUserResolver,
     SubscriptionResolver,
@@ -134,6 +137,7 @@ import { WebhookRmq } from './webhook/webhook.rmq';
     InviteRmq.provide(ErrorFactoryService),
     MailingRmq.provide(ErrorFactoryService),
     MessageRmq.provide(ErrorFactoryService),
+    PaymentRmq.provide(ErrorFactoryService),
     ProjectRmq.provide(ErrorFactoryService),
     ProjectUserRmq.provide(ErrorFactoryService),
     SubscriptionRmq.provide(ErrorFactoryService),

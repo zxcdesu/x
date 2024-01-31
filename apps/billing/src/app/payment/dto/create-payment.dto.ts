@@ -1,10 +1,4 @@
-import {
-  IsEnum,
-  IsISO4217CurrencyCode,
-  IsInt,
-  IsNumber,
-  Min,
-} from 'class-validator';
+import { IsEnum, IsInt, IsNumber, Min } from 'class-validator';
 import { PaymentProvider } from '../../prisma.service';
 
 export class CreatePaymentDto {
@@ -13,9 +7,6 @@ export class CreatePaymentDto {
 
   @IsEnum(PaymentProvider)
   provider: PaymentProvider;
-
-  @IsISO4217CurrencyCode()
-  currency: string;
 
   @IsNumber()
   @Min(1)

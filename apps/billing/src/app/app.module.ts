@@ -62,10 +62,10 @@ import { WalletService } from './wallet/wallet.service';
         transform: true,
       }),
     },
+    PaymentRepository,
     PaymentService,
     SubscriptionService,
     WalletService,
-    PaymentRepository,
   ],
 })
 export class AppModule {}

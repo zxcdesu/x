@@ -1,8 +1,10 @@
+import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../prisma.service';
 import { CreatePaymentDto } from './dto/create-payment.dto';
 import { HandleWebhookDto } from './dto/handle-webhook.dto';
 import { PaymentRepository } from './payment.repository';
 
+@Injectable()
 export class PaymentService {
   constructor(
     private readonly paymentRepository: PaymentRepository,
@@ -11,10 +13,13 @@ export class PaymentService {
 
   async create(payload: CreatePaymentDto) {
     const payment = await this.prismaService.payment.create({
-      data: payload,
+      data: {
+        projectId: payload.projectId,
+        provider: payload.provider,
+      },
     });
 
-    const data = await this.paymentRepository
+    const paymentDto = await this.paymentRepository
       .get(payment.provider)
       .create(payment, payload);
 
@@ -22,10 +27,10 @@ export class PaymentService {
       where: {
         id: payment.id,
       },
-      data: data.update,
+      data: paymentDto.update,
     });
 
-    return data;
+    return paymentDto;
   }
 
   handleWebhook(payload: HandleWebhookDto) {

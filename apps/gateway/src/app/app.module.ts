@@ -2,6 +2,7 @@ import { RabbitMQModule } from '@golevelup/nestjs-rabbitmq';
 import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import joi from 'joi';
+import { YookassaService } from './safety/yookassa.service';
 import { WebhookController } from './webhook/webhook.controller';
 import { WebhookService } from './webhook/webhook.service';
 
@@ -26,6 +27,6 @@ import { WebhookService } from './webhook/webhook.service';
     }),
   ],
   controllers: [WebhookController],
-  providers: [WebhookService],
+  providers: [YookassaService, WebhookService],
 })
 export class AppModule {}

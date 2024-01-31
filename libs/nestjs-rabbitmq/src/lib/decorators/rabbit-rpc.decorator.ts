@@ -11,10 +11,10 @@ export const RabbitRPC: typeof GolevelupRabbitRPC = (config) =>
           replyTo,
           Buffer.from(
             JSON.stringify(
-              Object.assign(error, {
-                error: true,
+              Object.assign({}, error, {
+                $error: true,
               }),
-              Object.getOwnPropertyNames(error),
+              Object.getOwnPropertyNames(error).concat('$error'),
             ),
           ),
           {
