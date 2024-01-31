@@ -116,6 +116,9 @@ export class YookassaPayment extends AbstractPayment<unknown> {
             },
           });
         }
+
+        // TODO: если refund, то списать деньги с кошелька
+        // если баланс отрицательный - заблокировать аккаунт
       });
     }
   }
