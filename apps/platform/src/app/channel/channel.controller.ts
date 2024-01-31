@@ -1,4 +1,4 @@
-import { RabbitPayload } from '@golevelup/nestjs-rabbitmq';
+import { RabbitPayload, RabbitSubscribe } from '@golevelup/nestjs-rabbitmq';
 import { Controller, ParseIntPipe, SerializeOptions } from '@nestjs/common';
 import { RabbitRPC } from '@zxcdesu/nestjs-rabbitmq';
 import { WebhookPayload } from '@zxcdesu/platform-type';
@@ -72,7 +72,7 @@ export class ChannelController {
     return this.channelService.remove(projectId, id);
   }
 
-  @RabbitRPC({
+  @RabbitSubscribe({
     routingKey: 'handleWebhook',
     exchange: 'platform',
   })

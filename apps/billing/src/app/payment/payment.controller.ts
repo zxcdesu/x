@@ -1,4 +1,4 @@
-import { RabbitPayload } from '@golevelup/nestjs-rabbitmq';
+import { RabbitPayload, RabbitSubscribe } from '@golevelup/nestjs-rabbitmq';
 import { Controller, SerializeOptions } from '@nestjs/common';
 import { RabbitRPC } from '@zxcdesu/nestjs-rabbitmq';
 import { CreatePaymentDto } from './dto/create-payment.dto';
@@ -21,7 +21,7 @@ export class PaymentController {
     return this.paymentService.create(payload);
   }
 
-  @RabbitRPC({
+  @RabbitSubscribe({
     exchange: 'billing',
     routingKey: 'handleWebhook',
   })
