@@ -15,7 +15,7 @@ WORKDIR /usr/src/app
 COPY --from=deps /usr/src/app/node_modules ./node_modules
 COPY --from=deps /usr/src/app/package.json ./package.json
 COPY dist/apps/notifications .
-COPY apps/auth/prisma/generated/libquery_engine-linux-musl-openssl-3.0.x.so.node /usr/src
+COPY apps/notifications/prisma/generated/libquery_engine-linux-musl-openssl-3.0.x.so.node /usr/src
 RUN chown -R node:node .
 USER node
 EXPOSE 3000
