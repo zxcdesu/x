@@ -9,6 +9,8 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { APP_INTERCEPTOR, APP_PIPE } from '@nestjs/core';
 import joi from 'joi';
 import { PrismaService } from './prisma.service';
+import { SubscriberController } from './subscriber/subscriber.controller';
+import { SubscriberService } from './subscriber/subscriber.service';
 
 @Module({
   imports: [
@@ -17,7 +19,6 @@ import { PrismaService } from './prisma.service';
       validationSchema: joi.object({
         DATABASE_URL: joi.string().uri().required(),
         BROKER_URL: joi.string().uri().required(),
-        GATEWAY_URL: joi.string().uri().required(),
         TELEGRAM_BOT_TOKEN: joi.string().required(),
       }),
     }),
@@ -40,7 +41,7 @@ import { PrismaService } from './prisma.service';
     }),
     HttpModule.register({}),
   ],
-  controllers: [],
+  controllers: [SubscriberController],
   providers: [
     PrismaService,
     {
@@ -54,6 +55,7 @@ import { PrismaService } from './prisma.service';
         transform: true,
       }),
     },
+    SubscriberService,
   ],
 })
 export class AppModule {}

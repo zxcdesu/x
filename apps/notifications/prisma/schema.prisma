@@ -10,5 +10,6 @@ datasource db {
 }
 
 model Subscriber {
-  userId Int @id
+  userId     Int     @id
+  externalId String?
 }
