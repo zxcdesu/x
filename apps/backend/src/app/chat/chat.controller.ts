@@ -1,5 +1,6 @@
 import { RabbitPayload, RabbitSubscribe } from '@golevelup/nestjs-rabbitmq';
 import { Controller } from '@nestjs/common';
+import { AssigneeType } from '../contact/dto/assignee-type.enum';
 import { PubSubService } from '../pubsub.service';
 import { ReceiveChatDto } from './dto/receive-chat.dto';
 
@@ -12,8 +13,15 @@ export class ChatController {
     exchange: 'backend',
   })
   receive(@RabbitPayload() payload: ReceiveChatDto) {
-    this.pubSubService.publish(PubSubService.chatReceived(payload.projectId), {
-      chatReceived: payload.chat,
-    });
+    this.pubSubService.publish(
+      PubSubService.chatReceived(
+        payload.projectId,
+        payload.chat.contact.assignedTo?.type === AssigneeType.User &&
+          payload.chat.contact.assignedTo,
+      ),
+      {
+        chatReceived: payload.chat,
+      },
+    );
   }
 }

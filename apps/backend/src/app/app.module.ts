@@ -17,8 +17,10 @@ import { ChannelRmq } from './channel/channel.rmq';
 import { ChatController } from './chat/chat.controller';
 import { ChatResolver } from './chat/chat.resolver';
 import { ChatRmq } from './chat/chat.rmq';
+import { ChatService } from './chat/chat.service';
 import { ContactResolver } from './contact/contact.resolver';
 import { ContactRmq } from './contact/contact.rmq';
+import { ContactService } from './contact/contact.service';
 import { ErrorFactoryService } from './error-factory.service';
 import { HsmResolver } from './hsm/hsm.resolver';
 import { HsmRmq } from './hsm/hsm.rmq';
@@ -31,6 +33,7 @@ import { MailingRmq } from './mailing/mailing.rmq';
 import { MessageController } from './message/message.controller';
 import { MessageResolver } from './message/message.resolver';
 import { MessageRmq } from './message/message.rmq';
+import { NotificationRmq } from './notification/notification.rmq';
 import { PaymentResolver } from './payment/payment.resolver';
 import { PaymentRmq } from './payment/payment.rmq';
 import { ProjectUserResolver } from './project-user/project-user.controller';
@@ -38,6 +41,8 @@ import { ProjectUserRmq } from './project-user/project-user.rmq';
 import { ProjectResolver } from './project/project.resolver';
 import { ProjectRmq } from './project/project.rmq';
 import { PubSubService } from './pubsub.service';
+import { SubscriberResolver } from './subscriber/subscriber.resolver';
+import { SubscriberRmq } from './subscriber/subscriber.rmq';
 import { SubscriptionResolver } from './subscription/subscription.resolver';
 import { SubscriptionRmq } from './subscription/subscription.rmq';
 import { TagResolver } from './tag/tag.resolver';
@@ -120,6 +125,7 @@ import { WebhookRmq } from './webhook/webhook.rmq';
     PaymentResolver,
     ProjectResolver,
     ProjectUserResolver,
+    SubscriberResolver,
     SubscriptionResolver,
     TagResolver,
     UserResolver,
@@ -137,14 +143,18 @@ import { WebhookRmq } from './webhook/webhook.rmq';
     InviteRmq.provide(ErrorFactoryService),
     MailingRmq.provide(ErrorFactoryService),
     MessageRmq.provide(ErrorFactoryService),
+    NotificationRmq.provide(ErrorFactoryService),
     PaymentRmq.provide(ErrorFactoryService),
     ProjectRmq.provide(ErrorFactoryService),
     ProjectUserRmq.provide(ErrorFactoryService),
+    SubscriberRmq.provide(ErrorFactoryService),
     SubscriptionRmq.provide(ErrorFactoryService),
     TagRmq.provide(ErrorFactoryService),
     UserRmq.provide(ErrorFactoryService),
     WalletRmq.provide(ErrorFactoryService),
     WebhookRmq.provide(ErrorFactoryService),
+    ChatService,
+    ContactService,
   ],
 })
 export class AppModule {}

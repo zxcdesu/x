@@ -1,8 +1,10 @@
 import { RabbitPayload, RabbitRPC } from '@golevelup/nestjs-rabbitmq';
 import { Controller, ParseIntPipe, SerializeOptions } from '@nestjs/common';
 import { ContactService } from './contact.service';
+import { AssignContactDto } from './dto/assign-contact.dto';
 import { ContactDto } from './dto/contact.dto';
 import { CreateContactDto } from './dto/create-contact.dto';
+import { FindAllContactsDto } from './dto/find-all-contacts.dto';
 import { UpdateContactDto } from './dto/update-contact.dto';
 
 @Controller()
@@ -41,8 +43,8 @@ export class ContactController {
   @SerializeOptions({
     type: ContactDto,
   })
-  findAll(@RabbitPayload('projectId', ParseIntPipe) projectId: number) {
-    return this.contactService.findAll(projectId);
+  findAll(@RabbitPayload() payload: FindAllContactsDto) {
+    return this.contactService.findAll(payload);
   }
 
   @RabbitRPC({
@@ -68,5 +70,44 @@ export class ContactController {
     @RabbitPayload('id', ParseIntPipe) id: number,
   ) {
     return this.contactService.remove(projectId, id);
+  }
+
+  @RabbitRPC({
+    routingKey: 'assignContact',
+    exchange: 'platform',
+  })
+  @SerializeOptions({
+    type: ContactDto,
+  })
+  assign(@RabbitPayload() payload: AssignContactDto) {
+    return this.contactService.assign(payload);
+  }
+
+  @RabbitRPC({
+    routingKey: 'resolveContact',
+    exchange: 'platform',
+  })
+  @SerializeOptions({
+    type: ContactDto,
+  })
+  resolve(
+    @RabbitPayload('projectId', ParseIntPipe) projectId: number,
+    @RabbitPayload('id', ParseIntPipe) id: number,
+  ) {
+    return this.contactService.resolve(projectId, id);
+  }
+
+  @RabbitRPC({
+    routingKey: 'rejectContact',
+    exchange: 'platform',
+  })
+  @SerializeOptions({
+    type: ContactDto,
+  })
+  reject(
+    @RabbitPayload('projectId', ParseIntPipe) projectId: number,
+    @RabbitPayload('id', ParseIntPipe) id: number,
+  ) {
+    return this.contactService.reject(projectId, id);
   }
 }

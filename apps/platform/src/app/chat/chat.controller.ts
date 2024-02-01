@@ -4,6 +4,7 @@ import { RabbitRPC } from '@zxcdesu/nestjs-rabbitmq';
 import { ChatService } from './chat.service';
 import { ChatDto } from './dto/chat.dto';
 import { CreateChatDto } from './dto/create-chat.dto';
+import { FindAllChatsDto } from './dto/find-all-chats.dto';
 import { UpdateChatDto } from './dto/update-chat.dto';
 
 @Controller()
@@ -42,8 +43,8 @@ export class ChatController {
   @SerializeOptions({
     type: ChatDto,
   })
-  findAll(@RabbitPayload('projectId', ParseIntPipe) projectId: number) {
-    return this.chatService.findAll(projectId);
+  findAll(@RabbitPayload() payload: FindAllChatsDto) {
+    return this.chatService.findAll(payload);
   }
 
   @RabbitRPC({

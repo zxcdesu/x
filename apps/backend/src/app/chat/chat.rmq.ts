@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { RmqService } from '@zxcdesu/nestjs-rabbitmq';
+import { CreateAssignedToDto } from '../contact/dto/create-assigned-to.dto';
 import { ChatDto } from './dto/chat.dto';
 import { CreateChatDto } from './dto/create-chat.dto';
 import { UpdateChatDto } from './dto/update-chat.dto';
@@ -28,13 +29,13 @@ export class ChatRmq extends RmqService {
     });
   }
 
-  findAll(projectId: number, ids?: number[]) {
+  findAll(projectId: number, assignedTo: CreateAssignedToDto) {
     return this.request<ChatDto[]>({
       exchange: 'platform',
       routingKey: 'findAllChats',
       payload: {
         projectId,
-        ids,
+        assignedTo,
       },
     });
   }

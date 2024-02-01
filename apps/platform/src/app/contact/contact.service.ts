@@ -1,6 +1,8 @@
 import { Injectable } from '@nestjs/common';
-import { PrismaService } from '../prisma.service';
+import { ContactStatus, PrismaService } from '../prisma.service';
+import { AssignContactDto } from './dto/assign-contact.dto';
 import { CreateContactDto } from './dto/create-contact.dto';
+import { FindAllContactsDto } from './dto/find-all-contacts.dto';
 import { UpdateContactDto } from './dto/update-contact.dto';
 
 @Injectable()
@@ -42,10 +44,18 @@ export class ContactService {
     });
   }
 
-  findAll(projectId: number) {
+  findAll(payload: FindAllContactsDto) {
     return this.prismaService.contact.findMany({
       where: {
-        projectId,
+        projectId: payload.projectId,
+        OR: [
+          {
+            assignedTo: null,
+          },
+          {
+            assignedTo: payload.assignedTo,
+          },
+        ],
       },
       include: {
         assignedTo: true,
@@ -87,6 +97,80 @@ export class ContactService {
           projectId,
           id,
         },
+      },
+      include: {
+        assignedTo: true,
+        customFields: true,
+        tags: {
+          include: {
+            tag: true,
+          },
+        },
+      },
+    });
+  }
+
+  assign(payload: AssignContactDto) {
+    return this.prismaService.contact.update({
+      where: {
+        projectId_id: {
+          projectId: payload.projectId,
+          id: payload.id,
+        },
+      },
+      data: {
+        assignedTo: {
+          create: payload.assignedTo,
+        },
+        status: ContactStatus.Processing,
+      },
+      include: {
+        assignedTo: true,
+        customFields: true,
+        tags: {
+          include: {
+            tag: true,
+          },
+        },
+      },
+    });
+  }
+
+  resolve(projectId: number, id: number) {
+    return this.prismaService.contact.update({
+      where: {
+        projectId_id: {
+          projectId,
+          id,
+        },
+      },
+      data: {
+        assignedTo: null,
+        status: ContactStatus.Resolved,
+      },
+      include: {
+        assignedTo: true,
+        customFields: true,
+        tags: {
+          include: {
+            tag: true,
+          },
+        },
+      },
+    });
+  }
+
+  reject(projectId: number, id: number) {
+    return this.prismaService.contact.update({
+      where: {
+        projectId_id: {
+          projectId,
+          id,
+        },
+      },
+      data: {
+        assignedTo: null,
+        status: ContactStatus.Rejected,
       },
       include: {
         assignedTo: true,

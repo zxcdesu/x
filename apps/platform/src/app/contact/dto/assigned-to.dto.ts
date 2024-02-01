@@ -1,7 +1,7 @@
-import { Exclude } from 'class-transformer';
-import { CreateAssignedToDto } from './create-assigned-to.dto';
+import { AssigneeType } from '../../prisma.service';
 
-export class AssignedToDto extends CreateAssignedToDto {
-  @Exclude()
-  contactId: number;
+export class AssignedToDto {
+  id: number;
+
+  type: AssigneeType;
 }

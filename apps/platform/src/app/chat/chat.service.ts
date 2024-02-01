@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { ChannelRepository } from '../channel/channel.repository';
 import { PrismaService } from '../prisma.service';
 import { CreateChatDto } from './dto/create-chat.dto';
+import { FindAllChatsDto } from './dto/find-all-chats.dto';
 import { UpdateChatDto } from './dto/update-chat.dto';
 
 @Injectable()
@@ -101,10 +102,20 @@ export class ChatService {
     });
   }
 
-  findAll(projectId: number) {
+  findAll(payload: FindAllChatsDto) {
     return this.prismaService.chat.findMany({
       where: {
-        projectId,
+        projectId: payload.projectId,
+        contact: {
+          OR: [
+            {
+              assignedTo: null,
+            },
+            {
+              assignedTo: payload.assignedTo,
+            },
+          ],
+        },
       },
       include: {
         contact: {
