@@ -13,7 +13,7 @@ export class SubscriptionController {
   @RabbitRPC({
     exchange: 'billing',
     routingKey: 'createSubscription',
-    queue: 'createSubscription',
+    queue: 'billing.createSubscription',
   })
   @SerializeOptions({
     type: SubscriptionDto,
@@ -25,7 +25,7 @@ export class SubscriptionController {
   @RabbitRPC({
     exchange: 'billing',
     routingKey: 'findOneSubscription',
-    queue: 'findOneSubscription',
+    queue: 'billing.findOneSubscription',
   })
   @SerializeOptions({
     type: SubscriptionDto,
@@ -37,7 +37,7 @@ export class SubscriptionController {
   @RabbitRPC({
     exchange: 'billing',
     routingKey: 'findAllSubscriptions',
-    queue: 'findAllSubscriptions',
+    queue: 'billing.findAllSubscriptions',
   })
   @SerializeOptions({
     type: SubscriptionDto,
@@ -49,7 +49,7 @@ export class SubscriptionController {
   @RabbitRPC({
     exchange: 'billing',
     routingKey: 'updateSubscription',
-    queue: 'updateSubscription',
+    queue: 'billing.updateSubscription',
   })
   @SerializeOptions({
     type: SubscriptionDto,
@@ -61,7 +61,7 @@ export class SubscriptionController {
   @RabbitRPC({
     exchange: 'billing',
     routingKey: 'removeSubscription',
-    queue: 'removeSubscription',
+    queue: 'billing.removeSubscription',
   })
   @SerializeOptions({
     type: SubscriptionDto,

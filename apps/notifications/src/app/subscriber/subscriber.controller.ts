@@ -14,7 +14,7 @@ export class SubscriberController {
   @RabbitRPC({
     exchange: 'notifications',
     routingKey: 'createSubscriber',
-    queue: 'createSubscriber',
+    queue: 'notifications.createSubscriber',
   })
   @SerializeOptions({
     type: SubscriberDto,
@@ -26,7 +26,7 @@ export class SubscriberController {
   @RabbitRPC({
     exchange: 'notifications',
     routingKey: 'findOneSubscriber',
-    queue: 'findOneSubscriber',
+    queue: 'notifications.findOneSubscriber',
   })
   @SerializeOptions({
     type: SubscriberDto,
@@ -38,7 +38,7 @@ export class SubscriberController {
   @RabbitRPC({
     exchange: 'notifications',
     routingKey: 'updateSubscriber',
-    queue: 'updateSubscriber',
+    queue: 'notifications.updateSubscriber',
   })
   @SerializeOptions({
     type: SubscriberDto,
@@ -50,7 +50,7 @@ export class SubscriberController {
   @RabbitRPC({
     exchange: 'notifications',
     routingKey: 'removeSubscriber',
-    queue: 'removeSubscriber',
+    queue: 'notifications.removeSubscriber',
   })
   @SerializeOptions({
     type: SubscriberDto,
@@ -62,7 +62,7 @@ export class SubscriberController {
   @RabbitSubscribe({
     exchange: 'notifications',
     routingKey: 'handleWebhook',
-    queue: 'handleWebhook',
+    queue: 'notifications.handleWebhook',
   })
   handleWebhook(@RabbitPayload() payload: HandleWebhookDto) {
     return this.subscriberService.handleWebhook(payload);

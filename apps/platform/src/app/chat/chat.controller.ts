@@ -14,7 +14,7 @@ export class ChatController {
   @RabbitRPC({
     exchange: 'platform',
     routingKey: 'createChat',
-    queue: 'createChat',
+    queue: 'platform.createChat',
   })
   @SerializeOptions({
     type: ChatDto,
@@ -26,7 +26,7 @@ export class ChatController {
   @RabbitRPC({
     exchange: 'platform',
     routingKey: 'findOneChat',
-    queue: 'findOneChat',
+    queue: 'platform.findOneChat',
   })
   @SerializeOptions({
     type: ChatDto,
@@ -41,7 +41,7 @@ export class ChatController {
   @RabbitRPC({
     exchange: 'platform',
     routingKey: 'findAllChats',
-    queue: 'findAllChats',
+    queue: 'platform.findAllChats',
   })
   @SerializeOptions({
     type: ChatDto,
@@ -53,7 +53,7 @@ export class ChatController {
   @RabbitRPC({
     exchange: 'platform',
     routingKey: 'updateChat',
-    queue: 'updateChat',
+    queue: 'platform.updateChat',
   })
   @SerializeOptions({
     type: ChatDto,
@@ -65,7 +65,7 @@ export class ChatController {
   @RabbitRPC({
     exchange: 'platform',
     routingKey: 'removeChat',
-    queue: 'removeChat',
+    queue: 'platform.removeChat',
   })
   @SerializeOptions({
     type: ChatDto,

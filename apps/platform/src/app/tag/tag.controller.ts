@@ -12,7 +12,7 @@ export class TagController {
   @RabbitRPC({
     exchange: 'platform',
     routingKey: 'createTag',
-    queue: 'createTag',
+    queue: 'platform.createTag',
   })
   @SerializeOptions({
     type: TagDto,
@@ -24,7 +24,7 @@ export class TagController {
   @RabbitRPC({
     exchange: 'platform',
     routingKey: 'findOneTag',
-    queue: 'findOneTag',
+    queue: 'platform.findOneTag',
   })
   @SerializeOptions({
     type: TagDto,
@@ -39,7 +39,7 @@ export class TagController {
   @RabbitRPC({
     exchange: 'platform',
     routingKey: 'findAllTags',
-    queue: 'findAllTags',
+    queue: 'platform.findAllTags',
   })
   @SerializeOptions({
     type: TagDto,
@@ -51,7 +51,7 @@ export class TagController {
   @RabbitRPC({
     exchange: 'platform',
     routingKey: 'updateTag',
-    queue: 'updateTag',
+    queue: 'platform.updateTag',
   })
   @SerializeOptions({
     type: TagDto,
@@ -63,7 +63,7 @@ export class TagController {
   @RabbitRPC({
     exchange: 'platform',
     routingKey: 'removeTag',
-    queue: 'removeTag',
+    queue: 'platform.removeTag',
   })
   @SerializeOptions({
     type: TagDto,

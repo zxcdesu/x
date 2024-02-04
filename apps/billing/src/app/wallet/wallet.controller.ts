@@ -13,7 +13,7 @@ export class WalletController {
   @RabbitRPC({
     exchange: 'billing',
     routingKey: 'createWallet',
-    queue: 'createWallet',
+    queue: 'billing.createWallet',
   })
   @SerializeOptions({
     type: WalletDto,
@@ -25,7 +25,7 @@ export class WalletController {
   @RabbitRPC({
     exchange: 'billing',
     routingKey: 'findOneWallet',
-    queue: 'findOneWallet',
+    queue: 'billing.findOneWallet',
   })
   @SerializeOptions({
     type: WalletDto,
@@ -37,7 +37,7 @@ export class WalletController {
   @RabbitRPC({
     exchange: 'billing',
     routingKey: 'findAllWallets',
-    queue: 'findAllWallets',
+    queue: 'billing.findAllWallets',
   })
   @SerializeOptions({
     type: WalletDto,
@@ -49,7 +49,7 @@ export class WalletController {
   @RabbitRPC({
     exchange: 'billing',
     routingKey: 'updateWallet',
-    queue: 'updateWallet',
+    queue: 'billing.updateWallet',
   })
   @SerializeOptions({
     type: WalletDto,
@@ -61,7 +61,7 @@ export class WalletController {
   @RabbitRPC({
     exchange: 'billing',
     routingKey: 'removeWallet',
-    queue: 'removeWallet',
+    queue: 'billing.removeWallet',
   })
   @SerializeOptions({
     type: WalletDto,

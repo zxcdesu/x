@@ -12,7 +12,7 @@ export class ContactTagController {
   @RabbitRPC({
     exchange: 'platform',
     routingKey: 'createContactTag',
-    queue: 'createContactTag',
+    queue: 'platform.createContactTag',
   })
   @SerializeOptions({
     type: ContactDto,
@@ -27,7 +27,7 @@ export class ContactTagController {
   @RabbitRPC({
     exchange: 'platform',
     routingKey: 'removeContactTag',
-    queue: 'removeContactTag',
+    queue: 'platform.removeContactTag',
   })
   @SerializeOptions({
     type: ContactDto,

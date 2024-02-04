@@ -13,7 +13,7 @@ export class MessageController {
   @RabbitRPC({
     exchange: 'platform',
     routingKey: 'createMessage',
-    queue: 'createMessage',
+    queue: 'platform.createMessage',
   })
   @SerializeOptions({
     type: MessageDto,
@@ -28,7 +28,7 @@ export class MessageController {
   @RabbitRPC({
     exchange: 'platform',
     routingKey: 'findAllMessages',
-    queue: 'findAllMessages',
+    queue: 'platform.findAllMessages',
   })
   @SerializeOptions({
     type: MessageDto,
@@ -43,7 +43,7 @@ export class MessageController {
   @RabbitRPC({
     exchange: 'platform',
     routingKey: 'updateMessage',
-    queue: 'updateMessage',
+    queue: 'platform.updateMessage',
   })
   @SerializeOptions({
     type: MessageDto,
@@ -58,7 +58,7 @@ export class MessageController {
   @RabbitRPC({
     exchange: 'platform',
     routingKey: 'removeMessage',
-    queue: 'removeMessage',
+    queue: 'platform.removeMessage',
   })
   @SerializeOptions({
     type: MessageDto,

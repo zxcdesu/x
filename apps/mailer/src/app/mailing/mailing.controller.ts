@@ -13,7 +13,7 @@ export class MailingController {
   @RabbitRPC({
     exchange: 'mailer',
     routingKey: 'createMailing',
-    queue: 'createMailing',
+    queue: 'mailer.createMailing',
   })
   @SerializeOptions({
     type: MailingDto,
@@ -25,7 +25,7 @@ export class MailingController {
   @RabbitRPC({
     exchange: 'mailer',
     routingKey: 'findOneMailing',
-    queue: 'findOneMailing',
+    queue: 'mailer.findOneMailing',
   })
   @SerializeOptions({
     type: MailingDto,
@@ -40,7 +40,7 @@ export class MailingController {
   @RabbitRPC({
     exchange: 'mailer',
     routingKey: 'findAllMailings',
-    queue: 'findAllMailings',
+    queue: 'mailer.findAllMailings',
   })
   @SerializeOptions({
     type: MailingDto,
@@ -52,7 +52,7 @@ export class MailingController {
   @RabbitRPC({
     exchange: 'mailer',
     routingKey: 'updateMailing',
-    queue: 'updateMailing',
+    queue: 'mailer.updateMailing',
   })
   @SerializeOptions({
     type: MailingDto,
@@ -64,7 +64,7 @@ export class MailingController {
   @RabbitRPC({
     exchange: 'mailer',
     routingKey: 'removeMailing',
-    queue: 'removeMailing',
+    queue: 'mailer.removeMailing',
   })
   @SerializeOptions({
     type: MailingDto,

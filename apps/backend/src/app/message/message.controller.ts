@@ -10,7 +10,7 @@ export class MessageController {
   @RabbitSubscribe({
     exchange: 'backend',
     routingKey: 'receiveMessage',
-    queue: 'receiveMessage',
+    queue: 'backend.receiveMessage',
   })
   receive(@RabbitPayload() payload: ReceiveMessageDto) {
     this.pubSubService.publish(

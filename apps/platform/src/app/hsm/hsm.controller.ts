@@ -12,7 +12,7 @@ export class HsmController {
   @RabbitRPC({
     exchange: 'platform',
     routingKey: 'createHsm',
-    queue: 'createHsm',
+    queue: 'platform.createHsm',
   })
   @SerializeOptions({
     type: HsmDto,
@@ -24,7 +24,7 @@ export class HsmController {
   @RabbitRPC({
     exchange: 'platform',
     routingKey: 'findOneHsm',
-    queue: 'findOneHsm',
+    queue: 'platform.findOneHsm',
   })
   @SerializeOptions({
     type: HsmDto,
@@ -39,7 +39,7 @@ export class HsmController {
   @RabbitRPC({
     exchange: 'platform',
     routingKey: 'findAllHsm',
-    queue: 'findAllHsm',
+    queue: 'platform.findAllHsm',
   })
   @SerializeOptions({
     type: HsmDto,
@@ -51,7 +51,7 @@ export class HsmController {
   @RabbitRPC({
     exchange: 'platform',
     routingKey: 'updateHsm',
-    queue: 'updateHsm',
+    queue: 'platform.updateHsm',
   })
   @SerializeOptions({
     type: HsmDto,
@@ -63,7 +63,7 @@ export class HsmController {
   @RabbitRPC({
     exchange: 'platform',
     routingKey: 'removeHsm',
-    queue: 'removeHsm',
+    queue: 'platform.removeHsm',
   })
   @SerializeOptions({
     type: HsmDto,

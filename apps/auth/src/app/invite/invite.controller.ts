@@ -11,7 +11,7 @@ export class InviteController {
   @RabbitRPC({
     exchange: 'auth',
     routingKey: 'createInvite',
-    queue: 'createInvite',
+    queue: 'auth.createInvite',
   })
   create(@RabbitPayload() payload: CreateInviteDto): Promise<boolean> {
     return this.inviteService.create(payload);

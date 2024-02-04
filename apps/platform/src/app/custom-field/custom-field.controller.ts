@@ -11,7 +11,7 @@ export class CustomFieldController {
   @RabbitRPC({
     exchange: 'platform',
     routingKey: 'createCustomField',
-    queue: 'createCustomField',
+    queue: 'platform.createCustomField',
   })
   @SerializeOptions({
     type: ContactDto,
@@ -26,7 +26,7 @@ export class CustomFieldController {
   @RabbitRPC({
     exchange: 'platform',
     routingKey: 'removeCustomField',
-    queue: 'removeCustomField',
+    queue: 'platform.removeCustomField',
   })
   @SerializeOptions({
     type: ContactDto,

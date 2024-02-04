@@ -11,7 +11,7 @@ export class ChatController {
   @RabbitSubscribe({
     exchange: 'backend',
     routingKey: 'receiveChat',
-    queue: 'receiveChat',
+    queue: 'backend.receiveChat',
   })
   receive(@RabbitPayload() payload: ReceiveChatDto) {
     this.pubSubService.publish(

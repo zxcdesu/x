@@ -14,7 +14,7 @@ export class ContactController {
   @RabbitRPC({
     exchange: 'platform',
     routingKey: 'createContact',
-    queue: 'createContact',
+    queue: 'platform.createContact',
   })
   @SerializeOptions({
     type: ContactDto,
@@ -26,7 +26,7 @@ export class ContactController {
   @RabbitRPC({
     exchange: 'platform',
     routingKey: 'findOneContact',
-    queue: 'findOneContact',
+    queue: 'platform.findOneContact',
   })
   @SerializeOptions({
     type: ContactDto,
@@ -41,7 +41,7 @@ export class ContactController {
   @RabbitRPC({
     exchange: 'platform',
     routingKey: 'findAllContacts',
-    queue: 'findAllContacts',
+    queue: 'platform.findAllContacts',
   })
   @SerializeOptions({
     type: ContactDto,
@@ -53,7 +53,7 @@ export class ContactController {
   @RabbitRPC({
     exchange: 'platform',
     routingKey: 'updateContact',
-    queue: 'updateContact',
+    queue: 'platform.updateContact',
   })
   @SerializeOptions({
     type: ContactDto,
@@ -65,7 +65,7 @@ export class ContactController {
   @RabbitRPC({
     exchange: 'platform',
     routingKey: 'removeContact',
-    queue: 'removeContact',
+    queue: 'platform.removeContact',
   })
   @SerializeOptions({
     type: ContactDto,
@@ -80,7 +80,7 @@ export class ContactController {
   @RabbitRPC({
     exchange: 'platform',
     routingKey: 'assignContact',
-    queue: 'assignContact',
+    queue: 'platform.assignContact',
   })
   @SerializeOptions({
     type: ContactDto,
@@ -92,7 +92,7 @@ export class ContactController {
   @RabbitRPC({
     exchange: 'platform',
     routingKey: 'resolveContact',
-    queue: 'resolveContact',
+    queue: 'platform.resolveContact',
   })
   @SerializeOptions({
     type: ContactDto,
@@ -107,7 +107,7 @@ export class ContactController {
   @RabbitRPC({
     exchange: 'platform',
     routingKey: 'rejectContact',
-    queue: 'rejectContact',
+    queue: 'platform.rejectContact',
   })
   @SerializeOptions({
     type: ContactDto,

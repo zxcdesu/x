@@ -14,7 +14,7 @@ export class WebhookController {
   @RabbitRPC({
     exchange: 'integrations',
     routingKey: 'createWebhook',
-    queue: 'createWebhook',
+    queue: 'integrations.createWebhook',
   })
   @SerializeOptions({
     type: WebhookDto,
@@ -26,7 +26,7 @@ export class WebhookController {
   @RabbitRPC({
     exchange: 'integrations',
     routingKey: 'findOneWebhook',
-    queue: 'findOneWebhook',
+    queue: 'integrations.findOneWebhook',
   })
   @SerializeOptions({
     type: WebhookDto,
@@ -41,7 +41,7 @@ export class WebhookController {
   @RabbitRPC({
     exchange: 'integrations',
     routingKey: 'findAllWebhooks',
-    queue: 'findAllWebhooks',
+    queue: 'integrations.findAllWebhooks',
   })
   @SerializeOptions({
     type: WebhookDto,
@@ -53,7 +53,7 @@ export class WebhookController {
   @RabbitRPC({
     exchange: 'integrations',
     routingKey: 'updateWebhook',
-    queue: 'updateWebhook',
+    queue: 'integrations.updateWebhook',
   })
   @SerializeOptions({
     type: WebhookDto,
@@ -65,7 +65,7 @@ export class WebhookController {
   @RabbitRPC({
     exchange: 'integrations',
     routingKey: 'removeWebhook',
-    queue: 'removeWebhook',
+    queue: 'integrations.removeWebhook',
   })
   @SerializeOptions({
     type: WebhookDto,
@@ -80,7 +80,7 @@ export class WebhookController {
   @RabbitRPC({
     exchange: 'integrations',
     routingKey: 'sendWebhooks',
-    queue: 'sendWebhook',
+    queue: 'integrations.sendWebhook',
   })
   sendWebhooks(@RabbitPayload() payload: ReceiveWebhookDto) {
     return this.webhookService.send(payload);

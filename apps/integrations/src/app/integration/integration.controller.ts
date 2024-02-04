@@ -18,7 +18,7 @@ export class IntegrationController {
   @RabbitRPC({
     exchange: 'integrations',
     routingKey: 'createIntegration',
-    queue: 'createIntegration',
+    queue: 'integrations.createIntegration',
   })
   @SerializeOptions({
     type: IntegrationDto,
@@ -30,7 +30,7 @@ export class IntegrationController {
   @RabbitRPC({
     exchange: 'integrations',
     routingKey: 'findOneIntegration',
-    queue: 'findOneIntegration',
+    queue: 'integrations.findOneIntegration',
   })
   @SerializeOptions({
     type: IntegrationDto,
@@ -45,7 +45,7 @@ export class IntegrationController {
   @RabbitRPC({
     exchange: 'integrations',
     routingKey: 'findAllIntegrations',
-    queue: 'findAllIntegrations',
+    queue: 'integrations.findAllIntegrations',
   })
   @SerializeOptions({
     type: IntegrationDto,
@@ -57,7 +57,7 @@ export class IntegrationController {
   @RabbitRPC({
     exchange: 'integrations',
     routingKey: 'updateIntegration',
-    queue: 'updateIntegration',
+    queue: 'integrations.updateIntegration',
   })
   @SerializeOptions({
     type: IntegrationDto,
@@ -69,7 +69,7 @@ export class IntegrationController {
   @RabbitRPC({
     exchange: 'integrations',
     routingKey: 'removeIntegration',
-    queue: 'removeIntegration',
+    queue: 'integrations.removeIntegration',
   })
   @SerializeOptions({
     type: IntegrationDto,

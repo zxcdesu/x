@@ -17,7 +17,7 @@ export class UserController {
   @RabbitRPC({
     exchange: 'auth',
     routingKey: 'createUser',
-    queue: 'createUser',
+    queue: 'auth.createUser',
   })
   @SerializeOptions({
     type: UserDto,
@@ -29,7 +29,7 @@ export class UserController {
   @RabbitRPC({
     exchange: 'auth',
     routingKey: 'findOneUser',
-    queue: 'findOneUser',
+    queue: 'auth.findOneUser',
   })
   @SerializeOptions({
     type: UserDto,
@@ -41,7 +41,7 @@ export class UserController {
   @RabbitRPC({
     exchange: 'auth',
     routingKey: 'updateUser',
-    queue: 'updateUser',
+    queue: 'auth.updateUser',
   })
   @SerializeOptions({
     type: UserDto,
@@ -53,7 +53,7 @@ export class UserController {
   @RabbitRPC({
     exchange: 'auth',
     routingKey: 'removeUser',
-    queue: 'removeUser',
+    queue: 'auth.removeUser',
   })
   @SerializeOptions({
     type: UserDto,
@@ -65,7 +65,7 @@ export class UserController {
   @RabbitRPC({
     exchange: 'auth',
     routingKey: 'signInUser',
-    queue: 'signInUser',
+    queue: 'auth.signInUser',
   })
   @SerializeOptions({
     type: JwtDto,

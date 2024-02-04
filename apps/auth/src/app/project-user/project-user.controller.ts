@@ -14,7 +14,7 @@ export class ProjectUserController {
   @RabbitRPC({
     exchange: 'auth',
     routingKey: 'findOneProjectUser',
-    queue: 'findOneProjectUser',
+    queue: 'auth.findOneProjectUser',
   })
   @SerializeOptions({
     type: ProjectUserDto,
@@ -29,7 +29,7 @@ export class ProjectUserController {
   @RabbitRPC({
     exchange: 'auth',
     routingKey: 'findAllProjectUsers',
-    queue: 'findAllProjectUsers',
+    queue: 'auth.findAllProjectUsers',
   })
   @SerializeOptions({
     type: ProjectUserDto,
@@ -41,7 +41,7 @@ export class ProjectUserController {
   @RabbitRPC({
     exchange: 'auth',
     routingKey: 'updateProjectUser',
-    queue: 'updateProjectUser',
+    queue: 'auth.updateProjectUser',
   })
   @SerializeOptions({
     type: ProjectUserDto,
@@ -57,7 +57,7 @@ export class ProjectUserController {
   @RabbitRPC({
     exchange: 'auth',
     routingKey: 'removeProjectUser',
-    queue: 'removeProjectUser',
+    queue: 'auth.removeProjectUser',
   })
   @SerializeOptions({
     type: ProjectUserDto,

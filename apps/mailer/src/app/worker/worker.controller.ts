@@ -11,7 +11,7 @@ export class WorkerController {
   @RabbitSubscribe({
     exchange: 'mailer.worker',
     routingKey: 'start',
-    queue: 'mailer.worker#start',
+    queue: 'mailer.worker.start',
   })
   start(@RabbitPayload() payload: StartDto) {
     return this.workerService.start(payload);
