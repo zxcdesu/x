@@ -6,7 +6,7 @@ export class AdminRmq extends RmqService {
   check(userId: number) {
     return this.request<boolean>({
       exchange: 'admin',
-      routingKey: 'checkAdmin',
+      routingKey: 'check',
       payload: {
         userId,
       },

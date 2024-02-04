@@ -11,8 +11,9 @@ export class MailingController {
   constructor(private readonly mailingService: MailingService) {}
 
   @RabbitRPC({
-    routingKey: 'createMailing',
     exchange: 'mailer',
+    routingKey: 'createMailing',
+    queue: 'createMailing',
   })
   @SerializeOptions({
     type: MailingDto,
@@ -22,8 +23,9 @@ export class MailingController {
   }
 
   @RabbitRPC({
-    routingKey: 'findOneMailing',
     exchange: 'mailer',
+    routingKey: 'findOneMailing',
+    queue: 'findOneMailing',
   })
   @SerializeOptions({
     type: MailingDto,
@@ -36,8 +38,9 @@ export class MailingController {
   }
 
   @RabbitRPC({
-    routingKey: 'findAllMailings',
     exchange: 'mailer',
+    routingKey: 'findAllMailings',
+    queue: 'findAllMailings',
   })
   @SerializeOptions({
     type: MailingDto,
@@ -47,8 +50,9 @@ export class MailingController {
   }
 
   @RabbitRPC({
-    routingKey: 'updateMailing',
     exchange: 'mailer',
+    routingKey: 'updateMailing',
+    queue: 'updateMailing',
   })
   @SerializeOptions({
     type: MailingDto,
@@ -58,8 +62,9 @@ export class MailingController {
   }
 
   @RabbitRPC({
-    routingKey: 'removeMailing',
     exchange: 'mailer',
+    routingKey: 'removeMailing',
+    queue: 'removeMailing',
   })
   @SerializeOptions({
     type: MailingDto,

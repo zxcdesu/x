@@ -12,8 +12,9 @@ export class ProjectUserController {
   constructor(private readonly projectUserService: ProjectUserService) {}
 
   @RabbitRPC({
-    routingKey: 'findOneProjectUser',
     exchange: 'auth',
+    routingKey: 'findOneProjectUser',
+    queue: 'findOneProjectUser',
   })
   @SerializeOptions({
     type: ProjectUserDto,
@@ -26,8 +27,9 @@ export class ProjectUserController {
   }
 
   @RabbitRPC({
-    routingKey: 'findAllProjectUsers',
     exchange: 'auth',
+    routingKey: 'findAllProjectUsers',
+    queue: 'findAllProjectUsers',
   })
   @SerializeOptions({
     type: ProjectUserDto,
@@ -37,8 +39,9 @@ export class ProjectUserController {
   }
 
   @RabbitRPC({
-    routingKey: 'updateProjectUser',
     exchange: 'auth',
+    routingKey: 'updateProjectUser',
+    queue: 'updateProjectUser',
   })
   @SerializeOptions({
     type: ProjectUserDto,
@@ -52,8 +55,9 @@ export class ProjectUserController {
   }
 
   @RabbitRPC({
-    routingKey: 'removeProjectUser',
     exchange: 'auth',
+    routingKey: 'removeProjectUser',
+    queue: 'removeProjectUser',
   })
   @SerializeOptions({
     type: ProjectUserDto,

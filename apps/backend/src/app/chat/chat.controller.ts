@@ -9,8 +9,9 @@ export class ChatController {
   constructor(private readonly pubSubService: PubSubService) {}
 
   @RabbitSubscribe({
-    routingKey: 'receiveChat',
     exchange: 'backend',
+    routingKey: 'receiveChat',
+    queue: 'receiveChat',
   })
   receive(@RabbitPayload() payload: ReceiveChatDto) {
     this.pubSubService.publish(

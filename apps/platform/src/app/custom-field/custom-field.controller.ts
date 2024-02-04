@@ -9,8 +9,9 @@ export class CustomFieldController {
   constructor(private readonly customFieldService: CustomFieldService) {}
 
   @RabbitRPC({
-    routingKey: 'createCustomField',
     exchange: 'platform',
+    routingKey: 'createCustomField',
+    queue: 'createCustomField',
   })
   @SerializeOptions({
     type: ContactDto,
@@ -23,8 +24,9 @@ export class CustomFieldController {
   }
 
   @RabbitRPC({
-    routingKey: 'removeCustomField',
     exchange: 'platform',
+    routingKey: 'removeCustomField',
+    queue: 'removeCustomField',
   })
   @SerializeOptions({
     type: ContactDto,

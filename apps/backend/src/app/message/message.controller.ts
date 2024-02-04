@@ -8,8 +8,9 @@ export class MessageController {
   constructor(private readonly pubSubService: PubSubService) {}
 
   @RabbitSubscribe({
-    routingKey: 'receiveMessage',
     exchange: 'backend',
+    routingKey: 'receiveMessage',
+    queue: 'receiveMessage',
   })
   receive(@RabbitPayload() payload: ReceiveMessageDto) {
     this.pubSubService.publish(

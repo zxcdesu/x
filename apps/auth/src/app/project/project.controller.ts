@@ -16,8 +16,9 @@ export class ProjectController {
   constructor(private readonly projectService: ProjectService) {}
 
   @RabbitRPC({
-    routingKey: 'createProject',
     exchange: 'auth',
+    routingKey: 'createProject',
+    queue: 'createProject',
   })
   @SerializeOptions({
     type: ProjectDto,
@@ -30,8 +31,9 @@ export class ProjectController {
   }
 
   @RabbitRPC({
-    routingKey: 'findOneProject',
     exchange: 'auth',
+    routingKey: 'findOneProject',
+    queue: 'findOneProject',
   })
   @SerializeOptions({
     type: ProjectDto,
@@ -44,8 +46,9 @@ export class ProjectController {
   }
 
   @RabbitRPC({
-    routingKey: 'findAllProjects',
     exchange: 'auth',
+    routingKey: 'findAllProjects',
+    queue: 'findAllProjects',
   })
   @SerializeOptions({
     type: ProjectDto,
@@ -55,8 +58,9 @@ export class ProjectController {
   }
 
   @RabbitRPC({
-    routingKey: 'updateProject',
     exchange: 'auth',
+    routingKey: 'updateProject',
+    queue: 'updateProject',
   })
   @SerializeOptions({
     type: ProjectDto,
@@ -69,8 +73,9 @@ export class ProjectController {
   }
 
   @RabbitRPC({
-    routingKey: 'removeProject',
     exchange: 'auth',
+    routingKey: 'removeProject',
+    queue: 'removeProject',
   })
   @SerializeOptions({
     type: ProjectDto,
@@ -83,8 +88,9 @@ export class ProjectController {
   }
 
   @RabbitRPC({
-    routingKey: 'signInProject',
     exchange: 'auth',
+    routingKey: 'signInProject',
+    queue: 'signInProject',
   })
   @SerializeOptions({
     type: JwtDto,

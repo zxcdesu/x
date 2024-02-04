@@ -10,6 +10,8 @@ import joi from 'joi';
 import { MailingController } from './mailing/mailing.controller';
 import { MailingService } from './mailing/mailing.service';
 import { PrismaService } from './prisma.service';
+import { WorkerController } from './worker/worker.controller';
+import { WorkerService } from './worker/worker.service';
 
 @Module({
   imports: [
@@ -42,7 +44,7 @@ import { PrismaService } from './prisma.service';
       }),
     }),
   ],
-  controllers: [MailingController],
+  controllers: [MailingController, WorkerController],
   providers: [
     PrismaService,
     {
@@ -57,6 +59,7 @@ import { PrismaService } from './prisma.service';
       }),
     },
     MailingService,
+    WorkerService,
   ],
 })
 export class AppModule {}

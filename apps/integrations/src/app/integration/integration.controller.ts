@@ -16,8 +16,9 @@ export class IntegrationController {
   constructor(private readonly integrationService: IntegrationService) {}
 
   @RabbitRPC({
-    routingKey: 'createIntegration',
     exchange: 'integrations',
+    routingKey: 'createIntegration',
+    queue: 'createIntegration',
   })
   @SerializeOptions({
     type: IntegrationDto,
@@ -27,8 +28,9 @@ export class IntegrationController {
   }
 
   @RabbitRPC({
-    routingKey: 'findOneIntegration',
     exchange: 'integrations',
+    routingKey: 'findOneIntegration',
+    queue: 'findOneIntegration',
   })
   @SerializeOptions({
     type: IntegrationDto,
@@ -41,8 +43,9 @@ export class IntegrationController {
   }
 
   @RabbitRPC({
-    routingKey: 'findAllIntegrations',
     exchange: 'integrations',
+    routingKey: 'findAllIntegrations',
+    queue: 'findAllIntegrations',
   })
   @SerializeOptions({
     type: IntegrationDto,
@@ -52,8 +55,9 @@ export class IntegrationController {
   }
 
   @RabbitRPC({
-    routingKey: 'updateIntegration',
     exchange: 'integrations',
+    routingKey: 'updateIntegration',
+    queue: 'updateIntegration',
   })
   @SerializeOptions({
     type: IntegrationDto,
@@ -63,8 +67,9 @@ export class IntegrationController {
   }
 
   @RabbitRPC({
-    routingKey: 'removeIntegration',
     exchange: 'integrations',
+    routingKey: 'removeIntegration',
+    queue: 'removeIntegration',
   })
   @SerializeOptions({
     type: IntegrationDto,

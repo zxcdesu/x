@@ -10,8 +10,9 @@ export class TagController {
   constructor(private readonly tagService: TagService) {}
 
   @RabbitRPC({
-    routingKey: 'createTag',
     exchange: 'platform',
+    routingKey: 'createTag',
+    queue: 'createTag',
   })
   @SerializeOptions({
     type: TagDto,
@@ -21,8 +22,9 @@ export class TagController {
   }
 
   @RabbitRPC({
-    routingKey: 'findOneTag',
     exchange: 'platform',
+    routingKey: 'findOneTag',
+    queue: 'findOneTag',
   })
   @SerializeOptions({
     type: TagDto,
@@ -35,8 +37,9 @@ export class TagController {
   }
 
   @RabbitRPC({
-    routingKey: 'findAllTags',
     exchange: 'platform',
+    routingKey: 'findAllTags',
+    queue: 'findAllTags',
   })
   @SerializeOptions({
     type: TagDto,
@@ -46,8 +49,9 @@ export class TagController {
   }
 
   @RabbitRPC({
-    routingKey: 'updateTag',
     exchange: 'platform',
+    routingKey: 'updateTag',
+    queue: 'updateTag',
   })
   @SerializeOptions({
     type: TagDto,
@@ -57,8 +61,9 @@ export class TagController {
   }
 
   @RabbitRPC({
-    routingKey: 'removeTag',
     exchange: 'platform',
+    routingKey: 'removeTag',
+    queue: 'removeTag',
   })
   @SerializeOptions({
     type: TagDto,

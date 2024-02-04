@@ -13,6 +13,7 @@ export class PaymentController {
   @RabbitRPC({
     exchange: 'billing',
     routingKey: 'createPayment',
+    queue: 'createPayment',
   })
   @SerializeOptions({
     type: PaymentDto,
@@ -24,6 +25,7 @@ export class PaymentController {
   @RabbitSubscribe({
     exchange: 'billing',
     routingKey: 'handleWebhook',
+    queue: 'handleWebhook',
   })
   handleWebhook(@RabbitPayload() payload: HandleWebhookDto) {
     return this.paymentService.handleWebhook(payload);

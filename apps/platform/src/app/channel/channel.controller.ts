@@ -12,8 +12,9 @@ export class ChannelController {
   constructor(private readonly channelService: ChannelService) {}
 
   @RabbitRPC({
-    routingKey: 'createChannel',
     exchange: 'platform',
+    routingKey: 'createChannel',
+    queue: 'createChannel',
   })
   @SerializeOptions({
     type: ChannelDto,
@@ -23,8 +24,9 @@ export class ChannelController {
   }
 
   @RabbitRPC({
-    routingKey: 'findOneChannel',
     exchange: 'platform',
+    routingKey: 'findOneChannel',
+    queue: 'findOneChannel',
   })
   @SerializeOptions({
     type: ChannelDto,
@@ -37,8 +39,9 @@ export class ChannelController {
   }
 
   @RabbitRPC({
-    routingKey: 'findAllChannels',
     exchange: 'platform',
+    routingKey: 'findAllChannels',
+    queue: 'findAllChannels',
   })
   @SerializeOptions({
     type: ChannelDto,
@@ -48,8 +51,9 @@ export class ChannelController {
   }
 
   @RabbitRPC({
-    routingKey: 'updateChannel',
     exchange: 'platform',
+    routingKey: 'updateChannel',
+    queue: 'updateChannel',
   })
   @SerializeOptions({
     type: ChannelDto,
@@ -59,8 +63,9 @@ export class ChannelController {
   }
 
   @RabbitRPC({
-    routingKey: 'removeChannel',
     exchange: 'platform',
+    routingKey: 'removeChannel',
+    queue: 'removeChannel',
   })
   @SerializeOptions({
     type: ChannelDto,
@@ -73,8 +78,9 @@ export class ChannelController {
   }
 
   @RabbitSubscribe({
-    routingKey: 'handleWebhook',
     exchange: 'platform',
+    routingKey: 'handleWebhook',
+    queue: 'handleWebhook',
   })
   handleWebhook(@RabbitPayload() event: WebhookPayload) {
     return this.channelService.handleWebhook(event);

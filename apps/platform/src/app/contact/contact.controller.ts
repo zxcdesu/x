@@ -12,8 +12,9 @@ export class ContactController {
   constructor(private readonly contactService: ContactService) {}
 
   @RabbitRPC({
-    routingKey: 'createContact',
     exchange: 'platform',
+    routingKey: 'createContact',
+    queue: 'createContact',
   })
   @SerializeOptions({
     type: ContactDto,
@@ -23,8 +24,9 @@ export class ContactController {
   }
 
   @RabbitRPC({
-    routingKey: 'findOneContact',
     exchange: 'platform',
+    routingKey: 'findOneContact',
+    queue: 'findOneContact',
   })
   @SerializeOptions({
     type: ContactDto,
@@ -37,8 +39,9 @@ export class ContactController {
   }
 
   @RabbitRPC({
-    routingKey: 'findAllContacts',
     exchange: 'platform',
+    routingKey: 'findAllContacts',
+    queue: 'findAllContacts',
   })
   @SerializeOptions({
     type: ContactDto,
@@ -48,8 +51,9 @@ export class ContactController {
   }
 
   @RabbitRPC({
-    routingKey: 'updateContact',
     exchange: 'platform',
+    routingKey: 'updateContact',
+    queue: 'updateContact',
   })
   @SerializeOptions({
     type: ContactDto,
@@ -59,8 +63,9 @@ export class ContactController {
   }
 
   @RabbitRPC({
-    routingKey: 'removeContact',
     exchange: 'platform',
+    routingKey: 'removeContact',
+    queue: 'removeContact',
   })
   @SerializeOptions({
     type: ContactDto,
@@ -73,8 +78,9 @@ export class ContactController {
   }
 
   @RabbitRPC({
-    routingKey: 'assignContact',
     exchange: 'platform',
+    routingKey: 'assignContact',
+    queue: 'assignContact',
   })
   @SerializeOptions({
     type: ContactDto,
@@ -84,8 +90,9 @@ export class ContactController {
   }
 
   @RabbitRPC({
-    routingKey: 'resolveContact',
     exchange: 'platform',
+    routingKey: 'resolveContact',
+    queue: 'resolveContact',
   })
   @SerializeOptions({
     type: ContactDto,
@@ -98,8 +105,9 @@ export class ContactController {
   }
 
   @RabbitRPC({
-    routingKey: 'rejectContact',
     exchange: 'platform',
+    routingKey: 'rejectContact',
+    queue: 'rejectContact',
   })
   @SerializeOptions({
     type: ContactDto,

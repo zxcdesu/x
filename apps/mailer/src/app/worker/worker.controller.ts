@@ -7,8 +7,9 @@ export class WorkerController {
   constructor(private readonly workerService: WorkerService) {}
 
   @RabbitSubscribe({
-    routingKey: 'createWorker',
     exchange: 'mailer',
+    routingKey: 'createWorker',
+    queue: 'createWorker',
   })
   create() {
     return this.workerService.create();

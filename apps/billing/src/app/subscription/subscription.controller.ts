@@ -11,8 +11,9 @@ export class SubscriptionController {
   constructor(private readonly subscriptionService: SubscriptionService) {}
 
   @RabbitRPC({
-    routingKey: 'createSubscription',
     exchange: 'billing',
+    routingKey: 'createSubscription',
+    queue: 'createSubscription',
   })
   @SerializeOptions({
     type: SubscriptionDto,
@@ -22,8 +23,9 @@ export class SubscriptionController {
   }
 
   @RabbitRPC({
-    routingKey: 'findOneSubscription',
     exchange: 'billing',
+    routingKey: 'findOneSubscription',
+    queue: 'findOneSubscription',
   })
   @SerializeOptions({
     type: SubscriptionDto,
@@ -33,8 +35,9 @@ export class SubscriptionController {
   }
 
   @RabbitRPC({
-    routingKey: 'findAllSubscriptions',
     exchange: 'billing',
+    routingKey: 'findAllSubscriptions',
+    queue: 'findAllSubscriptions',
   })
   @SerializeOptions({
     type: SubscriptionDto,
@@ -44,8 +47,9 @@ export class SubscriptionController {
   }
 
   @RabbitRPC({
-    routingKey: 'updateSubscription',
     exchange: 'billing',
+    routingKey: 'updateSubscription',
+    queue: 'updateSubscription',
   })
   @SerializeOptions({
     type: SubscriptionDto,
@@ -55,8 +59,9 @@ export class SubscriptionController {
   }
 
   @RabbitRPC({
-    routingKey: 'removeSubscription',
     exchange: 'billing',
+    routingKey: 'removeSubscription',
+    queue: 'removeSubscription',
   })
   @SerializeOptions({
     type: SubscriptionDto,

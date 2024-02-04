@@ -8,8 +8,9 @@ export class AdminController {
   constructor(private readonly adminService: AdminService) {}
 
   @RabbitRPC({
-    routingKey: 'checkAdmin',
     exchange: 'admin',
+    routingKey: 'check',
+    queue: 'check',
   })
   check(@RabbitPayload('userId', ParseIntPipe) userId: number) {
     return this.adminService.check(userId);

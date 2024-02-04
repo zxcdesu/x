@@ -11,8 +11,9 @@ export class BotController {
   constructor(private readonly botService: BotService) {}
 
   @RabbitRPC({
-    routingKey: 'createBot',
     exchange: 'bots',
+    routingKey: 'createBot',
+    queue: 'createBot',
   })
   @SerializeOptions({
     type: BotDto,
@@ -22,8 +23,9 @@ export class BotController {
   }
 
   @RabbitRPC({
-    routingKey: 'findOneBot',
     exchange: 'bots',
+    routingKey: 'findOneBot',
+    queue: 'findOneBot',
   })
   @SerializeOptions({
     type: BotDto,
@@ -36,8 +38,9 @@ export class BotController {
   }
 
   @RabbitRPC({
-    routingKey: 'findAllBots',
     exchange: 'bots',
+    routingKey: 'findAllBots',
+    queue: 'findAllBots',
   })
   @SerializeOptions({
     type: BotDto,
@@ -47,8 +50,9 @@ export class BotController {
   }
 
   @RabbitRPC({
-    routingKey: 'updateBot',
     exchange: 'bots',
+    routingKey: 'updateBot',
+    queue: 'updateBot',
   })
   @SerializeOptions({
     type: BotDto,
@@ -58,8 +62,9 @@ export class BotController {
   }
 
   @RabbitRPC({
-    routingKey: 'removeBot',
     exchange: 'bots',
+    routingKey: 'removeBot',
+    queue: 'removeBot',
   })
   @SerializeOptions({
     type: BotDto,

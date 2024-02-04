@@ -10,8 +10,9 @@ export class ContactTagController {
   constructor(private readonly contactTagService: ContactTagService) {}
 
   @RabbitRPC({
-    routingKey: 'createContactTag',
     exchange: 'platform',
+    routingKey: 'createContactTag',
+    queue: 'createContactTag',
   })
   @SerializeOptions({
     type: ContactDto,
@@ -24,8 +25,9 @@ export class ContactTagController {
   }
 
   @RabbitRPC({
-    routingKey: 'removeContactTag',
     exchange: 'platform',
+    routingKey: 'removeContactTag',
+    queue: 'removeContactTag',
   })
   @SerializeOptions({
     type: ContactDto,

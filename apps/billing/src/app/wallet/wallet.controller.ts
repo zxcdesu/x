@@ -11,8 +11,9 @@ export class WalletController {
   constructor(private readonly walletService: WalletService) {}
 
   @RabbitRPC({
-    routingKey: 'createWallet',
     exchange: 'billing',
+    routingKey: 'createWallet',
+    queue: 'createWallet',
   })
   @SerializeOptions({
     type: WalletDto,
@@ -22,8 +23,9 @@ export class WalletController {
   }
 
   @RabbitRPC({
-    routingKey: 'findOneWallet',
     exchange: 'billing',
+    routingKey: 'findOneWallet',
+    queue: 'findOneWallet',
   })
   @SerializeOptions({
     type: WalletDto,
@@ -33,8 +35,9 @@ export class WalletController {
   }
 
   @RabbitRPC({
-    routingKey: 'findAllWallets',
     exchange: 'billing',
+    routingKey: 'findAllWallets',
+    queue: 'findAllWallets',
   })
   @SerializeOptions({
     type: WalletDto,
@@ -44,8 +47,9 @@ export class WalletController {
   }
 
   @RabbitRPC({
-    routingKey: 'updateWallet',
     exchange: 'billing',
+    routingKey: 'updateWallet',
+    queue: 'updateWallet',
   })
   @SerializeOptions({
     type: WalletDto,
@@ -55,8 +59,9 @@ export class WalletController {
   }
 
   @RabbitRPC({
-    routingKey: 'removeWallet',
     exchange: 'billing',
+    routingKey: 'removeWallet',
+    queue: 'removeWallet',
   })
   @SerializeOptions({
     type: WalletDto,

@@ -10,8 +10,9 @@ export class HistoryController {
   constructor(private readonly historyService: HistoryService) {}
 
   @RabbitRPC({
-    routingKey: 'createHistory',
     exchange: 'history',
+    routingKey: 'createHistory',
+    queue: 'createHistory',
   })
   @SerializeOptions({
     type: HistoryDto,
@@ -21,8 +22,9 @@ export class HistoryController {
   }
 
   @RabbitRPC({
-    routingKey: 'findAllHistories',
     exchange: 'history',
+    routingKey: 'findAllHistories',
+    queue: 'findAllHistories',
   })
   @SerializeOptions({
     type: HistoryDto,

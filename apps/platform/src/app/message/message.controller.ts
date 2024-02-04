@@ -11,8 +11,9 @@ export class MessageController {
   constructor(private readonly messageService: MessageService) {}
 
   @RabbitRPC({
-    routingKey: 'createMessage',
     exchange: 'platform',
+    routingKey: 'createMessage',
+    queue: 'createMessage',
   })
   @SerializeOptions({
     type: MessageDto,
@@ -25,8 +26,9 @@ export class MessageController {
   }
 
   @RabbitRPC({
-    routingKey: 'findAllMessages',
     exchange: 'platform',
+    routingKey: 'findAllMessages',
+    queue: 'findAllMessages',
   })
   @SerializeOptions({
     type: MessageDto,
@@ -39,8 +41,9 @@ export class MessageController {
   }
 
   @RabbitRPC({
-    routingKey: 'updateMessage',
     exchange: 'platform',
+    routingKey: 'updateMessage',
+    queue: 'updateMessage',
   })
   @SerializeOptions({
     type: MessageDto,
@@ -53,8 +56,9 @@ export class MessageController {
   }
 
   @RabbitRPC({
-    routingKey: 'removeMessage',
     exchange: 'platform',
+    routingKey: 'removeMessage',
+    queue: 'removeMessage',
   })
   @SerializeOptions({
     type: MessageDto,

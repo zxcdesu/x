@@ -9,8 +9,9 @@ export class InviteController {
   constructor(private readonly inviteService: InviteService) {}
 
   @RabbitRPC({
-    routingKey: 'createInvite',
     exchange: 'auth',
+    routingKey: 'createInvite',
+    queue: 'createInvite',
   })
   create(@RabbitPayload() payload: CreateInviteDto): Promise<boolean> {
     return this.inviteService.create(payload);
