@@ -6,6 +6,7 @@ import {
 } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { APP_INTERCEPTOR, APP_PIPE } from '@nestjs/core';
+import { ScheduleModule } from '@nestjs/schedule';
 import joi from 'joi';
 import { MailingController } from './mailing/mailing.controller';
 import { MailingService } from './mailing/mailing.service';
@@ -43,6 +44,7 @@ import { WorkerService } from './worker/worker.service';
         },
       }),
     }),
+    ScheduleModule.forRoot(),
   ],
   controllers: [MailingController, WorkerController],
   providers: [
