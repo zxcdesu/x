@@ -32,6 +32,7 @@ export class RmqService {
       }
     >(...args);
     if (payload?.$error) {
+      delete payload.$error;
       throw this.errorFactory.errorFactory(payload);
     }
     return payload;
