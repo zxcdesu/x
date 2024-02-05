@@ -1,18 +1,22 @@
 import { RabbitPayload } from '@golevelup/nestjs-rabbitmq';
-import { Controller, SerializeOptions } from '@nestjs/common';
+import { Controller, ParseIntPipe, SerializeOptions } from '@nestjs/common';
+import {
+  CreateUserDto,
+  SignInUserDto,
+  UpdateUserDto,
+  UserDto,
+  UserService,
+} from '@zxcdesu/data-access-user';
+import { JwtDto } from '@zxcdesu/infrastructure';
 import { RabbitRPC } from '@zxcdesu/nestjs-rabbitmq';
-import { JwtDto } from '../jwt/dto/jwt.dto';
-import { CreateUserDto } from './dto/create-user.dto';
-import { FindOneUserDto } from './dto/find-one-user.dto';
-import { RemoveUserDto } from './dto/remove-user.dto';
-import { SignInUserDto } from './dto/sign-in-user.dto';
-import { UpdateUserDto } from './dto/update-user.dto';
-import { UserDto } from './dto/user.dto';
-import { UserService } from './user.service';
+import { UserAuthService } from './user-auth.service';
 
 @Controller()
 export class UserController {
-  constructor(private readonly userService: UserService) {}
+  constructor(
+    private readonly userService: UserService,
+    private readonly userAuthService: UserAuthService,
+  ) {}
 
   @RabbitRPC({
     exchange: 'auth',
@@ -34,8 +38,8 @@ export class UserController {
   @SerializeOptions({
     type: UserDto,
   })
-  findOne(@RabbitPayload() payload: FindOneUserDto): Promise<UserDto> {
-    return this.userService.findOne(payload);
+  findOne(@RabbitPayload('id', ParseIntPipe) id: number): Promise<UserDto> {
+    return this.userService.findOne(id);
   }
 
   @RabbitRPC({
@@ -46,8 +50,11 @@ export class UserController {
   @SerializeOptions({
     type: UserDto,
   })
-  update(@RabbitPayload() payload: UpdateUserDto): Promise<UserDto> {
-    return this.userService.update(payload);
+  update(
+    @RabbitPayload('id', ParseIntPipe) id: number,
+    @RabbitPayload() payload: UpdateUserDto,
+  ): Promise<UserDto> {
+    return this.userService.update(id, payload);
   }
 
   @RabbitRPC({
@@ -58,8 +65,8 @@ export class UserController {
   @SerializeOptions({
     type: UserDto,
   })
-  remove(@RabbitPayload() payload: RemoveUserDto): Promise<UserDto> {
-    return this.userService.remove(payload);
+  remove(@RabbitPayload('id', ParseIntPipe) id: number): Promise<UserDto> {
+    return this.userService.remove(id);
   }
 
   @RabbitRPC({
@@ -71,6 +78,6 @@ export class UserController {
     type: JwtDto,
   })
   signIn(@RabbitPayload() payload: SignInUserDto): Promise<JwtDto> {
-    return this.userService.signIn(payload);
+    return this.userAuthService.signIn(payload);
   }
 }

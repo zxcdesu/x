@@ -1,15 +1,34 @@
 import { RabbitPayload } from '@golevelup/nestjs-rabbitmq';
 import { Controller, SerializeOptions } from '@nestjs/common';
+import { ProjectId } from '@zxcdesu/data-access-project';
+import {
+  CreateProjectUserDto,
+  ProjectUserDto,
+  ProjectUserService,
+  UpdateProjectUserDto,
+} from '@zxcdesu/data-access-project-user';
+import { UserId } from '@zxcdesu/data-access-user';
 import { RabbitRPC } from '@zxcdesu/nestjs-rabbitmq';
-import { ProjectId } from '../project/project.decorator';
-import { UserId } from '../user/user.decorator';
-import { ProjectUserDto } from './dto/project-user.dto';
-import { UpdateProjectUserDto } from './dto/update-project-user.dto';
-import { ProjectUserService } from './project-user.service';
 
 @Controller()
 export class ProjectUserController {
   constructor(private readonly projectUserService: ProjectUserService) {}
+
+  @RabbitRPC({
+    exchange: 'auth',
+    routingKey: 'createProjectUser',
+    queue: 'auth.createProjectUser',
+  })
+  @SerializeOptions({
+    type: ProjectUserDto,
+  })
+  create(
+    @ProjectId() projectId: number,
+    @UserId() userId: number,
+    @RabbitPayload() payload: CreateProjectUserDto,
+  ): Promise<ProjectUserDto> {
+    return this.projectUserService.create(projectId, userId, payload);
+  }
 
   @RabbitRPC({
     exchange: 'auth',

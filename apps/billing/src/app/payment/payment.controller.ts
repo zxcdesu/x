@@ -1,10 +1,13 @@
 import { RabbitPayload, RabbitSubscribe } from '@golevelup/nestjs-rabbitmq';
 import { Controller, SerializeOptions } from '@nestjs/common';
+import {
+  CreatePaymentDto,
+  HandleWebhookDto,
+  PaymentDto,
+  PaymentService,
+} from '@zxcdesu/data-access-payment';
+import { ProjectId } from '@zxcdesu/data-access-project';
 import { RabbitRPC } from '@zxcdesu/nestjs-rabbitmq';
-import { CreatePaymentDto } from './dto/create-payment.dto';
-import { HandleWebhookDto } from './dto/handle-webhook.dto';
-import { PaymentDto } from './dto/payment.dto';
-import { PaymentService } from './payment.service';
 
 @Controller()
 export class PaymentController {
@@ -18,8 +21,11 @@ export class PaymentController {
   @SerializeOptions({
     type: PaymentDto,
   })
-  create(@RabbitPayload() payload: CreatePaymentDto) {
-    return this.paymentService.create(payload);
+  create(
+    @ProjectId() projectId: number,
+    @RabbitPayload() payload: CreatePaymentDto,
+  ) {
+    return this.paymentService.create(projectId, payload);
   }
 
   @RabbitSubscribe({

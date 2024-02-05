@@ -14,7 +14,7 @@ WORKDIR /usr/src/app
 COPY --from=deps /usr/src/app/node_modules ./node_modules
 COPY --from=deps /usr/src/app/package.json ./package.json
 COPY dist/apps/billing .
-COPY apps/billing/prisma/generated/libquery_engine-linux-musl-openssl-3.0.x.so.node /usr/src
+COPY libs/prisma-billing/prisma/generated/libquery_engine-linux-musl-openssl-3.0.x.so.node /usr/src
 RUN chown -R node:node .
 USER node
 CMD ["dumb-init", "node", "main.js"]

@@ -1,19 +1,23 @@
 import { RabbitPayload } from '@golevelup/nestjs-rabbitmq';
-import { Controller, SerializeOptions } from '@nestjs/common';
+import { Controller, ParseIntPipe, SerializeOptions } from '@nestjs/common';
+import {
+  CreateProjectDto,
+  ProjectDto,
+  ProjectService,
+  SignInProjectDto,
+  UpdateProjectDto,
+} from '@zxcdesu/data-access-project';
+import { UserId } from '@zxcdesu/data-access-user';
+import { JwtDto } from '@zxcdesu/infrastructure';
 import { RabbitRPC } from '@zxcdesu/nestjs-rabbitmq';
-import { JwtDto } from '../jwt/dto/jwt.dto';
-import { UserId } from '../user/user.decorator';
-import { CreateProjectDto } from './dto/create-project.dto';
-import { FindOneProjectDto } from './dto/find-one-project.dto';
-import { ProjectDto } from './dto/project.dto';
-import { RemoveProjectDto } from './dto/remove-project.dto';
-import { SignInProjectDto } from './dto/sign-in-project.dto';
-import { UpdateProjectDto } from './dto/update-project.dto';
-import { ProjectService } from './project.service';
+import { ProjectAuthService } from './project-auth.service';
 
 @Controller()
 export class ProjectController {
-  constructor(private readonly projectService: ProjectService) {}
+  constructor(
+    private readonly projectService: ProjectService,
+    private readonly projectAuthService: ProjectAuthService,
+  ) {}
 
   @RabbitRPC({
     exchange: 'auth',
@@ -40,9 +44,9 @@ export class ProjectController {
   })
   findOne(
     @UserId() userId: number,
-    @RabbitPayload() payload: FindOneProjectDto,
+    @RabbitPayload('id', ParseIntPipe) id: number,
   ): Promise<ProjectDto> {
-    return this.projectService.findOne(userId, payload);
+    return this.projectService.findOne(userId, id);
   }
 
   @RabbitRPC({
@@ -67,9 +71,10 @@ export class ProjectController {
   })
   update(
     @UserId() userId: number,
+    @RabbitPayload('id', ParseIntPipe) id: number,
     @RabbitPayload() payload: UpdateProjectDto,
   ): Promise<ProjectDto> {
-    return this.projectService.update(userId, payload);
+    return this.projectService.update(userId, id, payload);
   }
 
   @RabbitRPC({
@@ -82,9 +87,9 @@ export class ProjectController {
   })
   remove(
     @UserId() userId: number,
-    @RabbitPayload() payload: RemoveProjectDto,
+    @RabbitPayload('id', ParseIntPipe) id: number,
   ): Promise<ProjectDto> {
-    return this.projectService.remove(userId, payload);
+    return this.projectService.remove(userId, id);
   }
 
   @RabbitRPC({
@@ -99,6 +104,6 @@ export class ProjectController {
     @UserId() userId: number,
     @RabbitPayload() payload: SignInProjectDto,
   ): Promise<JwtDto> {
-    return this.projectService.signIn(userId, payload);
+    return this.projectAuthService.signIn(userId, payload);
   }
 }
