@@ -1,13 +1,10 @@
 import { RabbitPayload } from '@golevelup/nestjs-rabbitmq';
-import { Controller, SerializeOptions } from '@nestjs/common';
-import { ProjectId } from '@zxcdesu/data-access-project';
-import {
-  CreateWalletDto,
-  UpdateWalletDto,
-  WalletDto,
-  WalletService,
-} from '@zxcdesu/data-access-wallet';
+import { Controller, ParseIntPipe, SerializeOptions } from '@nestjs/common';
 import { RabbitRPC } from '@zxcdesu/nestjs-rabbitmq';
+import { CreateWalletDto } from './dto/create-wallet.dto';
+import { UpdateWalletDto } from './dto/update-wallet.dto';
+import { WalletDto } from './dto/wallet.dto';
+import { WalletService } from './wallet.service';
 
 @Controller()
 export class WalletController {
@@ -21,11 +18,8 @@ export class WalletController {
   @SerializeOptions({
     type: WalletDto,
   })
-  create(
-    @ProjectId() projectId: number,
-    @RabbitPayload() payload: CreateWalletDto,
-  ) {
-    return this.walletService.create(projectId, payload);
+  create(@RabbitPayload() payload: CreateWalletDto) {
+    return this.walletService.create(payload);
   }
 
   @RabbitRPC({
@@ -36,8 +30,20 @@ export class WalletController {
   @SerializeOptions({
     type: WalletDto,
   })
-  findOne(@ProjectId() projectId: number) {
+  findOne(@RabbitPayload('projectId', ParseIntPipe) projectId: number) {
     return this.walletService.findOne(projectId);
+  }
+
+  @RabbitRPC({
+    exchange: 'billing',
+    routingKey: 'findAllWallets',
+    queue: 'billing.findAllWallets',
+  })
+  @SerializeOptions({
+    type: WalletDto,
+  })
+  findAll() {
+    return this.walletService.findAll();
   }
 
   @RabbitRPC({
@@ -48,11 +54,8 @@ export class WalletController {
   @SerializeOptions({
     type: WalletDto,
   })
-  update(
-    @ProjectId() projectId: number,
-    @RabbitPayload() payload: UpdateWalletDto,
-  ) {
-    return this.walletService.update(projectId, payload);
+  update(@RabbitPayload() payload: UpdateWalletDto) {
+    return this.walletService.update(payload);
   }
 
   @RabbitRPC({
@@ -63,7 +66,7 @@ export class WalletController {
   @SerializeOptions({
     type: WalletDto,
   })
-  remove(@ProjectId() projectId: number) {
+  remove(@RabbitPayload('projectId', ParseIntPipe) projectId: number) {
     return this.walletService.remove(projectId);
   }
 }

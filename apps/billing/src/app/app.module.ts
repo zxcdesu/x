@@ -1,4 +1,5 @@
 import { RabbitMQModule } from '@golevelup/nestjs-rabbitmq';
+import { HttpModule } from '@nestjs/axios';
 import {
   ClassSerializerInterceptor,
   Module,
@@ -6,11 +7,15 @@ import {
 } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { APP_INTERCEPTOR, APP_PIPE } from '@nestjs/core';
-import { DataAccessPaymentModule } from '@zxcdesu/data-access-payment';
 import joi from 'joi';
 import { PaymentController } from './payment/payment.controller';
+import { PaymentRepository } from './payment/payment.repository';
+import { PaymentService } from './payment/payment.service';
+import { PrismaService } from './prisma.service';
 import { SubscriptionController } from './subscription/subscription.controller';
+import { SubscriptionService } from './subscription/subscription.service';
 import { WalletController } from './wallet/wallet.controller';
+import { WalletService } from './wallet/wallet.service';
 
 @Module({
   imports: [
@@ -41,19 +46,11 @@ import { WalletController } from './wallet/wallet.controller';
         },
       }),
     }),
-    DataAccessPaymentModule.forRootAsync({
-      inject: [ConfigService],
-      useFactory: (configService: ConfigService) => ({
-        yookassa: {
-          shopId: configService.get<string>('YOOKASSA_SHOP_ID'),
-          token: configService.get<string>('YOOKASSA_TOKEN'),
-          returnUrl: configService.get<string>('YOOKASSA_RETURN_URL'),
-        },
-      }),
-    }),
+    HttpModule.register({}),
   ],
   controllers: [PaymentController, SubscriptionController, WalletController],
   providers: [
+    PrismaService,
     {
       provide: APP_INTERCEPTOR,
       useClass: ClassSerializerInterceptor,
@@ -65,6 +62,10 @@ import { WalletController } from './wallet/wallet.controller';
         transform: true,
       }),
     },
+    PaymentRepository,
+    PaymentService,
+    SubscriptionService,
+    WalletService,
   ],
 })
 export class AppModule {}

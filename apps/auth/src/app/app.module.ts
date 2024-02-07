@@ -6,18 +6,17 @@ import {
 } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { APP_INTERCEPTOR, APP_PIPE } from '@nestjs/core';
-import { DataAccessInviteModule } from '@zxcdesu/data-access-invite';
-import { DataAccessProjectModule } from '@zxcdesu/data-access-project';
-import { DataAccessProjectUserModule } from '@zxcdesu/data-access-project-user';
-import { DataAccessUserModule } from '@zxcdesu/data-access-user';
-import { JwtModule } from '@zxcdesu/infrastructure';
 import joi from 'joi';
 import { InviteController } from './invite/invite.controller';
+import { InviteService } from './invite/invite.service';
+import { JwtService } from './jwt/jwt.service';
+import { PrismaService } from './prisma.service';
 import { ProjectUserController } from './project-user/project-user.controller';
-import { ProjectAuthService } from './project/project-auth.service';
+import { ProjectUserService } from './project-user/project-user.service';
 import { ProjectController } from './project/project.controller';
-import { UserAuthService } from './user/user-auth.service';
+import { ProjectService } from './project/project.service';
 import { UserController } from './user/user.controller';
+import { UserService } from './user/user.service';
 
 @Module({
   imports: [
@@ -46,16 +45,6 @@ import { UserController } from './user/user.controller';
         },
       }),
     }),
-    JwtModule.registerAsync({
-      inject: [ConfigService],
-      useFactory: (configService: ConfigService) => ({
-        secret: configService.get<string>('SECRET'),
-      }),
-    }),
-    DataAccessInviteModule,
-    DataAccessProjectModule,
-    DataAccessProjectUserModule,
-    DataAccessUserModule,
   ],
   controllers: [
     InviteController,
@@ -64,6 +53,7 @@ import { UserController } from './user/user.controller';
     UserController,
   ],
   providers: [
+    PrismaService,
     {
       provide: APP_INTERCEPTOR,
       useClass: ClassSerializerInterceptor,
@@ -75,8 +65,11 @@ import { UserController } from './user/user.controller';
         transform: true,
       }),
     },
-    ProjectAuthService,
-    UserAuthService,
+    InviteService,
+    ProjectService,
+    ProjectUserService,
+    JwtService,
+    UserService,
   ],
 })
 export class AppModule {}

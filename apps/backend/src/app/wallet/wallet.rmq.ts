@@ -27,6 +27,13 @@ export class WalletRmq extends RmqService {
     });
   }
 
+  findAll() {
+    return this.request<WalletDto[]>({
+      exchange: 'billing',
+      routingKey: 'findAllWallets',
+    });
+  }
+
   update(projectId: number, payload: UpdateWalletDto) {
     return this.request<WalletDto>({
       exchange: 'billing',

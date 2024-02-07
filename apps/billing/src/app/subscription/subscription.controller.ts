@@ -1,13 +1,10 @@
 import { RabbitPayload } from '@golevelup/nestjs-rabbitmq';
-import { Controller, SerializeOptions } from '@nestjs/common';
-import { ProjectId } from '@zxcdesu/data-access-project';
-import {
-  CreateSubscriptionDto,
-  SubscriptionDto,
-  SubscriptionService,
-  UpdateSubscriptionDto,
-} from '@zxcdesu/data-access-subscription';
+import { Controller, ParseIntPipe, SerializeOptions } from '@nestjs/common';
 import { RabbitRPC } from '@zxcdesu/nestjs-rabbitmq';
+import { CreateSubscriptionDto } from './dto/create-subscription.dto';
+import { SubscriptionDto } from './dto/subscription.dto';
+import { UpdateSubscriptionDto } from './dto/update-subscription.dto';
+import { SubscriptionService } from './subscription.service';
 
 @Controller()
 export class SubscriptionController {
@@ -21,11 +18,8 @@ export class SubscriptionController {
   @SerializeOptions({
     type: SubscriptionDto,
   })
-  create(
-    @ProjectId() projectId: number,
-    @RabbitPayload() payload: CreateSubscriptionDto,
-  ) {
-    return this.subscriptionService.create(projectId, payload);
+  create(@RabbitPayload() payload: CreateSubscriptionDto) {
+    return this.subscriptionService.create(payload);
   }
 
   @RabbitRPC({
@@ -36,8 +30,20 @@ export class SubscriptionController {
   @SerializeOptions({
     type: SubscriptionDto,
   })
-  findOne(@ProjectId() projectId: number) {
+  findOne(@RabbitPayload('projectId', ParseIntPipe) projectId: number) {
     return this.subscriptionService.findOne(projectId);
+  }
+
+  @RabbitRPC({
+    exchange: 'billing',
+    routingKey: 'findAllSubscriptions',
+    queue: 'billing.findAllSubscriptions',
+  })
+  @SerializeOptions({
+    type: SubscriptionDto,
+  })
+  findAll() {
+    return this.subscriptionService.findAll();
   }
 
   @RabbitRPC({
@@ -48,11 +54,8 @@ export class SubscriptionController {
   @SerializeOptions({
     type: SubscriptionDto,
   })
-  update(
-    @ProjectId() projectId: number,
-    @RabbitPayload() payload: UpdateSubscriptionDto,
-  ) {
-    return this.subscriptionService.update(projectId, payload);
+  update(@RabbitPayload() payload: UpdateSubscriptionDto) {
+    return this.subscriptionService.update(payload);
   }
 
   @RabbitRPC({
@@ -63,7 +66,7 @@ export class SubscriptionController {
   @SerializeOptions({
     type: SubscriptionDto,
   })
-  remove(@ProjectId() projectId: number) {
+  remove(@RabbitPayload('projectId', ParseIntPipe) projectId: number) {
     return this.subscriptionService.remove(projectId);
   }
 }

@@ -15,25 +15,9 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
-      "@zxcdesu/data-access-admin": ["libs/data-access-admin/src/index.ts"],
-      "@zxcdesu/data-access-invite": ["libs/data-access-invite/src/index.ts"],
-      "@zxcdesu/data-access-payment": ["libs/data-access-payment/src/index.ts"],
-      "@zxcdesu/data-access-project": ["libs/data-access-project/src/index.ts"],
-      "@zxcdesu/data-access-project-user": [
-        "libs/data-access-project-user/src/index.ts"
-      ],
-      "@zxcdesu/data-access-subscription": [
-        "libs/data-access-subscription/src/index.ts"
-      ],
-      "@zxcdesu/data-access-user": ["libs/data-access-user/src/index.ts"],
-      "@zxcdesu/data-access-wallet": ["libs/data-access-wallet/src/index.ts"],
-      "@zxcdesu/infrastructure": ["libs/infrastructure/src/index.ts"],
       "@zxcdesu/nestjs-graphql": ["libs/nestjs-graphql/src/index.ts"],
       "@zxcdesu/nestjs-rabbitmq": ["libs/nestjs-rabbitmq/src/index.ts"],
-      "@zxcdesu/platform-type": ["libs/platform-type/src/index.ts"],
-      "@zxcdesu/prisma-admin": ["libs/prisma-admin/src/index.ts"],
-      "@zxcdesu/prisma-auth": ["libs/prisma-auth/src/index.ts"],
-      "@zxcdesu/prisma-billing": ["libs/prisma-billing/src/index.ts"]
+      "@zxcdesu/platform-type": ["libs/platform-type/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]

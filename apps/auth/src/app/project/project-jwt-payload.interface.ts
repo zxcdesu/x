@@ -1,4 +1,4 @@
-import { RoleType } from '@zxcdesu/prisma-auth';
+import { RoleType } from '../prisma.service';
 import { UserJwtPayload } from '../user/user-jwt-payload.interface';
 
 export interface ProjectJwtPayload extends UserJwtPayload {

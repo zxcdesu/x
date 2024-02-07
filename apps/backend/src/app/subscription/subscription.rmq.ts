@@ -27,6 +27,13 @@ export class SubscriptionRmq extends RmqService {
     });
   }
 
+  findAll() {
+    return this.request<SubscriptionDto[]>({
+      exchange: 'billing',
+      routingKey: 'findAllSubscriptions',
+    });
+  }
+
   update(projectId: number, payload: UpdateSubscriptionDto) {
     return this.request<SubscriptionDto>({
       exchange: 'billing',
