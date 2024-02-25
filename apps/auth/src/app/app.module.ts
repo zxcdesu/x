@@ -7,6 +7,7 @@ import {
 } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { APP_INTERCEPTOR, APP_PIPE } from '@nestjs/core';
+import { JwtModule } from '@nestjs/jwt';
 import joi from 'joi';
 import { URL } from 'node:url';
 import { InviteProjectUserService } from './invite/invite-project-user.service';
@@ -32,6 +33,13 @@ import { UserService } from './user/user.service';
         MAILER_TRANSPORT: joi.string().required(),
         SECRET: joi.string().required(),
       }),
+    }),
+    JwtModule.registerAsync({
+      global: true,
+      useFactory: (configService: ConfigService) => ({
+        secret: configService.getOrThrow<string>('SECRET'),
+      }),
+      inject: [ConfigService],
     }),
     RabbitMQModule.forRootAsync(RabbitMQModule, {
       useFactory: (configService: ConfigService) => ({
