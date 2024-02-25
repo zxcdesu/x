@@ -23,7 +23,7 @@ export class PaymentService {
     );
   }
 
-  handleWebhook(payload: HandlePaymentDto) {
+  handle(payload: HandlePaymentDto) {
     return this.paymentRepository.get(payload.provider).handleWebhook(payload);
   }
 }

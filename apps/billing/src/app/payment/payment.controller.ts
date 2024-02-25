@@ -28,10 +28,10 @@ export class PaymentController {
 
   @RmqService.subscribe({
     exchange: 'billing',
-    routingKey: 'handleWebhook',
-    queue: 'handleWebhook',
+    routingKey: 'handlePayment',
+    queue: 'handlePayment',
   })
-  handleWebhook(@RabbitPayload() payload: HandlePaymentDto): Promise<void> {
-    return this.paymentService.handleWebhook(payload);
+  handle(@RabbitPayload() payload: HandlePaymentDto): Promise<void> {
+    return this.paymentService.handle(payload);
   }
 }
