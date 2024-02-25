@@ -1,6 +1,6 @@
-import { RabbitPayload } from '@golevelup/nestjs-rabbitmq';
-import { Controller, ParseIntPipe } from '@nestjs/common';
+import { Controller } from '@nestjs/common';
 import { RabbitRPC } from '@zxcdesu/nestjs-rabbitmq';
+import { UserId } from '@zxcdesu/util-user';
 import { AdminService } from './admin.service';
 
 @Controller()
@@ -10,9 +10,9 @@ export class AdminController {
   @RabbitRPC({
     exchange: 'admin',
     routingKey: 'checkAdmin',
-    queue: 'admin.checkAdmin',
+    queue: 'checkAdmin',
   })
-  check(@RabbitPayload('userId', ParseIntPipe) userId: number) {
+  check(@UserId userId: number) {
     return this.adminService.check(userId);
   }
 }

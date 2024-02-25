@@ -15,9 +15,11 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
-      "@zxcdesu/nestjs-graphql": ["libs/nestjs-graphql/src/index.ts"],
-      "@zxcdesu/nestjs-rabbitmq": ["libs/nestjs-rabbitmq/src/index.ts"],
-      "@zxcdesu/platform-type": ["libs/platform-type/src/index.ts"]
+      "@zxcdesu/util-gql": ["libs/shared/util-gql/src/index.ts"],
+      "@zxcdesu/util-http": ["libs/shared/util-http/src/index.ts"],
+      "@zxcdesu/util-project": ["libs/auth/util-project/src/index.ts"],
+      "@zxcdesu/util-rmq": ["libs/shared/util-rmq/src/index.ts"],
+      "@zxcdesu/util-user": ["libs/auth/util-user/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]
