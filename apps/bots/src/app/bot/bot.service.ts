@@ -7,19 +7,20 @@ import { UpdateBotDto } from './dto/update-bot.dto';
 export class BotService {
   constructor(private readonly prismaService: PrismaService) {}
 
-  create(payload: CreateBotDto) {
+  create(projectId: number, payload: CreateBotDto) {
     return this.prismaService.bot.create({
-      data: payload as unknown as Prisma.BotCreateInput,
+      data: {
+        projectId,
+        ...payload,
+      } as unknown as Prisma.BotCreateInput,
     });
   }
 
   findOne(projectId: number, id: number) {
     return this.prismaService.bot.findUniqueOrThrow({
       where: {
-        projectId_id: {
-          projectId,
-          id,
-        },
+        projectId,
+        id,
       },
     });
   }
@@ -32,13 +33,11 @@ export class BotService {
     });
   }
 
-  update(payload: UpdateBotDto) {
+  update(projectId: number, id: number, payload: UpdateBotDto) {
     return this.prismaService.bot.update({
       where: {
-        projectId_id: {
-          projectId: payload.projectId,
-          id: payload.id,
-        },
+        projectId,
+        id,
       },
       data: payload as unknown as Prisma.BotUpdateInput,
     });
@@ -47,10 +46,8 @@ export class BotService {
   remove(projectId: number, id: number) {
     return this.prismaService.bot.delete({
       where: {
-        projectId_id: {
-          projectId,
-          id,
-        },
+        projectId,
+        id,
       },
     });
   }

@@ -1,6 +1,6 @@
 import { RabbitPayload } from '@golevelup/nestjs-rabbitmq';
 import { Controller, ParseIntPipe, SerializeOptions } from '@nestjs/common';
-import { RabbitRPC } from '@zxcdesu/nestjs-rabbitmq';
+import { RmqService } from '@zxcdesu/util-rmq';
 import { BotTemplateService } from './bot-template.service';
 import { BotTemplateDto } from './dto/bot-template.dto';
 import { CreateBotTemplateDto } from './dto/create-bot-template.dto';
@@ -10,10 +10,10 @@ import { UpdateBotTemplate } from './dto/update-bot-template.dto';
 export class BotTemplateController {
   constructor(private readonly botTemplateService: BotTemplateService) {}
 
-  @RabbitRPC({
+  @RmqService.rpc({
     exchange: 'bots',
     routingKey: 'createBotTemplate',
-    queue: 'bots.createBotTemplate',
+    queue: 'createBotTemplate',
   })
   @SerializeOptions({
     type: BotTemplateDto,
@@ -22,10 +22,10 @@ export class BotTemplateController {
     return this.botTemplateService.create(payload);
   }
 
-  @RabbitRPC({
+  @RmqService.rpc({
     exchange: 'bots',
     routingKey: 'findOneBotTemplate',
-    queue: 'bots.findOneBotTemplate',
+    queue: 'findOneBotTemplate',
   })
   @SerializeOptions({
     type: BotTemplateDto,
@@ -34,10 +34,10 @@ export class BotTemplateController {
     return this.botTemplateService.findOne(id);
   }
 
-  @RabbitRPC({
+  @RmqService.rpc({
     exchange: 'bots',
     routingKey: 'findAllBotTemplates',
-    queue: 'bots.findAllBotTemplates',
+    queue: 'findAllBotTemplates',
   })
   @SerializeOptions({
     type: BotTemplateDto,
@@ -46,22 +46,25 @@ export class BotTemplateController {
     return this.botTemplateService.findAll();
   }
 
-  @RabbitRPC({
+  @RmqService.rpc({
     exchange: 'bots',
     routingKey: 'updateBotTemplate',
-    queue: 'bots.updateBotTemplate',
+    queue: 'updateBotTemplate',
   })
   @SerializeOptions({
     type: BotTemplateDto,
   })
-  update(@RabbitPayload() payload: UpdateBotTemplate) {
-    return this.botTemplateService.update(payload);
+  update(
+    @RabbitPayload('id', ParseIntPipe) id: number,
+    @RabbitPayload() payload: UpdateBotTemplate,
+  ) {
+    return this.botTemplateService.update(id, payload);
   }
 
-  @RabbitRPC({
+  @RmqService.rpc({
     exchange: 'bots',
     routingKey: 'removeBotTemplate',
-    queue: 'bots.removeBotTemplate',
+    queue: 'removeBotTemplate',
   })
   @SerializeOptions({
     type: BotTemplateDto,

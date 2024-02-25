@@ -14,13 +14,8 @@ export class BotDto implements Omit<Bot, 'flow'> {
 
   imageUrl: string | null;
 
-  version: string;
-
   @Type(() => Flow)
   flow: Flow;
-
-  @Exclude()
-  containerId: string;
 
   createdAt: Date;
 

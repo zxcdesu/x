@@ -25,10 +25,10 @@ export class BotTemplateService {
     return this.prismaService.botTemplate.findMany();
   }
 
-  update(payload: UpdateBotTemplate) {
+  update(id: number, payload: UpdateBotTemplate) {
     return this.prismaService.botTemplate.update({
       where: {
-        id: payload.id,
+        id,
       },
       data: payload as unknown as Prisma.BotTemplateUpdateInput,
     });

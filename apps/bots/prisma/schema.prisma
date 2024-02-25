@@ -15,12 +15,10 @@ model Bot {
   name        String
   description String   @default("")
   imageUrl    String?
-  version     String   @default("1.0.0")
   flow        Json
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 
-  @@unique([projectId, id])
   @@index([projectId])
 }
 
@@ -37,6 +35,4 @@ model BotTemplate {
   flow        Json
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
-
-  @@index([category])
 }
