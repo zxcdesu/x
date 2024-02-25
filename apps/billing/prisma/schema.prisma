@@ -15,6 +15,7 @@ model Wallet {
   currency       String        @default("USD")
   currentBalance Decimal       @default(0) @db.Decimal(15, 6)
   subscription   Subscription?
+  payments       Payment[]
 }
 
 model Subscription {
@@ -30,21 +31,24 @@ enum PaymentProvider {
 }
 
 enum PaymentStatus {
-  Succeeded
   Pending
+  Succeeded
   Cancelled
   Refunded
 }
 
 model Payment {
-  id         Int             @id @default(autoincrement())
-  projectId  Int
-  provider   PaymentProvider
-  status     PaymentStatus   @default(Pending)
-  externalId String?
-  expireAt   DateTime?
+  id           Int             @id @default(autoincrement())
+  projectId    Int
+  wallet       Wallet          @relation(fields: [projectId], references: [projectId], onDelete: Cascade)
+  externalId   String?
+  provider     PaymentProvider
+  status       PaymentStatus   @default(Pending)
+  amount       Decimal         @db.Decimal(15, 6)
+  incomeAmount Decimal?        @db.Decimal(15, 6)
+  expiresAt    DateTime?
 
+  @@unique([externalId, provider])
   @@index([projectId])
-  @@index([externalId, provider])
-  @@index([expireAt, status])
+  @@index([expiresAt])
 }

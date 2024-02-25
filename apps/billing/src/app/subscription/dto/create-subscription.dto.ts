@@ -1,12 +1,9 @@
-import { IsDate, IsInt } from 'class-validator';
+import { IsDate } from 'class-validator';
 import { Prisma } from '../../prisma.service';
 
 export class CreateSubscriptionDto
-  implements Prisma.SubscriptionUncheckedCreateInput
+  implements Omit<Prisma.SubscriptionUncheckedCreateInput, 'projectId'>
 {
-  @IsInt()
-  projectId: number;
-
   @IsDate()
   expiresAt: Date;
 }

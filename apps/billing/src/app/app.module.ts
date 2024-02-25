@@ -26,14 +26,14 @@ import { WalletService } from './wallet/wallet.service';
         BROKER_URL: joi.string().uri().required(),
         YOOKASSA_SHOP_ID: joi.string().required(),
         YOOKASSA_TOKEN: joi.string().required(),
-        YOOKASSA_REDIRECT_URL: joi.string().uri().required(),
+        YOOKASSA_RETURN_URL: joi.string().uri().required(),
       }),
     }),
     RabbitMQModule.forRootAsync(RabbitMQModule, {
       inject: [ConfigService],
       useFactory: (configService: ConfigService) => ({
         enableControllerDiscovery: true,
-        uri: configService.get<string>('BROKER_URL'),
+        uri: configService.getOrThrow<string>('BROKER_URL'),
         exchanges: [
           {
             name: 'billing',

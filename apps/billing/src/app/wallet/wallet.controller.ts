@@ -1,6 +1,7 @@
 import { RabbitPayload } from '@golevelup/nestjs-rabbitmq';
-import { Controller, ParseIntPipe, SerializeOptions } from '@nestjs/common';
-import { RabbitRPC } from '@zxcdesu/nestjs-rabbitmq';
+import { Controller, SerializeOptions } from '@nestjs/common';
+import { ProjectId } from '@zxcdesu/util-project';
+import { RmqService } from '@zxcdesu/util-rmq';
 import { CreateWalletDto } from './dto/create-wallet.dto';
 import { UpdateWalletDto } from './dto/update-wallet.dto';
 import { WalletDto } from './dto/wallet.dto';
@@ -10,63 +11,57 @@ import { WalletService } from './wallet.service';
 export class WalletController {
   constructor(private readonly walletService: WalletService) {}
 
-  @RabbitRPC({
+  @RmqService.rpc({
     exchange: 'billing',
     routingKey: 'createWallet',
-    queue: 'billing.createWallet',
+    queue: 'createWallet',
   })
   @SerializeOptions({
     type: WalletDto,
   })
-  create(@RabbitPayload() payload: CreateWalletDto) {
-    return this.walletService.create(payload);
+  create(
+    @ProjectId() projectId: number,
+    @RabbitPayload() payload: CreateWalletDto,
+  ): Promise<WalletDto> {
+    return this.walletService.create(projectId, payload);
   }
 
-  @RabbitRPC({
+  @RmqService.rpc({
     exchange: 'billing',
     routingKey: 'findOneWallet',
-    queue: 'billing.findOneWallet',
+    queue: 'findOneWallet',
   })
   @SerializeOptions({
     type: WalletDto,
   })
-  findOne(@RabbitPayload('projectId', ParseIntPipe) projectId: number) {
+  findOne(@ProjectId() projectId: number): Promise<WalletDto> {
     return this.walletService.findOne(projectId);
   }
 
-  @RabbitRPC({
-    exchange: 'billing',
-    routingKey: 'findAllWallets',
-    queue: 'billing.findAllWallets',
-  })
-  @SerializeOptions({
-    type: WalletDto,
-  })
-  findAll() {
-    return this.walletService.findAll();
-  }
-
-  @RabbitRPC({
+  @RmqService.rpc({
     exchange: 'billing',
     routingKey: 'updateWallet',
-    queue: 'billing.updateWallet',
+    queue: 'updateWallet',
   })
   @SerializeOptions({
     type: WalletDto,
   })
-  update(@RabbitPayload() payload: UpdateWalletDto) {
-    return this.walletService.update(payload);
+  update(
+    @ProjectId() projectId: number,
+    @RabbitPayload() payload: UpdateWalletDto,
+  ): Promise<WalletDto> {
+    return this.walletService.update(projectId, payload);
   }
 
-  @RabbitRPC({
+  @RmqService.rpc({
     exchange: 'billing',
     routingKey: 'removeWallet',
-    queue: 'billing.removeWallet',
+    queue: 'removeWallet',
   })
   @SerializeOptions({
     type: WalletDto,
   })
-  remove(@RabbitPayload('projectId', ParseIntPipe) projectId: number) {
+  remove(@ProjectId() projectId: number): Promise<WalletDto> {
     return this.walletService.remove(projectId);
   }
 }

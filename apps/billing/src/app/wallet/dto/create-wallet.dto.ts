@@ -1,16 +1,14 @@
 import {
   IsISO31661Alpha2,
   IsISO4217CurrencyCode,
-  IsInt,
   IsNumber,
   IsOptional,
 } from 'class-validator';
 import { Prisma } from '../../prisma.service';
 
-export class CreateWalletDto implements Prisma.WalletUncheckedCreateInput {
-  @IsInt()
-  projectId: number;
-
+export class CreateWalletDto
+  implements Omit<Prisma.WalletUncheckedCreateInput, 'projectId'>
+{
   @IsISO31661Alpha2()
   country: string;
 

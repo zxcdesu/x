@@ -1,33 +1,37 @@
-import { RabbitPayload, RabbitSubscribe } from '@golevelup/nestjs-rabbitmq';
+import { RabbitPayload } from '@golevelup/nestjs-rabbitmq';
 import { Controller, SerializeOptions } from '@nestjs/common';
-import { RabbitRPC } from '@zxcdesu/nestjs-rabbitmq';
+import { ProjectId } from '@zxcdesu/util-project';
+import { RmqService } from '@zxcdesu/util-rmq';
 import { CreatePaymentDto } from './dto/create-payment.dto';
-import { HandleWebhookDto } from './dto/handle-webhook.dto';
-import { PaymentDto } from './dto/payment.dto';
+import { HandlePaymentDto } from './dto/handle-payment.dto';
+import { PaymentUrlDto } from './dto/payment-url.dto';
 import { PaymentService } from './payment.service';
 
 @Controller()
 export class PaymentController {
   constructor(private readonly paymentService: PaymentService) {}
 
-  @RabbitRPC({
+  @RmqService.rpc({
     exchange: 'billing',
     routingKey: 'createPayment',
-    queue: 'billing.createPayment',
+    queue: 'createPayment',
   })
   @SerializeOptions({
-    type: PaymentDto,
+    type: PaymentUrlDto,
   })
-  create(@RabbitPayload() payload: CreatePaymentDto) {
-    return this.paymentService.create(payload);
+  create(
+    @ProjectId() projectId: number,
+    @RabbitPayload() payload: CreatePaymentDto,
+  ): Promise<PaymentUrlDto> {
+    return this.paymentService.create(projectId, payload);
   }
 
-  @RabbitSubscribe({
+  @RmqService.subscribe({
     exchange: 'billing',
     routingKey: 'handleWebhook',
-    queue: 'billing.handleWebhook',
+    queue: 'handleWebhook',
   })
-  handleWebhook(@RabbitPayload() payload: HandleWebhookDto) {
+  handleWebhook(@RabbitPayload() payload: HandlePaymentDto): Promise<void> {
     return this.paymentService.handleWebhook(payload);
   }
 }

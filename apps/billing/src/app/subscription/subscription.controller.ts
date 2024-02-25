@@ -1,6 +1,7 @@
 import { RabbitPayload } from '@golevelup/nestjs-rabbitmq';
-import { Controller, ParseIntPipe, SerializeOptions } from '@nestjs/common';
-import { RabbitRPC } from '@zxcdesu/nestjs-rabbitmq';
+import { Controller, SerializeOptions } from '@nestjs/common';
+import { ProjectId } from '@zxcdesu/util-project';
+import { RmqService } from '@zxcdesu/util-rmq';
 import { CreateSubscriptionDto } from './dto/create-subscription.dto';
 import { SubscriptionDto } from './dto/subscription.dto';
 import { UpdateSubscriptionDto } from './dto/update-subscription.dto';
@@ -10,63 +11,57 @@ import { SubscriptionService } from './subscription.service';
 export class SubscriptionController {
   constructor(private readonly subscriptionService: SubscriptionService) {}
 
-  @RabbitRPC({
+  @RmqService.rpc({
     exchange: 'billing',
     routingKey: 'createSubscription',
-    queue: 'billing.createSubscription',
+    queue: 'createSubscription',
   })
   @SerializeOptions({
     type: SubscriptionDto,
   })
-  create(@RabbitPayload() payload: CreateSubscriptionDto) {
-    return this.subscriptionService.create(payload);
+  create(
+    @ProjectId() projectId: number,
+    @RabbitPayload() payload: CreateSubscriptionDto,
+  ): Promise<SubscriptionDto> {
+    return this.subscriptionService.create(projectId, payload);
   }
 
-  @RabbitRPC({
+  @RmqService.rpc({
     exchange: 'billing',
     routingKey: 'findOneSubscription',
-    queue: 'billing.findOneSubscription',
+    queue: 'findOneSubscription',
   })
   @SerializeOptions({
     type: SubscriptionDto,
   })
-  findOne(@RabbitPayload('projectId', ParseIntPipe) projectId: number) {
+  findOne(@ProjectId() projectId: number): Promise<SubscriptionDto> {
     return this.subscriptionService.findOne(projectId);
   }
 
-  @RabbitRPC({
-    exchange: 'billing',
-    routingKey: 'findAllSubscriptions',
-    queue: 'billing.findAllSubscriptions',
-  })
-  @SerializeOptions({
-    type: SubscriptionDto,
-  })
-  findAll() {
-    return this.subscriptionService.findAll();
-  }
-
-  @RabbitRPC({
+  @RmqService.rpc({
     exchange: 'billing',
     routingKey: 'updateSubscription',
-    queue: 'billing.updateSubscription',
+    queue: 'updateSubscription',
   })
   @SerializeOptions({
     type: SubscriptionDto,
   })
-  update(@RabbitPayload() payload: UpdateSubscriptionDto) {
-    return this.subscriptionService.update(payload);
+  update(
+    @ProjectId() projectId: number,
+    @RabbitPayload() payload: UpdateSubscriptionDto,
+  ): Promise<SubscriptionDto> {
+    return this.subscriptionService.update(projectId, payload);
   }
 
-  @RabbitRPC({
+  @RmqService.rpc({
     exchange: 'billing',
     routingKey: 'removeSubscription',
-    queue: 'billing.removeSubscription',
+    queue: 'removeSubscription',
   })
   @SerializeOptions({
     type: SubscriptionDto,
   })
-  remove(@RabbitPayload('projectId', ParseIntPipe) projectId: number) {
+  remove(@ProjectId() projectId: number): Promise<SubscriptionDto> {
     return this.subscriptionService.remove(projectId);
   }
 }

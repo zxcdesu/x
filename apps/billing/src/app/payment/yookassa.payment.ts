@@ -1,69 +1,45 @@
-import { lastValueFrom } from 'rxjs';
-import { Payment, PaymentStatus } from '../prisma.service';
+import { lastValueFrom, map } from 'rxjs';
+import { PaymentStatus } from '../prisma.service';
 import { AbstractPayment } from './abstract.payment';
 import { CreatePaymentDto } from './dto/create-payment.dto';
-import { HandleWebhookDto } from './dto/handle-webhook.dto';
+import { HandlePaymentDto } from './dto/handle-payment.dto';
+import { PaymentUrlDto } from './dto/payment-url.dto';
 import { PaymentDto } from './dto/payment.dto';
 
 export class YookassaPayment extends AbstractPayment<unknown> {
   async create(
-    payment: Payment,
+    payment: PaymentDto,
     payload: CreatePaymentDto,
-  ): Promise<PaymentDto> {
-    const wallet = await this.prismaService.wallet.findUniqueOrThrow({
+  ): Promise<PaymentUrlDto> {
+    const { currency } = await this.prismaService.wallet.findUniqueOrThrow({
       where: {
-        projectId: payload.projectId,
+        projectId: payment.projectId,
       },
       select: {
         currency: true,
       },
     });
 
-    const response = await lastValueFrom(
-      this.httpService.post<{
-        id: string;
-        created_at: string;
-        confirmation: {
-          confirmation_url: string;
-        };
-      }>(
-        'https://api.yookassa.ru/v3/payments',
-        {
-          amount: {
-            value: payload.value,
-            currency: wallet.currency,
-          },
-          capture: true,
-          confirmation: {
-            type: 'redirect',
-            return_url: this.configService.get<string>('YOOKASSA_REDIRECT_URL'),
-          },
-          description: null,
-        },
-        {
-          auth: {
-            username: this.configService.get<string>('YOOKASSA_SHOP_ID'),
-            password: this.configService.get<string>('YOOKASSA_TOKEN'),
-          },
-          headers: {
-            'Idempotence-Key': payment.id,
-          },
-        },
-      ),
-    );
+    const response = await this.request(payment, payload.amount, currency);
 
-    const createdAt = new Date(response.data.created_at);
-    return {
-      url: response.data.confirmation.confirmation_url,
-      update: {
-        externalId: response.data.id,
-        expireAt: new Date(createdAt.getTime() + 600000),
+    const createdAt = new Date(response.created_at);
+    await this.prismaService.payment.update({
+      where: {
+        id: payment.id,
       },
+      data: {
+        externalId: response.id,
+        expiresAt: new Date(createdAt.getTime() + 600000),
+      },
+    });
+
+    return {
+      url: response.confirmation.confirmation_url,
     };
   }
 
   async handleWebhook(
-    payload: HandleWebhookDto<{
+    payload: HandlePaymentDto<{
       event:
         | 'payment.succeeded'
         | 'payment.waiting_for_capture'
@@ -111,15 +87,50 @@ export class YookassaPayment extends AbstractPayment<unknown> {
             },
             data: {
               currentBalance: {
-                increment: Number(payload.value.object.income_amount.value),
+                increment: payload.value.object.income_amount.value,
               },
             },
           });
         }
-
-        // TODO: если refund, то списать деньги с кошелька
-        // если баланс отрицательный - заблокировать аккаунт
       });
     }
+  }
+
+  private request(payment: PaymentDto, value: number, currency: string) {
+    return lastValueFrom(
+      this.httpService
+        .post<{
+          id: string;
+          created_at: string;
+          confirmation: {
+            confirmation_url: string;
+          };
+        }>(
+          'https://api.yookassa.ru/v3/payments',
+          {
+            amount: {
+              value,
+              currency,
+            },
+            capture: true,
+            confirmation: {
+              type: 'redirect',
+              return_url: this.configService.get<string>('YOOKASSA_RETURN_URL'),
+            },
+            description: null,
+          },
+          {
+            auth: {
+              username:
+                this.configService.getOrThrow<string>('YOOKASSA_SHOP_ID'),
+              password: this.configService.getOrThrow<string>('YOOKASSA_TOKEN'),
+            },
+            headers: {
+              'Idempotence-Key': payment.id,
+            },
+          },
+        )
+        .pipe(map(({ data }) => data)),
+    );
   }
 }

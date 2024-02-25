@@ -1,9 +1,31 @@
-import { Exclude } from 'class-transformer';
-import { Prisma } from '../../prisma.service';
+import { Exclude, Transform, Type } from 'class-transformer';
+import {
+  Payment,
+  PaymentProvider,
+  PaymentStatus,
+  Prisma,
+} from '../../prisma.service';
 
-export class PaymentDto {
-  url: string;
+export class PaymentDto implements Payment {
+  id: number;
 
   @Exclude()
-  update: Prisma.PaymentUncheckedUpdateInput;
+  projectId: number;
+
+  @Exclude()
+  externalId: string | null;
+
+  provider: PaymentProvider;
+
+  status: PaymentStatus;
+
+  @Type(() => String)
+  @Transform(({ value }) => value && new Prisma.Decimal(value))
+  amount: Prisma.Decimal;
+
+  @Type(() => String)
+  @Transform(({ value }) => value && new Prisma.Decimal(value))
+  incomeAmount: Prisma.Decimal | null;
+
+  expiresAt: Date | null;
 }

@@ -1,8 +1,9 @@
 import { HttpService } from '@nestjs/axios';
 import { ConfigService } from '@nestjs/config';
-import { Payment, PrismaService } from '../prisma.service';
+import { PrismaService } from '../prisma.service';
 import { CreatePaymentDto } from './dto/create-payment.dto';
-import { HandleWebhookDto } from './dto/handle-webhook.dto';
+import { HandlePaymentDto } from './dto/handle-payment.dto';
+import { PaymentUrlDto } from './dto/payment-url.dto';
 import { PaymentDto } from './dto/payment.dto';
 
 export abstract class AbstractPayment<T = unknown> {
@@ -13,9 +14,9 @@ export abstract class AbstractPayment<T = unknown> {
   ) {}
 
   abstract create(
-    payment: Payment,
+    payment: PaymentDto,
     payload: CreatePaymentDto,
-  ): Promise<PaymentDto>;
+  ): Promise<PaymentUrlDto>;
 
-  abstract handleWebhook(payload: HandleWebhookDto<T>): Promise<void>;
+  abstract handleWebhook(payload: HandlePaymentDto<T>): Promise<void>;
 }
