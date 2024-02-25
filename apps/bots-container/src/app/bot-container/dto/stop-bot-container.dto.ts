@@ -1,1 +1,1 @@
-export class StopBotContainer {}
+export class StopBotContainerDto {}

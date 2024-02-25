@@ -1,18 +1,31 @@
 import { RabbitPayload } from '@golevelup/nestjs-rabbitmq';
 import { Controller } from '@nestjs/common';
+import { RmqService } from '@zxcdesu/util-rmq';
 import { BotContainerService } from './bot-container.service';
-import { StartBotContainer } from './dto/start-bot-container.dto';
-import { StopBotContainer } from './dto/stop-bot-container.dto';
+import { StartBotContainerDto } from './dto/start-bot-container.dto';
+import { StopBotContainerDto } from './dto/stop-bot-container.dto';
 
 @Controller()
 export class BotContainerController {
   constructor(private readonly botContainerService: BotContainerService) {}
 
-  start(@RabbitPayload() payload: StartBotContainer) {
+  @RmqService.subscribe({
+    exchange: 'bots-container',
+    routingKey: 'startBotContainer',
+    queue: 'startBotContainer',
+  })
+  start(@RabbitPayload() payload: StartBotContainerDto): Promise<void> {
     return this.botContainerService.start(payload);
   }
 
-  stop(@RabbitPayload() payload: StopBotContainer) {
+  @RmqService.subscribe({
+    exchange: 'bots-container',
+    routingKey: 'startBotContainer',
+    queueOptions: {
+      autoDelete: true,
+    },
+  })
+  stop(@RabbitPayload() payload: StopBotContainerDto): Promise<void> {
     return this.botContainerService.stop(payload);
   }
 }

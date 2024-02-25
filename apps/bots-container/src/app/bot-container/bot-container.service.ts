@@ -1,16 +1,16 @@
 import { Injectable, NotImplementedException } from '@nestjs/common';
-import { StartBotContainer } from './dto/start-bot-container.dto';
-import { StopBotContainer } from './dto/stop-bot-container.dto';
+import { StartBotContainerDto } from './dto/start-bot-container.dto';
+import { StopBotContainerDto } from './dto/stop-bot-container.dto';
 
 @Injectable()
 export class BotContainerService {
-  async start(payload: StartBotContainer) {
+  async start(payload: StartBotContainerDto) {
     throw new NotImplementedException({
       payload,
     });
   }
 
-  async stop(payload: StopBotContainer) {
+  async stop(payload: StopBotContainerDto) {
     throw new NotImplementedException({
       payload,
     });

@@ -22,7 +22,7 @@ import { BotContainerService } from './bot-container/bot-container.service';
       inject: [ConfigService],
       useFactory: (configService: ConfigService) => ({
         enableControllerDiscovery: true,
-        uri: configService.get<string>('BROKER_URL'),
+        uri: configService.getOrThrow<string>('BROKER_URL'),
         exchanges: [
           {
             name: 'bots-container',
