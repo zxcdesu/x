@@ -15,8 +15,14 @@ export class HistoryService {
   findAll(projectId?: number, userId?: number) {
     return this.prismaService.history.findMany({
       where: {
-        projectId,
-        userId,
+        OR: [
+          {
+            projectId,
+          },
+          {
+            userId,
+          },
+        ],
       },
     });
   }

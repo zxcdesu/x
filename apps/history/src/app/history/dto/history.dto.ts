@@ -3,9 +3,9 @@ import { History, HistoryType } from '../../prisma.service';
 export class HistoryDto implements History {
   id: number;
 
-  projectId: number;
+  projectId: number | null;
 
-  userId: number;
+  userId: number | null;
 
   type: HistoryType;
 

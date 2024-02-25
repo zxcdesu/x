@@ -21,9 +21,5 @@ model History {
   value     Json?
   createdAt DateTime    @default(now())
 
-  @@unique([projectId, userId, id])
-  @@index([projectId])
-  @@index([userId])
-  @@index([type])
-  @@index([createdAt])
+  @@index([projectId, userId])
 }
