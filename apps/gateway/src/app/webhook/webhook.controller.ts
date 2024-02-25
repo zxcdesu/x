@@ -4,32 +4,31 @@ import {
   Controller,
   HttpCode,
   Param,
+  ParseIntPipe,
   Post,
-  Query,
 } from '@nestjs/common';
-import { IpDecorator } from '../safety/ip.decorator';
-import { YookassaService } from '../safety/yookassa.service';
-import { WebhookParamDto } from './dto/webhook-param.dto';
+import { Ip } from '@zxcdesu/util-http';
 import { WebhookService } from './webhook.service';
+import { YookassaSafetyService } from './yookassa-safety.service';
 
 @Controller()
 export class WebhookController {
   constructor(
-    private readonly yookassaService: YookassaService,
+    private readonly yookassaSafetyService: YookassaSafetyService,
     private readonly webhookService: WebhookService,
   ) {}
 
   @Post('yookassa')
   @HttpCode(200)
-  handleYookassaWebhook(@IpDecorator() ip: string, @Body() body: unknown) {
-    if (this.yookassaService.check(ip)) {
+  handleYookassaWebhook(@Ip() ip: string, @Body() body: unknown) {
+    if (this.yookassaSafetyService.check(ip)) {
       return this.webhookService.handle(
         'billing',
         {
           provider: 'Yookassa',
           value: body,
         },
-        'handleWebhook',
+        'handlePayment',
       );
     }
   }
@@ -43,21 +42,23 @@ export class WebhookController {
         provider: 'Telegram',
         value: body,
       },
-      'handleWebhook',
+      'handleSubscriber',
     );
   }
 
   @All(':channelId')
   @HttpCode(200)
-  handleWebhook(
-    @Param() param: WebhookParamDto,
-    @Query() query: unknown,
+  handleChannelWebhook(
+    @Param('channelId', ParseIntPipe) channelId: number,
     @Body() body: unknown,
   ) {
-    return this.webhookService.handle('platform', {
-      param,
-      query,
-      body,
-    });
+    return this.webhookService.handle(
+      'platform',
+      {
+        channelId,
+        value: body,
+      },
+      'handleChannel',
+    );
   }
 }

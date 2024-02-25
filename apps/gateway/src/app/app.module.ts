@@ -2,9 +2,9 @@ import { RabbitMQModule } from '@golevelup/nestjs-rabbitmq';
 import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import joi from 'joi';
-import { YookassaService } from './safety/yookassa.service';
 import { WebhookController } from './webhook/webhook.controller';
 import { WebhookService } from './webhook/webhook.service';
+import { YookassaSafetyService } from './webhook/yookassa-safety.service';
 
 @Module({
   imports: [
@@ -18,7 +18,7 @@ import { WebhookService } from './webhook/webhook.service';
     RabbitMQModule.forRootAsync(RabbitMQModule, {
       inject: [ConfigService],
       useFactory: (configService: ConfigService) => ({
-        uri: configService.get<string>('BROKER_URL'),
+        uri: configService.getOrThrow<string>('BROKER_URL'),
         prefetchCount: 1,
         connectionInitOptions: {
           wait: false,
@@ -27,6 +27,6 @@ import { WebhookService } from './webhook/webhook.service';
     }),
   ],
   controllers: [WebhookController],
-  providers: [YookassaService, WebhookService],
+  providers: [YookassaSafetyService, WebhookService],
 })
 export class AppModule {}
