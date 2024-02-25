@@ -1,19 +1,25 @@
 import { RabbitPayload } from '@golevelup/nestjs-rabbitmq';
 import { Controller } from '@nestjs/common';
-import { RabbitRPC } from '@zxcdesu/nestjs-rabbitmq';
+import { ProjectId } from '@zxcdesu/util-project';
+import { RmqService } from '@zxcdesu/util-rmq';
 import { CreateInviteDto } from './dto/create-invite.dto';
-import { InviteService } from './invite.service';
+import { InviteProjectUserService } from './invite-project-user.service';
 
 @Controller()
 export class InviteController {
-  constructor(private readonly inviteService: InviteService) {}
+  constructor(
+    private readonly inviteProjectUserService: InviteProjectUserService,
+  ) {}
 
-  @RabbitRPC({
+  @RmqService.rpc({
     exchange: 'auth',
-    routingKey: 'createInvite',
-    queue: 'auth.createInvite',
+    routingKey: 'inviteProjectUser',
+    queue: 'inviteProjectUser',
   })
-  create(@RabbitPayload() payload: CreateInviteDto): Promise<boolean> {
-    return this.inviteService.create(payload);
+  invite(
+    @ProjectId() projectId: number,
+    @RabbitPayload() payload: CreateInviteDto,
+  ): Promise<boolean> {
+    return this.inviteProjectUserService.invite(projectId, payload);
   }
 }

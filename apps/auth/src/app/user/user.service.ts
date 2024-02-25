@@ -1,26 +1,14 @@
-import {
-  Inject,
-  Injectable,
-  UnauthorizedException,
-  forwardRef,
-} from '@nestjs/common';
-import { compare, hash } from 'bcrypt';
+import { Injectable } from '@nestjs/common';
+import { hash } from 'argon2';
 import { InviteService } from '../invite/invite.service';
-import { JwtService } from '../jwt/jwt.service';
 import { PrismaService } from '../prisma.service';
 import { CreateUserDto } from './dto/create-user.dto';
-import { FindOneUserDto } from './dto/find-one-user.dto';
-import { RemoveUserDto } from './dto/remove-user.dto';
-import { SignInUserDto } from './dto/sign-in-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
-import { UserJwtPayload } from './user-jwt-payload.interface';
 
 @Injectable()
 export class UserService {
   constructor(
     private readonly prismaService: PrismaService,
-    private readonly jwtService: JwtService<UserJwtPayload>,
-    @Inject(forwardRef(() => InviteService))
     private readonly inviteService: InviteService,
   ) {}
 
@@ -29,7 +17,7 @@ export class UserService {
     return this.prismaService.user.create({
       data: {
         ...payload,
-        password: await hash(payload.password, 10),
+        password: await hash(payload.password),
         projects: {
           createMany: {
             data: invites.map(({ projectId }) => ({
@@ -41,15 +29,15 @@ export class UserService {
     });
   }
 
-  findOne(payload: FindOneUserDto) {
+  findOne(id: number) {
     return this.prismaService.user.findUniqueOrThrow({
       where: {
-        id: payload.id,
+        id,
       },
     });
   }
 
-  findOneByEmail(email: string) {
+  findOneOrNullByEmail(email: string) {
     return this.prismaService.user.findUnique({
       where: {
         email,
@@ -57,38 +45,20 @@ export class UserService {
     });
   }
 
-  update(payload: UpdateUserDto) {
+  update(id: number, payload: UpdateUserDto) {
     return this.prismaService.user.update({
       where: {
-        id: payload.id,
+        id,
       },
       data: payload,
     });
   }
 
-  remove(payload: RemoveUserDto) {
+  remove(id: number) {
     return this.prismaService.user.delete({
       where: {
-        id: payload.id,
+        id,
       },
     });
-  }
-
-  async signIn(payload: SignInUserDto) {
-    const user = await this.prismaService.user.findUniqueOrThrow({
-      where: {
-        email: payload.email,
-      },
-    });
-
-    if (await compare(payload.password, user.password)) {
-      return {
-        token: this.jwtService.sign({
-          id: user.id,
-        }),
-      };
-    } else {
-      throw new UnauthorizedException();
-    }
   }
 }

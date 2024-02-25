@@ -6,13 +6,13 @@ export class UserDto implements User {
 
   name: string;
 
-  imageUrl: string;
+  imageUrl: string | null;
 
   email: string;
 
   emailConfirmed: boolean;
 
-  phone: string;
+  phone: string | null;
 
   phoneConfirmed: boolean;
 

@@ -1,24 +1,25 @@
 import { RabbitPayload } from '@golevelup/nestjs-rabbitmq';
-import { Controller, SerializeOptions } from '@nestjs/common';
-import { RabbitRPC } from '@zxcdesu/nestjs-rabbitmq';
-import { JwtDto } from '../jwt/dto/jwt.dto';
-import { UserId } from '../user/user.decorator';
+import { Controller, ParseIntPipe, SerializeOptions } from '@nestjs/common';
+import { RmqService } from '@zxcdesu/util-rmq';
+import { UserId } from '@zxcdesu/util-user';
 import { CreateProjectDto } from './dto/create-project.dto';
-import { FindOneProjectDto } from './dto/find-one-project.dto';
 import { ProjectDto } from './dto/project.dto';
-import { RemoveProjectDto } from './dto/remove-project.dto';
 import { SignInProjectDto } from './dto/sign-in-project.dto';
 import { UpdateProjectDto } from './dto/update-project.dto';
+import { ProjectAuthService } from './project-auth.service';
 import { ProjectService } from './project.service';
 
 @Controller()
 export class ProjectController {
-  constructor(private readonly projectService: ProjectService) {}
+  constructor(
+    private readonly projectService: ProjectService,
+    private readonly projectAuthService: ProjectAuthService,
+  ) {}
 
-  @RabbitRPC({
+  @RmqService.rpc({
     exchange: 'auth',
     routingKey: 'createProject',
-    queue: 'auth.createProject',
+    queue: 'createProject',
   })
   @SerializeOptions({
     type: ProjectDto,
@@ -30,25 +31,25 @@ export class ProjectController {
     return this.projectService.create(userId, payload);
   }
 
-  @RabbitRPC({
+  @RmqService.rpc({
     exchange: 'auth',
     routingKey: 'findOneProject',
-    queue: 'auth.findOneProject',
+    queue: 'findOneProject',
   })
   @SerializeOptions({
     type: ProjectDto,
   })
   findOne(
     @UserId() userId: number,
-    @RabbitPayload() payload: FindOneProjectDto,
+    @RabbitPayload('id', ParseIntPipe) id: number,
   ): Promise<ProjectDto> {
-    return this.projectService.findOne(userId, payload);
+    return this.projectService.findOne(userId, id);
   }
 
-  @RabbitRPC({
+  @RmqService.rpc({
     exchange: 'auth',
     routingKey: 'findAllProjects',
-    queue: 'auth.findAllProjects',
+    queue: 'findAllProjects',
   })
   @SerializeOptions({
     type: ProjectDto,
@@ -57,48 +58,48 @@ export class ProjectController {
     return this.projectService.findAll(userId);
   }
 
-  @RabbitRPC({
+  @RmqService.rpc({
     exchange: 'auth',
     routingKey: 'updateProject',
-    queue: 'auth.updateProject',
+    queue: 'updateProject',
   })
   @SerializeOptions({
     type: ProjectDto,
   })
   update(
     @UserId() userId: number,
+    @RabbitPayload('id', ParseIntPipe) id: number,
     @RabbitPayload() payload: UpdateProjectDto,
   ): Promise<ProjectDto> {
-    return this.projectService.update(userId, payload);
+    return this.projectService.update(userId, id, payload);
   }
 
-  @RabbitRPC({
+  @RmqService.rpc({
     exchange: 'auth',
     routingKey: 'removeProject',
-    queue: 'auth.removeProject',
+    queue: 'removeProject',
   })
   @SerializeOptions({
     type: ProjectDto,
   })
   remove(
     @UserId() userId: number,
-    @RabbitPayload() payload: RemoveProjectDto,
+    @RabbitPayload('id', ParseIntPipe) id: number,
   ): Promise<ProjectDto> {
-    return this.projectService.remove(userId, payload);
+    return this.projectService.remove(userId, id);
   }
 
-  @RabbitRPC({
+  @RmqService.rpc({
     exchange: 'auth',
     routingKey: 'signInProject',
-    queue: 'auth.signInProject',
-  })
-  @SerializeOptions({
-    type: JwtDto,
+    queue: 'signInProject',
   })
   signIn(
     @UserId() userId: number,
     @RabbitPayload() payload: SignInProjectDto,
-  ): Promise<JwtDto> {
-    return this.projectService.signIn(userId, payload);
+  ): Promise<{
+    token: string;
+  }> {
+    return this.projectAuthService.signIn(userId, payload);
   }
 }

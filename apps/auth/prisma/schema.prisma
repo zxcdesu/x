@@ -26,7 +26,6 @@ model User {
 model Project {
   id          Int           @id @default(autoincrement())
   name        String
-  description String        @default("")
   imageUrl    String?
   users       ProjectUser[]
   invites     Invite[]
@@ -35,9 +34,10 @@ model Project {
 }
 
 model Invite {
-  email     String
   projectId Int
-  project   Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  project   Project    @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  email     String
+  roles     RoleType[]
 
   @@id([projectId, email])
   @@index([email])
@@ -48,13 +48,13 @@ enum RoleType {
 }
 
 model ProjectUser {
-  userId    Int
-  user      User       @relation(fields: [userId], references: [id], onDelete: Cascade)
   projectId Int
   project   Project    @relation(fields: [projectId], references: [id], onDelete: Cascade)
-  roles     RoleType[] @default([Platform])
+  userId    Int
+  user      User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  roles     RoleType[]
 
-  @@unique([projectId, userId])
+  @@id([projectId, userId])
   @@index([userId])
   @@index([projectId])
 }

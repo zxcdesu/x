@@ -1,3 +1,6 @@
-import { FindOneProjectDto } from './find-one-project.dto';
+import { IsInt } from 'class-validator';
 
-export class SignInProjectDto extends FindOneProjectDto {}
+export class SignInProjectDto {
+  @IsInt()
+  id: number;
+}

@@ -1,3 +1,4 @@
+import { Transform } from 'class-transformer';
 import {
   IsEmail,
   IsOptional,
@@ -9,7 +10,9 @@ import {
 import { Prisma } from '../../prisma.service';
 
 export class CreateUserDto implements Prisma.UserUncheckedCreateInput {
+  @Transform(({ value }) => value?.trim())
   @IsString()
+  @Length(1, 120)
   name: string;
 
   @IsOptional()
@@ -24,6 +27,6 @@ export class CreateUserDto implements Prisma.UserUncheckedCreateInput {
   phone?: string;
 
   @IsString()
-  @Length(8, 64)
+  @Length(8, 80)
   password: string;
 }

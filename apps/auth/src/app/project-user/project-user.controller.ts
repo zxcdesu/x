@@ -1,8 +1,8 @@
 import { RabbitPayload } from '@golevelup/nestjs-rabbitmq';
 import { Controller, SerializeOptions } from '@nestjs/common';
-import { RabbitRPC } from '@zxcdesu/nestjs-rabbitmq';
-import { ProjectId } from '../project/project.decorator';
-import { UserId } from '../user/user.decorator';
+import { ProjectId } from '@zxcdesu/util-project';
+import { RmqService } from '@zxcdesu/util-rmq';
+import { UserId } from '@zxcdesu/util-user';
 import { ProjectUserDto } from './dto/project-user.dto';
 import { UpdateProjectUserDto } from './dto/update-project-user.dto';
 import { ProjectUserService } from './project-user.service';
@@ -11,10 +11,10 @@ import { ProjectUserService } from './project-user.service';
 export class ProjectUserController {
   constructor(private readonly projectUserService: ProjectUserService) {}
 
-  @RabbitRPC({
+  @RmqService.rpc({
     exchange: 'auth',
     routingKey: 'findOneProjectUser',
-    queue: 'auth.findOneProjectUser',
+    queue: 'findOneProjectUser',
   })
   @SerializeOptions({
     type: ProjectUserDto,
@@ -26,10 +26,10 @@ export class ProjectUserController {
     return this.projectUserService.findOne(projectId, userId);
   }
 
-  @RabbitRPC({
+  @RmqService.rpc({
     exchange: 'auth',
     routingKey: 'findAllProjectUsers',
-    queue: 'auth.findAllProjectUsers',
+    queue: 'findAllProjectUsers',
   })
   @SerializeOptions({
     type: ProjectUserDto,
@@ -38,10 +38,10 @@ export class ProjectUserController {
     return this.projectUserService.findAll(projectId);
   }
 
-  @RabbitRPC({
+  @RmqService.rpc({
     exchange: 'auth',
     routingKey: 'updateProjectUser',
-    queue: 'auth.updateProjectUser',
+    queue: 'updateProjectUser',
   })
   @SerializeOptions({
     type: ProjectUserDto,
@@ -54,10 +54,10 @@ export class ProjectUserController {
     return this.projectUserService.update(projectId, userId, payload);
   }
 
-  @RabbitRPC({
+  @RmqService.rpc({
     exchange: 'auth',
     routingKey: 'removeProjectUser',
-    queue: 'auth.removeProjectUser',
+    queue: 'removeProjectUser',
   })
   @SerializeOptions({
     type: ProjectUserDto,

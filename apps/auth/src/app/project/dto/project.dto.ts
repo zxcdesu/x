@@ -5,9 +5,7 @@ export class ProjectDto implements Project {
 
   name: string;
 
-  description: string;
-
-  imageUrl: string;
+  imageUrl: string | null;
 
   createdAt: Date;
 

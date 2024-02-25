@@ -1,23 +1,24 @@
 import { RabbitPayload } from '@golevelup/nestjs-rabbitmq';
-import { Controller, SerializeOptions } from '@nestjs/common';
-import { RabbitRPC } from '@zxcdesu/nestjs-rabbitmq';
-import { JwtDto } from '../jwt/dto/jwt.dto';
+import { Controller, ParseIntPipe, SerializeOptions } from '@nestjs/common';
+import { RmqService } from '@zxcdesu/util-rmq';
 import { CreateUserDto } from './dto/create-user.dto';
-import { FindOneUserDto } from './dto/find-one-user.dto';
-import { RemoveUserDto } from './dto/remove-user.dto';
 import { SignInUserDto } from './dto/sign-in-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { UserDto } from './dto/user.dto';
+import { UserAuthService } from './user-auth.service';
 import { UserService } from './user.service';
 
 @Controller()
 export class UserController {
-  constructor(private readonly userService: UserService) {}
+  constructor(
+    private readonly userService: UserService,
+    private readonly userAuthService: UserAuthService,
+  ) {}
 
-  @RabbitRPC({
+  @RmqService.rpc({
     exchange: 'auth',
     routingKey: 'createUser',
-    queue: 'auth.createUser',
+    queue: 'createUser',
   })
   @SerializeOptions({
     type: UserDto,
@@ -26,51 +27,53 @@ export class UserController {
     return this.userService.create(payload);
   }
 
-  @RabbitRPC({
+  @RmqService.rpc({
     exchange: 'auth',
     routingKey: 'findOneUser',
-    queue: 'auth.findOneUser',
+    queue: 'findOneUser',
   })
   @SerializeOptions({
     type: UserDto,
   })
-  findOne(@RabbitPayload() payload: FindOneUserDto): Promise<UserDto> {
-    return this.userService.findOne(payload);
+  findOne(@RabbitPayload('id', ParseIntPipe) id: number): Promise<UserDto> {
+    return this.userService.findOne(id);
   }
 
-  @RabbitRPC({
+  @RmqService.rpc({
     exchange: 'auth',
     routingKey: 'updateUser',
-    queue: 'auth.updateUser',
+    queue: 'updateUser',
   })
   @SerializeOptions({
     type: UserDto,
   })
-  update(@RabbitPayload() payload: UpdateUserDto): Promise<UserDto> {
-    return this.userService.update(payload);
+  update(
+    @RabbitPayload('id', ParseIntPipe) id: number,
+    @RabbitPayload() payload: UpdateUserDto,
+  ): Promise<UserDto> {
+    return this.userService.update(id, payload);
   }
 
-  @RabbitRPC({
+  @RmqService.rpc({
     exchange: 'auth',
     routingKey: 'removeUser',
-    queue: 'auth.removeUser',
+    queue: 'removeUser',
   })
   @SerializeOptions({
     type: UserDto,
   })
-  remove(@RabbitPayload() payload: RemoveUserDto): Promise<UserDto> {
-    return this.userService.remove(payload);
+  remove(@RabbitPayload('id', ParseIntPipe) id: number): Promise<UserDto> {
+    return this.userService.remove(id);
   }
 
-  @RabbitRPC({
+  @RmqService.rpc({
     exchange: 'auth',
     routingKey: 'signInUser',
-    queue: 'auth.signInUser',
+    queue: 'signInUser',
   })
-  @SerializeOptions({
-    type: JwtDto,
-  })
-  signIn(@RabbitPayload() payload: SignInUserDto): Promise<JwtDto> {
-    return this.userService.signIn(payload);
+  signIn(@RabbitPayload() payload: SignInUserDto): Promise<{
+    token: string;
+  }> {
+    return this.userAuthService.signIn(payload);
   }
 }

@@ -1,21 +1,11 @@
 import { Injectable } from '@nestjs/common';
-import { JwtService } from '../jwt/jwt.service';
 import { PrismaService } from '../prisma.service';
-import { ProjectUserService } from '../project-user/project-user.service';
 import { CreateProjectDto } from './dto/create-project.dto';
-import { FindOneProjectDto } from './dto/find-one-project.dto';
-import { RemoveProjectDto } from './dto/remove-project.dto';
-import { SignInProjectDto } from './dto/sign-in-project.dto';
 import { UpdateProjectDto } from './dto/update-project.dto';
-import { ProjectJwtPayload } from './project-jwt-payload.interface';
 
 @Injectable()
 export class ProjectService {
-  constructor(
-    private readonly prismaService: PrismaService,
-    private readonly jwtService: JwtService<ProjectJwtPayload>,
-    private readonly projectUserService: ProjectUserService,
-  ) {}
+  constructor(private readonly prismaService: PrismaService) {}
 
   create(userId: number, payload: CreateProjectDto) {
     return this.prismaService.project.create({
@@ -37,10 +27,10 @@ export class ProjectService {
     });
   }
 
-  findOne(userId: number, payload: FindOneProjectDto) {
+  findOne(userId: number, id: number) {
     return this.prismaService.project.findFirstOrThrow({
       where: {
-        id: payload.id,
+        id,
         users: {
           some: {
             userId,
@@ -76,10 +66,10 @@ export class ProjectService {
     });
   }
 
-  update(userId: number, payload: UpdateProjectDto) {
+  update(userId: number, id: number, payload: UpdateProjectDto) {
     return this.prismaService.project.update({
       where: {
-        id: payload.id,
+        id,
       },
       data: payload,
       include: {
@@ -92,10 +82,10 @@ export class ProjectService {
     });
   }
 
-  remove(userId: number, payload: RemoveProjectDto) {
+  remove(userId: number, id: number) {
     return this.prismaService.project.delete({
       where: {
-        id: payload.id,
+        id,
       },
       include: {
         users: {
@@ -105,18 +95,5 @@ export class ProjectService {
         },
       },
     });
-  }
-
-  async signIn(userId: number, payload: SignInProjectDto) {
-    const { roles } = await this.projectUserService.findOne(payload.id, userId);
-    return {
-      token: this.jwtService.sign({
-        id: userId,
-        project: {
-          id: payload.id,
-          roles,
-        },
-      }),
-    };
   }
 }
