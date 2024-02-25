@@ -1,5 +1,5 @@
 import { Controller } from '@nestjs/common';
-import { RabbitRPC } from '@zxcdesu/nestjs-rabbitmq';
+import { RmqService } from '@zxcdesu/util-rmq';
 import { UserId } from '@zxcdesu/util-user';
 import { AdminService } from './admin.service';
 
@@ -7,12 +7,12 @@ import { AdminService } from './admin.service';
 export class AdminController {
   constructor(private readonly adminService: AdminService) {}
 
-  @RabbitRPC({
+  @RmqService.rpc({
     exchange: 'admin',
     routingKey: 'checkAdmin',
     queue: 'checkAdmin',
   })
-  check(@UserId userId: number) {
+  check(@UserId() userId: number) {
     return this.adminService.check(userId);
   }
 }
