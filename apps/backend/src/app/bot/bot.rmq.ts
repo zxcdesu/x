@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { RmqService } from '@zxcdesu/nestjs-rabbitmq';
+import { RmqService } from '@zxcdesu/util-rmq';
 import { BotDto } from './dto/bot.dto';
 import { CreateBotDto } from './dto/create-bot.dto';
 import { UpdateBotDto } from './dto/update-bot.dto';
@@ -11,8 +11,8 @@ export class BotRmq extends RmqService {
       exchange: 'bots',
       routingKey: 'createBot',
       payload: {
-        ...payload,
         projectId,
+        ...payload,
       },
     });
   }
@@ -44,8 +44,8 @@ export class BotRmq extends RmqService {
       exchange: 'bots',
       routingKey: 'updateBot',
       payload: {
-        ...payload,
         projectId,
+        ...payload,
       },
     });
   }

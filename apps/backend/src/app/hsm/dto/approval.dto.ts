@@ -4,12 +4,12 @@ import { ApprovalStatus } from './approval-status.enum';
 
 @ObjectType()
 export class ApprovalDto {
+  @Field(() => ChannelDto)
+  channel: ChannelDto;
+
   @Field(() => ApprovalStatus)
   status: ApprovalStatus;
 
   @Field(() => String, { nullable: true })
   rejectedReason: string | null;
-
-  @Field(() => ChannelDto)
-  channel: ChannelDto;
 }

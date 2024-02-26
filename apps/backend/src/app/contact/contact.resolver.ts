@@ -5,10 +5,11 @@ import { BearerAuthGuard } from '../auth/bearer-auth.guard';
 import { BearerAuth } from '../auth/bearer-auth.interface';
 import { ContactRmq } from './contact.rmq';
 import { ContactService } from './contact.service';
-import { AssignContactDto } from './dto/assign-contact.dto';
 import { AssigneeType } from './dto/assignee-type.enum';
+import { CloseContactDto } from './dto/close-contact.dto';
 import { ContactDto } from './dto/contact.dto';
 import { CreateContactDto } from './dto/create-contact.dto';
+import { EnqueueContactDto } from './dto/enqueue-contact.dto';
 import { UpdateContactDto } from './dto/update-contact.dto';
 
 @Resolver()
@@ -21,7 +22,7 @@ export class ContactResolver {
   @UseGuards(BearerAuthGuard)
   @Mutation(() => ContactDto)
   createContact(
-    @BearerAuthDecorator() auth: BearerAuth,
+    @BearerAuthDecorator() auth: Required<BearerAuth>,
     @Args() payload: CreateContactDto,
   ): Promise<ContactDto> {
     return this.rmq.create(auth.project.id, payload);
@@ -30,7 +31,7 @@ export class ContactResolver {
   @UseGuards(BearerAuthGuard)
   @Query(() => ContactDto)
   contactById(
-    @BearerAuthDecorator() auth: BearerAuth,
+    @BearerAuthDecorator() auth: Required<BearerAuth>,
     @Args('id', ParseIntPipe) id: number,
   ): Promise<ContactDto> {
     return this.contactService.findOneAndCheck(auth, id);
@@ -38,7 +39,9 @@ export class ContactResolver {
 
   @UseGuards(BearerAuthGuard)
   @Query(() => [ContactDto])
-  contacts(@BearerAuthDecorator() auth: BearerAuth): Promise<ContactDto[]> {
+  contacts(
+    @BearerAuthDecorator() auth: Required<BearerAuth>,
+  ): Promise<ContactDto[]> {
     return this.rmq.findAll(auth.project.id, {
       id: auth.id,
       type: AssigneeType.User,
@@ -48,7 +51,7 @@ export class ContactResolver {
   @UseGuards(BearerAuthGuard)
   @Mutation(() => ContactDto)
   async updateContact(
-    @BearerAuthDecorator() auth: BearerAuth,
+    @BearerAuthDecorator() auth: Required<BearerAuth>,
     @Args() payload: UpdateContactDto,
   ): Promise<ContactDto> {
     await this.contactService.findOneAndCheck(auth, payload.id);
@@ -58,7 +61,7 @@ export class ContactResolver {
   @UseGuards(BearerAuthGuard)
   @Mutation(() => ContactDto)
   async removeContact(
-    @BearerAuthDecorator() auth: BearerAuth,
+    @BearerAuthDecorator() auth: Required<BearerAuth>,
     @Args('id', ParseIntPipe) id: number,
   ): Promise<ContactDto> {
     await this.contactService.findOneAndCheck(auth, id);
@@ -67,31 +70,21 @@ export class ContactResolver {
 
   @UseGuards(BearerAuthGuard)
   @Mutation(() => ContactDto)
-  async assignContact(
-    @BearerAuthDecorator() auth: BearerAuth,
-    @Args() payload: AssignContactDto,
+  async enqueueContact(
+    @BearerAuthDecorator() auth: Required<BearerAuth>,
+    @Args() payload: EnqueueContactDto,
   ): Promise<ContactDto> {
     await this.contactService.findOneAndCheck(auth, payload.id);
-    return this.rmq.assign(auth.project.id, payload);
+    return this.rmq.enqueue(auth.project.id, payload);
   }
 
   @UseGuards(BearerAuthGuard)
   @Mutation(() => ContactDto)
-  async resolveContact(
-    @BearerAuthDecorator() auth: BearerAuth,
-    @Args('id', ParseIntPipe) id: number,
+  async closeContact(
+    @BearerAuthDecorator() auth: Required<BearerAuth>,
+    @Args() payload: CloseContactDto,
   ): Promise<ContactDto> {
-    await this.contactService.findOneAndCheck(auth, id);
-    return this.rmq.resolve(auth.project.id, id);
-  }
-
-  @UseGuards(BearerAuthGuard)
-  @Mutation(() => ContactDto)
-  async rejectContact(
-    @BearerAuthDecorator() auth: BearerAuth,
-    @Args('id', ParseIntPipe) id: number,
-  ): Promise<ContactDto> {
-    await this.contactService.findOneAndCheck(auth, id);
-    return this.rmq.reject(auth.project.id, id);
+    await this.contactService.findOneAndCheck(auth, payload.id);
+    return this.rmq.close(auth.project.id, payload);
   }
 }

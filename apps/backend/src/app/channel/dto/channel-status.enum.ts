@@ -2,7 +2,7 @@ import { registerEnumType } from '@nestjs/graphql';
 
 export enum ChannelStatus {
   Connecting = 'Connecting',
-  Connected = 'Connected',
+  Active = 'Active',
   Failed = 'Failed',
 }
 

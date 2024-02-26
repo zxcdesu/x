@@ -5,6 +5,7 @@ export enum MailingStatus {
   Scheduled = 'Scheduled',
   Active = 'Active',
   Finished = 'Finished',
+  Failed = 'Failed',
 }
 
 registerEnumType(MailingStatus, {

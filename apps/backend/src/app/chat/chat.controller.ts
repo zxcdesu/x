@@ -1,22 +1,27 @@
-import { RabbitPayload, RabbitSubscribe } from '@golevelup/nestjs-rabbitmq';
+import { RabbitPayload } from '@golevelup/nestjs-rabbitmq';
 import { Controller } from '@nestjs/common';
+import { ProjectId } from '@zxcdesu/util-project';
+import { RmqService } from '@zxcdesu/util-rmq';
 import { AssigneeType } from '../contact/dto/assignee-type.enum';
 import { PubSubService } from '../pubsub.service';
-import { ReceiveChatDto } from './dto/receive-chat.dto';
+import { HandleChatDto } from './dto/receive-chat.dto';
 
 @Controller()
 export class ChatController {
   constructor(private readonly pubSubService: PubSubService) {}
 
-  @RabbitSubscribe({
+  @RmqService.subscribe({
     exchange: 'backend',
-    routingKey: 'receiveChat',
-    queue: 'backend.receiveChat',
+    routingKey: 'handleChat',
+    queue: 'handleChat',
   })
-  receive(@RabbitPayload() payload: ReceiveChatDto) {
+  handle(
+    @ProjectId() projectId: number,
+    @RabbitPayload() payload: HandleChatDto,
+  ) {
     this.pubSubService.publish(
       PubSubService.chatReceived(
-        payload.projectId,
+        projectId,
         payload.chat.contact.assignedTo?.type === AssigneeType.User &&
           payload.chat.contact.assignedTo,
       ),

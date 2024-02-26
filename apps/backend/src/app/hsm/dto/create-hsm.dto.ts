@@ -5,7 +5,7 @@ import { ButtonDto } from '../../message/dto/button.dto';
 @ArgsType()
 export class CreateHsmDto {
   @Field(() => String)
-  code: string;
+  name: string;
 
   @Field(() => String)
   text: string;

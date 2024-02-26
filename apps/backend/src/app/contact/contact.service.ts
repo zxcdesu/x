@@ -8,13 +8,13 @@ import { AssigneeType } from './dto/assignee-type.enum';
 export class ContactService {
   constructor(private readonly rmq: ContactRmq) {}
 
-  async findOneAndCheck(auth: BearerAuth, id: number) {
+  async findOneAndCheck(auth: Required<BearerAuth>, id: number) {
     const contact = await this.rmq.findOne(auth.project.id, id);
     this.check(auth.id, contact.assignedTo);
     return contact;
   }
 
-  check(userId: number, assignedTo?: AssignedToDto) {
+  check(userId: number, assignedTo: AssignedToDto | null) {
     if (assignedTo) {
       if (assignedTo.id !== userId && assignedTo.type === AssigneeType.User) {
         throw new ForbiddenException();

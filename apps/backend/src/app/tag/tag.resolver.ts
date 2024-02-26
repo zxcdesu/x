@@ -15,7 +15,7 @@ export class TagResolver {
   @UseGuards(BearerAuthGuard)
   @Mutation(() => TagDto)
   createTag(
-    @BearerAuthDecorator() auth: BearerAuth,
+    @BearerAuthDecorator() auth: Required<BearerAuth>,
     @Args() payload: CreateTagDto,
   ): Promise<TagDto> {
     return this.rmq.create(auth.project.id, payload);
@@ -24,7 +24,7 @@ export class TagResolver {
   @UseGuards(BearerAuthGuard)
   @Query(() => TagDto)
   tagById(
-    @BearerAuthDecorator() auth: BearerAuth,
+    @BearerAuthDecorator() auth: Required<BearerAuth>,
     @Args('id', ParseIntPipe) id: number,
   ): Promise<TagDto> {
     return this.rmq.findOne(auth.project.id, id);
@@ -32,14 +32,14 @@ export class TagResolver {
 
   @UseGuards(BearerAuthGuard)
   @Query(() => [TagDto])
-  tags(@BearerAuthDecorator() auth: BearerAuth): Promise<TagDto[]> {
+  tags(@BearerAuthDecorator() auth: Required<BearerAuth>): Promise<TagDto[]> {
     return this.rmq.findAll(auth.project.id);
   }
 
   @UseGuards(BearerAuthGuard)
   @Mutation(() => TagDto)
   updateTag(
-    @BearerAuthDecorator() auth: BearerAuth,
+    @BearerAuthDecorator() auth: Required<BearerAuth>,
     @Args() payload: UpdateTagDto,
   ): Promise<TagDto> {
     return this.rmq.update(auth.project.id, payload);
@@ -48,7 +48,7 @@ export class TagResolver {
   @UseGuards(BearerAuthGuard)
   @Mutation(() => TagDto)
   removeTag(
-    @BearerAuthDecorator() auth: BearerAuth,
+    @BearerAuthDecorator() auth: Required<BearerAuth>,
     @Args('id', ParseIntPipe) id: number,
   ): Promise<TagDto> {
     return this.rmq.remove(auth.project.id, id);

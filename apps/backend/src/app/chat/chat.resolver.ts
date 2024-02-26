@@ -22,7 +22,7 @@ export class ChatResolver {
   @UseGuards(BearerAuthGuard)
   @Mutation(() => ChatDto)
   createChat(
-    @BearerAuthDecorator() auth: BearerAuth,
+    @BearerAuthDecorator() auth: Required<BearerAuth>,
     @Args() payload: CreateChatDto,
   ): Promise<ChatDto> {
     return this.rmq.create(auth.project.id, payload);
@@ -31,7 +31,7 @@ export class ChatResolver {
   @UseGuards(BearerAuthGuard)
   @Query(() => ChatDto)
   chatById(
-    @BearerAuthDecorator() auth: BearerAuth,
+    @BearerAuthDecorator() auth: Required<BearerAuth>,
     @Args('id', ParseIntPipe) id: number,
   ): Promise<ChatDto> {
     return this.chatService.findOneAndCheck(auth, id);
@@ -39,7 +39,7 @@ export class ChatResolver {
 
   @UseGuards(BearerAuthGuard)
   @Query(() => [ChatDto])
-  chats(@BearerAuthDecorator() auth: BearerAuth): Promise<ChatDto[]> {
+  chats(@BearerAuthDecorator() auth: Required<BearerAuth>): Promise<ChatDto[]> {
     return this.rmq.findAll(auth.project.id, {
       id: auth.id,
       type: AssigneeType.User,
@@ -49,7 +49,7 @@ export class ChatResolver {
   @UseGuards(BearerAuthGuard)
   @Mutation(() => ChatDto)
   async updateChat(
-    @BearerAuthDecorator() auth: BearerAuth,
+    @BearerAuthDecorator() auth: Required<BearerAuth>,
     @Args() payload: UpdateChatDto,
   ): Promise<ChatDto> {
     await this.chatService.findOneAndCheck(auth, payload.id);
@@ -59,7 +59,7 @@ export class ChatResolver {
   @UseGuards(BearerAuthGuard)
   @Mutation(() => ChatDto)
   async removeChat(
-    @BearerAuthDecorator() auth: BearerAuth,
+    @BearerAuthDecorator() auth: Required<BearerAuth>,
     @Args('id', ParseIntPipe) id: number,
   ): Promise<ChatDto> {
     await this.chatService.findOneAndCheck(auth, id);
@@ -68,7 +68,7 @@ export class ChatResolver {
 
   @UseGuards(BearerAuthGuard)
   @Subscription(() => ChatDto)
-  chatReceived(@BearerAuthDecorator() auth: BearerAuth) {
+  chatReceived(@BearerAuthDecorator() auth: Required<BearerAuth>) {
     return this.pubSubService.asyncIterator([
       PubSubService.chatReceived(auth.project.id),
       PubSubService.chatReceived(auth.project.id, {

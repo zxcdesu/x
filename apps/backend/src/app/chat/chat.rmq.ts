@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { RmqService } from '@zxcdesu/nestjs-rabbitmq';
+import { RmqService } from '@zxcdesu/util-rmq';
 import { CreateAssignedToDto } from '../contact/dto/create-assigned-to.dto';
 import { ChatDto } from './dto/chat.dto';
 import { CreateChatDto } from './dto/create-chat.dto';

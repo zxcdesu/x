@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { RmqService } from '@zxcdesu/nestjs-rabbitmq';
+import { RmqService } from '@zxcdesu/util-rmq';
 import { CreateTagDto } from './dto/create-tag.dto';
 import { TagDto } from './dto/tag.dto';
 import { UpdateTagDto } from './dto/update-tag.dto';
@@ -11,8 +11,8 @@ export class TagRmq extends RmqService {
       exchange: 'platform',
       routingKey: 'createTag',
       payload: {
-        ...payload,
         projectId,
+        ...payload,
       },
     });
   }
@@ -44,8 +44,8 @@ export class TagRmq extends RmqService {
       exchange: 'platform',
       routingKey: 'updateTag',
       payload: {
-        ...payload,
         projectId,
+        ...payload,
       },
     });
   }

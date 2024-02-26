@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { RmqService } from '@zxcdesu/nestjs-rabbitmq';
+import { RmqService } from '@zxcdesu/util-rmq';
 import { CreateMailingDto } from './dto/create-mailing.dto';
 import { MailingDto } from './dto/mailing.dto';
 import { UpdateMailingDto } from './dto/update-mailing.dto';
@@ -11,8 +11,8 @@ export class MailingRmq extends RmqService {
       exchange: 'mailer',
       routingKey: 'createMailing',
       payload: {
-        ...payload,
         projectId,
+        ...payload,
       },
     });
   }
@@ -44,8 +44,8 @@ export class MailingRmq extends RmqService {
       exchange: 'mailer',
       routingKey: 'updateMailing',
       payload: {
-        ...payload,
         projectId,
+        ...payload,
       },
     });
   }

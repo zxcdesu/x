@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { RmqService } from '@zxcdesu/nestjs-rabbitmq';
+import { RmqService } from '@zxcdesu/util-rmq';
 import { CreateIntegrationDto } from './dto/create-integration.dto';
 import { IntegrationDto } from './dto/integration.dto';
 import { UpdateIntegrationDto } from './dto/update-integration.dto';
@@ -11,13 +11,13 @@ export class IntegrationRmq extends RmqService {
       exchange: 'integrations',
       routingKey: 'createIntegration',
       payload: {
-        ...payload,
         projectId,
+        ...payload,
       },
     });
   }
 
-  findOne(projectId: number, id: string) {
+  findOne(projectId: number, id: number) {
     return this.request<IntegrationDto>({
       exchange: 'integrations',
       routingKey: 'findOneIntegration',
@@ -43,8 +43,8 @@ export class IntegrationRmq extends RmqService {
       exchange: 'integrations',
       routingKey: 'updateIntegration',
       payload: {
-        ...payload,
         projectId,
+        ...payload,
       },
     });
   }

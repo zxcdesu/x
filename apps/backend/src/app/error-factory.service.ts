@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { ErrorFactory } from '@zxcdesu/nestjs-rabbitmq';
+import { ErrorFactory } from '@zxcdesu/util-rmq';
 import { ApolloError } from 'apollo-server-express';
 
 @Injectable()

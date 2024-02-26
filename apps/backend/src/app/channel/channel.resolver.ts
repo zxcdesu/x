@@ -15,7 +15,7 @@ export class ChannelResolver {
   @UseGuards(BearerAuthGuard)
   @Mutation(() => ChannelDto)
   createChannel(
-    @BearerAuthDecorator() auth: BearerAuth,
+    @BearerAuthDecorator() auth: Required<BearerAuth>,
     @Args() payload: CreateChannelDto,
   ): Promise<ChannelDto> {
     return this.rmq.create(auth.project.id, payload);
@@ -24,7 +24,7 @@ export class ChannelResolver {
   @UseGuards(BearerAuthGuard)
   @Query(() => ChannelDto)
   channelById(
-    @BearerAuthDecorator() auth: BearerAuth,
+    @BearerAuthDecorator() auth: Required<BearerAuth>,
     @Args('id', ParseIntPipe) id: number,
   ): Promise<ChannelDto> {
     return this.rmq.findOne(auth.project.id, id);
@@ -32,14 +32,16 @@ export class ChannelResolver {
 
   @UseGuards(BearerAuthGuard)
   @Query(() => [ChannelDto])
-  channels(@BearerAuthDecorator() auth: BearerAuth): Promise<ChannelDto[]> {
+  channels(
+    @BearerAuthDecorator() auth: Required<BearerAuth>,
+  ): Promise<ChannelDto[]> {
     return this.rmq.findAll(auth.project.id);
   }
 
   @UseGuards(BearerAuthGuard)
   @Mutation(() => ChannelDto)
   updateChannel(
-    @BearerAuthDecorator() auth: BearerAuth,
+    @BearerAuthDecorator() auth: Required<BearerAuth>,
     @Args() payload: UpdateChannelDto,
   ): Promise<ChannelDto> {
     return this.rmq.update(auth.project.id, payload);
@@ -48,7 +50,7 @@ export class ChannelResolver {
   @UseGuards(BearerAuthGuard)
   @Mutation(() => ChannelDto)
   removeChannel(
-    @BearerAuthDecorator() auth: BearerAuth,
+    @BearerAuthDecorator() auth: Required<BearerAuth>,
     @Args('id', ParseIntPipe) id: number,
   ): Promise<ChannelDto> {
     return this.rmq.remove(auth.project.id, id);

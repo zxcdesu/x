@@ -24,7 +24,9 @@ export class ProjectResolver {
 
   @UseGuards(BearerAuthGuard)
   @Query(() => ProjectDto)
-  project(@BearerAuthDecorator() auth: BearerAuth): Promise<ProjectDto> {
+  project(
+    @BearerAuthDecorator() auth: Required<BearerAuth>,
+  ): Promise<ProjectDto> {
     return this.rmq.findOne(auth.id, auth.project.id);
   }
 
@@ -37,7 +39,7 @@ export class ProjectResolver {
   @UseGuards(BearerAuthGuard)
   @Mutation(() => ProjectDto)
   updateProject(
-    @BearerAuthDecorator() auth: BearerAuth,
+    @BearerAuthDecorator() auth: Required<BearerAuth>,
     @Args() payload: UpdateProjectDto,
   ): Promise<ProjectDto> {
     return this.rmq.update(auth.id, auth.project.id, payload);
@@ -45,7 +47,9 @@ export class ProjectResolver {
 
   @UseGuards(BearerAuthGuard)
   @Mutation(() => ProjectDto)
-  removeProject(@BearerAuthDecorator() auth: BearerAuth): Promise<ProjectDto> {
+  removeProject(
+    @BearerAuthDecorator() auth: Required<BearerAuth>,
+  ): Promise<ProjectDto> {
     return this.rmq.remove(auth.id, auth.project.id);
   }
 

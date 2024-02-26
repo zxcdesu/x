@@ -15,7 +15,7 @@ export class MailingResolver {
   @UseGuards(BearerAuthGuard)
   @Mutation(() => MailingDto)
   createMailing(
-    @BearerAuthDecorator() auth: BearerAuth,
+    @BearerAuthDecorator() auth: Required<BearerAuth>,
     @Args() payload: CreateMailingDto,
   ): Promise<MailingDto> {
     return this.rmq.create(auth.project.id, payload);
@@ -24,7 +24,7 @@ export class MailingResolver {
   @UseGuards(BearerAuthGuard)
   @Query(() => MailingDto)
   mailingById(
-    @BearerAuthDecorator() auth: BearerAuth,
+    @BearerAuthDecorator() auth: Required<BearerAuth>,
     @Args('id', ParseIntPipe) id: number,
   ): Promise<MailingDto> {
     return this.rmq.findOne(auth.project.id, id);
@@ -32,14 +32,16 @@ export class MailingResolver {
 
   @UseGuards(BearerAuthGuard)
   @Query(() => [MailingDto])
-  mailings(@BearerAuthDecorator() auth: BearerAuth): Promise<MailingDto[]> {
+  mailings(
+    @BearerAuthDecorator() auth: Required<BearerAuth>,
+  ): Promise<MailingDto[]> {
     return this.rmq.findAll(auth.project.id);
   }
 
   @UseGuards(BearerAuthGuard)
   @Mutation(() => MailingDto)
   updateMailing(
-    @BearerAuthDecorator() auth: BearerAuth,
+    @BearerAuthDecorator() auth: Required<BearerAuth>,
     @Args() payload: UpdateMailingDto,
   ): Promise<MailingDto> {
     return this.rmq.update(auth.project.id, payload);
@@ -48,7 +50,7 @@ export class MailingResolver {
   @UseGuards(BearerAuthGuard)
   @Mutation(() => MailingDto)
   removeMailing(
-    @BearerAuthDecorator() auth: BearerAuth,
+    @BearerAuthDecorator() auth: Required<BearerAuth>,
     @Args('id', ParseIntPipe) id: number,
   ): Promise<MailingDto> {
     return this.rmq.remove(auth.project.id, id);

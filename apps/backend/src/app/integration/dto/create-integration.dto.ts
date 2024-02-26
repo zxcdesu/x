@@ -8,7 +8,7 @@ export class CreateIntegrationDto {
   type: IntegrationType;
 
   @Field(() => String)
-  accountId: string;
+  externalId: string;
 
   @Field(() => GraphQLJSON)
   // eslint-disable-next-line @typescript-eslint/no-explicit-any

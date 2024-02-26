@@ -1,11 +1,8 @@
 import { Type } from 'class-transformer';
-import { IsInt, ValidateNested } from 'class-validator';
+import { ValidateNested } from 'class-validator';
 import { ChatDto } from './chat.dto';
 
-export class ReceiveChatDto {
-  @IsInt()
-  projectId: number;
-
+export class HandleChatDto {
   @Type(() => ChatDto)
   @ValidateNested()
   chat: ChatDto;

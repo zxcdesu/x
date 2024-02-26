@@ -12,9 +12,6 @@ export class CreateBotDto {
   @Field(() => String, { nullable: true })
   imageUrl?: string;
 
-  @Field(() => String, { nullable: true })
-  version?: string;
-
   @Field(() => GraphQLJSONObject)
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   flow: any;

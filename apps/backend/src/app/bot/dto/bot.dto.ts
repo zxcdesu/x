@@ -15,9 +15,6 @@ export class BotDto {
   @Field(() => String, { nullable: true })
   imageUrl: string | null;
 
-  @Field(() => String)
-  version: string;
-
   @Field(() => GraphQLJSONObject)
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   flow: any;

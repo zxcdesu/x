@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { RmqService } from '@zxcdesu/nestjs-rabbitmq';
+import { RmqService } from '@zxcdesu/util-rmq';
 import { TokenDto } from '../auth/dto/token.dto';
 import { CreateProjectDto } from './dto/create-project.dto';
 import { ProjectDto } from './dto/project.dto';
@@ -12,8 +12,8 @@ export class ProjectRmq extends RmqService {
       exchange: 'auth',
       routingKey: 'createProject',
       payload: {
-        ...payload,
         userId,
+        ...payload,
       },
     });
   }
@@ -44,9 +44,9 @@ export class ProjectRmq extends RmqService {
       exchange: 'auth',
       routingKey: 'updateProject',
       payload: {
-        ...payload,
-        id,
         userId,
+        id,
+        ...payload,
       },
     });
   }

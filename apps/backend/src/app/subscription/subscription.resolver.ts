@@ -13,7 +13,7 @@ export class SubscriptionResolver {
   @UseGuards(BearerAuthGuard)
   @Query(() => SubscriptionDto)
   subscription(
-    @BearerAuthDecorator() auth: BearerAuth,
+    @BearerAuthDecorator() auth: Required<BearerAuth>,
   ): Promise<SubscriptionDto> {
     return this.rmq.findOne(auth.project.id);
   }

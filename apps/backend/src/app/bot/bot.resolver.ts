@@ -15,7 +15,7 @@ export class BotResolver {
   @UseGuards(BearerAuthGuard)
   @Mutation(() => BotDto)
   createBot(
-    @BearerAuthDecorator() auth: BearerAuth,
+    @BearerAuthDecorator() auth: Required<BearerAuth>,
     @Args() payload: CreateBotDto,
   ): Promise<BotDto> {
     return this.rmq.create(auth.project.id, payload);
@@ -24,7 +24,7 @@ export class BotResolver {
   @UseGuards(BearerAuthGuard)
   @Query(() => BotDto)
   botById(
-    @BearerAuthDecorator() auth: BearerAuth,
+    @BearerAuthDecorator() auth: Required<BearerAuth>,
     @Args('id', ParseIntPipe) id: number,
   ): Promise<BotDto> {
     return this.rmq.findOne(auth.project.id, id);
@@ -32,14 +32,14 @@ export class BotResolver {
 
   @UseGuards(BearerAuthGuard)
   @Query(() => [BotDto])
-  bots(@BearerAuthDecorator() auth: BearerAuth): Promise<BotDto[]> {
+  bots(@BearerAuthDecorator() auth: Required<BearerAuth>): Promise<BotDto[]> {
     return this.rmq.findAll(auth.project.id);
   }
 
   @UseGuards(BearerAuthGuard)
   @Mutation(() => BotDto)
   updateBot(
-    @BearerAuthDecorator() auth: BearerAuth,
+    @BearerAuthDecorator() auth: Required<BearerAuth>,
     @Args() payload: UpdateBotDto,
   ): Promise<BotDto> {
     return this.rmq.update(auth.project.id, payload);
@@ -48,7 +48,7 @@ export class BotResolver {
   @UseGuards(BearerAuthGuard)
   @Mutation(() => BotDto)
   removeBot(
-    @BearerAuthDecorator() auth: BearerAuth,
+    @BearerAuthDecorator() auth: Required<BearerAuth>,
     @Args('id', ParseIntPipe) id: number,
   ): Promise<BotDto> {
     return this.rmq.remove(auth.project.id, id);

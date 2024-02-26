@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { RmqService } from '@zxcdesu/nestjs-rabbitmq';
+import { RmqService } from '@zxcdesu/util-rmq';
 import { ChannelDto } from './dto/channel.dto';
 import { CreateChannelDto } from './dto/create-channel.dto';
 import { UpdateChannelDto } from './dto/update-channel.dto';
@@ -11,8 +11,8 @@ export class ChannelRmq extends RmqService {
       exchange: 'platform',
       routingKey: 'createChannel',
       payload: {
-        ...payload,
         projectId,
+        ...payload,
       },
     });
   }
@@ -44,8 +44,8 @@ export class ChannelRmq extends RmqService {
       exchange: 'platform',
       routingKey: 'updateChannel',
       payload: {
-        ...payload,
         projectId,
+        ...payload,
       },
     });
   }

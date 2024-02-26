@@ -6,8 +6,5 @@ export class CreateProjectDto {
   name: string;
 
   @Field(() => String, { nullable: true })
-  description?: string;
-
-  @Field(() => String, { nullable: true })
   imageUrl?: string;
 }

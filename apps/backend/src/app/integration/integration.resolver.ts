@@ -1,4 +1,4 @@
-import { ParseIntPipe, ParseUUIDPipe, UseGuards } from '@nestjs/common';
+import { ParseIntPipe, UseGuards } from '@nestjs/common';
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { BearerAuthDecorator } from '../auth/bearer-auth.decorator';
 import { BearerAuthGuard } from '../auth/bearer-auth.guard';
@@ -15,7 +15,7 @@ export class IntegrationResolver {
   @UseGuards(BearerAuthGuard)
   @Mutation(() => IntegrationDto)
   createIntegration(
-    @BearerAuthDecorator() auth: BearerAuth,
+    @BearerAuthDecorator() auth: Required<BearerAuth>,
     @Args() payload: CreateIntegrationDto,
   ): Promise<IntegrationDto> {
     return this.rmq.create(auth.project.id, payload);
@@ -24,8 +24,8 @@ export class IntegrationResolver {
   @UseGuards(BearerAuthGuard)
   @Query(() => IntegrationDto)
   integrationById(
-    @BearerAuthDecorator() auth: BearerAuth,
-    @Args('id', ParseUUIDPipe) id: string,
+    @BearerAuthDecorator() auth: Required<BearerAuth>,
+    @Args('id', ParseIntPipe) id: number,
   ): Promise<IntegrationDto> {
     return this.rmq.findOne(auth.project.id, id);
   }
@@ -33,7 +33,7 @@ export class IntegrationResolver {
   @UseGuards(BearerAuthGuard)
   @Query(() => [IntegrationDto])
   integrations(
-    @BearerAuthDecorator() auth: BearerAuth,
+    @BearerAuthDecorator() auth: Required<BearerAuth>,
   ): Promise<IntegrationDto[]> {
     return this.rmq.findAll(auth.project.id);
   }
@@ -41,7 +41,7 @@ export class IntegrationResolver {
   @UseGuards(BearerAuthGuard)
   @Mutation(() => IntegrationDto)
   updateIntegration(
-    @BearerAuthDecorator() auth: BearerAuth,
+    @BearerAuthDecorator() auth: Required<BearerAuth>,
     @Args() payload: UpdateIntegrationDto,
   ): Promise<IntegrationDto> {
     return this.rmq.update(auth.project.id, payload);
@@ -50,7 +50,7 @@ export class IntegrationResolver {
   @UseGuards(BearerAuthGuard)
   @Mutation(() => IntegrationDto)
   removeIntegration(
-    @BearerAuthDecorator() auth: BearerAuth,
+    @BearerAuthDecorator() auth: Required<BearerAuth>,
     @Args('id', ParseIntPipe) id: number,
   ): Promise<IntegrationDto> {
     return this.rmq.remove(auth.project.id, id);

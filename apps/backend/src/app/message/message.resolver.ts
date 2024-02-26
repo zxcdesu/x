@@ -29,7 +29,7 @@ export class MessageResolver {
   @UseGuards(BearerAuthGuard)
   @Mutation(() => MessageDto)
   async createMessage(
-    @BearerAuthDecorator() auth: BearerAuth,
+    @BearerAuthDecorator() auth: Required<BearerAuth>,
     @Args() payload: CreateMessageDto,
   ): Promise<MessageDto> {
     await this.chatService.findOneAndCheck(auth, payload.chatId);
@@ -46,7 +46,7 @@ export class MessageResolver {
   @UseGuards(BearerAuthGuard)
   @Query(() => [MessageDto])
   async messages(
-    @BearerAuthDecorator() auth: BearerAuth,
+    @BearerAuthDecorator() auth: Required<BearerAuth>,
     @Args('chatId', { type: () => Int }) chatId: number,
   ): Promise<MessageDto[]> {
     await this.chatService.findOneAndCheck(auth, chatId);
@@ -56,7 +56,7 @@ export class MessageResolver {
   @UseGuards(BearerAuthGuard)
   @Mutation(() => MessageDto)
   async updateMessage(
-    @BearerAuthDecorator() auth: BearerAuth,
+    @BearerAuthDecorator() auth: Required<BearerAuth>,
     @Args() payload: UpdateMessageDto,
   ): Promise<MessageDto> {
     await this.chatService.findOneAndCheck(auth, payload.chatId);
@@ -66,7 +66,7 @@ export class MessageResolver {
   @UseGuards(BearerAuthGuard)
   @Mutation(() => MessageDto)
   async removeMessage(
-    @BearerAuthDecorator() auth: BearerAuth,
+    @BearerAuthDecorator() auth: Required<BearerAuth>,
     @Args('chatId', { type: () => Int }) chatId: number,
     @Args('id', { type: () => Int }) id: number,
   ): Promise<MessageDto> {
@@ -77,7 +77,7 @@ export class MessageResolver {
   @UseGuards(BearerAuthGuard)
   @Subscription(() => MessageDto)
   async messageReceived(
-    @BearerAuthDecorator() auth: BearerAuth,
+    @BearerAuthDecorator() auth: Required<BearerAuth>,
     @Args('chatId', { type: () => Int }) chatId: number,
   ) {
     await this.chatService.findOneAndCheck(auth, chatId);

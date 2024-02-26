@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { RmqService } from '@zxcdesu/nestjs-rabbitmq';
+import { RmqService } from '@zxcdesu/util-rmq';
 import { BotTemplateDto } from './dto/bot-template.dto';
 import { CreateBotTemplateDto } from './dto/create-bot-template.dto';
 import { UpdateBotTemplateDto } from './dto/update-bot-template.dto';

@@ -13,7 +13,7 @@ export class InviteResolver {
   @UseGuards(BearerAuthGuard)
   @Mutation(() => Boolean)
   createInvite(
-    @BearerAuthDecorator() auth: BearerAuth,
+    @BearerAuthDecorator() auth: Required<BearerAuth>,
     @Args() payload: CreateInviteDto,
   ): Promise<boolean> {
     return this.rmq.create(auth.project.id, payload);

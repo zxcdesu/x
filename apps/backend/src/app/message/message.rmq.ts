@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { RmqService } from '@zxcdesu/nestjs-rabbitmq';
+import { RmqService } from '@zxcdesu/util-rmq';
 import { AuthorDto } from './dto/author.dto';
 import { CreateMessageDto } from './dto/create-message.dto';
 import { MessageDto } from './dto/message.dto';
@@ -14,9 +14,9 @@ export class MessageRmq extends RmqService {
       exchange: this.exchange,
       routingKey: 'createMessage',
       payload: {
-        ...payload,
-        author,
         projectId,
+        author,
+        ...payload,
       },
     });
   }
@@ -37,8 +37,8 @@ export class MessageRmq extends RmqService {
       exchange: this.exchange,
       routingKey: 'updateMessage',
       payload: {
-        ...payload,
         projectId,
+        ...payload,
       },
     });
   }

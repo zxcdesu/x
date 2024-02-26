@@ -15,7 +15,7 @@ export class WebhookResolver {
   @UseGuards(BearerAuthGuard)
   @Mutation(() => WebhookDto)
   createWebhook(
-    @BearerAuthDecorator() auth: BearerAuth,
+    @BearerAuthDecorator() auth: Required<BearerAuth>,
     @Args() payload: CreateWebhookDto,
   ): Promise<WebhookDto> {
     return this.rmq.create(auth.project.id, payload);
@@ -24,7 +24,7 @@ export class WebhookResolver {
   @UseGuards(BearerAuthGuard)
   @Query(() => WebhookDto)
   webhookById(
-    @BearerAuthDecorator() auth: BearerAuth,
+    @BearerAuthDecorator() auth: Required<BearerAuth>,
     @Args('id', ParseIntPipe) id: number,
   ): Promise<WebhookDto> {
     return this.rmq.findOne(auth.project.id, id);
@@ -32,14 +32,16 @@ export class WebhookResolver {
 
   @UseGuards(BearerAuthGuard)
   @Query(() => [WebhookDto])
-  webhooks(@BearerAuthDecorator() auth: BearerAuth): Promise<WebhookDto[]> {
+  webhooks(
+    @BearerAuthDecorator() auth: Required<BearerAuth>,
+  ): Promise<WebhookDto[]> {
     return this.rmq.findAll(auth.project.id);
   }
 
   @UseGuards(BearerAuthGuard)
   @Mutation(() => WebhookDto)
   updateWebhook(
-    @BearerAuthDecorator() auth: BearerAuth,
+    @BearerAuthDecorator() auth: Required<BearerAuth>,
     @Args() payload: UpdateWebhookDto,
   ): Promise<WebhookDto> {
     return this.rmq.update(auth.project.id, payload);
@@ -48,7 +50,7 @@ export class WebhookResolver {
   @UseGuards(BearerAuthGuard)
   @Mutation(() => WebhookDto)
   removeWebhook(
-    @BearerAuthDecorator() auth: BearerAuth,
+    @BearerAuthDecorator() auth: Required<BearerAuth>,
     @Args('id', ParseIntPipe) id: number,
   ): Promise<WebhookDto> {
     return this.rmq.remove(auth.project.id, id);

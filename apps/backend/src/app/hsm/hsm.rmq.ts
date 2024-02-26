@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { RmqService } from '@zxcdesu/nestjs-rabbitmq';
+import { RmqService } from '@zxcdesu/util-rmq';
 import { CreateHsmDto } from './dto/create-hsm.dto';
 import { HsmDto } from './dto/hsm.dto';
 import { UpdateHsmDto } from './dto/update-hsm.dto';
@@ -11,8 +11,8 @@ export class HsmRmq extends RmqService {
       exchange: 'platform',
       routingKey: 'createHsm',
       payload: {
-        ...payload,
         projectId,
+        ...payload,
       },
     });
   }
@@ -44,8 +44,8 @@ export class HsmRmq extends RmqService {
       exchange: 'platform',
       routingKey: 'updateHsm',
       payload: {
-        ...payload,
         projectId,
+        ...payload,
       },
     });
   }

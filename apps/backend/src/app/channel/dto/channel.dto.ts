@@ -7,11 +7,11 @@ export class ChannelDto {
   @Field(() => Int)
   id: number;
 
-  @Field(() => ChannelType)
-  type: ChannelType;
-
   @Field(() => String)
   name: string;
+
+  @Field(() => ChannelType)
+  type: ChannelType;
 
   @Field(() => ChannelStatus)
   status: ChannelStatus;

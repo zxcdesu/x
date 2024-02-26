@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { RmqService } from '@zxcdesu/nestjs-rabbitmq';
+import { RmqService } from '@zxcdesu/util-rmq';
 import { CreateWebhookDto } from './dto/create-webhook.dto';
 import { UpdateWebhookDto } from './dto/update-webhook.dto';
 import { WebhookDto } from './dto/webhook.dto';
@@ -11,8 +11,8 @@ export class WebhookRmq extends RmqService {
       exchange: 'integrations',
       routingKey: 'createWebhook',
       payload: {
-        ...payload,
         projectId,
+        ...payload,
       },
     });
   }
@@ -28,13 +28,12 @@ export class WebhookRmq extends RmqService {
     });
   }
 
-  findAll(projectId: number, ids?: number[]) {
+  findAll(projectId: number) {
     return this.request<WebhookDto[]>({
       exchange: 'integrations',
       routingKey: 'findAllWebhooks',
       payload: {
         projectId,
-        ids,
       },
     });
   }
@@ -44,8 +43,8 @@ export class WebhookRmq extends RmqService {
       exchange: 'integrations',
       routingKey: 'updateWebhook',
       payload: {
-        ...payload,
         projectId,
+        ...payload,
       },
     });
   }

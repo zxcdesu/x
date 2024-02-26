@@ -15,7 +15,7 @@ export class HsmResolver {
   @UseGuards(BearerAuthGuard)
   @Mutation(() => HsmDto)
   createHsm(
-    @BearerAuthDecorator() auth: BearerAuth,
+    @BearerAuthDecorator() auth: Required<BearerAuth>,
     @Args() payload: CreateHsmDto,
   ): Promise<HsmDto> {
     return this.rmq.create(auth.project.id, payload);
@@ -24,7 +24,7 @@ export class HsmResolver {
   @UseGuards(BearerAuthGuard)
   @Query(() => HsmDto)
   hsmById(
-    @BearerAuthDecorator() auth: BearerAuth,
+    @BearerAuthDecorator() auth: Required<BearerAuth>,
     @Args('id', ParseIntPipe) id: number,
   ): Promise<HsmDto> {
     return this.rmq.findOne(auth.project.id, id);
@@ -32,14 +32,14 @@ export class HsmResolver {
 
   @UseGuards(BearerAuthGuard)
   @Query(() => [HsmDto])
-  hsm(@BearerAuthDecorator() auth: BearerAuth): Promise<HsmDto[]> {
+  hsm(@BearerAuthDecorator() auth: Required<BearerAuth>): Promise<HsmDto[]> {
     return this.rmq.findAll(auth.project.id);
   }
 
   @UseGuards(BearerAuthGuard)
   @Mutation(() => HsmDto)
   updateHsm(
-    @BearerAuthDecorator() auth: BearerAuth,
+    @BearerAuthDecorator() auth: Required<BearerAuth>,
     @Args() payload: UpdateHsmDto,
   ): Promise<HsmDto> {
     return this.rmq.update(auth.project.id, payload);
@@ -48,7 +48,7 @@ export class HsmResolver {
   @UseGuards(BearerAuthGuard)
   @Mutation(() => HsmDto)
   removeHsm(
-    @BearerAuthDecorator() auth: BearerAuth,
+    @BearerAuthDecorator() auth: Required<BearerAuth>,
     @Args('id', ParseIntPipe) id: number,
   ): Promise<HsmDto> {
     return this.rmq.remove(auth.project.id, id);

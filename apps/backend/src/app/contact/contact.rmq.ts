@@ -1,9 +1,10 @@
 import { Injectable } from '@nestjs/common';
-import { RmqService } from '@zxcdesu/nestjs-rabbitmq';
-import { AssignContactDto } from './dto/assign-contact.dto';
+import { RmqService } from '@zxcdesu/util-rmq';
+import { CloseContactDto } from './dto/close-contact.dto';
 import { ContactDto } from './dto/contact.dto';
 import { CreateAssignedToDto } from './dto/create-assigned-to.dto';
 import { CreateContactDto } from './dto/create-contact.dto';
+import { EnqueueContactDto } from './dto/enqueue-contact.dto';
 import { UpdateContactDto } from './dto/update-contact.dto';
 
 @Injectable()
@@ -13,8 +14,8 @@ export class ContactRmq extends RmqService {
       exchange: 'platform',
       routingKey: 'createContact',
       payload: {
-        ...payload,
         projectId,
+        ...payload,
       },
     });
   }
@@ -46,8 +47,8 @@ export class ContactRmq extends RmqService {
       exchange: 'platform',
       routingKey: 'updateContact',
       payload: {
-        ...payload,
         projectId,
+        ...payload,
       },
     });
   }
@@ -63,35 +64,24 @@ export class ContactRmq extends RmqService {
     });
   }
 
-  assign(projectId: number, payload: AssignContactDto) {
+  enqueue(projectId: number, payload: EnqueueContactDto) {
     return this.request<ContactDto>({
       exchange: 'platform',
-      routingKey: 'assignContact',
+      routingKey: 'enqueueContact',
       payload: {
+        projectId,
         ...payload,
-        projectId,
       },
     });
   }
 
-  resolve(projectId: number, id: number) {
+  close(projectId: number, payload: CloseContactDto) {
     return this.request<ContactDto>({
       exchange: 'platform',
-      routingKey: 'assignContact',
+      routingKey: 'closeContact',
       payload: {
         projectId,
-        id,
-      },
-    });
-  }
-
-  reject(projectId: number, id: number) {
-    return this.request<ContactDto>({
-      exchange: 'platform',
-      routingKey: 'assignContact',
-      payload: {
-        projectId,
-        id,
+        ...payload,
       },
     });
   }

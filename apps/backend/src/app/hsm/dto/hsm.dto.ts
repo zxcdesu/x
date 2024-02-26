@@ -9,7 +9,7 @@ export class HsmDto {
   id: number;
 
   @Field(() => String)
-  code: string;
+  name: string;
 
   @Field(() => String)
   text: string;
@@ -20,12 +20,12 @@ export class HsmDto {
   @Field(() => [ButtonDto])
   buttons: ButtonDto[];
 
+  @Field(() => [ApprovalDto])
+  approval: ApprovalDto[];
+
   @Field(() => String)
   createdAt: string;
 
   @Field(() => String)
   updatedAt: string;
-
-  @Field(() => [ApprovalDto])
-  approval: ApprovalDto[];
 }

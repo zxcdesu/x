@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { RmqService } from '@zxcdesu/nestjs-rabbitmq';
+import { RmqService } from '@zxcdesu/util-rmq';
 import { TokenDto } from '../auth/dto/token.dto';
 import { CreateUserDto } from './dto/create-user.dto';
 import { SignInUserDto } from './dto/sign-in-user.dto';

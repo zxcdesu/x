@@ -9,5 +9,5 @@ export class CreateChatDto {
   contactId: number;
 
   @Field(() => String)
-  accountId: string;
+  externalId: string;
 }

@@ -11,7 +11,7 @@ export class ChatDto {
   contact: ContactDto;
 
   @Field(() => Int)
-  unreadCount: number;
+  unreadMessages: number;
 
   @Field(() => [MessageDto])
   messages: MessageDto[];

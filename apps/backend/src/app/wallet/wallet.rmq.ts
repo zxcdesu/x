@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { RmqService } from '@zxcdesu/nestjs-rabbitmq';
+import { RmqService } from '@zxcdesu/util-rmq';
 import { CreateWalletDto } from './dto/create-wallet.dto';
 import { UpdateWalletDto } from './dto/update-project.dto';
 import { WalletDto } from './dto/wallet.dto';
@@ -24,13 +24,6 @@ export class WalletRmq extends RmqService {
       payload: {
         projectId,
       },
-    });
-  }
-
-  findAll() {
-    return this.request<WalletDto[]>({
-      exchange: 'billing',
-      routingKey: 'findAllWallets',
     });
   }
 

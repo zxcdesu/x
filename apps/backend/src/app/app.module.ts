@@ -3,11 +3,11 @@ import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
 import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { GraphQLModule } from '@nestjs/graphql';
-import { PassportModule } from '@nestjs/passport';
+import { JwtModule } from '@nestjs/jwt';
+import type { Request } from 'express';
 import joi from 'joi';
 import mapObject from 'map-obj';
 import { AdminRmq } from './admin/admin.rmq';
-import { BearerAuthStrategy } from './auth/bearer-auth.strategy';
 import { BotTemplateResolver } from './bot-template/bot-template.resolver';
 import { BotTemplateRmq } from './bot-template/bot-template.rmq';
 import { BotResolver } from './bot/bot.resolver';
@@ -64,11 +64,18 @@ import { WebhookRmq } from './webhook/webhook.rmq';
         SECRET: joi.string().required(),
       }),
     }),
+    JwtModule.registerAsync({
+      global: true,
+      useFactory: (configService: ConfigService) => ({
+        secret: configService.getOrThrow<string>('SECRET'),
+      }),
+      inject: [ConfigService],
+    }),
     RabbitMQModule.forRootAsync(RabbitMQModule, {
       inject: [ConfigService],
       useFactory: (configService: ConfigService) => ({
         enableControllerDiscovery: true,
-        uri: configService.get<string>('BROKER_URL'),
+        uri: configService.getOrThrow<string>('BROKER_URL'),
         exchanges: [
           {
             name: 'backend',
@@ -89,29 +96,38 @@ import { WebhookRmq } from './webhook/webhook.rmq';
       subscriptions: {
         'graphql-ws': true,
       },
-      context: ({ req, extra, connectionParams }) =>
-        connectionParams
-          ? {
-              req: Object.assign(extra.request, {
-                headers: mapObject(
-                  connectionParams,
-                  (key, value) => [String(key).toLowerCase(), value],
-                  {
-                    deep: true,
-                  },
-                ),
-              }),
-            }
-          : {
-              req,
-            },
+      context: ({
+        req,
+        extra,
+        connectionParams,
+        ...other
+      }: {
+        req?: Request;
+        connectionParams?: Record<string, unknown>;
+        extra?: {
+          request: Request;
+        };
+        [key: string]: unknown;
+      }) =>
+        Object.assign(other, {
+          req:
+            connectionParams && extra
+              ? Object.assign(extra.request, {
+                  headers: mapObject(
+                    connectionParams,
+                    (key, value) => [String(key).toLowerCase(), value],
+                    {
+                      deep: true,
+                    },
+                  ),
+                })
+              : req,
+        }),
     }),
-    PassportModule,
   ],
   controllers: [ChatController, MessageController],
   providers: [
     PubSubService,
-    BearerAuthStrategy,
     BotResolver,
     BotTemplateResolver,
     ChannelResolver,

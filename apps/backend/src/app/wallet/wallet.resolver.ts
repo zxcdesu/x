@@ -12,7 +12,9 @@ export class WalletResolver {
 
   @UseGuards(BearerAuthGuard)
   @Query(() => WalletDto)
-  wallet(@BearerAuthDecorator() auth: BearerAuth): Promise<WalletDto> {
+  wallet(
+    @BearerAuthDecorator() auth: Required<BearerAuth>,
+  ): Promise<WalletDto> {
     return this.rmq.findOne(auth.project.id);
   }
 }

@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { RmqService } from '@zxcdesu/nestjs-rabbitmq';
+import { RmqService } from '@zxcdesu/util-rmq';
 import { CreateSubscriptionDto } from './dto/create-subscription.dto';
 import { SubscriptionDto } from './dto/subscription.dto';
 import { UpdateSubscriptionDto } from './dto/update-subscription.dto';
@@ -24,13 +24,6 @@ export class SubscriptionRmq extends RmqService {
       payload: {
         projectId,
       },
-    });
-  }
-
-  findAll() {
-    return this.request<SubscriptionDto[]>({
-      exchange: 'billing',
-      routingKey: 'findAllSubscriptions',
     });
   }
 
