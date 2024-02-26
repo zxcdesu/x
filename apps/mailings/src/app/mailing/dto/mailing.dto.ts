@@ -21,6 +21,8 @@ export class MailingDto implements Mailing {
 
   status: MailingStatus;
 
+  failedReason: string | null;
+
   scheduledAt: Date | null;
 
   createdAt: Date;
