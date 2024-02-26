@@ -1,6 +1,7 @@
 import { RabbitPayload } from '@golevelup/nestjs-rabbitmq';
 import { Controller, ParseIntPipe, SerializeOptions } from '@nestjs/common';
-import { RabbitRPC } from '@zxcdesu/nestjs-rabbitmq';
+import { ProjectId } from '@zxcdesu/util-project';
+import { RmqService } from '@zxcdesu/util-rmq';
 import { CreateMailingDto } from './dto/create-mailing.dto';
 import { MailingDto } from './dto/mailing.dto';
 import { UpdateMailingDto } from './dto/update-mailing.dto';
@@ -10,69 +11,76 @@ import { MailingService } from './mailing.service';
 export class MailingController {
   constructor(private readonly mailingService: MailingService) {}
 
-  @RabbitRPC({
-    exchange: 'mailer',
+  @RmqService.rpc({
+    exchange: 'mailings',
     routingKey: 'createMailing',
-    queue: 'mailer.createMailing',
+    queue: 'createMailing',
   })
   @SerializeOptions({
     type: MailingDto,
   })
-  create(@RabbitPayload() payload: CreateMailingDto) {
-    return this.mailingService.create(payload);
+  create(
+    @ProjectId() projectId: number,
+    @RabbitPayload() payload: CreateMailingDto,
+  ): Promise<MailingDto> {
+    return this.mailingService.create(projectId, payload);
   }
 
-  @RabbitRPC({
-    exchange: 'mailer',
+  @RmqService.rpc({
+    exchange: 'mailings',
     routingKey: 'findOneMailing',
-    queue: 'mailer.findOneMailing',
+    queue: 'findOneMailing',
   })
   @SerializeOptions({
     type: MailingDto,
   })
   findOne(
-    @RabbitPayload('projectId', ParseIntPipe) projectId: number,
+    @ProjectId() projectId: number,
     @RabbitPayload('id', ParseIntPipe) id: number,
-  ) {
+  ): Promise<MailingDto> {
     return this.mailingService.findOne(projectId, id);
   }
 
-  @RabbitRPC({
-    exchange: 'mailer',
+  @RmqService.rpc({
+    exchange: 'mailings',
     routingKey: 'findAllMailings',
-    queue: 'mailer.findAllMailings',
+    queue: 'findAllMailings',
   })
   @SerializeOptions({
     type: MailingDto,
   })
-  findAll(@RabbitPayload('projectId', ParseIntPipe) projectId: number) {
+  findAll(@ProjectId() projectId: number): Promise<MailingDto[]> {
     return this.mailingService.findAll(projectId);
   }
 
-  @RabbitRPC({
-    exchange: 'mailer',
+  @RmqService.rpc({
+    exchange: 'mailings',
     routingKey: 'updateMailing',
-    queue: 'mailer.updateMailing',
+    queue: 'updateMailing',
   })
   @SerializeOptions({
     type: MailingDto,
   })
-  update(@RabbitPayload() payload: UpdateMailingDto) {
-    return this.mailingService.update(payload);
+  update(
+    @ProjectId() projectId: number,
+    @RabbitPayload('id', ParseIntPipe) id: number,
+    @RabbitPayload() payload: UpdateMailingDto,
+  ): Promise<MailingDto> {
+    return this.mailingService.update(projectId, id, payload);
   }
 
-  @RabbitRPC({
-    exchange: 'mailer',
+  @RmqService.rpc({
+    exchange: 'mailings',
     routingKey: 'removeMailing',
-    queue: 'mailer.removeMailing',
+    queue: 'removeMailing',
   })
   @SerializeOptions({
     type: MailingDto,
   })
   remove(
-    @RabbitPayload('projectId', ParseIntPipe) projectId: number,
+    @ProjectId() projectId: number,
     @RabbitPayload('id', ParseIntPipe) id: number,
-  ) {
+  ): Promise<MailingDto> {
     return this.mailingService.remove(projectId, id);
   }
 }

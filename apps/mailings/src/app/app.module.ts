@@ -8,11 +8,11 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { APP_INTERCEPTOR, APP_PIPE } from '@nestjs/core';
 import { ScheduleModule } from '@nestjs/schedule';
 import joi from 'joi';
+import { MailingWorkerController } from './mailing-worker/mailing-worker.controller';
+import { MailingWorkerService } from './mailing-worker/mailing-worker.service';
 import { MailingController } from './mailing/mailing.controller';
 import { MailingService } from './mailing/mailing.service';
 import { PrismaService } from './prisma.service';
-import { WorkerController } from './worker/worker.controller';
-import { WorkerService } from './worker/worker.service';
 
 @Module({
   imports: [
@@ -27,14 +27,14 @@ import { WorkerService } from './worker/worker.service';
       inject: [ConfigService],
       useFactory: (configService: ConfigService) => ({
         enableControllerDiscovery: true,
-        uri: configService.get<string>('BROKER_URL'),
+        uri: configService.getOrThrow<string>('BROKER_URL'),
         exchanges: [
           {
-            name: 'mailer',
+            name: 'mailings',
             type: 'topic',
           },
           {
-            name: 'mailer.worker',
+            name: 'mailings.worker',
             type: 'topic',
           },
         ],
@@ -46,7 +46,7 @@ import { WorkerService } from './worker/worker.service';
     }),
     ScheduleModule.forRoot(),
   ],
-  controllers: [MailingController, WorkerController],
+  controllers: [MailingController, MailingWorkerController],
   providers: [
     PrismaService,
     {
@@ -61,7 +61,7 @@ import { WorkerService } from './worker/worker.service';
       }),
     },
     MailingService,
-    WorkerService,
+    MailingWorkerService,
   ],
 })
 export class AppModule {}

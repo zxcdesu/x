@@ -11,10 +11,13 @@ export class MailingService {
     private readonly amqpConnection: AmqpConnection,
   ) {}
 
-  async create(payload: CreateMailingDto) {
+  async create(projectId: number, payload: CreateMailingDto) {
     return this.start(
       await this.prismaService.mailing.create({
-        data: payload,
+        data: {
+          projectId,
+          ...payload,
+        },
       }),
     );
   }
@@ -22,10 +25,8 @@ export class MailingService {
   findOne(projectId: number, id: number) {
     return this.prismaService.mailing.findUniqueOrThrow({
       where: {
-        projectId_id: {
-          projectId,
-          id,
-        },
+        projectId,
+        id,
       },
     });
   }
@@ -38,18 +39,16 @@ export class MailingService {
     });
   }
 
-  async update(payload: UpdateMailingDto) {
-    const mailing = await this.findOne(payload.projectId, payload.id);
+  async update(projectId: number, id: number, payload: UpdateMailingDto) {
+    const mailing = await this.findOne(projectId, id);
     switch (mailing.status) {
       case MailingStatus.Disabled:
       case MailingStatus.Scheduled:
         return this.start(
           await this.prismaService.mailing.update({
             where: {
-              projectId_id: {
-                projectId: payload.projectId,
-                id: payload.id,
-              },
+              projectId,
+              id,
             },
             data: payload,
           }),
@@ -64,22 +63,28 @@ export class MailingService {
     return this.stop(
       await this.prismaService.mailing.delete({
         where: {
-          projectId_id: {
-            projectId,
-            id,
-          },
+          projectId,
+          id,
         },
       }),
     );
   }
 
   private async start(mailing: Mailing) {
-    await this.amqpConnection.publish('mailer.worker', 'start', mailing);
+    await this.amqpConnection.publish(
+      'mailings.worker',
+      'startMailingWorker',
+      mailing,
+    );
     return mailing;
   }
 
   private async stop(mailing: Mailing) {
-    await this.amqpConnection.publish('mailer.worker', 'stop', mailing);
+    await this.amqpConnection.publish(
+      'mailings.worker',
+      'stopMailingWorker',
+      mailing,
+    );
     return mailing;
   }
 }

@@ -5,24 +5,26 @@ import {
   IsHexColor,
   IsIn,
   IsInt,
-  IsNotEmpty,
   IsOptional,
   IsString,
+  Length,
   MinDate,
   ValidateIf,
 } from 'class-validator';
 import { MailingStatus, Prisma } from '../../prisma.service';
 
-export class CreateMailingDto implements Prisma.MailingUncheckedCreateInput {
-  @IsInt()
-  projectId: number;
-
+export class CreateMailingDto
+  implements Omit<Prisma.MailingUncheckedCreateInput, 'projectId'>
+{
+  @Transform(({ value }) => value?.trim())
   @IsString()
-  @IsNotEmpty()
+  @Length(1, 20)
   name: string;
 
+  @Transform(({ value }) => value?.trim())
   @IsOptional()
   @IsString()
+  @Length(1, 1000)
   description?: string;
 
   @IsHexColor()
@@ -32,10 +34,10 @@ export class CreateMailingDto implements Prisma.MailingUncheckedCreateInput {
   channelId: number;
 
   @IsInt({ each: true })
-  tagIds?: number[];
+  tagIds: number[];
 
   @IsInt({ each: true })
-  hsmIds?: number[];
+  hsmIds: number[];
 
   @IsOptional()
   @IsEnum(MailingStatus)
@@ -45,7 +47,7 @@ export class CreateMailingDto implements Prisma.MailingUncheckedCreateInput {
   @ValidateIf(
     (object: CreateMailingDto) => object.status === MailingStatus.Scheduled,
   )
-  @Transform(({ value }) => new Date(value))
+  @Transform(({ value }) => value && new Date(value))
   @IsDate()
   @MinDate(() => new Date())
   scheduledAt?: Date;
