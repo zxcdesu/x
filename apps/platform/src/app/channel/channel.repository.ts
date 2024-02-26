@@ -13,7 +13,7 @@ import { WebChannel } from './web.channel';
 
 @Injectable()
 export class ChannelRepository
-  implements Record<ChannelType, typeof AbstractChannel<unknown, unknown>>
+  implements Record<ChannelType, typeof AbstractChannel<unknown>>
 {
   [ChannelType.Gupshup] = GupshupChannel;
   [ChannelType.Instagram] = InstagramChannel;

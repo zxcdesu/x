@@ -1,88 +1,96 @@
-import { RabbitPayload, RabbitSubscribe } from '@golevelup/nestjs-rabbitmq';
+import { RabbitPayload } from '@golevelup/nestjs-rabbitmq';
 import { Controller, ParseIntPipe, SerializeOptions } from '@nestjs/common';
-import { RabbitRPC } from '@zxcdesu/nestjs-rabbitmq';
-import { WebhookPayload } from '@zxcdesu/platform-type';
+import { ProjectId } from '@zxcdesu/util-project';
+import { RmqService } from '@zxcdesu/util-rmq';
 import { ChannelService } from './channel.service';
 import { ChannelDto } from './dto/channel.dto';
 import { CreateChannelDto } from './dto/create-channel.dto';
+import { HandleChannelDto } from './dto/handle-channel.dto';
 import { UpdateChannelDto } from './dto/update-channel.dto';
 
 @Controller()
 export class ChannelController {
   constructor(private readonly channelService: ChannelService) {}
 
-  @RabbitRPC({
+  @RmqService.rpc({
     exchange: 'platform',
     routingKey: 'createChannel',
-    queue: 'platform.createChannel',
+    queue: 'createChannel',
   })
   @SerializeOptions({
     type: ChannelDto,
   })
-  create(@RabbitPayload() payload: CreateChannelDto) {
-    return this.channelService.create(payload);
+  create(
+    @ProjectId() projectId: number,
+    @RabbitPayload() payload: CreateChannelDto,
+  ) {
+    return this.channelService.create(projectId, payload);
   }
 
-  @RabbitRPC({
+  @RmqService.rpc({
     exchange: 'platform',
     routingKey: 'findOneChannel',
-    queue: 'platform.findOneChannel',
+    queue: 'findOneChannel',
   })
   @SerializeOptions({
     type: ChannelDto,
   })
   findOne(
-    @RabbitPayload('projectId', ParseIntPipe) projectId: number,
+    @ProjectId() projectId: number,
     @RabbitPayload('id', ParseIntPipe) id: number,
   ) {
     return this.channelService.findOne(projectId, id);
   }
 
-  @RabbitRPC({
+  @RmqService.rpc({
     exchange: 'platform',
     routingKey: 'findAllChannels',
-    queue: 'platform.findAllChannels',
+    queue: 'findAllChannels',
   })
   @SerializeOptions({
     type: ChannelDto,
   })
-  findAll(@RabbitPayload('projectId', ParseIntPipe) projectId: number) {
+  findAll(@ProjectId() projectId: number) {
     return this.channelService.findAll(projectId);
   }
 
-  @RabbitRPC({
+  @RmqService.rpc({
     exchange: 'platform',
     routingKey: 'updateChannel',
-    queue: 'platform.updateChannel',
+    queue: 'updateChannel',
   })
   @SerializeOptions({
     type: ChannelDto,
   })
-  update(@RabbitPayload() payload: UpdateChannelDto) {
-    return this.channelService.update(payload);
+  update(
+    @ProjectId() projectId: number,
+    @RabbitPayload('id', ParseIntPipe) id: number,
+    @RabbitPayload() payload: UpdateChannelDto,
+  ) {
+    return this.channelService.update(projectId, id, payload);
   }
 
-  @RabbitRPC({
+  @RmqService.rpc({
     exchange: 'platform',
     routingKey: 'removeChannel',
-    queue: 'platform.removeChannel',
+    queue: 'removeChannel',
   })
   @SerializeOptions({
     type: ChannelDto,
   })
   remove(
-    @RabbitPayload('projectId', ParseIntPipe) projectId: number,
+    @ProjectId() projectId: number,
     @RabbitPayload('id', ParseIntPipe) id: number,
   ) {
     return this.channelService.remove(projectId, id);
   }
 
-  @RabbitSubscribe({
+  @RmqService.subscribe({
     exchange: 'platform',
-    routingKey: 'handleWebhook',
-    queue: 'platform.handleWebhook',
+    routingKey: 'handleChannel',
+    queue: 'handleChannel',
   })
-  handleWebhook(@RabbitPayload() event: WebhookPayload) {
-    return this.channelService.handleWebhook(event);
+  handle(@RabbitPayload() payload: HandleChannelDto) {
+    return this.channelService.handle(payload);
   }
 }

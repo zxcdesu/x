@@ -1,5 +1,7 @@
-import { RabbitPayload, RabbitRPC } from '@golevelup/nestjs-rabbitmq';
+import { RabbitPayload } from '@golevelup/nestjs-rabbitmq';
 import { Controller, ParseIntPipe, SerializeOptions } from '@nestjs/common';
+import { ProjectId } from '@zxcdesu/util-project';
+import { RmqService } from '@zxcdesu/util-rmq';
 import { CreateHsmDto } from './dto/create-hsm.dto';
 import { HsmDto } from './dto/hsm.dto';
 import { UpdateHsmDto } from './dto/update-hsm.dto';
@@ -9,67 +11,74 @@ import { HsmService } from './hsm.service';
 export class HsmController {
   constructor(private readonly hsmService: HsmService) {}
 
-  @RabbitRPC({
+  @RmqService.rpc({
     exchange: 'platform',
     routingKey: 'createHsm',
-    queue: 'platform.createHsm',
+    queue: 'createHsm',
   })
   @SerializeOptions({
     type: HsmDto,
   })
-  create(@RabbitPayload() payload: CreateHsmDto) {
-    return this.hsmService.create(payload);
+  create(
+    @ProjectId() projectId: number,
+    @RabbitPayload() payload: CreateHsmDto,
+  ) {
+    return this.hsmService.create(projectId, payload);
   }
 
-  @RabbitRPC({
+  @RmqService.rpc({
     exchange: 'platform',
     routingKey: 'findOneHsm',
-    queue: 'platform.findOneHsm',
+    queue: 'findOneHsm',
   })
   @SerializeOptions({
     type: HsmDto,
   })
   findOne(
-    @RabbitPayload('projectId', ParseIntPipe) projectId: number,
+    @ProjectId() projectId: number,
     @RabbitPayload('id', ParseIntPipe) id: number,
   ) {
     return this.hsmService.findOne(projectId, id);
   }
 
-  @RabbitRPC({
+  @RmqService.rpc({
     exchange: 'platform',
     routingKey: 'findAllHsm',
-    queue: 'platform.findAllHsm',
+    queue: 'findAllHsm',
   })
   @SerializeOptions({
     type: HsmDto,
   })
-  findAll(@RabbitPayload('projectId', ParseIntPipe) projectId: number) {
+  findAll(@ProjectId() projectId: number) {
     return this.hsmService.findAll(projectId);
   }
 
-  @RabbitRPC({
+  @RmqService.rpc({
     exchange: 'platform',
     routingKey: 'updateHsm',
-    queue: 'platform.updateHsm',
+    queue: 'updateHsm',
   })
   @SerializeOptions({
     type: HsmDto,
   })
-  update(@RabbitPayload() payload: UpdateHsmDto) {
-    return this.hsmService.update(payload);
+  update(
+    @ProjectId() projectId: number,
+    @RabbitPayload('id', ParseIntPipe) id: number,
+    @RabbitPayload() payload: UpdateHsmDto,
+  ) {
+    return this.hsmService.update(projectId, id, payload);
   }
 
-  @RabbitRPC({
+  @RmqService.rpc({
     exchange: 'platform',
     routingKey: 'removeHsm',
-    queue: 'platform.removeHsm',
+    queue: 'removeHsm',
   })
   @SerializeOptions({
     type: HsmDto,
   })
   remove(
-    @RabbitPayload('projectId', ParseIntPipe) projectId: number,
+    @ProjectId() projectId: number,
     @RabbitPayload('id', ParseIntPipe) id: number,
   ) {
     return this.hsmService.remove(projectId, id);

@@ -2,7 +2,6 @@ import { Injectable } from '@nestjs/common';
 import { ChannelRepository } from '../channel/channel.repository';
 import { PrismaService } from '../prisma.service';
 import { CreateChatDto } from './dto/create-chat.dto';
-import { FindAllChatsDto } from './dto/find-all-chats.dto';
 import { UpdateChatDto } from './dto/update-chat.dto';
 
 @Injectable()
@@ -12,16 +11,14 @@ export class ChatService {
     private readonly channelRepository: ChannelRepository,
   ) {}
 
-  async create(payload: CreateChatDto) {
+  async create(projectId: number, payload: CreateChatDto) {
     return this.prismaService.chat.create({
       data: await this.channelRepository
         .get(
           await this.prismaService.channel.findUniqueOrThrow({
             where: {
-              projectId_id: {
-                projectId: payload.projectId,
-                id: payload.channelId,
-              },
+              projectId,
+              id: payload.channelId,
             },
           }),
         )
@@ -30,7 +27,11 @@ export class ChatService {
         contact: {
           include: {
             assignedTo: true,
-            customFields: true,
+            fields: {
+              include: {
+                field: true,
+              },
+            },
             tags: {
               include: {
                 tag: true,
@@ -63,16 +64,20 @@ export class ChatService {
   findOne(projectId: number, id: number) {
     return this.prismaService.chat.findUniqueOrThrow({
       where: {
-        projectId_id: {
+        channel: {
           projectId,
-          id,
         },
+        id,
       },
       include: {
         contact: {
           include: {
             assignedTo: true,
-            customFields: true,
+            fields: {
+              include: {
+                field: true,
+              },
+            },
             tags: {
               include: {
                 tag: true,
@@ -102,26 +107,22 @@ export class ChatService {
     });
   }
 
-  findAll(payload: FindAllChatsDto) {
+  findAll(projectId: number) {
     return this.prismaService.chat.findMany({
       where: {
-        projectId: payload.projectId,
-        contact: {
-          OR: [
-            {
-              assignedTo: null,
-            },
-            {
-              assignedTo: payload.assignedTo,
-            },
-          ],
+        channel: {
+          projectId,
         },
       },
       include: {
         contact: {
           include: {
             assignedTo: true,
-            customFields: true,
+            fields: {
+              include: {
+                field: true,
+              },
+            },
             tags: {
               include: {
                 tag: true,
@@ -151,20 +152,24 @@ export class ChatService {
     });
   }
 
-  update(payload: UpdateChatDto) {
+  update(projectId: number, id: number, payload: UpdateChatDto) {
     return this.prismaService.chat.update({
       where: {
-        projectId_id: {
-          projectId: payload.projectId,
-          id: payload.id,
+        channel: {
+          projectId,
         },
+        id,
       },
       data: payload,
       include: {
         contact: {
           include: {
             assignedTo: true,
-            customFields: true,
+            fields: {
+              include: {
+                field: true,
+              },
+            },
             tags: {
               include: {
                 tag: true,
@@ -197,16 +202,20 @@ export class ChatService {
   remove(projectId: number, id: number) {
     return this.prismaService.chat.delete({
       where: {
-        projectId_id: {
+        channel: {
           projectId,
-          id,
         },
+        id,
       },
       include: {
         contact: {
           include: {
             assignedTo: true,
-            customFields: true,
+            fields: {
+              include: {
+                field: true,
+              },
+            },
             tags: {
               include: {
                 tag: true,

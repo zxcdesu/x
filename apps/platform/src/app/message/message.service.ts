@@ -11,13 +11,13 @@ export class MessageService {
     private readonly channelRepository: ChannelRepository,
   ) {}
 
-  async create(projectId: number, payload: CreateMessageDto) {
+  async create(projectId: number, chatId: number, payload: CreateMessageDto) {
     const chat = await this.prismaService.chat.findUniqueOrThrow({
       where: {
-        projectId_id: {
+        channel: {
           projectId,
-          id: payload.chatId,
         },
+        id: chatId,
       },
       include: {
         channel: true,
@@ -53,10 +53,10 @@ export class MessageService {
   async findAll(projectId: number, chatId: number) {
     const { messages } = await this.prismaService.chat.findUniqueOrThrow({
       where: {
-        projectId_id: {
+        channel: {
           projectId,
-          id: chatId,
         },
+        id: chatId,
       },
       select: {
         messages: {
@@ -79,18 +79,23 @@ export class MessageService {
     return messages;
   }
 
-  async update(projectId: number, payload: UpdateMessageDto) {
+  async update(
+    projectId: number,
+    chatId: number,
+    id: number,
+    payload: UpdateMessageDto,
+  ) {
     const chat = await this.prismaService.chat.findUniqueOrThrow({
       where: {
-        projectId_id: {
+        channel: {
           projectId,
-          id: payload.chatId,
         },
+        id: chatId,
       },
       include: {
         messages: {
           where: {
-            id: payload.id,
+            id,
           },
         },
         channel: true,
@@ -122,10 +127,10 @@ export class MessageService {
   async remove(projectId: number, chatId: number, id: number) {
     const chat = await this.prismaService.chat.findUniqueOrThrow({
       where: {
-        projectId_id: {
+        channel: {
           projectId,
-          id: chatId,
         },
+        id: chatId,
       },
       include: {
         messages: {

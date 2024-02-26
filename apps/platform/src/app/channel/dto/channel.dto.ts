@@ -12,7 +12,7 @@ export class ChannelDto implements Channel {
   name: string;
 
   @Exclude()
-  accountId: string;
+  externalId: string;
 
   @Exclude()
   // eslint-disable-next-line @typescript-eslint/no-explicit-any

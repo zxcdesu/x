@@ -1,121 +1,124 @@
-import { RabbitPayload, RabbitRPC } from '@golevelup/nestjs-rabbitmq';
+import { RabbitPayload } from '@golevelup/nestjs-rabbitmq';
 import { Controller, ParseIntPipe, SerializeOptions } from '@nestjs/common';
+import { ProjectId } from '@zxcdesu/util-project';
+import { RmqService } from '@zxcdesu/util-rmq';
+import { ContactAssignedToService } from './contact-assigned-to.service';
 import { ContactService } from './contact.service';
-import { AssignContactDto } from './dto/assign-contact.dto';
+import { CloseContactDto } from './dto/close-contact.dto';
 import { ContactDto } from './dto/contact.dto';
 import { CreateContactDto } from './dto/create-contact.dto';
-import { FindAllContactsDto } from './dto/find-all-contacts.dto';
+import { EnqueueContactDto } from './dto/enqueue-contact.dto';
 import { UpdateContactDto } from './dto/update-contact.dto';
 
 @Controller()
 export class ContactController {
-  constructor(private readonly contactService: ContactService) {}
+  constructor(
+    private readonly contactService: ContactService,
+    private readonly contactAssignedToService: ContactAssignedToService,
+  ) {}
 
-  @RabbitRPC({
+  @RmqService.rpc({
     exchange: 'platform',
     routingKey: 'createContact',
-    queue: 'platform.createContact',
+    queue: 'createContact',
   })
   @SerializeOptions({
     type: ContactDto,
   })
-  create(@RabbitPayload() payload: CreateContactDto) {
-    return this.contactService.create(payload);
+  create(
+    @ProjectId() projectId: number,
+    @RabbitPayload() payload: CreateContactDto,
+  ) {
+    return this.contactService.create(projectId, payload);
   }
 
-  @RabbitRPC({
+  @RmqService.rpc({
     exchange: 'platform',
     routingKey: 'findOneContact',
-    queue: 'platform.findOneContact',
+    queue: 'findOneContact',
   })
   @SerializeOptions({
     type: ContactDto,
   })
   findOne(
-    @RabbitPayload('projectId', ParseIntPipe) projectId: number,
+    @ProjectId() projectId: number,
     @RabbitPayload('id', ParseIntPipe) id: number,
   ) {
     return this.contactService.findOne(projectId, id);
   }
 
-  @RabbitRPC({
+  @RmqService.rpc({
     exchange: 'platform',
     routingKey: 'findAllContacts',
-    queue: 'platform.findAllContacts',
+    queue: 'findAllContacts',
   })
   @SerializeOptions({
     type: ContactDto,
   })
-  findAll(@RabbitPayload() payload: FindAllContactsDto) {
-    return this.contactService.findAll(payload);
+  findAll(@ProjectId() projectId: number) {
+    return this.contactService.findAll(projectId);
   }
 
-  @RabbitRPC({
+  @RmqService.rpc({
     exchange: 'platform',
     routingKey: 'updateContact',
-    queue: 'platform.updateContact',
+    queue: 'updateContact',
   })
   @SerializeOptions({
     type: ContactDto,
   })
-  update(@RabbitPayload() payload: UpdateContactDto) {
-    return this.contactService.update(payload);
+  update(
+    @ProjectId() projectId: number,
+    @RabbitPayload('id', ParseIntPipe) id: number,
+    @RabbitPayload() payload: UpdateContactDto,
+  ) {
+    return this.contactService.update(projectId, id, payload);
   }
 
-  @RabbitRPC({
+  @RmqService.rpc({
     exchange: 'platform',
     routingKey: 'removeContact',
-    queue: 'platform.removeContact',
+    queue: 'removeContact',
   })
   @SerializeOptions({
     type: ContactDto,
   })
   remove(
-    @RabbitPayload('projectId', ParseIntPipe) projectId: number,
+    @ProjectId() projectId: number,
     @RabbitPayload('id', ParseIntPipe) id: number,
   ) {
     return this.contactService.remove(projectId, id);
   }
 
-  @RabbitRPC({
+  @RmqService.rpc({
     exchange: 'platform',
-    routingKey: 'assignContact',
-    queue: 'platform.assignContact',
+    routingKey: 'enqueueContact',
+    queue: 'enqueueContact',
   })
   @SerializeOptions({
     type: ContactDto,
   })
-  assign(@RabbitPayload() payload: AssignContactDto) {
-    return this.contactService.assign(payload);
+  enqueue(
+    @ProjectId() projectId: number,
+    @RabbitPayload('id', ParseIntPipe) id: number,
+    @RabbitPayload() payload: EnqueueContactDto,
+  ) {
+    return this.contactAssignedToService.enqueue(projectId, id, payload);
   }
 
-  @RabbitRPC({
+  @RmqService.rpc({
     exchange: 'platform',
-    routingKey: 'resolveContact',
-    queue: 'platform.resolveContact',
+    routingKey: 'closeContact',
+    queue: 'closeContact',
   })
   @SerializeOptions({
     type: ContactDto,
   })
-  resolve(
-    @RabbitPayload('projectId', ParseIntPipe) projectId: number,
+  close(
+    @ProjectId() projectId: number,
     @RabbitPayload('id', ParseIntPipe) id: number,
+    @RabbitPayload() payload: CloseContactDto,
   ) {
-    return this.contactService.resolve(projectId, id);
-  }
-
-  @RabbitRPC({
-    exchange: 'platform',
-    routingKey: 'rejectContact',
-    queue: 'platform.rejectContact',
-  })
-  @SerializeOptions({
-    type: ContactDto,
-  })
-  reject(
-    @RabbitPayload('projectId', ParseIntPipe) projectId: number,
-    @RabbitPayload('id', ParseIntPipe) id: number,
-  ) {
-    return this.contactService.reject(projectId, id);
+    return this.contactAssignedToService.close(projectId, id, payload);
   }
 }

@@ -1,19 +1,19 @@
 import { NotImplementedException } from '@nestjs/common';
-import { WebhookPayload } from '@zxcdesu/platform-type';
 import { CreateChatDto } from '../chat/dto/create-chat.dto';
 import { CreateMessageDto } from '../message/dto/create-message.dto';
 import { UpdateMessageDto } from '../message/dto/update-message.dto';
 import { Chat, Prisma } from '../prisma.service';
 import { AbstractChannel } from './abstract.channel';
+import { HandleChannelDto } from './dto/handle-channel.dto';
 
 export class ViberChannel extends AbstractChannel {
   async create(): Promise<Partial<Prisma.ChannelUncheckedUpdateInput>> {
     throw new NotImplementedException();
   }
 
-  async handleWebhook(event: WebhookPayload<unknown, unknown>): Promise<void> {
+  async handleWebhook(payload: HandleChannelDto<unknown>): Promise<void> {
     throw new NotImplementedException({
-      event,
+      event: payload,
     });
   }
 

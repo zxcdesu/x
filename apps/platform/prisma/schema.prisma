@@ -20,7 +20,7 @@ enum ChannelType {
 
 enum ChannelStatus {
   Connecting
-  Connected
+  Active
   Failed
 }
 
@@ -29,43 +29,51 @@ model Channel {
   projectId    Int
   type         ChannelType
   name         String
-  accountId    String
+  externalId   String
   token        Json
-  status       ChannelStatus
+  status       ChannelStatus @default(Connecting)
   failedReason String?
   approval     Approval[]
   chats        Chat[]
   createdAt    DateTime      @default(now())
   updatedAt    DateTime      @updatedAt
 
-  @@unique([projectId, id])
   @@index([projectId])
 }
 
 model Chat {
-  id          Int       @id @default(autoincrement())
-  projectId   Int
-  channelId   Int
-  channel     Channel   @relation(fields: [channelId], references: [id], onDelete: Cascade)
-  contactId   Int
-  contact     Contact   @relation(fields: [contactId], references: [id], onDelete: Cascade)
-  accountId   String
-  isNew       Boolean   @default(true)
-  unreadCount Int       @default(0)
-  messages    Message[]
-  createdAt   DateTime  @default(now())
-  updatedAt   DateTime  @updatedAt
+  id             Int       @id @default(autoincrement())
+  channelId      Int
+  channel        Channel   @relation(fields: [channelId], references: [id], onDelete: Cascade)
+  contactId      Int
+  contact        Contact   @relation(fields: [contactId], references: [id], onDelete: Cascade)
+  externalId     String
+  unreadMessages Int       @default(0)
+  messages       Message[]
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime  @updatedAt
 
-  @@unique([projectId, id])
-  @@unique([channelId, accountId])
-  @@index([projectId])
+  @@unique([channelId, externalId])
   @@index([channelId])
-  @@index([accountId])
+}
+
+enum AuthorType {
+  Bot
+  Contact
+  User
+}
+
+model Author {
+  messageId Int        @id
+  message   Message    @relation(fields: [messageId], references: [id], onDelete: Cascade)
+  id        Int?
+  type      AuthorType
 }
 
 enum MessageStatus {
   Submitted
   Delivered
+  Sent
   Read
   Failed
 }
@@ -74,28 +82,15 @@ model Message {
   id           Int           @id @default(autoincrement())
   chatId       Int
   chat         Chat          @relation(fields: [chatId], references: [id], onDelete: Cascade)
-  content      Content[]
-  author       Author?
   externalId   String
   status       MessageStatus
   failedReason String?
+  author       Author?
+  content      Content[]
   createdAt    DateTime      @default(now())
   updatedAt    DateTime      @updatedAt
 
   @@unique([chatId, externalId])
-}
-
-enum AuthorType {
-  User
-  Bot
-  Contact
-}
-
-model Author {
-  messageId Int        @id
-  message   Message    @relation(fields: [messageId], references: [id], onDelete: Cascade)
-  id        Int?
-  type      AuthorType
 }
 
 model Content {
@@ -111,6 +106,7 @@ enum AttachmentType {
   Audio
   Document
   Image
+  Unknown
   Video
 }
 
@@ -118,51 +114,16 @@ model Attachment {
   id        Int            @id @default(autoincrement())
   contentId Int
   content   Content        @relation(fields: [contentId], references: [id], onDelete: Cascade)
+  name      String?
   url       String
   type      AttachmentType
-  name      String?
 
   @@index([type])
 }
 
-model Hsm {
-  id          Int        @id @default(autoincrement())
-  projectId   Int
-  code        String
-  text        String
-  attachments Json       @default("[]")
-  buttons     Json       @default("[]")
-  approval    Approval[]
-  createdAt   DateTime   @default(now())
-  updatedAt   DateTime   @updatedAt
-
-  @@unique([projectId, id])
-  @@unique([projectId, code])
-  @@index([projectId])
-}
-
-enum ApprovalStatus {
-  Submitted
-  Approved
-  Rejected
-}
-
-model Approval {
-  hsmId          Int
-  hsm            Hsm            @relation(fields: [hsmId], references: [id], onDelete: Cascade)
-  channelId      Int
-  channel        Channel        @relation(fields: [channelId], references: [id], onDelete: Cascade)
-  status         ApprovalStatus
-  rejectedReason String?
-  externalId     String?
-
-  @@id([channelId, hsmId])
-  @@unique([externalId])
-}
-
 enum AssigneeType {
-  User
   Bot
+  User
 }
 
 model AssignedTo {
@@ -170,42 +131,40 @@ model AssignedTo {
   contact   Contact      @relation(fields: [contactId], references: [id], onDelete: Cascade)
   id        Int
   type      AssigneeType @default(User)
-
-  @@unique([contactId, id])
-  @@index([id])
-  @@index([type])
 }
 
 enum ContactStatus {
-  Pending
-  Processing
-  Resolved
-  Rejected
+  Queued
+  Closed
 }
 
 model Contact {
-  id             Int           @id @default(autoincrement())
-  projectId      Int
-  name           String        @default("")
-  description    String        @default("")
-  imageUrl       String?
-  assignedTo     AssignedTo?
-  priority       Int           @default(3)
-  status         ContactStatus
-  rejectedReason String?
-  chats          Chat[]
-  tags           ContactTag[]
-  customFields   CustomField[]
-  createdAt      DateTime      @default(now())
-  updatedAt      DateTime?     @updatedAt
-  deletedAt      DateTime?
+  id           Int            @id @default(autoincrement())
+  projectId    Int
+  name         String         @default("")
+  description  String         @default("")
+  imageUrl     String?
+  priority     Int            @default(3)
+  status       ContactStatus  @default(Queued)
+  closedReason String?
+  assignedTo   AssignedTo?
+  chats        Chat[]
+  fields       ContactField[]
+  tags         ContactTag[]
+  createdAt    DateTime       @default(now())
+  updatedAt    DateTime       @updatedAt
+  deletedAt    DateTime?
 
-  @@unique([projectId, id])
   @@index([projectId])
-  @@index([priority])
-  @@index([status])
-  @@index([createdAt])
-  @@index([updatedAt])
+}
+
+model ContactTag {
+  contactId Int
+  contact   Contact @relation(fields: [contactId], references: [id], onDelete: Cascade)
+  tagId     Int
+  tag       Tag     @relation(fields: [tagId], references: [id], onDelete: Cascade)
+
+  @@id([tagId, contactId])
 }
 
 model Tag {
@@ -221,28 +180,64 @@ model Tag {
   createdAt   DateTime     @default(now())
   updatedAt   DateTime     @updatedAt
 
-  @@unique([projectId, id])
   @@unique([projectId, name])
   @@index([projectId])
 }
 
-model ContactTag {
-  tagId     Int
-  tag       Tag     @relation(fields: [tagId], references: [id], onDelete: Cascade)
+model ContactField {
   contactId Int
   contact   Contact @relation(fields: [contactId], references: [id], onDelete: Cascade)
-
-  @@id([tagId, contactId])
-  @@index([tagId])
-  @@index([contactId])
-}
-
-model CustomField {
-  id        Int     @id @default(autoincrement())
-  contactId Int
-  contact   Contact @relation(fields: [contactId], references: [id], onDelete: Cascade)
-  name      String
+  fieldId   Int
+  field     Field   @relation(fields: [fieldId], references: [id], onDelete: Cascade)
   value     String?
 
-  @@index([contactId])
+  @@id([contactId, fieldId])
+}
+
+model Field {
+  id          Int            @id @default(autoincrement())
+  projectId   Int
+  name        String
+  description String         @default("")
+  value       String?
+  contacts    ContactField[]
+  createdAt   DateTime       @default(now())
+  updatedAt   DateTime       @updatedAt
+
+  @@unique([projectId, name])
+  @@index([projectId])
+}
+
+model Hsm {
+  id          Int        @id @default(autoincrement())
+  projectId   Int
+  name        String
+  text        String
+  attachments Json       @default("[]")
+  buttons     Json       @default("[]")
+  approval    Approval[]
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+
+  @@unique([projectId, name])
+  @@index([projectId])
+}
+
+enum ApprovalStatus {
+  Submitted
+  Approved
+  Rejected
+}
+
+model Approval {
+  channelId      Int
+  channel        Channel        @relation(fields: [channelId], references: [id], onDelete: Cascade)
+  hsmId          Int
+  hsm            Hsm            @relation(fields: [hsmId], references: [id], onDelete: Cascade)
+  externalId     String?
+  status         ApprovalStatus
+  rejectedReason String?
+
+  @@id([channelId, hsmId])
+  @@unique([externalId])
 }

@@ -1,9 +1,10 @@
+import { Transform } from 'class-transformer';
 import {
   IsEnum,
   IsPhoneNumber,
   IsString,
   IsUrl,
-  MaxLength,
+  Length,
   ValidateIf,
 } from 'class-validator';
 import { ButtonType } from './button-type.enum';
@@ -12,8 +13,9 @@ export class CreateButtonDto {
   @IsEnum(ButtonType)
   type: ButtonType;
 
+  @Transform(({ value }) => value?.trim())
   @IsString()
-  @MaxLength(20)
+  @Length(1, 20)
   text: string;
 
   @ValidateIf((object: CreateButtonDto) => object.type === ButtonType.Url)

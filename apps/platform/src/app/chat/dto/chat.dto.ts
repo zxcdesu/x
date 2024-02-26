@@ -7,24 +7,18 @@ export class ChatDto implements Chat {
   id: number;
 
   @Exclude()
-  projectId: number;
-
-  @Exclude()
   channelId: number;
 
   @Exclude()
   contactId: number;
 
-  @Exclude()
-  accountId: string;
-
   @Type(() => ContactDto)
   contact: ContactDto;
 
   @Exclude()
-  isNew: boolean;
+  externalId: string;
 
-  unreadCount: number;
+  unreadMessages: number;
 
   @Type(() => MessageDto)
   messages: MessageDto[];

@@ -1,8 +1,8 @@
 import { Injectable } from '@nestjs/common';
-import { WebhookPayload } from '@zxcdesu/platform-type';
-import { ChannelStatus, PrismaService } from '../prisma.service';
+import { PrismaService } from '../prisma.service';
 import { ChannelRepository } from './channel.repository';
 import { CreateChannelDto } from './dto/create-channel.dto';
+import { HandleChannelDto } from './dto/handle-channel.dto';
 import { UpdateChannelDto } from './dto/update-channel.dto';
 
 @Injectable()
@@ -12,11 +12,11 @@ export class ChannelService {
     private readonly channelRepository: ChannelRepository,
   ) {}
 
-  async create(payload: CreateChannelDto) {
+  async create(projectId: number, payload: CreateChannelDto) {
     const channel = await this.prismaService.channel.create({
       data: {
+        projectId,
         ...payload,
-        status: ChannelStatus.Connecting,
       },
     });
 
@@ -31,10 +31,8 @@ export class ChannelService {
   findOne(projectId: number, id: number) {
     return this.prismaService.channel.findUniqueOrThrow({
       where: {
-        projectId_id: {
-          projectId,
-          id,
-        },
+        projectId,
+        id,
       },
     });
   }
@@ -47,13 +45,11 @@ export class ChannelService {
     });
   }
 
-  update(payload: UpdateChannelDto) {
+  update(projectId: number, id: number, payload: UpdateChannelDto) {
     return this.prismaService.channel.update({
       where: {
-        projectId_id: {
-          projectId: payload.projectId,
-          id: payload.id,
-        },
+        projectId,
+        id,
       },
       data: payload,
     });
@@ -62,18 +58,16 @@ export class ChannelService {
   remove(projectId: number, id: number) {
     return this.prismaService.channel.delete({
       where: {
-        projectId_id: {
-          projectId,
-          id,
-        },
+        projectId,
+        id,
       },
     });
   }
 
-  async handleWebhook(payload: WebhookPayload) {
+  async handle(payload: HandleChannelDto) {
     const channel = await this.prismaService.channel.findUnique({
       where: {
-        id: payload.param.channelId,
+        id: payload.channelId,
       },
     });
     if (channel) {

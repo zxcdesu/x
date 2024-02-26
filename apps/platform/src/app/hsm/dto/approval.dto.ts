@@ -1,21 +1,21 @@
 import { Exclude, Type } from 'class-transformer';
-import { Approval, ApprovalStatus } from '../../prisma.service';
 import { ChannelDto } from '../../channel/dto/channel.dto';
+import { Approval, ApprovalStatus } from '../../prisma.service';
 
 export class ApprovalDto implements Approval {
+  @Exclude()
+  channelId: number;
+
+  @Type(() => ChannelDto)
+  channel: ChannelDto;
+
   @Exclude()
   hsmId: number;
 
   @Exclude()
-  channelId: number;
+  externalId: string;
 
   status: ApprovalStatus;
 
   rejectedReason: string | null;
-
-  @Exclude()
-  externalId: string;
-
-  @Type(() => ChannelDto)
-  channel: ChannelDto;
 }

@@ -2,7 +2,6 @@ import { AmqpConnection } from '@golevelup/nestjs-rabbitmq';
 import { HttpService } from '@nestjs/axios';
 import { Logger } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import { WebhookPayload } from '@zxcdesu/platform-type';
 import { plainToInstance } from 'class-transformer';
 import { ChatDto } from '../chat/dto/chat.dto';
 import { CreateChatDto } from '../chat/dto/create-chat.dto';
@@ -12,13 +11,13 @@ import { UpdateMessageDto } from '../message/dto/update-message.dto';
 import {
   Channel,
   Chat,
-  ContactStatus,
   MessageStatus,
   Prisma,
   PrismaService,
 } from '../prisma.service';
+import { HandleChannelDto } from './dto/handle-channel.dto';
 
-export abstract class AbstractChannel<Q = unknown, B = unknown> {
+export abstract class AbstractChannel<T = unknown> {
   protected readonly logger = new Logger(this.constructor.name);
 
   constructor(
@@ -31,7 +30,7 @@ export abstract class AbstractChannel<Q = unknown, B = unknown> {
 
   abstract create(): Promise<Partial<Prisma.ChannelUncheckedUpdateInput>>;
 
-  abstract handleWebhook(event: WebhookPayload<Q, B>): Promise<void>;
+  abstract handleWebhook(payload: HandleChannelDto<T>): Promise<void>;
 
   abstract createChat(
     chat: CreateChatDto,
@@ -114,33 +113,30 @@ export abstract class AbstractChannel<Q = unknown, B = unknown> {
     ]);
   }
 
-  private async saveChat(accountId: string, name: string) {
+  private async saveChat(externalId: string, name: string) {
     return this.prismaService.chat.upsert({
       where: {
-        channelId_accountId: {
+        channelId_externalId: {
           channelId: this.channel.id,
-          accountId,
+          externalId,
         },
       },
       create: {
-        projectId: this.channel.projectId,
         channel: {
           connect: {
             id: this.channel.id,
           },
         },
-        accountId,
+        externalId,
         contact: {
           create: {
             projectId: this.channel.projectId,
             name,
-            status: ContactStatus.Pending,
           },
         },
       },
       update: {
-        isNew: false,
-        unreadCount: {
+        unreadMessages: {
           increment: 1,
         },
       },
@@ -148,7 +144,11 @@ export abstract class AbstractChannel<Q = unknown, B = unknown> {
         contact: {
           include: {
             assignedTo: true,
-            customFields: true,
+            fields: {
+              include: {
+                field: true,
+              },
+            },
             tags: true,
           },
         },

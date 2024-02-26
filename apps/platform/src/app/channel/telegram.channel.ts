@@ -1,5 +1,4 @@
 import { NotImplementedException } from '@nestjs/common';
-import { TelegramWebhook, WebhookPayload } from '@zxcdesu/platform-type';
 import { randomUUID } from 'crypto';
 import { catchError, lastValueFrom, map } from 'rxjs';
 import { CreateChatDto } from '../chat/dto/create-chat.dto';
@@ -13,6 +12,7 @@ import {
   Prisma,
 } from '../prisma.service';
 import { AbstractChannel } from './abstract.channel';
+import { HandleChannelDto } from './dto/handle-channel.dto';
 
 export class TelegramChannel extends AbstractChannel {
   create(): Promise<Prisma.ChannelUncheckedUpdateInput> {
@@ -20,14 +20,14 @@ export class TelegramChannel extends AbstractChannel {
       this.httpService
         .post(`https://api.telegram.org/bot${this.channel.token}/setWebhook`, {
           url: [
-            this.configService.get<string>('GATEWAY_URL'),
+            this.configService.getOrThrow<string>('GATEWAY_URL'),
             this.channel.id.toString(),
           ].join('/'),
         })
         .pipe(
           map(() => {
             return {
-              status: ChannelStatus.Connected,
+              status: ChannelStatus.Active,
             };
           }),
           catchError((error) => {
@@ -46,9 +46,31 @@ export class TelegramChannel extends AbstractChannel {
   }
 
   async handleWebhook(
-    event: WebhookPayload<unknown, TelegramWebhook>,
+    payload: HandleChannelDto<{
+      message?: {
+        message_id: number;
+        chat: {
+          id: number;
+          first_name: string;
+          username: string;
+        };
+        date: number;
+        text: string;
+      };
+      edited_message?: {
+        message_id: number;
+        chat: {
+          id: number;
+          first_name: string;
+          username: string;
+        };
+        date: number;
+        edit_date: number;
+        text: string;
+      };
+    }>,
   ): Promise<void> {
-    const message = event.body.edited_message ?? event.body.message;
+    const message = payload.value.edited_message ?? payload.value.message;
     if (message) {
       await this.saveAndPublish(
         message.chat.id.toString(),
@@ -82,7 +104,7 @@ export class TelegramChannel extends AbstractChannel {
     return lastValueFrom(
       this.httpService
         .post(`https://api.telegram.org/bot${this.channel.token}/sendMessage`, {
-          chat_id: Number.parseInt(chat.accountId),
+          chat_id: Number.parseInt(chat.externalId),
           text: message.content.text,
         })
         .pipe(

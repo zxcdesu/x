@@ -13,12 +13,12 @@ import { ChannelRepository } from './channel/channel.repository';
 import { ChannelService } from './channel/channel.service';
 import { ChatController } from './chat/chat.controller';
 import { ChatService } from './chat/chat.service';
+import { CustomFieldController } from './contact-field/custom-field.controller';
+import { ContactFieldService } from './contact-field/custom-field.service';
 import { ContactTagController } from './contact-tag/contact-tag.controller';
 import { ContactTagService } from './contact-tag/contact-tag.service';
 import { ContactController } from './contact/contact.controller';
 import { ContactService } from './contact/contact.service';
-import { CustomFieldController } from './custom-field/custom-field.controller';
-import { CustomFieldService } from './custom-field/custom-field.service';
 import { HsmController } from './hsm/hsm.controller';
 import { HsmService } from './hsm/hsm.service';
 import { MessageController } from './message/message.controller';
@@ -41,7 +41,7 @@ import { TagService } from './tag/tag.service';
       inject: [ConfigService],
       useFactory: (configService: ConfigService) => ({
         enableControllerDiscovery: true,
-        uri: configService.get<string>('BROKER_URL'),
+        uri: configService.getOrThrow<string>('BROKER_URL'),
         exchanges: [
           {
             name: 'platform',
@@ -54,7 +54,12 @@ import { TagService } from './tag/tag.service';
         },
       }),
     }),
-    HttpModule.register({}),
+    HttpModule.register({
+      headers: {
+        'User-Agent':
+          'Mozilla/5.0 (compatible; PlatformService/1.0; +https://en.wikipedia.org/wiki/Webhook)',
+      },
+    }),
   ],
   controllers: [
     ChannelController,
@@ -84,7 +89,7 @@ import { TagService } from './tag/tag.service';
     ChatService,
     ContactService,
     ContactTagService,
-    CustomFieldService,
+    ContactFieldService,
     HsmService,
     MessageService,
     TagService,

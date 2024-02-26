@@ -10,7 +10,7 @@ export class HsmDto implements Omit<Hsm, 'attachments' | 'buttons'> {
   @Exclude()
   projectId: number;
 
-  code: string;
+  name: string;
 
   text: string;
 
@@ -20,10 +20,10 @@ export class HsmDto implements Omit<Hsm, 'attachments' | 'buttons'> {
   @Type(() => CreateButtonDto)
   buttons: CreateButtonDto[];
 
+  @Type(() => ApprovalDto)
+  approval: ApprovalDto[];
+
   createdAt: Date;
 
   updatedAt: Date;
-
-  @Type(() => ApprovalDto)
-  approval: ApprovalDto[];
 }

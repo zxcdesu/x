@@ -1,16 +1,4 @@
-import {
-  IntersectionType,
-  OmitType,
-  PartialType,
-  PickType,
-} from '@nestjs/mapped-types';
-import { IsInt } from 'class-validator';
+import { PartialType } from '@nestjs/mapped-types';
 import { CreateTagDto } from './create-tag.dto';
 
-export class UpdateTagDto extends IntersectionType(
-  PickType(CreateTagDto, ['projectId'] as const),
-  PartialType(OmitType(CreateTagDto, ['projectId'] as const)),
-) {
-  @IsInt()
-  id: number;
-}
+export class UpdateTagDto extends PartialType(CreateTagDto) {}

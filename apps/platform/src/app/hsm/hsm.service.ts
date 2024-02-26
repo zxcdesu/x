@@ -7,9 +7,12 @@ import { UpdateHsmDto } from './dto/update-hsm.dto';
 export class HsmService {
   constructor(private readonly prismaService: PrismaService) {}
 
-  create(payload: CreateHsmDto) {
+  create(projectId: number, payload: CreateHsmDto) {
     return this.prismaService.hsm.create({
-      data: payload as unknown as Prisma.HsmCreateInput,
+      data: {
+        projectId,
+        ...payload,
+      } as unknown as Prisma.HsmCreateInput,
       include: {
         approval: {
           include: {
@@ -23,10 +26,8 @@ export class HsmService {
   findOne(projectId: number, id: number) {
     return this.prismaService.hsm.findUniqueOrThrow({
       where: {
-        projectId_id: {
-          projectId,
-          id,
-        },
+        projectId,
+        id,
       },
       include: {
         approval: {
@@ -53,13 +54,11 @@ export class HsmService {
     });
   }
 
-  update(payload: UpdateHsmDto) {
+  update(projectId: number, id: number, payload: UpdateHsmDto) {
     return this.prismaService.hsm.update({
       where: {
-        projectId_id: {
-          projectId: payload.projectId,
-          id: payload.id,
-        },
+        projectId,
+        id,
       },
       data: payload as unknown as Prisma.HsmUpdateInput,
       include: {
@@ -75,10 +74,8 @@ export class HsmService {
   remove(projectId: number, id: number) {
     return this.prismaService.hsm.delete({
       where: {
-        projectId_id: {
-          projectId,
-          id,
-        },
+        projectId,
+        id,
       },
       include: {
         approval: {

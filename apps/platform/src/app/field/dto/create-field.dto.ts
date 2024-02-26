@@ -1,15 +1,9 @@
 import { Transform } from 'class-transformer';
-import {
-  IsHexColor,
-  IsInt,
-  IsOptional,
-  IsString,
-  Length,
-} from 'class-validator';
+import { IsOptional, IsString, Length } from 'class-validator';
 import { Prisma } from '../../prisma.service';
 
-export class CreateTagDto
-  implements Omit<Prisma.TagUncheckedCreateInput, 'projectId'>
+export class CreateFieldDto
+  implements Omit<Prisma.FieldCreateWithoutContactsInput, 'projectId'>
 {
   @Transform(({ value }) => value?.trim())
   @IsString()
@@ -17,15 +11,11 @@ export class CreateTagDto
   name: string;
 
   @Transform(({ value }) => value?.trim())
-  @IsOptional()
   @IsString()
   @Length(1, 1000)
   description?: string;
 
-  @IsHexColor()
-  color: string;
-
   @IsOptional()
-  @IsInt()
-  parentId?: number | null;
+  @IsString()
+  value?: string;
 }

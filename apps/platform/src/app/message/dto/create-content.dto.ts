@@ -1,16 +1,21 @@
-import { Type } from 'class-transformer';
-import { IsOptional, IsString, ValidateNested } from 'class-validator';
+import { Transform, Type } from 'class-transformer';
+import { IsOptional, IsString, Length, ValidateNested } from 'class-validator';
 import { Prisma } from '../../prisma.service';
 import { CreateAttachmentDto } from './create-attachment.dto';
 import { CreateButtonDto } from './create-button.dto';
 
 export class CreateContentDto
   implements
-    Omit<Prisma.ContentCreateInput, 'message' | 'attachments' | 'buttons'>
+    Omit<
+      Prisma.ContentUncheckedCreateInput,
+      'messageId' | 'attachments' | 'buttons'
+    >
 {
+  @Transform(({ value }) => value?.trim())
   @IsOptional()
   @IsString()
-  text: string;
+  @Length(1, 1000)
+  text?: string;
 
   @Type(() => CreateAttachmentDto)
   @IsOptional()

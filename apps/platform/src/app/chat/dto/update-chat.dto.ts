@@ -1,16 +1,6 @@
-import {
-  IntersectionType,
-  OmitType,
-  PartialType,
-  PickType,
-} from '@nestjs/mapped-types';
-import { IsInt } from 'class-validator';
+import { OmitType, PartialType } from '@nestjs/mapped-types';
 import { CreateChatDto } from './create-chat.dto';
 
-export class UpdateChatDto extends IntersectionType(
-  PickType(CreateChatDto, ['projectId'] as const),
-  PartialType(OmitType(CreateChatDto, ['projectId'] as const)),
-) {
-  @IsInt()
-  id: number;
-}
+export class UpdateChatDto extends PartialType(
+  OmitType(CreateChatDto, ['externalId'] as const),
+) {}

@@ -7,9 +7,12 @@ import { UpdateTagDto } from './dto/update-tag.dto';
 export class TagService {
   constructor(private readonly prismaService: PrismaService) {}
 
-  create(payload: CreateTagDto) {
+  create(projectId: number, payload: CreateTagDto) {
     return this.prismaService.tag.create({
-      data: payload,
+      data: {
+        projectId,
+        ...payload,
+      },
       include: {
         children: true,
         parent: true,
@@ -20,10 +23,8 @@ export class TagService {
   findOne(projectId: number, id: number) {
     return this.prismaService.tag.findUniqueOrThrow({
       where: {
-        projectId_id: {
-          projectId,
-          id,
-        },
+        projectId,
+        id,
       },
       include: {
         children: true,
@@ -44,13 +45,11 @@ export class TagService {
     });
   }
 
-  update(payload: UpdateTagDto) {
+  update(projectId: number, id: number, payload: UpdateTagDto) {
     return this.prismaService.tag.update({
       where: {
-        projectId_id: {
-          projectId: payload.projectId,
-          id: payload.id,
-        },
+        projectId,
+        id,
       },
       data: payload,
       include: {
@@ -63,10 +62,8 @@ export class TagService {
   remove(projectId: number, id: number) {
     return this.prismaService.tag.delete({
       where: {
-        projectId_id: {
-          projectId,
-          id,
-        },
+        projectId,
+        id,
       },
       include: {
         children: true,

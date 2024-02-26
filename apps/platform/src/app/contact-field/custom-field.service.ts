@@ -1,14 +1,14 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../prisma.service';
-import { CreateContactTagDto } from './dto/create-contact-tag.dto';
-import { RemoveContactTagDto } from './dto/remove-contact-tag.dto';
+import { CreateContactFieldDto } from './dto/create-contact-field.dto';
+import { RemoveContactFieldDto } from './dto/remove-contact-field.dto';
 
 @Injectable()
-export class ContactTagService {
+export class ContactFieldService {
   constructor(private readonly prismaService: PrismaService) {}
 
-  async create(projectId: number, payload: CreateContactTagDto) {
-    const { contact } = await this.prismaService.contactTag.create({
+  async create(projectId: number, payload: CreateContactFieldDto) {
+    const { contact } = await this.prismaService.contactField.create({
       data: {
         contact: {
           connect: {
@@ -16,12 +16,13 @@ export class ContactTagService {
             id: payload.contactId,
           },
         },
-        tag: {
+        field: {
           connect: {
             projectId,
-            id: payload.tagId,
+            id: payload.fieldId,
           },
         },
+        value: payload.value,
       },
       select: {
         contact: {
@@ -45,10 +46,10 @@ export class ContactTagService {
     return contact;
   }
 
-  async remove(projectId: number, payload: RemoveContactTagDto) {
-    const { contact } = await this.prismaService.contactTag.delete({
+  async remove(projectId: number, payload: RemoveContactFieldDto) {
+    const { contact } = await this.prismaService.contactField.delete({
       where: {
-        tagId_contactId: payload,
+        contactId_fieldId: payload,
         contact: {
           projectId,
         },

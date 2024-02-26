@@ -1,6 +1,7 @@
 import { RabbitPayload } from '@golevelup/nestjs-rabbitmq';
 import { Controller, ParseIntPipe, SerializeOptions } from '@nestjs/common';
-import { RabbitRPC } from '@zxcdesu/nestjs-rabbitmq';
+import { ProjectId } from '@zxcdesu/util-project';
+import { RmqService } from '@zxcdesu/util-rmq';
 import { CreateMessageDto } from './dto/create-message.dto';
 import { MessageDto } from './dto/message.dto';
 import { UpdateMessageDto } from './dto/update-message.dto';
@@ -10,61 +11,64 @@ import { MessageService } from './message.service';
 export class MessageController {
   constructor(private readonly messageService: MessageService) {}
 
-  @RabbitRPC({
+  @RmqService.rpc({
     exchange: 'platform',
     routingKey: 'createMessage',
-    queue: 'platform.createMessage',
+    queue: 'createMessage',
   })
   @SerializeOptions({
     type: MessageDto,
   })
   create(
-    @RabbitPayload('projectId', ParseIntPipe) projectId: number,
+    @ProjectId() projectId: number,
+    @RabbitPayload('chatId', ParseIntPipe) chatId: number,
     @RabbitPayload() payload: CreateMessageDto,
   ) {
-    return this.messageService.create(projectId, payload);
+    return this.messageService.create(projectId, chatId, payload);
   }
 
-  @RabbitRPC({
+  @RmqService.rpc({
     exchange: 'platform',
     routingKey: 'findAllMessages',
-    queue: 'platform.findAllMessages',
+    queue: 'findAllMessages',
   })
   @SerializeOptions({
     type: MessageDto,
   })
   findAll(
-    @RabbitPayload('projectId', ParseIntPipe) projectId: number,
+    @ProjectId() projectId: number,
     @RabbitPayload('chatId', ParseIntPipe) chatId: number,
   ) {
     return this.messageService.findAll(projectId, chatId);
   }
 
-  @RabbitRPC({
+  @RmqService.rpc({
     exchange: 'platform',
     routingKey: 'updateMessage',
-    queue: 'platform.updateMessage',
+    queue: 'updateMessage',
   })
   @SerializeOptions({
     type: MessageDto,
   })
   update(
-    @RabbitPayload('projectId', ParseIntPipe) projectId: number,
+    @ProjectId() projectId: number,
+    @RabbitPayload('chatId', ParseIntPipe) chatId: number,
+    @RabbitPayload('id', ParseIntPipe) id: number,
     @RabbitPayload() payload: UpdateMessageDto,
   ) {
-    return this.messageService.update(projectId, payload);
+    return this.messageService.update(projectId, chatId, id, payload);
   }
 
-  @RabbitRPC({
+  @RmqService.rpc({
     exchange: 'platform',
     routingKey: 'removeMessage',
-    queue: 'platform.removeMessage',
+    queue: 'removeMessage',
   })
   @SerializeOptions({
     type: MessageDto,
   })
   remove(
-    @RabbitPayload('projectId', ParseIntPipe) projectId: number,
+    @ProjectId() projectId: number,
     @RabbitPayload('chatId', ParseIntPipe) chatId: number,
     @RabbitPayload('id', ParseIntPipe) id: number,
   ) {

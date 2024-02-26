@@ -1,11 +1,12 @@
-import { IsEnum, IsInt } from 'class-validator';
+import { IsEnum, IsInt, IsOptional } from 'class-validator';
 import { AuthorType, Prisma } from '../../prisma.service';
 
 export class CreateAuthorDto
-  implements Omit<Prisma.AuthorCreateInput, 'message'>
+  implements Omit<Prisma.AuthorUncheckedCreateInput, 'messageId'>
 {
+  @IsOptional()
   @IsInt()
-  id: number | null;
+  id?: number;
 
   @IsEnum(AuthorType)
   type: AuthorType;

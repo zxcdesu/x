@@ -1,5 +1,7 @@
-import { RabbitPayload, RabbitRPC } from '@golevelup/nestjs-rabbitmq';
+import { RabbitPayload } from '@golevelup/nestjs-rabbitmq';
 import { Controller, ParseIntPipe, SerializeOptions } from '@nestjs/common';
+import { ProjectId } from '@zxcdesu/util-project';
+import { RmqService } from '@zxcdesu/util-rmq';
 import { CreateTagDto } from './dto/create-tag.dto';
 import { TagDto } from './dto/tag.dto';
 import { UpdateTagDto } from './dto/update-tag.dto';
@@ -9,67 +11,74 @@ import { TagService } from './tag.service';
 export class TagController {
   constructor(private readonly tagService: TagService) {}
 
-  @RabbitRPC({
+  @RmqService.rpc({
     exchange: 'platform',
     routingKey: 'createTag',
-    queue: 'platform.createTag',
+    queue: 'createTag',
   })
   @SerializeOptions({
     type: TagDto,
   })
-  create(@RabbitPayload() payload: CreateTagDto) {
-    return this.tagService.create(payload);
+  create(
+    @ProjectId() projectId: number,
+    @RabbitPayload() payload: CreateTagDto,
+  ) {
+    return this.tagService.create(projectId, payload);
   }
 
-  @RabbitRPC({
+  @RmqService.rpc({
     exchange: 'platform',
     routingKey: 'findOneTag',
-    queue: 'platform.findOneTag',
+    queue: 'findOneTag',
   })
   @SerializeOptions({
     type: TagDto,
   })
   findOne(
-    @RabbitPayload('projectId', ParseIntPipe) projectId: number,
+    @ProjectId() projectId: number,
     @RabbitPayload('id', ParseIntPipe) id: number,
   ) {
     return this.tagService.findOne(projectId, id);
   }
 
-  @RabbitRPC({
+  @RmqService.rpc({
     exchange: 'platform',
     routingKey: 'findAllTags',
-    queue: 'platform.findAllTags',
+    queue: 'findAllTags',
   })
   @SerializeOptions({
     type: TagDto,
   })
-  findAll(@RabbitPayload('projectId', ParseIntPipe) projectId: number) {
+  findAll(@ProjectId() projectId: number) {
     return this.tagService.findAll(projectId);
   }
 
-  @RabbitRPC({
+  @RmqService.rpc({
     exchange: 'platform',
     routingKey: 'updateTag',
-    queue: 'platform.updateTag',
+    queue: 'updateTag',
   })
   @SerializeOptions({
     type: TagDto,
   })
-  update(@RabbitPayload() payload: UpdateTagDto) {
-    return this.tagService.update(payload);
+  update(
+    @ProjectId() projectId: number,
+    @RabbitPayload('id', ParseIntPipe) id: number,
+    @RabbitPayload() payload: UpdateTagDto,
+  ) {
+    return this.tagService.update(projectId, id, payload);
   }
 
-  @RabbitRPC({
+  @RmqService.rpc({
     exchange: 'platform',
     routingKey: 'removeTag',
-    queue: 'platform.removeTag',
+    queue: 'removeTag',
   })
   @SerializeOptions({
     type: TagDto,
   })
   remove(
-    @RabbitPayload('projectId', ParseIntPipe) projectId: number,
+    @ProjectId() projectId: number,
     @RabbitPayload('id', ParseIntPipe) id: number,
   ) {
     return this.tagService.remove(projectId, id);
