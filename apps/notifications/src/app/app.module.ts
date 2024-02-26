@@ -26,7 +26,7 @@ import { SubscriberService } from './subscriber/subscriber.service';
       inject: [ConfigService],
       useFactory: (configService: ConfigService) => ({
         enableControllerDiscovery: true,
-        uri: configService.get<string>('BROKER_URL'),
+        uri: configService.getOrThrow<string>('BROKER_URL'),
         exchanges: [
           {
             name: 'notifications',
@@ -39,7 +39,12 @@ import { SubscriberService } from './subscriber/subscriber.service';
         },
       }),
     }),
-    HttpModule.register({}),
+    HttpModule.register({
+      headers: {
+        'User-Agent':
+          'Mozilla/5.0 (compatible; NotificationsService/1.0; +https://en.wikipedia.org/wiki/Webhook)',
+      },
+    }),
   ],
   controllers: [SubscriberController],
   providers: [
