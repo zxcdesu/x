@@ -8,7 +8,7 @@ import { UpdateMailingDto } from './dto/update-mailing.dto';
 export class MailingRmq extends RmqService {
   create(projectId: number, payload: CreateMailingDto) {
     return this.request<MailingDto>({
-      exchange: 'mailer',
+      exchange: 'mailings',
       routingKey: 'createMailing',
       payload: {
         projectId,
@@ -19,7 +19,7 @@ export class MailingRmq extends RmqService {
 
   findOne(projectId: number, id: number) {
     return this.request<MailingDto>({
-      exchange: 'mailer',
+      exchange: 'mailings',
       routingKey: 'findOneMailing',
       payload: {
         projectId,
@@ -30,7 +30,7 @@ export class MailingRmq extends RmqService {
 
   findAll(projectId: number, ids?: number[]) {
     return this.request<MailingDto[]>({
-      exchange: 'mailer',
+      exchange: 'mailings',
       routingKey: 'findAllMailings',
       payload: {
         projectId,
@@ -41,7 +41,7 @@ export class MailingRmq extends RmqService {
 
   update(projectId: number, payload: UpdateMailingDto) {
     return this.request<MailingDto>({
-      exchange: 'mailer',
+      exchange: 'mailings',
       routingKey: 'updateMailing',
       payload: {
         projectId,
@@ -52,7 +52,7 @@ export class MailingRmq extends RmqService {
 
   remove(projectId: number, id: number) {
     return this.request<MailingDto>({
-      exchange: 'mailer',
+      exchange: 'mailings',
       routingKey: 'removeMailing',
       payload: {
         projectId,
