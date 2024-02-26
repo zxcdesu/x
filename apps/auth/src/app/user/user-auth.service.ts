@@ -13,7 +13,7 @@ export class UserAuthService {
 
   async signIn(payload: SignInUserDto) {
     const user = await this.userService.findOneOrNullByEmail(payload.email);
-    if (user && (await verify(payload.password, user.password))) {
+    if (user && (await verify(user.password, payload.password))) {
       return {
         token: await this.jwtService.signAsync({
           id: user.id,
