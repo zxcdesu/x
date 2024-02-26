@@ -10,6 +10,7 @@ import { APP_INTERCEPTOR, APP_PIPE } from '@nestjs/core';
 import joi from 'joi';
 import { PrismaService } from './prisma.service';
 import { SubscriberController } from './subscriber/subscriber.controller';
+import { SubscriberRepository } from './subscriber/subscriber.repository';
 import { SubscriberService } from './subscriber/subscriber.service';
 
 @Module({
@@ -60,6 +61,7 @@ import { SubscriberService } from './subscriber/subscriber.service';
         transform: true,
       }),
     },
+    SubscriberRepository,
     SubscriberService,
   ],
 })
