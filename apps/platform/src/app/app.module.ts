@@ -17,6 +17,7 @@ import { CustomFieldController } from './contact-field/custom-field.controller';
 import { ContactFieldService } from './contact-field/custom-field.service';
 import { ContactTagController } from './contact-tag/contact-tag.controller';
 import { ContactTagService } from './contact-tag/contact-tag.service';
+import { ContactAssignedToService } from './contact/contact-assigned-to.service';
 import { ContactController } from './contact/contact.controller';
 import { ContactService } from './contact/contact.service';
 import { HsmController } from './hsm/hsm.controller';
@@ -87,6 +88,7 @@ import { TagService } from './tag/tag.service';
     ChannelRepository,
     ChannelService,
     ChatService,
+    ContactAssignedToService,
     ContactService,
     ContactTagService,
     ContactFieldService,
