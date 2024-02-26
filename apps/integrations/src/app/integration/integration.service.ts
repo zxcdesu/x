@@ -7,19 +7,20 @@ import { UpdateIntegrationDto } from './dto/update-integration.dto';
 export class IntegrationService {
   constructor(private readonly prismaService: PrismaService) {}
 
-  create(payload: CreateIntegrationDto) {
+  create(projectId: number, payload: CreateIntegrationDto) {
     return this.prismaService.integration.create({
-      data: payload,
+      data: {
+        projectId,
+        ...payload,
+      },
     });
   }
 
-  findOne(projectId: number, id: string) {
+  findOne(projectId: number, id: number) {
     return this.prismaService.integration.findUniqueOrThrow({
       where: {
-        projectId_id: {
-          projectId,
-          id,
-        },
+        projectId,
+        id,
       },
     });
   }
@@ -32,25 +33,21 @@ export class IntegrationService {
     });
   }
 
-  update(payload: UpdateIntegrationDto) {
+  update(projectId: number, id: number, payload: UpdateIntegrationDto) {
     return this.prismaService.integration.update({
       where: {
-        projectId_id: {
-          projectId: payload.projectId,
-          id: payload.id,
-        },
+        projectId,
+        id,
       },
       data: payload,
     });
   }
 
-  remove(projectId: number, id: string) {
+  remove(projectId: number, id: number) {
     return this.prismaService.integration.delete({
       where: {
-        projectId_id: {
-          projectId,
-          id,
-        },
+        projectId,
+        id,
       },
     });
   }

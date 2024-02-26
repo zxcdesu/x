@@ -15,13 +15,13 @@ enum IntegrationType {
 }
 
 model Integration {
-  id        String          @id @default(uuid()) @db.Uuid
-  projectId Int
-  type      IntegrationType
-  accountId String
-  token     Json            @default("{}")
+  id         Int             @id @default(autoincrement()) 
+  projectId  Int
+  type       IntegrationType
+  externalId String
+  token      Json            @default("{}")
 
-  @@unique([projectId, id])
+  @@index([projectId])
 }
 
 enum WebhookType {
@@ -35,5 +35,5 @@ model Webhook {
   url       String
   type      WebhookType
 
-  @@unique([projectId, id])
+  @@index([projectId])
 }

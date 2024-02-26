@@ -1,88 +1,103 @@
 import { RabbitPayload } from '@golevelup/nestjs-rabbitmq';
 import { Controller, ParseIntPipe, SerializeOptions } from '@nestjs/common';
-import { RabbitRPC } from '@zxcdesu/nestjs-rabbitmq';
+import { ProjectId } from '@zxcdesu/util-project';
+import { RmqService } from '@zxcdesu/util-rmq';
 import { CreateWebhookDto } from '../webhook/dto/create-webhook.dto';
 import { UpdateWebhookDto } from '../webhook/dto/update-webhook.dto';
 import { WebhookDto } from '../webhook/dto/webhook.dto';
-import { ReceiveWebhookDto } from './dto/receive-webhook.dto';
+import { SendWebhooksDto } from './dto/send-webhooks.dto';
+import { WebhookSenderService } from './webhook-sender.service';
 import { WebhookService } from './webhook.service';
 
 @Controller()
 export class WebhookController {
-  constructor(private readonly webhookService: WebhookService) {}
+  constructor(
+    private readonly webhookService: WebhookService,
+    private readonly webhookSenderService: WebhookSenderService,
+  ) {}
 
-  @RabbitRPC({
+  @RmqService.rpc({
     exchange: 'integrations',
     routingKey: 'createWebhook',
-    queue: 'integrations.createWebhook',
+    queue: 'createWebhook',
   })
   @SerializeOptions({
     type: WebhookDto,
   })
-  create(@RabbitPayload() payload: CreateWebhookDto) {
-    return this.webhookService.create(payload);
+  create(
+    @ProjectId() projectId: number,
+    @RabbitPayload() payload: CreateWebhookDto,
+  ): Promise<WebhookDto> {
+    return this.webhookService.create(projectId, payload);
   }
 
-  @RabbitRPC({
+  @RmqService.rpc({
     exchange: 'integrations',
     routingKey: 'findOneWebhook',
-    queue: 'integrations.findOneWebhook',
+    queue: 'findOneWebhook',
   })
   @SerializeOptions({
     type: WebhookDto,
   })
   findOne(
-    @RabbitPayload('projectId', ParseIntPipe) projectId: number,
+    @ProjectId() projectId: number,
     @RabbitPayload('id', ParseIntPipe) id: number,
-  ) {
+  ): Promise<WebhookDto> {
     return this.webhookService.findOne(projectId, id);
   }
 
-  @RabbitRPC({
+  @RmqService.rpc({
     exchange: 'integrations',
     routingKey: 'findAllWebhooks',
-    queue: 'integrations.findAllWebhooks',
+    queue: 'findAllWebhooks',
   })
   @SerializeOptions({
     type: WebhookDto,
   })
-  findAll(@RabbitPayload('projectId', ParseIntPipe) projectId: number) {
+  findAll(@ProjectId() projectId: number): Promise<WebhookDto[]> {
     return this.webhookService.findAll(projectId);
   }
 
-  @RabbitRPC({
+  @RmqService.rpc({
     exchange: 'integrations',
     routingKey: 'updateWebhook',
-    queue: 'integrations.updateWebhook',
+    queue: 'updateWebhook',
   })
   @SerializeOptions({
     type: WebhookDto,
   })
-  update(@RabbitPayload() payload: UpdateWebhookDto) {
-    return this.webhookService.update(payload);
+  update(
+    @ProjectId() projectId: number,
+    @RabbitPayload('id', ParseIntPipe) id: number,
+    @RabbitPayload() payload: UpdateWebhookDto,
+  ): Promise<WebhookDto> {
+    return this.webhookService.update(projectId, id, payload);
   }
 
-  @RabbitRPC({
+  @RmqService.rpc({
     exchange: 'integrations',
     routingKey: 'removeWebhook',
-    queue: 'integrations.removeWebhook',
+    queue: 'removeWebhook',
   })
   @SerializeOptions({
     type: WebhookDto,
   })
   remove(
-    @RabbitPayload('projectId', ParseIntPipe) projectId: number,
+    @ProjectId() projectId: number,
     @RabbitPayload('id', ParseIntPipe) id: number,
-  ) {
+  ): Promise<WebhookDto> {
     return this.webhookService.remove(projectId, id);
   }
 
-  @RabbitRPC({
+  @RmqService.subscribe({
     exchange: 'integrations',
     routingKey: 'sendWebhooks',
-    queue: 'integrations.sendWebhook',
+    queue: 'sendWebhooks',
   })
-  sendWebhooks(@RabbitPayload() payload: ReceiveWebhookDto) {
-    return this.webhookService.send(payload);
+  send(
+    @ProjectId() projectId: number,
+    @RabbitPayload() payload: SendWebhooksDto,
+  ): Promise<void> {
+    return this.webhookSenderService.send(projectId, payload);
   }
 }

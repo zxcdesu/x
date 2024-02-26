@@ -1,11 +1,7 @@
 import { RabbitPayload } from '@golevelup/nestjs-rabbitmq';
-import {
-  Controller,
-  ParseIntPipe,
-  ParseUUIDPipe,
-  SerializeOptions,
-} from '@nestjs/common';
-import { RabbitRPC } from '@zxcdesu/nestjs-rabbitmq';
+import { Controller, ParseIntPipe, SerializeOptions } from '@nestjs/common';
+import { ProjectId } from '@zxcdesu/util-project';
+import { RmqService } from '@zxcdesu/util-rmq';
 import { CreateIntegrationDto } from './dto/create-integration.dto';
 import { IntegrationDto } from './dto/integration.dto';
 import { UpdateIntegrationDto } from './dto/update-integration.dto';
@@ -15,68 +11,75 @@ import { IntegrationService } from './integration.service';
 export class IntegrationController {
   constructor(private readonly integrationService: IntegrationService) {}
 
-  @RabbitRPC({
+  @RmqService.rpc({
     exchange: 'integrations',
     routingKey: 'createIntegration',
-    queue: 'integrations.createIntegration',
+    queue: 'createIntegration',
   })
   @SerializeOptions({
     type: IntegrationDto,
   })
-  create(@RabbitPayload() payload: CreateIntegrationDto) {
-    return this.integrationService.create(payload);
+  create(
+    @ProjectId() projectId: number,
+    @RabbitPayload() payload: CreateIntegrationDto,
+  ) {
+    return this.integrationService.create(projectId, payload);
   }
 
-  @RabbitRPC({
+  @RmqService.rpc({
     exchange: 'integrations',
     routingKey: 'findOneIntegration',
-    queue: 'integrations.findOneIntegration',
+    queue: 'findOneIntegration',
   })
   @SerializeOptions({
     type: IntegrationDto,
   })
   findOne(
-    @RabbitPayload('projectId', ParseIntPipe) projectId: number,
-    @RabbitPayload('id', ParseUUIDPipe) id: string,
-  ) {
+    @ProjectId() projectId: number,
+    @RabbitPayload('id', ParseIntPipe) id: number,
+  ): Promise<IntegrationDto> {
     return this.integrationService.findOne(projectId, id);
   }
 
-  @RabbitRPC({
+  @RmqService.rpc({
     exchange: 'integrations',
     routingKey: 'findAllIntegrations',
-    queue: 'integrations.findAllIntegrations',
+    queue: 'findAllIntegrations',
   })
   @SerializeOptions({
     type: IntegrationDto,
   })
-  findAll(@RabbitPayload('projectId', ParseIntPipe) projectId: number) {
+  findAll(@ProjectId() projectId: number): Promise<IntegrationDto[]> {
     return this.integrationService.findAll(projectId);
   }
 
-  @RabbitRPC({
+  @RmqService.rpc({
     exchange: 'integrations',
     routingKey: 'updateIntegration',
-    queue: 'integrations.updateIntegration',
+    queue: 'updateIntegration',
   })
   @SerializeOptions({
     type: IntegrationDto,
   })
-  update(@RabbitPayload() payload: UpdateIntegrationDto) {
-    return this.integrationService.update(payload);
+  update(
+    @ProjectId() projectId: number,
+    @RabbitPayload('id', ParseIntPipe) id: number,
+    @RabbitPayload() payload: UpdateIntegrationDto,
+  ): Promise<IntegrationDto> {
+    return this.integrationService.update(projectId, id, payload);
   }
 
-  @RabbitRPC({
+  @RmqService.rpc({
     exchange: 'integrations',
     routingKey: 'removeIntegration',
-    queue: 'integrations.removeIntegration',
+    queue: 'removeIntegration',
   })
   @SerializeOptions({
     type: IntegrationDto,
   })
   remove(
-    @RabbitPayload('projectId', ParseIntPipe) projectId: number,
-    @RabbitPayload('id', ParseUUIDPipe) id: string,
+    @ProjectId() projectId: number,
+    @RabbitPayload('id', ParseIntPipe) id: number,
   ) {
     return this.integrationService.remove(projectId, id);
   }

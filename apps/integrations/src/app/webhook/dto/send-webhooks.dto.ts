@@ -1,10 +1,7 @@
-import { IsDefined, IsEnum, IsInt } from 'class-validator';
+import { IsDefined, IsEnum } from 'class-validator';
 import { WebhookType } from '../../prisma.service';
 
-export class ReceiveWebhookDto {
-  @IsInt()
-  projectId: number;
-
+export class SendWebhooksDto {
   @IsEnum(WebhookType)
   type: WebhookType;
 

@@ -11,6 +11,7 @@ import joi from 'joi';
 import { IntegrationController } from './integration/integration.controller';
 import { IntegrationService } from './integration/integration.service';
 import { PrismaService } from './prisma.service';
+import { WebhookSenderService } from './webhook/webhook-sender.service';
 import { WebhookController } from './webhook/webhook.controller';
 import { WebhookService } from './webhook/webhook.service';
 
@@ -27,7 +28,7 @@ import { WebhookService } from './webhook/webhook.service';
       inject: [ConfigService],
       useFactory: (configService: ConfigService) => ({
         enableControllerDiscovery: true,
-        uri: configService.get<string>('BROKER_URL'),
+        uri: configService.getOrThrow<string>('BROKER_URL'),
         exchanges: [
           {
             name: 'integrations',
@@ -62,6 +63,7 @@ import { WebhookService } from './webhook/webhook.service';
       }),
     },
     IntegrationService,
+    WebhookSenderService,
     WebhookService,
   ],
 })

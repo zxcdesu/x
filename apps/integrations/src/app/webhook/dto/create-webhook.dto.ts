@@ -1,10 +1,9 @@
-import { IsEnum, IsInt, IsUrl } from 'class-validator';
+import { IsEnum, IsUrl } from 'class-validator';
 import { Prisma, WebhookType } from '../../prisma.service';
 
-export class CreateWebhookDto implements Prisma.WebhookUncheckedCreateInput {
-  @IsInt()
-  projectId: number;
-
+export class CreateWebhookDto
+  implements Omit<Prisma.WebhookUncheckedCreateInput, 'projectId'>
+{
   @IsUrl()
   url: string;
 
