@@ -1,17 +1,19 @@
-import { RabbitPayload, RabbitSubscribe } from '@golevelup/nestjs-rabbitmq';
+import { RabbitPayload } from '@golevelup/nestjs-rabbitmq';
 import { Controller } from '@nestjs/common';
-import { NotifyDto } from './dto/notify.dto';
+import { RmqService } from '@zxcdesu/util-rmq';
+import { SendNotificationDto } from './dto/send-notification.dto';
 import { NotificationService } from './notification.service';
 
 @Controller()
 export class NotificationController {
   constructor(private readonly notificationService: NotificationService) {}
 
-  @RabbitSubscribe({
+  @RmqService.subscribe({
     exchange: 'notifications',
-    routingKey: 'notify',
+    routingKey: 'sendNotification',
+    queue: 'sendNotification',
   })
-  notify(@RabbitPayload() payload: NotifyDto) {
-    return this.notificationService.notify(payload);
+  send(@RabbitPayload() payload: SendNotificationDto): Promise<void> {
+    return this.notificationService.send(payload);
   }
 }

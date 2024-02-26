@@ -9,7 +9,17 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+enum SubscriberProvider {
+  Telegram
+}
+
 model Subscriber {
-  userId     Int     @id
+  id         Int                @id @default(autoincrement())
+  userId     Int
   externalId String?
+  provider   SubscriberProvider
+
+  @@unique([userId, provider])
+  @@unique([externalId, provider])
+  @@index([userId])
 }

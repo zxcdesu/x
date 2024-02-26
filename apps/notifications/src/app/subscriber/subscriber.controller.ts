@@ -1,8 +1,9 @@
-import { RabbitPayload, RabbitSubscribe } from '@golevelup/nestjs-rabbitmq';
+import { RabbitPayload } from '@golevelup/nestjs-rabbitmq';
 import { Controller, ParseIntPipe, SerializeOptions } from '@nestjs/common';
-import { RabbitRPC } from '@zxcdesu/nestjs-rabbitmq';
+import { RmqService } from '@zxcdesu/util-rmq';
+import { UserId } from '@zxcdesu/util-user';
 import { CreateSubscriberDto } from './dto/create-subscriber.dto';
-import { HandleWebhookDto } from './dto/handle-webhook.dto';
+import { HandleSubscriberDto } from './dto/handle-subscriber.dto';
 import { SubscriberDto } from './dto/subscriber.dto';
 import { UpdateSubscriberDto } from './dto/update-subscriber.dto';
 import { SubscriberService } from './subscriber.service';
@@ -11,60 +12,70 @@ import { SubscriberService } from './subscriber.service';
 export class SubscriberController {
   constructor(private readonly subscriberService: SubscriberService) {}
 
-  @RabbitRPC({
+  @RmqService.rpc({
     exchange: 'notifications',
     routingKey: 'createSubscriber',
-    queue: 'notifications.createSubscriber',
+    queue: 'createSubscriber',
   })
   @SerializeOptions({
     type: SubscriberDto,
   })
-  create(@RabbitPayload() payload: CreateSubscriberDto) {
-    return this.subscriberService.create(payload);
+  create(
+    @UserId() userId: number,
+    @RabbitPayload() payload: CreateSubscriberDto,
+  ): Promise<SubscriberDto> {
+    return this.subscriberService.create(userId, payload);
   }
 
-  @RabbitRPC({
+  @RmqService.rpc({
     exchange: 'notifications',
     routingKey: 'findOneSubscriber',
-    queue: 'notifications.findOneSubscriber',
+    queue: 'findOneSubscriber',
   })
   @SerializeOptions({
     type: SubscriberDto,
   })
-  findOne(@RabbitPayload('userId', ParseIntPipe) userId: number) {
-    return this.subscriberService.findOne(userId);
+  findAll(@UserId() userId: number): Promise<SubscriberDto[]> {
+    return this.subscriberService.findAll(userId);
   }
 
-  @RabbitRPC({
+  @RmqService.rpc({
     exchange: 'notifications',
     routingKey: 'updateSubscriber',
-    queue: 'notifications.updateSubscriber',
+    queue: 'updateSubscriber',
   })
   @SerializeOptions({
     type: SubscriberDto,
   })
-  update(@RabbitPayload() payload: UpdateSubscriberDto) {
-    return this.subscriberService.update(payload);
+  update(
+    @UserId() userId: number,
+    @RabbitPayload('id', ParseIntPipe) id: number,
+    @RabbitPayload() payload: UpdateSubscriberDto,
+  ) {
+    return this.subscriberService.update(userId, id, payload);
   }
 
-  @RabbitRPC({
+  @RmqService.rpc({
     exchange: 'notifications',
     routingKey: 'removeSubscriber',
-    queue: 'notifications.removeSubscriber',
+    queue: 'removeSubscriber',
   })
   @SerializeOptions({
     type: SubscriberDto,
   })
-  remove(@RabbitPayload('userId', ParseIntPipe) userId: number) {
-    return this.subscriberService.remove(userId);
+  remove(
+    @UserId() userId: number,
+    @RabbitPayload('id', ParseIntPipe) id: number,
+  ) {
+    return this.subscriberService.remove(userId, id);
   }
 
-  @RabbitSubscribe({
+  @RmqService.subscribe({
     exchange: 'notifications',
-    routingKey: 'handleWebhook',
-    queue: 'notifications.handleWebhook',
+    routingKey: 'handleSubscriber',
+    queue: 'handleSubscriber',
   })
-  handleWebhook(@RabbitPayload() payload: HandleWebhookDto) {
-    return this.subscriberService.handleWebhook(payload);
+  handleWebhook(@RabbitPayload() payload: HandleSubscriberDto) {
+    return this.subscriberService.handle(payload);
   }
 }

@@ -1,11 +1,13 @@
 import { Exclude } from 'class-transformer';
-import { Subscriber } from '../../prisma.service';
+import { Subscriber, SubscriberProvider } from '../../prisma.service';
 
 export class SubscriberDto implements Subscriber {
+  id: number;
+
   userId: number;
 
   @Exclude()
   externalId: string | null;
 
-  // TODO: типы событий
+  provider: SubscriberProvider;
 }
