@@ -46,7 +46,12 @@ import { WalletService } from './wallet/wallet.service';
         },
       }),
     }),
-    HttpModule.register({}),
+    HttpModule.register({
+      headers: {
+        'User-Agent':
+          'Mozilla/5.0 (compatible; PaymentService/1.0; +https://en.wikipedia.org/wiki/Webhook)',
+      },
+    }),
   ],
   controllers: [PaymentController, SubscriptionController, WalletController],
   providers: [

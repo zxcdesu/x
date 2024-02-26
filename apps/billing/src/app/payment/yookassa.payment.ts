@@ -115,7 +115,9 @@ export class YookassaPayment extends AbstractPayment<unknown> {
             capture: true,
             confirmation: {
               type: 'redirect',
-              return_url: this.configService.get<string>('YOOKASSA_RETURN_URL'),
+              return_url: this.configService.getOrThrow<string>(
+                'YOOKASSA_RETURN_URL',
+              ),
             },
             description: null,
           },
