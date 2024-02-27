@@ -1,12 +1,12 @@
 import { Injectable } from '@nestjs/common';
 import { RmqService } from '@zxcdesu/util-rmq';
-import { ProjectUserDto } from './dto/project-user.dto';
-import { UpdateProjectUserDto } from './dto/update-project-user.dto';
+import { ProjectUser } from './dto/project-user.entity';
+import { UpdateProjectUserArgs } from './dto/update-project-user.args';
 
 @Injectable()
 export class ProjectUserRmq extends RmqService {
   findOne(projectId: number, userId: number) {
-    return this.request<ProjectUserDto>({
+    return this.request<ProjectUser>({
       exchange: 'auth',
       routingKey: 'findOneProjectUser',
       payload: {
@@ -17,7 +17,7 @@ export class ProjectUserRmq extends RmqService {
   }
 
   findAll(projectId: number) {
-    return this.request<ProjectUserDto[]>({
+    return this.request<ProjectUser[]>({
       exchange: 'auth',
       routingKey: 'findAllProjectUsers',
       payload: {
@@ -26,8 +26,8 @@ export class ProjectUserRmq extends RmqService {
     });
   }
 
-  update(projectId: number, payload: UpdateProjectUserDto) {
-    return this.request<ProjectUserDto>({
+  update(projectId: number, payload: UpdateProjectUserArgs) {
+    return this.request<ProjectUser>({
       exchange: 'auth',
       routingKey: 'updateProjectUser',
       payload: {
@@ -38,7 +38,7 @@ export class ProjectUserRmq extends RmqService {
   }
 
   remove(projectId: number, userId: number) {
-    return this.request<ProjectUserDto>({
+    return this.request<ProjectUser>({
       exchange: 'auth',
       routingKey: 'removeProjectUser',
       payload: {

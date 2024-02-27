@@ -4,9 +4,9 @@ import { BearerAuthDecorator } from '../auth/bearer-auth.decorator';
 import { BearerAuthGuard } from '../auth/bearer-auth.guard';
 import { BearerAuth } from '../auth/bearer-auth.interface';
 import { TokenDto } from '../auth/dto/token.dto';
-import { CreateProjectDto } from './dto/create-project.dto';
-import { ProjectDto } from './dto/project.dto';
-import { UpdateProjectDto } from './dto/update-project.dto';
+import { CreateProjectArgs } from './dto/create-project.args';
+import { Project } from './dto/project.entity';
+import { UpdateProjectArgs } from './dto/update-project.args';
 import { ProjectRmq } from './project.rmq';
 
 @Resolver()
@@ -14,42 +14,40 @@ export class ProjectResolver {
   constructor(private readonly rmq: ProjectRmq) {}
 
   @UseGuards(BearerAuthGuard)
-  @Mutation(() => ProjectDto)
+  @Mutation(() => Project)
   createProject(
     @BearerAuthDecorator() auth: BearerAuth,
-    @Args() payload: CreateProjectDto,
-  ): Promise<ProjectDto> {
+    @Args() payload: CreateProjectArgs,
+  ): Promise<Project> {
     return this.rmq.create(auth.id, payload);
   }
 
   @UseGuards(BearerAuthGuard)
-  @Query(() => ProjectDto)
-  project(
-    @BearerAuthDecorator() auth: Required<BearerAuth>,
-  ): Promise<ProjectDto> {
+  @Query(() => Project)
+  project(@BearerAuthDecorator() auth: Required<BearerAuth>): Promise<Project> {
     return this.rmq.findOne(auth.id, auth.project.id);
   }
 
   @UseGuards(BearerAuthGuard)
-  @Query(() => [ProjectDto])
-  projects(@BearerAuthDecorator() auth: BearerAuth): Promise<ProjectDto[]> {
+  @Query(() => [Project])
+  projects(@BearerAuthDecorator() auth: BearerAuth): Promise<Project[]> {
     return this.rmq.findAll(auth.id);
   }
 
   @UseGuards(BearerAuthGuard)
-  @Mutation(() => ProjectDto)
+  @Mutation(() => Project)
   updateProject(
     @BearerAuthDecorator() auth: Required<BearerAuth>,
-    @Args() payload: UpdateProjectDto,
-  ): Promise<ProjectDto> {
+    @Args() payload: UpdateProjectArgs,
+  ): Promise<Project> {
     return this.rmq.update(auth.id, auth.project.id, payload);
   }
 
   @UseGuards(BearerAuthGuard)
-  @Mutation(() => ProjectDto)
+  @Mutation(() => Project)
   removeProject(
     @BearerAuthDecorator() auth: Required<BearerAuth>,
-  ): Promise<ProjectDto> {
+  ): Promise<Project> {
     return this.rmq.remove(auth.id, auth.project.id);
   }
 

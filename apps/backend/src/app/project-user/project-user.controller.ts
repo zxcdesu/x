@@ -3,8 +3,8 @@ import { Args, Int, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { BearerAuthDecorator } from '../auth/bearer-auth.decorator';
 import { BearerAuthGuard } from '../auth/bearer-auth.guard';
 import { BearerAuth } from '../auth/bearer-auth.interface';
-import { ProjectUserDto } from './dto/project-user.dto';
-import { UpdateProjectUserDto } from './dto/update-project-user.dto';
+import { ProjectUser } from './dto/project-user.entity';
+import { UpdateProjectUserArgs } from './dto/update-project-user.args';
 import { ProjectUserRmq } from './project-user.rmq';
 
 @Resolver()
@@ -12,37 +12,37 @@ export class ProjectUserResolver {
   constructor(private readonly rmq: ProjectUserRmq) {}
 
   @UseGuards(BearerAuthGuard)
-  @Query(() => ProjectUserDto)
+  @Query(() => ProjectUser)
   projectUserById(
     @BearerAuthDecorator() auth: Required<BearerAuth>,
     @Args('userId', { type: () => Int }) userId: number,
-  ): Promise<ProjectUserDto> {
+  ): Promise<ProjectUser> {
     return this.rmq.findOne(auth.project.id, userId);
   }
 
   @UseGuards(BearerAuthGuard)
-  @Query(() => [ProjectUserDto])
+  @Query(() => [ProjectUser])
   projectUsers(
     @BearerAuthDecorator() auth: Required<BearerAuth>,
-  ): Promise<ProjectUserDto[]> {
+  ): Promise<ProjectUser[]> {
     return this.rmq.findAll(auth.project.id);
   }
 
   @UseGuards(BearerAuthGuard)
-  @Mutation(() => ProjectUserDto)
+  @Mutation(() => ProjectUser)
   updateProjectUser(
     @BearerAuthDecorator() auth: Required<BearerAuth>,
-    @Args() payload: UpdateProjectUserDto,
-  ): Promise<ProjectUserDto> {
+    @Args() payload: UpdateProjectUserArgs,
+  ): Promise<ProjectUser> {
     return this.rmq.update(auth.project.id, payload);
   }
 
   @UseGuards(BearerAuthGuard)
-  @Mutation(() => ProjectUserDto)
+  @Mutation(() => ProjectUser)
   removeProjectUser(
     @BearerAuthDecorator() auth: Required<BearerAuth>,
     @Args('userId', { type: () => Int }) userId: number,
-  ): Promise<ProjectUserDto> {
+  ): Promise<ProjectUser> {
     return this.rmq.remove(auth.project.id, userId);
   }
 }

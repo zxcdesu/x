@@ -1,14 +1,14 @@
 import { Injectable } from '@nestjs/common';
 import { RmqService } from '@zxcdesu/util-rmq';
 import { TokenDto } from '../auth/dto/token.dto';
-import { CreateProjectDto } from './dto/create-project.dto';
-import { ProjectDto } from './dto/project.dto';
-import { UpdateProjectDto } from './dto/update-project.dto';
+import { CreateProjectArgs } from './dto/create-project.args';
+import { Project } from './dto/project.entity';
+import { UpdateProjectArgs } from './dto/update-project.args';
 
 @Injectable()
 export class ProjectRmq extends RmqService {
-  create(userId: number, payload: CreateProjectDto) {
-    return this.request<ProjectDto>({
+  create(userId: number, payload: CreateProjectArgs) {
+    return this.request<Project>({
       exchange: 'auth',
       routingKey: 'createProject',
       payload: {
@@ -19,7 +19,7 @@ export class ProjectRmq extends RmqService {
   }
 
   findOne(userId: number, id: number) {
-    return this.request<ProjectDto>({
+    return this.request<Project>({
       exchange: 'auth',
       routingKey: 'findOneProject',
       payload: {
@@ -30,7 +30,7 @@ export class ProjectRmq extends RmqService {
   }
 
   findAll(userId: number) {
-    return this.request<ProjectDto[]>({
+    return this.request<Project[]>({
       exchange: 'auth',
       routingKey: 'findAllProjects',
       payload: {
@@ -39,8 +39,8 @@ export class ProjectRmq extends RmqService {
     });
   }
 
-  update(userId: number, id: number, payload: UpdateProjectDto) {
-    return this.request<ProjectDto>({
+  update(userId: number, id: number, payload: UpdateProjectArgs) {
+    return this.request<Project>({
       exchange: 'auth',
       routingKey: 'updateProject',
       payload: {
@@ -52,7 +52,7 @@ export class ProjectRmq extends RmqService {
   }
 
   remove(userId: number, id: number) {
-    return this.request<ProjectDto>({
+    return this.request<Project>({
       exchange: 'auth',
       routingKey: 'removeProject',
       payload: {

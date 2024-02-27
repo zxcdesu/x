@@ -1,12 +1,13 @@
 import { RabbitPayload } from '@golevelup/nestjs-rabbitmq';
 import { Controller, ParseIntPipe, SerializeOptions } from '@nestjs/common';
+import {
+  CreateUserDto,
+  UpdateUserDto,
+  UserDto,
+  UserService,
+} from '@zxcdesu/data-access-user';
+import { SignInUserDto, UserAuthService } from '@zxcdesu/feature-user-auth';
 import { RmqService } from '@zxcdesu/util-rmq';
-import { CreateUserDto } from './dto/create-user.dto';
-import { SignInUserDto } from './dto/sign-in-user.dto';
-import { UpdateUserDto } from './dto/update-user.dto';
-import { UserDto } from './dto/user.dto';
-import { UserAuthService } from './user-auth.service';
-import { UserService } from './user.service';
 
 @Controller()
 export class UserController {

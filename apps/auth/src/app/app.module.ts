@@ -8,20 +8,18 @@ import {
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { APP_INTERCEPTOR, APP_PIPE } from '@nestjs/core';
 import { JwtModule } from '@nestjs/jwt';
+import { DataAccessProjectModule } from '@zxcdesu/data-access-project';
+import { DataAccessProjectUserModule } from '@zxcdesu/data-access-project-user';
+import { DataAccessUserModule } from '@zxcdesu/data-access-user';
+import { FeatureInviteUserToProjectModule } from '@zxcdesu/feature-invite-user-to-project';
+import { FeatureProjectAuthModule } from '@zxcdesu/feature-project-auth';
+import { FeatureUserAuthModule } from '@zxcdesu/feature-user-auth';
 import joi from 'joi';
 import { URL } from 'node:url';
-import { InviteProjectUserService } from './invite/invite-project-user.service';
 import { InviteController } from './invite/invite.controller';
-import { InviteService } from './invite/invite.service';
-import { PrismaService } from './prisma.service';
 import { ProjectUserController } from './project-user/project-user.controller';
-import { ProjectUserService } from './project-user/project-user.service';
-import { ProjectAuthService } from './project/project-auth.service';
 import { ProjectController } from './project/project.controller';
-import { ProjectService } from './project/project.service';
-import { UserAuthService } from './user/user-auth.service';
 import { UserController } from './user/user.controller';
-import { UserService } from './user/user.service';
 
 @Module({
   imports: [
@@ -71,6 +69,12 @@ import { UserService } from './user/user.service';
       },
       inject: [ConfigService],
     }),
+    DataAccessProjectModule,
+    DataAccessProjectUserModule,
+    DataAccessUserModule,
+    FeatureInviteUserToProjectModule,
+    FeatureProjectAuthModule,
+    FeatureUserAuthModule,
   ],
   controllers: [
     InviteController,
@@ -79,7 +83,6 @@ import { UserService } from './user/user.service';
     UserController,
   ],
   providers: [
-    PrismaService,
     {
       provide: APP_INTERCEPTOR,
       useClass: ClassSerializerInterceptor,
@@ -91,13 +94,6 @@ import { UserService } from './user/user.service';
         transform: true,
       }),
     },
-    InviteProjectUserService,
-    InviteService,
-    ProjectAuthService,
-    ProjectService,
-    ProjectUserService,
-    UserAuthService,
-    UserService,
   ],
 })
 export class AppModule {}

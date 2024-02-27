@@ -4,44 +4,44 @@ import { BearerAuthDecorator } from '../auth/bearer-auth.decorator';
 import { BearerAuthGuard } from '../auth/bearer-auth.guard';
 import { BearerAuth } from '../auth/bearer-auth.interface';
 import { TokenDto } from '../auth/dto/token.dto';
-import { CreateUserDto } from './dto/create-user.dto';
-import { SignInUserDto } from './dto/sign-in-user.dto';
-import { UpdateUserDto } from './dto/update-user.dto';
-import { UserDto } from './dto/user.dto';
+import { CreateUserArgs } from './dto/create-user.args';
+import { SignInUserArgs } from './dto/sign-in-user.args';
+import { UpdateUserArgs } from './dto/update-user.args';
+import { User } from './dto/user.entity';
 import { UserRmq } from './user.rmq';
 
 @Resolver()
 export class UserResolver {
   constructor(private readonly rmq: UserRmq) {}
 
-  @Mutation(() => UserDto)
-  createUser(@Args() payload: CreateUserDto): Promise<UserDto> {
+  @Mutation(() => User)
+  createUser(@Args() payload: CreateUserArgs): Promise<User> {
     return this.rmq.create(payload);
   }
 
   @UseGuards(BearerAuthGuard)
-  @Query(() => UserDto)
-  user(@BearerAuthDecorator() auth: BearerAuth): Promise<UserDto> {
+  @Query(() => User)
+  user(@BearerAuthDecorator() auth: BearerAuth): Promise<User> {
     return this.rmq.findOne(auth.id);
   }
 
   @UseGuards(BearerAuthGuard)
-  @Mutation(() => UserDto)
+  @Mutation(() => User)
   updateUser(
     @BearerAuthDecorator() auth: BearerAuth,
-    @Args() payload: UpdateUserDto,
-  ): Promise<UserDto> {
+    @Args() payload: UpdateUserArgs,
+  ): Promise<User> {
     return this.rmq.update(auth.id, payload);
   }
 
   @UseGuards(BearerAuthGuard)
-  @Mutation(() => UserDto)
-  removeUser(@BearerAuthDecorator() auth: BearerAuth): Promise<UserDto> {
+  @Mutation(() => User)
+  removeUser(@BearerAuthDecorator() auth: BearerAuth): Promise<User> {
     return this.rmq.remove(auth.id);
   }
 
   @Mutation(() => TokenDto)
-  signIn(@Args() payload: SignInUserDto): Promise<TokenDto> {
+  signIn(@Args() payload: SignInUserArgs): Promise<TokenDto> {
     return this.rmq.signIn(payload);
   }
 }

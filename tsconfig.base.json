@@ -18,7 +18,27 @@
       "@zxcdesu/data-access-admin": [
         "libs/admin/data-access-admin/src/index.ts"
       ],
+      "@zxcdesu/data-access-invite": [
+        "libs/auth/data-access-invite/src/index.ts"
+      ],
+      "@zxcdesu/data-access-project": [
+        "libs/auth/data-access-project/src/index.ts"
+      ],
+      "@zxcdesu/data-access-project-user": [
+        "libs/auth/data-access-project-user/src/index.ts"
+      ],
+      "@zxcdesu/data-access-user": ["libs/auth/data-access-user/src/index.ts"],
+      "@zxcdesu/feature-invite-user-to-project": [
+        "libs/auth/feature-invite-user-to-project/src/index.ts"
+      ],
+      "@zxcdesu/feature-project-auth": [
+        "libs/auth/feature-project-auth/src/index.ts"
+      ],
+      "@zxcdesu/feature-user-auth": [
+        "libs/auth/feature-user-auth/src/index.ts"
+      ],
       "@zxcdesu/prisma-admin": ["libs/admin/prisma-admin/src/index.ts"],
+      "@zxcdesu/prisma-auth": ["libs/auth/prisma-auth/src/index.ts"],
       "@zxcdesu/util-gql": ["libs/shared/util-gql/src/index.ts"],
       "@zxcdesu/util-http": ["libs/shared/util-http/src/index.ts"],
       "@zxcdesu/util-project": ["libs/auth/util-project/src/index.ts"],

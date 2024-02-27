@@ -1,13 +1,13 @@
 import { Injectable } from '@nestjs/common';
 import { RmqService } from '@zxcdesu/util-rmq';
-import { CreateInviteDto } from './dto/create-invite.dto';
+import { CreateInviteArgs } from './dto/create-invite.args';
 
 @Injectable()
 export class InviteRmq extends RmqService {
-  create(projectId: number, payload: CreateInviteDto) {
+  invite(projectId: number, payload: CreateInviteArgs) {
     return this.request<boolean>({
       exchange: 'auth',
-      routingKey: 'inviteProjectUser',
+      routingKey: 'inviteUserToProject',
       payload: {
         projectId,
         ...payload,

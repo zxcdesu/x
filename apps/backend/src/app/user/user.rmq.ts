@@ -1,15 +1,15 @@
 import { Injectable } from '@nestjs/common';
 import { RmqService } from '@zxcdesu/util-rmq';
 import { TokenDto } from '../auth/dto/token.dto';
-import { CreateUserDto } from './dto/create-user.dto';
-import { SignInUserDto } from './dto/sign-in-user.dto';
-import { UpdateUserDto } from './dto/update-user.dto';
-import { UserDto } from './dto/user.dto';
+import { CreateUserArgs } from './dto/create-user.args';
+import { SignInUserArgs } from './dto/sign-in-user.args';
+import { UpdateUserArgs } from './dto/update-user.args';
+import { User } from './dto/user.entity';
 
 @Injectable()
 export class UserRmq extends RmqService {
-  create(payload: CreateUserDto) {
-    return this.request<UserDto>({
+  create(payload: CreateUserArgs) {
+    return this.request<User>({
       exchange: 'auth',
       routingKey: 'createUser',
       payload,
@@ -17,7 +17,7 @@ export class UserRmq extends RmqService {
   }
 
   findOne(id: number) {
-    return this.request<UserDto>({
+    return this.request<User>({
       exchange: 'auth',
       routingKey: 'findOneUser',
       payload: {
@@ -26,8 +26,8 @@ export class UserRmq extends RmqService {
     });
   }
 
-  update(id: number, payload: UpdateUserDto) {
-    return this.request<UserDto>({
+  update(id: number, payload: UpdateUserArgs) {
+    return this.request<User>({
       exchange: 'auth',
       routingKey: 'updateUser',
       payload: {
@@ -38,7 +38,7 @@ export class UserRmq extends RmqService {
   }
 
   remove(id: number) {
-    return this.request<UserDto>({
+    return this.request<User>({
       exchange: 'auth',
       routingKey: 'removeUser',
       payload: {
@@ -47,7 +47,7 @@ export class UserRmq extends RmqService {
     });
   }
 
-  signIn(payload: SignInUserDto) {
+  signIn(payload: SignInUserArgs) {
     return this.request<TokenDto>({
       exchange: 'auth',
       routingKey: 'signInUser',

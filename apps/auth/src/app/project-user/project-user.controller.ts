@@ -1,11 +1,13 @@
 import { RabbitPayload } from '@golevelup/nestjs-rabbitmq';
 import { Controller, SerializeOptions } from '@nestjs/common';
+import {
+  ProjectUserDto,
+  ProjectUserService,
+  UpdateProjectUserDto,
+} from '@zxcdesu/data-access-project-user';
 import { ProjectId } from '@zxcdesu/util-project';
 import { RmqService } from '@zxcdesu/util-rmq';
 import { UserId } from '@zxcdesu/util-user';
-import { ProjectUserDto } from './dto/project-user.dto';
-import { UpdateProjectUserDto } from './dto/update-project-user.dto';
-import { ProjectUserService } from './project-user.service';
 
 @Controller()
 export class ProjectUserController {
