@@ -1,5 +1,4 @@
 import { RabbitMQModule } from '@golevelup/nestjs-rabbitmq';
-import { HttpModule } from '@nestjs/axios';
 import {
   ClassSerializerInterceptor,
   Module,
@@ -7,15 +6,13 @@ import {
 } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { APP_INTERCEPTOR, APP_PIPE } from '@nestjs/core';
+import { DataAccessSubscriptionModule } from '@zxcdesu/data-access-subscription';
+import { DataAccessWalletModule } from '@zxcdesu/data-access-wallet';
+import { FeaturePaymentProviderModule } from '@zxcdesu/feature-payment-provider';
 import joi from 'joi';
 import { PaymentController } from './payment/payment.controller';
-import { PaymentRepository } from './payment/payment.repository';
-import { PaymentService } from './payment/payment.service';
-import { PrismaService } from './prisma.service';
 import { SubscriptionController } from './subscription/subscription.controller';
-import { SubscriptionService } from './subscription/subscription.service';
 import { WalletController } from './wallet/wallet.controller';
-import { WalletService } from './wallet/wallet.service';
 
 @Module({
   imports: [
@@ -46,16 +43,21 @@ import { WalletService } from './wallet/wallet.service';
         },
       }),
     }),
-    HttpModule.register({
-      headers: {
-        'User-Agent':
-          'Mozilla/5.0 (compatible; PaymentService/1.0; +https://en.wikipedia.org/wiki/Webhook)',
-      },
+    DataAccessSubscriptionModule,
+    DataAccessWalletModule,
+    FeaturePaymentProviderModule.forRootAsync({
+      useFactory: (configService: ConfigService) => ({
+        yookassa: {
+          shopId: configService.getOrThrow<string>('YOOKASSA_SHOP_ID'),
+          token: configService.getOrThrow<string>('YOOKASSA_TOKEN'),
+          returnUrl: configService.getOrThrow<string>('YOOKASSA_RETURN_URL'),
+        },
+      }),
+      inject: [ConfigService],
     }),
   ],
   controllers: [PaymentController, SubscriptionController, WalletController],
   providers: [
-    PrismaService,
     {
       provide: APP_INTERCEPTOR,
       useClass: ClassSerializerInterceptor,
@@ -67,10 +69,6 @@ import { WalletService } from './wallet/wallet.service';
         transform: true,
       }),
     },
-    PaymentRepository,
-    PaymentService,
-    SubscriptionService,
-    WalletService,
   ],
 })
 export class AppModule {}

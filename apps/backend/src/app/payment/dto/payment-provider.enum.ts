@@ -1,9 +1,8 @@
 import { registerEnumType } from '@nestjs/graphql';
-
-export enum PaymentProvider {
-  Yookassa = 'Yookassa',
-}
+import { PaymentProvider } from '@zxcdesu/prisma-billing';
 
 registerEnumType(PaymentProvider, {
   name: 'PaymentProvider',
 });
+
+export { PaymentProvider };

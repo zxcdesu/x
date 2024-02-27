@@ -1,13 +1,13 @@
 import { Injectable } from '@nestjs/common';
 import { RmqService } from '@zxcdesu/util-rmq';
-import { CreateSubscriptionDto } from './dto/create-subscription.dto';
-import { SubscriptionDto } from './dto/subscription.dto';
-import { UpdateSubscriptionDto } from './dto/update-subscription.dto';
+import { CreateSubscriptionArgs } from './dto/create-subscription.args';
+import { SubscriptionObject } from './dto/subscription.object';
+import { UpdateSubscriptionArgs } from './dto/update-subscription.args';
 
 @Injectable()
 export class SubscriptionRmq extends RmqService {
-  create(projectId: number, payload: CreateSubscriptionDto) {
-    return this.request<SubscriptionDto>({
+  create(projectId: number, payload: CreateSubscriptionArgs) {
+    return this.request<SubscriptionObject>({
       exchange: 'billing',
       routingKey: 'createSubscription',
       payload: {
@@ -18,7 +18,7 @@ export class SubscriptionRmq extends RmqService {
   }
 
   findOne(projectId: number) {
-    return this.request<SubscriptionDto>({
+    return this.request<SubscriptionObject>({
       exchange: 'billing',
       routingKey: 'findOneSubscription',
       payload: {
@@ -27,8 +27,8 @@ export class SubscriptionRmq extends RmqService {
     });
   }
 
-  update(projectId: number, payload: UpdateSubscriptionDto) {
-    return this.request<SubscriptionDto>({
+  update(projectId: number, payload: UpdateSubscriptionArgs) {
+    return this.request<SubscriptionObject>({
       exchange: 'billing',
       routingKey: 'updateSubscription',
       payload: {
@@ -39,7 +39,7 @@ export class SubscriptionRmq extends RmqService {
   }
 
   remove(projectId: number) {
-    return this.request<SubscriptionDto>({
+    return this.request<SubscriptionObject>({
       exchange: 'billing',
       routingKey: 'removeSubscription',
       payload: {

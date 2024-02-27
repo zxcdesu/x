@@ -1,12 +1,13 @@
 import { RabbitPayload } from '@golevelup/nestjs-rabbitmq';
 import { Controller, SerializeOptions } from '@nestjs/common';
+import {
+  CreateWalletDto,
+  UpdateWalletDto,
+  WalletDto,
+  WalletService,
+} from '@zxcdesu/data-access-wallet';
 import { ProjectId } from '@zxcdesu/util-project';
 import { RmqService } from '@zxcdesu/util-rmq';
-import { CreateWalletDto } from './dto/create-wallet.dto';
-import { UpdateWalletDto } from './dto/update-wallet.dto';
-import { WalletDto } from './dto/wallet.dto';
-import { WalletService } from './wallet.service';
-
 @Controller()
 export class WalletController {
   constructor(private readonly walletService: WalletService) {}
