@@ -1,15 +1,21 @@
 import { RabbitPayload } from '@golevelup/nestjs-rabbitmq';
 import { Controller, ParseIntPipe, SerializeOptions } from '@nestjs/common';
+import {
+  CreateMailingDto,
+  MailingDto,
+  MailingService,
+  UpdateMailingDto,
+} from '@zxcdesu/data-access-mailing';
+import { MailingSchedulerService } from '@zxcdesu/feature-mailing-scheduler';
 import { ProjectId } from '@zxcdesu/util-project';
 import { RmqService } from '@zxcdesu/util-rmq';
-import { CreateMailingDto } from './dto/create-mailing.dto';
-import { MailingDto } from './dto/mailing.dto';
-import { UpdateMailingDto } from './dto/update-mailing.dto';
-import { MailingService } from './mailing.service';
 
 @Controller()
 export class MailingController {
-  constructor(private readonly mailingService: MailingService) {}
+  constructor(
+    private readonly mailingService: MailingService,
+    private readonly mailingSchedulerService: MailingSchedulerService,
+  ) {}
 
   @RmqService.rpc({
     exchange: 'mailings',
@@ -19,11 +25,13 @@ export class MailingController {
   @SerializeOptions({
     type: MailingDto,
   })
-  create(
+  async create(
     @ProjectId() projectId: number,
     @RabbitPayload() payload: CreateMailingDto,
   ): Promise<MailingDto> {
-    return this.mailingService.create(projectId, payload);
+    return this.mailingSchedulerService.start(
+      await this.mailingService.create(projectId, payload),
+    );
   }
 
   @RmqService.rpc({
@@ -61,12 +69,14 @@ export class MailingController {
   @SerializeOptions({
     type: MailingDto,
   })
-  update(
+  async update(
     @ProjectId() projectId: number,
     @RabbitPayload('id', ParseIntPipe) id: number,
     @RabbitPayload() payload: UpdateMailingDto,
   ): Promise<MailingDto> {
-    return this.mailingService.update(projectId, id, payload);
+    return this.mailingSchedulerService.start(
+      await this.mailingService.update(projectId, id, payload),
+    );
   }
 
   @RmqService.rpc({
@@ -77,10 +87,12 @@ export class MailingController {
   @SerializeOptions({
     type: MailingDto,
   })
-  remove(
+  async remove(
     @ProjectId() projectId: number,
     @RabbitPayload('id', ParseIntPipe) id: number,
   ): Promise<MailingDto> {
-    return this.mailingService.remove(projectId, id);
+    return this.mailingSchedulerService.stop(
+      await this.mailingService.remove(projectId, id),
+    );
   }
 }

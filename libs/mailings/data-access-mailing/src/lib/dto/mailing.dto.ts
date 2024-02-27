@@ -1,5 +1,5 @@
+import { Mailing, MailingStatus } from '@zxcdesu/prisma-mailings';
 import { Exclude } from 'class-transformer';
-import { Mailing, MailingStatus } from '../../prisma.service';
 
 export class MailingDto implements Mailing {
   id: number;

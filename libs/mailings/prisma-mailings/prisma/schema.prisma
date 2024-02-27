@@ -1,0 +1,60 @@
+generator client {
+  provider      = "prisma-client-js"
+  binaryTargets = ["native", "linux-musl-openssl-3.0.x"]
+  output        = "./generated"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum MailingStatus {
+  Disabled
+  Scheduled
+  Active
+  Finished
+  Failed
+}
+
+model Mailing {
+  id           Int           @id @default(autoincrement())
+  projectId    Int
+  name         String
+  description  String        @default("")
+  color        String
+  channelId    Int
+  tagIds       Int[]
+  hsmIds       Int[]
+  status       MailingStatus @default(Disabled)
+  failedReason String?
+  scheduledAt  DateTime?
+  jobs         MailingJob[]
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+
+  @@index([projectId])
+  @@index([scheduledAt])
+}
+
+enum MailingJobStatus {
+  Scheduled
+  Active
+  Finished
+  Canceled
+  Failed
+}
+
+model MailingJob {
+  id           Int              @id @default(autoincrement())
+  mailingId    Int
+  mailing      Mailing          @relation(fields: [mailingId], references: [id], onDelete: Cascade)
+  contactId    Int
+  chatId       Int
+  messageId    Int?
+  variables    Json             @default("{}")
+  status       MailingJobStatus @default(Scheduled)
+  failedReason String?
+
+  @@index([mailingId])
+}

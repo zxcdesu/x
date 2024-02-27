@@ -27,6 +27,12 @@
       "@zxcdesu/data-access-invite": [
         "libs/auth/data-access-invite/src/index.ts"
       ],
+      "@zxcdesu/data-access-mailing": [
+        "libs/mailings/data-access-mailing/src/index.ts"
+      ],
+      "@zxcdesu/data-access-mailing-job": [
+        "libs/mailings/data-access-mailing-job/src/index.ts"
+      ],
       "@zxcdesu/data-access-payment": [
         "libs/billing/data-access-payment/src/index.ts"
       ],
@@ -49,6 +55,12 @@
       "@zxcdesu/feature-invite-user-to-project": [
         "libs/auth/feature-invite-user-to-project/src/index.ts"
       ],
+      "@zxcdesu/feature-mailing-scheduler": [
+        "libs/mailings/feature-mailing-scheduler/src/index.ts"
+      ],
+      "@zxcdesu/feature-mailing-worker": [
+        "libs/mailings/feature-mailing-worker/src/index.ts"
+      ],
       "@zxcdesu/feature-payment-provider": [
         "libs/billing/feature-payment-provider/src/index.ts"
       ],
@@ -67,6 +79,9 @@
       "@zxcdesu/prisma-history": ["libs/history/prisma-history/src/index.ts"],
       "@zxcdesu/prisma-integrations": [
         "libs/integrations/prisma-integrations/src/index.ts"
+      ],
+      "@zxcdesu/prisma-mailings": [
+        "libs/mailings/prisma-mailings/src/index.ts"
       ],
       "@zxcdesu/util-gql": ["libs/shared/util-gql/src/index.ts"],
       "@zxcdesu/util-http": ["libs/shared/util-http/src/index.ts"],

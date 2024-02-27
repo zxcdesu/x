@@ -6,13 +6,11 @@ import {
 } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { APP_INTERCEPTOR, APP_PIPE } from '@nestjs/core';
-import { ScheduleModule } from '@nestjs/schedule';
+import { DataAccessMailingModule } from '@zxcdesu/data-access-mailing';
+import { FeatureMailingSchedulerModule } from '@zxcdesu/feature-mailing-scheduler';
 import joi from 'joi';
 import { MailingWorkerController } from './mailing-worker/mailing-worker.controller';
-import { MailingWorkerService } from './mailing-worker/mailing-worker.service';
 import { MailingController } from './mailing/mailing.controller';
-import { MailingService } from './mailing/mailing.service';
-import { PrismaService } from './prisma.service';
 
 @Module({
   imports: [
@@ -34,7 +32,7 @@ import { PrismaService } from './prisma.service';
             type: 'topic',
           },
           {
-            name: 'mailings.worker',
+            name: 'mailings.jobs',
             type: 'topic',
           },
         ],
@@ -44,11 +42,11 @@ import { PrismaService } from './prisma.service';
         },
       }),
     }),
-    ScheduleModule.forRoot(),
+    DataAccessMailingModule,
+    FeatureMailingSchedulerModule,
   ],
   controllers: [MailingController, MailingWorkerController],
   providers: [
-    PrismaService,
     {
       provide: APP_INTERCEPTOR,
       useClass: ClassSerializerInterceptor,
@@ -60,8 +58,6 @@ import { PrismaService } from './prisma.service';
         transform: true,
       }),
     },
-    MailingService,
-    MailingWorkerService,
   ],
 })
 export class AppModule {}

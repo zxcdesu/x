@@ -1,3 +1,4 @@
+import { MailingStatus, Prisma } from '@zxcdesu/prisma-mailings';
 import { Transform } from 'class-transformer';
 import {
   IsDate,
@@ -11,7 +12,6 @@ import {
   MinDate,
   ValidateIf,
 } from 'class-validator';
-import { MailingStatus, Prisma } from '../../prisma.service';
 
 export class CreateMailingDto
   implements Omit<Prisma.MailingUncheckedCreateInput, 'projectId'>
