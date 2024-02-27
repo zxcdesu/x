@@ -1,12 +1,13 @@
 import { RabbitPayload } from '@golevelup/nestjs-rabbitmq';
 import { Controller, SerializeOptions } from '@nestjs/common';
+import {
+  CreateHistoryDto,
+  HistoryDto,
+  HistoryService,
+} from '@zxcdesu/data-access-history';
 import { ProjectId } from '@zxcdesu/util-project';
 import { RmqService } from '@zxcdesu/util-rmq';
 import { UserId } from '@zxcdesu/util-user';
-import { History } from '../prisma.service';
-import { CreateHistoryDto } from './dto/create-history.dto';
-import { HistoryDto } from './dto/history.dto';
-import { HistoryService } from './history.service';
 
 @Controller()
 export class HistoryController {
@@ -20,7 +21,7 @@ export class HistoryController {
   @SerializeOptions({
     type: HistoryDto,
   })
-  create(@RabbitPayload() payload: CreateHistoryDto): Promise<History> {
+  create(@RabbitPayload() payload: CreateHistoryDto): Promise<HistoryDto> {
     return this.historyService.create(payload);
   }
 
@@ -35,7 +36,7 @@ export class HistoryController {
   findAll(
     @ProjectId() projectId: number,
     @UserId() userId: number,
-  ): Promise<History[]> {
+  ): Promise<HistoryDto[]> {
     return this.historyService.findAll(projectId, userId);
   }
 }

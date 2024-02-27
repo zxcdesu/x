@@ -6,10 +6,9 @@ import {
 } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { APP_INTERCEPTOR, APP_PIPE } from '@nestjs/core';
+import { DataAccessHistoryModule } from '@zxcdesu/data-access-history';
 import joi from 'joi';
 import { HistoryController } from './history/history.controller';
-import { HistoryService } from './history/history.service';
-import { PrismaService } from './prisma.service';
 
 @Module({
   imports: [
@@ -37,10 +36,10 @@ import { PrismaService } from './prisma.service';
         },
       }),
     }),
+    DataAccessHistoryModule,
   ],
   controllers: [HistoryController],
   providers: [
-    PrismaService,
     {
       provide: APP_INTERCEPTOR,
       useClass: ClassSerializerInterceptor,
@@ -52,7 +51,6 @@ import { PrismaService } from './prisma.service';
         transform: true,
       }),
     },
-    HistoryService,
   ],
 })
 export class AppModule {}

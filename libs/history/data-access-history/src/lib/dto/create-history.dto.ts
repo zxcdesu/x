@@ -1,3 +1,4 @@
+import { HistoryType, Prisma } from '@zxcdesu/prisma-history';
 import {
   IsEnum,
   IsInt,
@@ -5,7 +6,6 @@ import {
   IsOptional,
   ValidateIf,
 } from 'class-validator';
-import { HistoryType, Prisma } from '../../prisma.service';
 
 export class CreateHistoryDto implements Prisma.HistoryUncheckedCreateInput {
   @ValidateIf((object: CreateHistoryDto) => object.userId == null)

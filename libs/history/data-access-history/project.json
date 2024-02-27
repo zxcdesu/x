@@ -1,21 +1,21 @@
 {
-  "name": "feature-invite-user-to-project",
+  "name": "data-access-history",
   "$schema": "../../../node_modules/nx/schemas/project-schema.json",
-  "sourceRoot": "libs/auth/feature-invite-user-to-project/src",
+  "sourceRoot": "libs/history/data-access-history/src",
   "projectType": "library",
   "targets": {
     "lint": {
       "executor": "@nx/eslint:lint",
       "outputs": ["{options.outputFile}"],
       "options": {
-        "lintFilePatterns": ["libs/auth/feature-invite-user-to-project/**/*.ts"]
+        "lintFilePatterns": ["libs/history/data-access-history/**/*.ts"]
       }
     },
     "test": {
       "executor": "@nx/jest:jest",
       "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
       "options": {
-        "jestConfig": "libs/auth/feature-invite-user-to-project/jest.config.ts",
+        "jestConfig": "libs/history/data-access-history/jest.config.ts",
         "passWithNoTests": true
       }
     }

@@ -18,6 +18,9 @@
       "@zxcdesu/data-access-admin": [
         "libs/admin/data-access-admin/src/index.ts"
       ],
+      "@zxcdesu/data-access-history": [
+        "libs/history/data-access-history/src/index.ts"
+      ],
       "@zxcdesu/data-access-invite": [
         "libs/auth/data-access-invite/src/index.ts"
       ],
@@ -52,6 +55,7 @@
       "@zxcdesu/prisma-admin": ["libs/admin/prisma-admin/src/index.ts"],
       "@zxcdesu/prisma-auth": ["libs/auth/prisma-auth/src/index.ts"],
       "@zxcdesu/prisma-billing": ["libs/billing/prisma-billing/src/index.ts"],
+      "@zxcdesu/prisma-history": ["libs/history/prisma-history/src/index.ts"],
       "@zxcdesu/util-gql": ["libs/shared/util-gql/src/index.ts"],
       "@zxcdesu/util-http": ["libs/shared/util-http/src/index.ts"],
       "@zxcdesu/util-project": ["libs/auth/util-project/src/index.ts"],

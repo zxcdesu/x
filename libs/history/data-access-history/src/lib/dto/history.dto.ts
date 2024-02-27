@@ -1,4 +1,4 @@
-import { History, HistoryType } from '../../prisma.service';
+import { History, HistoryType } from '@zxcdesu/prisma-history';
 
 export class HistoryDto implements History {
   id: number;
