@@ -2,7 +2,7 @@ import { Field, Int, ObjectType } from '@nestjs/graphql';
 import type { UserDto } from '@zxcdesu/data-access-user';
 
 @ObjectType()
-export class User
+export class UserObject
   implements Omit<UserDto, 'password' | 'createdAt' | 'updatedAt'>
 {
   @Field(() => Int)

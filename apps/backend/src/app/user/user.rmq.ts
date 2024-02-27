@@ -4,12 +4,12 @@ import { TokenDto } from '../auth/dto/token.dto';
 import { CreateUserArgs } from './dto/create-user.args';
 import { SignInUserArgs } from './dto/sign-in-user.args';
 import { UpdateUserArgs } from './dto/update-user.args';
-import { User } from './dto/user.entity';
+import { UserObject } from './dto/user.object';
 
 @Injectable()
 export class UserRmq extends RmqService {
   create(payload: CreateUserArgs) {
-    return this.request<User>({
+    return this.request<UserObject>({
       exchange: 'auth',
       routingKey: 'createUser',
       payload,
@@ -17,7 +17,7 @@ export class UserRmq extends RmqService {
   }
 
   findOne(id: number) {
-    return this.request<User>({
+    return this.request<UserObject>({
       exchange: 'auth',
       routingKey: 'findOneUser',
       payload: {
@@ -27,7 +27,7 @@ export class UserRmq extends RmqService {
   }
 
   update(id: number, payload: UpdateUserArgs) {
-    return this.request<User>({
+    return this.request<UserObject>({
       exchange: 'auth',
       routingKey: 'updateUser',
       payload: {
@@ -38,7 +38,7 @@ export class UserRmq extends RmqService {
   }
 
   remove(id: number) {
-    return this.request<User>({
+    return this.request<UserObject>({
       exchange: 'auth',
       routingKey: 'removeUser',
       payload: {
