@@ -1,0 +1,39 @@
+generator client {
+  provider      = "prisma-client-js"
+  binaryTargets = ["native", "linux-musl-openssl-3.0.x"]
+  output        = "./generated"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum IntegrationType {
+  Amocrm
+  Bitrix
+}
+
+model Integration {
+  id         Int             @id @default(autoincrement()) 
+  projectId  Int
+  type       IntegrationType
+  externalId String
+  token      Json            @default("{}")
+
+  @@index([projectId])
+}
+
+enum WebhookType {
+  ChatEvent
+  MessageEvent
+}
+
+model Webhook {
+  id        Int         @id @default(autoincrement())
+  projectId Int
+  url       String
+  type      WebhookType
+
+  @@index([projectId])
+}

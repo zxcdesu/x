@@ -1,13 +1,13 @@
 import { Injectable } from '@nestjs/common';
 import { RmqService } from '@zxcdesu/util-rmq';
-import { CreateWebhookDto } from './dto/create-webhook.dto';
-import { UpdateWebhookDto } from './dto/update-webhook.dto';
-import { WebhookDto } from './dto/webhook.dto';
+import { CreateWebhookArgs } from './dto/create-webhook.args';
+import { UpdateWebhookArgs } from './dto/update-webhook.args';
+import { WebhookObject } from './dto/webhook.object';
 
 @Injectable()
 export class WebhookRmq extends RmqService {
-  create(projectId: number, payload: CreateWebhookDto) {
-    return this.request<WebhookDto>({
+  create(projectId: number, payload: CreateWebhookArgs) {
+    return this.request<WebhookObject>({
       exchange: 'integrations',
       routingKey: 'createWebhook',
       payload: {
@@ -18,7 +18,7 @@ export class WebhookRmq extends RmqService {
   }
 
   findOne(projectId: number, id: number) {
-    return this.request<WebhookDto>({
+    return this.request<WebhookObject>({
       exchange: 'integrations',
       routingKey: 'findOneWebhook',
       payload: {
@@ -29,7 +29,7 @@ export class WebhookRmq extends RmqService {
   }
 
   findAll(projectId: number) {
-    return this.request<WebhookDto[]>({
+    return this.request<WebhookObject[]>({
       exchange: 'integrations',
       routingKey: 'findAllWebhooks',
       payload: {
@@ -38,8 +38,8 @@ export class WebhookRmq extends RmqService {
     });
   }
 
-  update(projectId: number, payload: UpdateWebhookDto) {
-    return this.request<WebhookDto>({
+  update(projectId: number, payload: UpdateWebhookArgs) {
+    return this.request<WebhookObject>({
       exchange: 'integrations',
       routingKey: 'updateWebhook',
       payload: {
@@ -50,7 +50,7 @@ export class WebhookRmq extends RmqService {
   }
 
   remove(projectId: number, id: number) {
-    return this.request<WebhookDto>({
+    return this.request<WebhookObject>({
       exchange: 'integrations',
       routingKey: 'removeWebhook',
       payload: {

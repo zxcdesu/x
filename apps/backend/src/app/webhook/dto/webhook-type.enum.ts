@@ -1,10 +1,8 @@
 import { registerEnumType } from '@nestjs/graphql';
-
-export enum WebhookType {
-  ChatEvent = 'ChatEvent',
-  MessageEvent = 'MessageEvent',
-}
+import { WebhookType } from '@zxcdesu/prisma-integrations';
 
 registerEnumType(WebhookType, {
   name: 'WebhookType',
 });
+
+export { WebhookType };

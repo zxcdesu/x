@@ -1,13 +1,17 @@
 import { RabbitPayload } from '@golevelup/nestjs-rabbitmq';
 import { Controller, ParseIntPipe, SerializeOptions } from '@nestjs/common';
+import {
+  CreateWebhookDto,
+  UpdateWebhookDto,
+  WebhookDto,
+  WebhookService,
+} from '@zxcdesu/data-access-webhook';
+import {
+  SendWebhooksDto,
+  WebhookSenderService,
+} from '@zxcdesu/feature-webhook-sender';
 import { ProjectId } from '@zxcdesu/util-project';
 import { RmqService } from '@zxcdesu/util-rmq';
-import { CreateWebhookDto } from '../webhook/dto/create-webhook.dto';
-import { UpdateWebhookDto } from '../webhook/dto/update-webhook.dto';
-import { WebhookDto } from '../webhook/dto/webhook.dto';
-import { SendWebhooksDto } from './dto/send-webhooks.dto';
-import { WebhookSenderService } from './webhook-sender.service';
-import { WebhookService } from './webhook.service';
 
 @Controller()
 export class WebhookController {

@@ -1,10 +1,8 @@
 import { registerEnumType } from '@nestjs/graphql';
-
-export enum IntegrationType {
-  Amocrm = 'Amocrm',
-  Bitrix = 'Bitrix',
-}
+import { IntegrationType } from '@zxcdesu/prisma-integrations';
 
 registerEnumType(IntegrationType, {
   name: 'IntegrationType',
 });
+
+export { IntegrationType };

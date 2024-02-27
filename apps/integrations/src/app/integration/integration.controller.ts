@@ -1,11 +1,13 @@
 import { RabbitPayload } from '@golevelup/nestjs-rabbitmq';
 import { Controller, ParseIntPipe, SerializeOptions } from '@nestjs/common';
+import {
+  CreateIntegrationDto,
+  IntegrationDto,
+  IntegrationService,
+  UpdateIntegrationDto,
+} from '@zxcdesu/data-access-integration';
 import { ProjectId } from '@zxcdesu/util-project';
 import { RmqService } from '@zxcdesu/util-rmq';
-import { CreateIntegrationDto } from './dto/create-integration.dto';
-import { IntegrationDto } from './dto/integration.dto';
-import { UpdateIntegrationDto } from './dto/update-integration.dto';
-import { IntegrationService } from './integration.service';
 
 @Controller()
 export class IntegrationController {
@@ -22,7 +24,7 @@ export class IntegrationController {
   create(
     @ProjectId() projectId: number,
     @RabbitPayload() payload: CreateIntegrationDto,
-  ) {
+  ): Promise<IntegrationDto> {
     return this.integrationService.create(projectId, payload);
   }
 
@@ -80,7 +82,7 @@ export class IntegrationController {
   remove(
     @ProjectId() projectId: number,
     @RabbitPayload('id', ParseIntPipe) id: number,
-  ) {
+  ): Promise<IntegrationDto> {
     return this.integrationService.remove(projectId, id);
   }
 }

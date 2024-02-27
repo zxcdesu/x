@@ -1,13 +1,13 @@
 import { Injectable } from '@nestjs/common';
 import { RmqService } from '@zxcdesu/util-rmq';
-import { CreateIntegrationDto } from './dto/create-integration.dto';
-import { IntegrationDto } from './dto/integration.dto';
-import { UpdateIntegrationDto } from './dto/update-integration.dto';
+import { CreateIntegrationArgs } from './dto/create-integration.args';
+import { IntegrationObject } from './dto/integration.object';
+import { UpdateIntegrationArgs } from './dto/update-integration.args';
 
 @Injectable()
 export class IntegrationRmq extends RmqService {
-  create(projectId: number, payload: CreateIntegrationDto) {
-    return this.request<IntegrationDto>({
+  create(projectId: number, payload: CreateIntegrationArgs) {
+    return this.request<IntegrationObject>({
       exchange: 'integrations',
       routingKey: 'createIntegration',
       payload: {
@@ -18,7 +18,7 @@ export class IntegrationRmq extends RmqService {
   }
 
   findOne(projectId: number, id: number) {
-    return this.request<IntegrationDto>({
+    return this.request<IntegrationObject>({
       exchange: 'integrations',
       routingKey: 'findOneIntegration',
       payload: {
@@ -29,7 +29,7 @@ export class IntegrationRmq extends RmqService {
   }
 
   findAll(projectId: number) {
-    return this.request<IntegrationDto[]>({
+    return this.request<IntegrationObject[]>({
       exchange: 'integrations',
       routingKey: 'findAllIntegrations',
       payload: {
@@ -38,8 +38,8 @@ export class IntegrationRmq extends RmqService {
     });
   }
 
-  update(projectId: number, payload: UpdateIntegrationDto) {
-    return this.request<IntegrationDto>({
+  update(projectId: number, payload: UpdateIntegrationArgs) {
+    return this.request<IntegrationObject>({
       exchange: 'integrations',
       routingKey: 'updateIntegration',
       payload: {
@@ -50,7 +50,7 @@ export class IntegrationRmq extends RmqService {
   }
 
   remove(projectId: number, id: number) {
-    return this.request<IntegrationDto>({
+    return this.request<IntegrationObject>({
       exchange: 'integrations',
       routingKey: 'removeIntegration',
       payload: {
