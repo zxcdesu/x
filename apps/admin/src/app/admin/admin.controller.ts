@@ -1,7 +1,7 @@
 import { Controller } from '@nestjs/common';
+import { AdminService } from '@zxcdesu/data-access-admin';
 import { RmqService } from '@zxcdesu/util-rmq';
 import { UserId } from '@zxcdesu/util-user';
-import { AdminService } from './admin.service';
 
 @Controller()
 export class AdminController {

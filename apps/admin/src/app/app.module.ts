@@ -6,10 +6,9 @@ import {
 } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { APP_INTERCEPTOR, APP_PIPE } from '@nestjs/core';
+import { DataAccessAdminModule } from '@zxcdesu/data-access-admin';
 import joi from 'joi';
 import { AdminController } from './admin/admin.controller';
-import { AdminService } from './admin/admin.service';
-import { PrismaService } from './prisma.service';
 
 @Module({
   imports: [
@@ -37,10 +36,10 @@ import { PrismaService } from './prisma.service';
         },
       }),
     }),
+    DataAccessAdminModule,
   ],
   controllers: [AdminController],
   providers: [
-    PrismaService,
     {
       provide: APP_INTERCEPTOR,
       useClass: ClassSerializerInterceptor,
@@ -52,7 +51,6 @@ import { PrismaService } from './prisma.service';
         transform: true,
       }),
     },
-    AdminService,
   ],
 })
 export class AppModule {}
