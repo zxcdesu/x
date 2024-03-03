@@ -33,6 +33,9 @@
       "@zxcdesu/data-access-mailing-job": [
         "libs/mailings/data-access-mailing-job/src/index.ts"
       ],
+      "@zxcdesu/data-access-notification-subscriber": [
+        "libs/notifications/data-access-notification-subscriber/src/index.ts"
+      ],
       "@zxcdesu/data-access-payment": [
         "libs/billing/data-access-payment/src/index.ts"
       ],
@@ -61,6 +64,12 @@
       "@zxcdesu/feature-mailing-worker": [
         "libs/mailings/feature-mailing-worker/src/index.ts"
       ],
+      "@zxcdesu/feature-notification-sender": [
+        "libs/notifications/feature-notification-sender/src/index.ts"
+      ],
+      "@zxcdesu/feature-notification-subscriber-provider": [
+        "libs/notifications/feature-notification-subscriber-provider/src/index.ts"
+      ],
       "@zxcdesu/feature-payment-provider": [
         "libs/billing/feature-payment-provider/src/index.ts"
       ],
@@ -82,6 +91,9 @@
       ],
       "@zxcdesu/prisma-mailings": [
         "libs/mailings/prisma-mailings/src/index.ts"
+      ],
+      "@zxcdesu/prisma-notifications": [
+        "libs/notifications/prisma-notifications/src/index.ts"
       ],
       "@zxcdesu/util-gql": ["libs/shared/util-gql/src/index.ts"],
       "@zxcdesu/util-http": ["libs/shared/util-http/src/index.ts"],

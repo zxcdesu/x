@@ -1,5 +1,4 @@
 import { RabbitMQModule } from '@golevelup/nestjs-rabbitmq';
-import { HttpModule } from '@nestjs/axios';
 import {
   ClassSerializerInterceptor,
   Module,
@@ -7,11 +6,12 @@ import {
 } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { APP_INTERCEPTOR, APP_PIPE } from '@nestjs/core';
+import { NotificationSubscriberService } from '@zxcdesu/data-access-notification-subscriber';
+import { NotificationSenderService } from '@zxcdesu/feature-notification-sender';
+import { NotificationSubscriberRepository } from '@zxcdesu/feature-notification-subscriber-provider';
 import joi from 'joi';
-import { PrismaService } from './prisma.service';
-import { SubscriberController } from './subscriber/subscriber.controller';
-import { SubscriberRepository } from './subscriber/subscriber.repository';
-import { SubscriberService } from './subscriber/subscriber.service';
+import { NotificationSenderController } from './notification-sender/notification-sender.contoller';
+import { NotificationSubscriberController } from './notification-subscriber/notification-subscriber.controller';
 
 @Module({
   imports: [
@@ -40,16 +40,12 @@ import { SubscriberService } from './subscriber/subscriber.service';
         },
       }),
     }),
-    HttpModule.register({
-      headers: {
-        'User-Agent':
-          'Mozilla/5.0 (compatible; NotificationsService/1.0; +https://en.wikipedia.org/wiki/Webhook)',
-      },
-    }),
+    NotificationSubscriberService,
+    NotificationSubscriberRepository,
+    NotificationSenderService,
   ],
-  controllers: [SubscriberController],
+  controllers: [NotificationSenderController, NotificationSubscriberController],
   providers: [
-    PrismaService,
     {
       provide: APP_INTERCEPTOR,
       useClass: ClassSerializerInterceptor,
@@ -61,8 +57,6 @@ import { SubscriberService } from './subscriber/subscriber.service';
         transform: true,
       }),
     },
-    SubscriberRepository,
-    SubscriberService,
   ],
 })
 export class AppModule {}

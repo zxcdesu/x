@@ -1,0 +1,25 @@
+generator client {
+  provider      = "prisma-client-js"
+  binaryTargets = ["native", "linux-musl-openssl-3.0.x"]
+  output        = "./generated"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum NotificationSubscriberProvider {
+  Telegram
+}
+
+model NotificationSubscriber {
+  id         Int                            @id @default(autoincrement())
+  userId     Int
+  externalId String?
+  provider   NotificationSubscriberProvider
+
+  @@unique([userId, provider])
+  @@unique([externalId, provider])
+  @@index([userId])
+}
