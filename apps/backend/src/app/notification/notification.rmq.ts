@@ -1,16 +1,16 @@
 import { Injectable } from '@nestjs/common';
+import { SendNotificationDto } from '@zxcdesu/feature-notification-sender';
 import { RmqService } from '@zxcdesu/util-rmq';
-import { NotifyDto } from './dto/notify.dto';
 
 @Injectable()
 export class NotificationRmq extends RmqService {
-  notify(userId: number, payload: NotifyDto) {
+  send(userId: number, payload: SendNotificationDto) {
     return this.request({
       exchange: 'notifications',
-      routingKey: 'notify',
+      routingKey: 'sendNotification',
       payload: {
-        ...payload,
         userId,
+        ...payload,
       },
     });
   }
