@@ -97,6 +97,7 @@
       ],
       "@zxcdesu/util-gql": ["libs/shared/util-gql/src/index.ts"],
       "@zxcdesu/util-http": ["libs/shared/util-http/src/index.ts"],
+      "@zxcdesu/util-pagination": ["libs/shared/util-pagination/src/index.ts"],
       "@zxcdesu/util-project": ["libs/auth/util-project/src/index.ts"],
       "@zxcdesu/util-rmq": ["libs/shared/util-rmq/src/index.ts"],
       "@zxcdesu/util-user": ["libs/auth/util-user/src/index.ts"]
