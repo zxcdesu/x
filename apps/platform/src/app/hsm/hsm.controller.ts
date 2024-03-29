@@ -1,11 +1,13 @@
 import { RabbitPayload } from '@golevelup/nestjs-rabbitmq';
 import { Controller, ParseIntPipe, SerializeOptions } from '@nestjs/common';
+import {
+  CreateHsmDto,
+  HsmDto,
+  HsmService,
+  UpdateHsmDto,
+} from '@zxcdesu/data-access-hsm';
 import { ProjectId } from '@zxcdesu/util-project';
 import { RmqService } from '@zxcdesu/util-rmq';
-import { CreateHsmDto } from './dto/create-hsm.dto';
-import { HsmDto } from './dto/hsm.dto';
-import { UpdateHsmDto } from './dto/update-hsm.dto';
-import { HsmService } from './hsm.service';
 
 @Controller()
 export class HsmController {

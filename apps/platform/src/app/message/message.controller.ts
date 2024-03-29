@@ -1,15 +1,21 @@
 import { RabbitPayload } from '@golevelup/nestjs-rabbitmq';
 import { Controller, ParseIntPipe, SerializeOptions } from '@nestjs/common';
+import {
+  CreateMessageDto,
+  MessageDto,
+  MessageService,
+  UpdateMessageDto,
+} from '@zxcdesu/data-access-message';
+import { MessageFactoryService } from '@zxcdesu/feature-message-factory';
 import { ProjectId } from '@zxcdesu/util-project';
 import { RmqService } from '@zxcdesu/util-rmq';
-import { CreateMessageDto } from './dto/create-message.dto';
-import { MessageDto } from './dto/message.dto';
-import { UpdateMessageDto } from './dto/update-message.dto';
-import { MessageService } from './message.service';
 
 @Controller()
 export class MessageController {
-  constructor(private readonly messageService: MessageService) {}
+  constructor(
+    private readonly messageService: MessageService,
+    private readonly messageFactoryService: MessageFactoryService,
+  ) {}
 
   @RmqService.rpc({
     exchange: 'platform',
@@ -24,7 +30,7 @@ export class MessageController {
     @RabbitPayload('chatId', ParseIntPipe) chatId: number,
     @RabbitPayload() payload: CreateMessageDto,
   ) {
-    return this.messageService.create(projectId, chatId, payload);
+    return this.messageFactoryService.create(projectId, chatId, payload);
   }
 
   @RmqService.rpc({
@@ -56,7 +62,7 @@ export class MessageController {
     @RabbitPayload('id', ParseIntPipe) id: number,
     @RabbitPayload() payload: UpdateMessageDto,
   ) {
-    return this.messageService.update(projectId, chatId, id, payload);
+    return this.messageFactoryService.update(projectId, chatId, id, payload);
   }
 
   @RmqService.rpc({
@@ -72,6 +78,6 @@ export class MessageController {
     @RabbitPayload('chatId', ParseIntPipe) chatId: number,
     @RabbitPayload('id', ParseIntPipe) id: number,
   ) {
-    return this.messageService.remove(projectId, chatId, id);
+    return this.messageFactoryService.remove(projectId, chatId, id);
   }
 }

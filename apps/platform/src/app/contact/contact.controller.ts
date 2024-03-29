@@ -1,14 +1,16 @@
 import { RabbitPayload } from '@golevelup/nestjs-rabbitmq';
 import { Controller, ParseIntPipe, SerializeOptions } from '@nestjs/common';
+import {
+  ContactDto,
+  ContactService,
+  CreateContactDto,
+  UpdateContactDto,
+} from '@zxcdesu/data-access-contact';
 import { ProjectId } from '@zxcdesu/util-project';
 import { RmqService } from '@zxcdesu/util-rmq';
 import { ContactAssignedToService } from './contact-assigned-to.service';
-import { ContactService } from './contact.service';
 import { CloseContactDto } from './dto/close-contact.dto';
-import { ContactDto } from './dto/contact.dto';
-import { CreateContactDto } from './dto/create-contact.dto';
 import { EnqueueContactDto } from './dto/enqueue-contact.dto';
-import { UpdateContactDto } from './dto/update-contact.dto';
 
 @Controller()
 export class ContactController {

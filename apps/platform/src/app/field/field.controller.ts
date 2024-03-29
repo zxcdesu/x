@@ -1,11 +1,13 @@
 import { RabbitPayload } from '@golevelup/nestjs-rabbitmq';
 import { Controller, ParseIntPipe, SerializeOptions } from '@nestjs/common';
+import {
+  CreateFieldDto,
+  FieldDto,
+  FieldService,
+  UpdateFieldDto,
+} from '@zxcdesu/data-access-field';
 import { ProjectId } from '@zxcdesu/util-project';
 import { RmqService } from '@zxcdesu/util-rmq';
-import { CreateFieldDto } from './dto/create-field.dto';
-import { FieldDto } from './dto/field.dto';
-import { UpdateFieldDto } from './dto/update-field.dto';
-import { FieldService } from './field.service';
 
 @Controller()
 export class FieldController {

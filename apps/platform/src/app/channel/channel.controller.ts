@@ -1,16 +1,22 @@
 import { RabbitPayload } from '@golevelup/nestjs-rabbitmq';
 import { Controller, ParseIntPipe, SerializeOptions } from '@nestjs/common';
+import {
+  ChannelDto,
+  ChannelService,
+  CreateChannelDto,
+  HandleChannelDto,
+  UpdateChannelDto,
+} from '@zxcdesu/data-access-channel';
+import { ChannelFactoryService } from '@zxcdesu/feature-channel-factory';
 import { ProjectId } from '@zxcdesu/util-project';
 import { RmqService } from '@zxcdesu/util-rmq';
-import { ChannelService } from './channel.service';
-import { ChannelDto } from './dto/channel.dto';
-import { CreateChannelDto } from './dto/create-channel.dto';
-import { HandleChannelDto } from './dto/handle-channel.dto';
-import { UpdateChannelDto } from './dto/update-channel.dto';
 
 @Controller()
 export class ChannelController {
-  constructor(private readonly channelService: ChannelService) {}
+  constructor(
+    private readonly channelService: ChannelService,
+    private readonly channelFactoryService: ChannelFactoryService,
+  ) {}
 
   @RmqService.rpc({
     exchange: 'platform',
@@ -20,11 +26,11 @@ export class ChannelController {
   @SerializeOptions({
     type: ChannelDto,
   })
-  create(
+  async create(
     @ProjectId() projectId: number,
     @RabbitPayload() payload: CreateChannelDto,
   ) {
-    return this.channelService.create(projectId, payload);
+    return this.channelFactoryService.create(projectId, payload);
   }
 
   @RmqService.rpc({
@@ -67,7 +73,7 @@ export class ChannelController {
     @RabbitPayload('id', ParseIntPipe) id: number,
     @RabbitPayload() payload: UpdateChannelDto,
   ) {
-    return this.channelService.update(projectId, id, payload);
+    return this.channelFactoryService.update(projectId, id, payload);
   }
 
   @RmqService.rpc({
@@ -82,7 +88,7 @@ export class ChannelController {
     @ProjectId() projectId: number,
     @RabbitPayload('id', ParseIntPipe) id: number,
   ) {
-    return this.channelService.remove(projectId, id);
+    return this.channelFactoryService.remove(projectId, id);
   }
 
   @RmqService.subscribe({
@@ -91,6 +97,6 @@ export class ChannelController {
     queue: 'handleChannel',
   })
   handle(@RabbitPayload() payload: HandleChannelDto) {
-    return this.channelService.handle(payload);
+    return this.channelFactoryService.handle(payload);
   }
 }

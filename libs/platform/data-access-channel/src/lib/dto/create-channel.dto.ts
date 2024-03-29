@@ -1,0 +1,29 @@
+import { ChannelType, Prisma } from '@zxcdesu/prisma-platform';
+import { Transform } from 'class-transformer';
+import {
+  IsDefined,
+  IsEnum,
+  IsNotEmpty,
+  IsString,
+  Length,
+} from 'class-validator';
+
+export class CreateChannelDto
+  implements Omit<Prisma.ChannelUncheckedCreateInput, 'projectId'>
+{
+  @Transform(({ value }) => value?.trim())
+  @IsString()
+  @Length(1, 120)
+  name: string;
+
+  @IsEnum(ChannelType)
+  type: ChannelType;
+
+  @IsString()
+  @IsNotEmpty()
+  externalId: string;
+
+  @IsDefined()
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  token: any;
+}

@@ -1,0 +1,27 @@
+export {
+  Approval,
+  ApprovalStatus,
+  AssignedTo,
+  AssigneeType,
+  Attachment,
+  AttachmentType,
+  Author,
+  AuthorType,
+  Channel,
+  ChannelStatus,
+  ChannelType,
+  Chat,
+  Contact,
+  ContactField,
+  ContactStatus,
+  ContactTag,
+  Content,
+  Field,
+  Hsm,
+  Message,
+  MessageStatus,
+  Prisma,
+  Tag,
+} from '../prisma/generated';
+export * from './lib/prisma-platform.module';
+export * from './lib/prisma.service';

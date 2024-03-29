@@ -18,8 +18,29 @@
       "@zxcdesu/data-access-admin": [
         "libs/admin/data-access-admin/src/index.ts"
       ],
+      "@zxcdesu/data-access-channel": [
+        "libs/platform/data-access-channel/src/index.ts"
+      ],
+      "@zxcdesu/data-access-chat": [
+        "libs/platform/data-access-chat/src/index.ts"
+      ],
+      "@zxcdesu/data-access-contact": [
+        "libs/platform/data-access-contact/src/index.ts"
+      ],
+      "@zxcdesu/data-access-contact-field": [
+        "libs/platform/data-access-contact-field/src/index.ts"
+      ],
+      "@zxcdesu/data-access-contact-tag": [
+        "libs/platform/data-access-contact-tag/src/index.ts"
+      ],
+      "@zxcdesu/data-access-field": [
+        "libs/platform/data-access-field/src/index.ts"
+      ],
       "@zxcdesu/data-access-history": [
         "libs/history/data-access-history/src/index.ts"
+      ],
+      "@zxcdesu/data-access-hsm": [
+        "libs/platform/data-access-hsm/src/index.ts"
       ],
       "@zxcdesu/data-access-integration": [
         "libs/integrations/data-access-integration/src/index.ts"
@@ -32,6 +53,9 @@
       ],
       "@zxcdesu/data-access-mailing-job": [
         "libs/mailings/data-access-mailing-job/src/index.ts"
+      ],
+      "@zxcdesu/data-access-message": [
+        "libs/platform/data-access-message/src/index.ts"
       ],
       "@zxcdesu/data-access-notification-subscriber": [
         "libs/notifications/data-access-notification-subscriber/src/index.ts"
@@ -48,12 +72,21 @@
       "@zxcdesu/data-access-subscription": [
         "libs/billing/data-access-subscription/src/index.ts"
       ],
+      "@zxcdesu/data-access-tag": [
+        "libs/platform/data-access-tag/src/index.ts"
+      ],
       "@zxcdesu/data-access-user": ["libs/auth/data-access-user/src/index.ts"],
       "@zxcdesu/data-access-wallet": [
         "libs/billing/data-access-wallet/src/index.ts"
       ],
       "@zxcdesu/data-access-webhook": [
         "libs/integrations/data-access-webhook/src/index.ts"
+      ],
+      "@zxcdesu/feature-channel-factory": [
+        "libs/platform/feature-channel-factory/src/index.ts"
+      ],
+      "@zxcdesu/feature-chat-factory": [
+        "libs/platform/feature-chat-factory/src/index.ts"
       ],
       "@zxcdesu/feature-invite-user-to-project": [
         "libs/auth/feature-invite-user-to-project/src/index.ts"
@@ -63,6 +96,9 @@
       ],
       "@zxcdesu/feature-mailing-worker": [
         "libs/mailings/feature-mailing-worker/src/index.ts"
+      ],
+      "@zxcdesu/feature-message-factory": [
+        "libs/platform/feature-message-factory/src/index.ts"
       ],
       "@zxcdesu/feature-notification-sender": [
         "libs/notifications/feature-notification-sender/src/index.ts"
@@ -75,6 +111,9 @@
       ],
       "@zxcdesu/feature-project-auth": [
         "libs/auth/feature-project-auth/src/index.ts"
+      ],
+      "@zxcdesu/feature-third-party-api-factory": [
+        "libs/platform/feature-third-party-api-factory/src/index.ts"
       ],
       "@zxcdesu/feature-user-auth": [
         "libs/auth/feature-user-auth/src/index.ts"
@@ -94,6 +133,9 @@
       ],
       "@zxcdesu/prisma-notifications": [
         "libs/notifications/prisma-notifications/src/index.ts"
+      ],
+      "@zxcdesu/prisma-platform": [
+        "libs/platform/prisma-platform/src/index.ts"
       ],
       "@zxcdesu/util-gql": ["libs/shared/util-gql/src/index.ts"],
       "@zxcdesu/util-http": ["libs/shared/util-http/src/index.ts"],

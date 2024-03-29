@@ -1,11 +1,13 @@
 import { RabbitPayload } from '@golevelup/nestjs-rabbitmq';
 import { Controller, SerializeOptions } from '@nestjs/common';
+import { ContactDto } from '@zxcdesu/data-access-contact';
+import {
+  ContactTagService,
+  CreateContactTagDto,
+  RemoveContactTagDto,
+} from '@zxcdesu/data-access-contact-tag';
 import { ProjectId } from '@zxcdesu/util-project';
 import { RmqService } from '@zxcdesu/util-rmq';
-import { ContactDto } from '../contact/dto/contact.dto';
-import { ContactTagService } from './contact-tag.service';
-import { CreateContactTagDto } from './dto/create-contact-tag.dto';
-import { RemoveContactTagDto } from './dto/remove-contact-tag.dto';
 
 @Controller()
 export class ContactTagController {

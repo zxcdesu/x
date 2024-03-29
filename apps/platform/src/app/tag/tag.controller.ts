@@ -1,11 +1,13 @@
 import { RabbitPayload } from '@golevelup/nestjs-rabbitmq';
 import { Controller, ParseIntPipe, SerializeOptions } from '@nestjs/common';
+import {
+  CreateTagDto,
+  TagDto,
+  TagService,
+  UpdateTagDto,
+} from '@zxcdesu/data-access-tag';
 import { ProjectId } from '@zxcdesu/util-project';
 import { RmqService } from '@zxcdesu/util-rmq';
-import { CreateTagDto } from './dto/create-tag.dto';
-import { TagDto } from './dto/tag.dto';
-import { UpdateTagDto } from './dto/update-tag.dto';
-import { TagService } from './tag.service';
 
 @Controller()
 export class TagController {

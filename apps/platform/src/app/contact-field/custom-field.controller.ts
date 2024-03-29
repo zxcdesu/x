@@ -1,11 +1,13 @@
 import { RabbitPayload } from '@golevelup/nestjs-rabbitmq';
 import { Controller, SerializeOptions } from '@nestjs/common';
+import { ContactDto } from '@zxcdesu/data-access-contact';
+import {
+  ContactFieldService,
+  CreateContactFieldDto,
+  RemoveContactFieldDto,
+} from '@zxcdesu/data-access-contact-field';
 import { ProjectId } from '@zxcdesu/util-project';
 import { RmqService } from '@zxcdesu/util-rmq';
-import { ContactDto } from '../contact/dto/contact.dto';
-import { ContactFieldService } from './custom-field.service';
-import { CreateContactFieldDto } from './dto/create-contact-field.dto';
-import { RemoveContactFieldDto } from './dto/remove-contact-field.dto';
 
 @Controller()
 export class CustomFieldController {
