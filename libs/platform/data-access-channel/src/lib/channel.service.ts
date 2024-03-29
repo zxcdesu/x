@@ -24,6 +24,15 @@ export class ChannelService {
     });
   }
 
+  findOneOrNull(projectId: number | undefined, id: number) {
+    return this.prismaService.channel.findUnique({
+      where: {
+        projectId,
+        id,
+      },
+    });
+  }
+
   findAll(projectId: number) {
     return this.prismaService.channel.findMany({
       where: {

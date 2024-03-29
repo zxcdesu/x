@@ -52,8 +52,19 @@ export class ChannelFactoryService {
   }
 
   async handle(payload: HandleChannelDto) {
-    throw new NotImplementedException({
-      payload,
-    });
+    const channel = await this.channelService.findOneOrNull(
+      undefined,
+      payload.channelId,
+    );
+    if (channel) {
+      return this.thirdPartyApiFactoryService
+        .factory(channel)
+        .factoryChannel()
+        .handle(payload, async (payload) => {
+          throw new NotImplementedException({
+            payload,
+          });
+        });
+    }
   }
 }
