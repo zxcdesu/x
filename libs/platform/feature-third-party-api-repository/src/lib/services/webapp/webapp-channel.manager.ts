@@ -1,33 +1,20 @@
 import { NotImplementedException } from '@nestjs/common';
 import {
   ChannelPayload,
-  CreateChannelPayload,
   HandleChannelPayload,
   RemoveChannelPayload,
-  UpdateChannelPayload,
+  UpsertChannelPayload,
 } from '../../interfaces';
 import { BaseChannelManager } from '../base-channel.manager';
 
 export class WebappChannelManager extends BaseChannelManager {
-  override create(
-    payload: CreateChannelPayload<unknown>,
-  ): Promise<ChannelPayload> {
+  override upsert(payload: UpsertChannelPayload): Promise<ChannelPayload> {
     throw new NotImplementedException({
       payload,
     });
   }
 
-  override update(
-    payload: UpdateChannelPayload<unknown>,
-  ): Promise<ChannelPayload> {
-    throw new NotImplementedException({
-      payload,
-    });
-  }
-
-  override remove(
-    payload: RemoveChannelPayload<unknown>,
-  ): Promise<ChannelPayload> {
+  override remove(payload: RemoveChannelPayload): Promise<void> {
     throw new NotImplementedException({
       payload,
     });

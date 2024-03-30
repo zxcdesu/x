@@ -19,23 +19,24 @@ export class ChatManager {
     Object.assign(
       payload,
       await this.thirdPartyApiRepository
-        .get(await this.channelService.findOne(projectId, payload.channelId))
+        .getOrThrow(
+          await this.channelService.findOne(projectId, payload.channelId),
+        )
         .factoryChat()
-        .create(payload),
+        .upsert(payload),
     );
     return this.chatService.create(projectId, payload);
   }
 
   async update(projectId: number, id: number, payload: UpdateChatDto) {
     const chat = await this.chatService.update(projectId, id, payload);
-    if (
-      typeof payload.externalId !== 'undefined' ||
-      typeof payload.channelId !== 'undefined'
-    ) {
+    if (payload.externalId || payload.channelId) {
       await this.thirdPartyApiRepository
-        .get(await this.channelService.findOne(projectId, chat.channelId))
+        .getOrThrow(
+          await this.channelService.findOne(projectId, chat.channelId),
+        )
         .factoryChat()
-        .update(chat);
+        .upsert(chat);
     }
     return chat;
   }
@@ -43,7 +44,7 @@ export class ChatManager {
   async remove(projectId: number, id: number) {
     const chat = await this.chatService.remove(projectId, id);
     await this.thirdPartyApiRepository
-      .get(await this.channelService.findOne(projectId, chat.channelId))
+      .getOrThrow(await this.channelService.findOne(projectId, chat.channelId))
       .factoryChat()
       .remove(chat);
     return chat;

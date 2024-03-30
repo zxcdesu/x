@@ -5,17 +5,27 @@ import { BaseFactory } from '../base.factory';
 import { InstagramChannelManager } from './instagram-channel.manager';
 import { InstagramChatManager } from './instagram-chat.manager';
 import { InstagramMessageManager } from './instagram-message.manager';
+import { InstagramClient } from './instagram.client';
 
 export class InstagramFactory extends BaseFactory {
   override factoryChannel(): BaseChannelManager<unknown> {
-    return new InstagramChannelManager(this.httpService);
+    return new InstagramChannelManager(
+      new InstagramClient(this.options, this.httpService),
+      this.configService,
+    );
   }
 
   override factoryChat(): BaseChatManager {
-    return new InstagramChatManager(this.httpService);
+    return new InstagramChatManager(
+      new InstagramClient(this.options, this.httpService),
+      this.configService,
+    );
   }
 
   override factoryMessage(): BaseMessageManager {
-    return new InstagramMessageManager(this.httpService);
+    return new InstagramMessageManager(
+      new InstagramClient(this.options, this.httpService),
+      this.configService,
+    );
   }
 }

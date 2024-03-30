@@ -1,1 +1,3 @@
-export interface RemoveChatPayload {}
+export interface RemoveChatPayload {
+  externalId: string;
+}

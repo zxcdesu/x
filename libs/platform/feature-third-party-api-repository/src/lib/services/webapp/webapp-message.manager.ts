@@ -20,7 +20,7 @@ export class WebappMessageManager extends BaseMessageManager {
     });
   }
 
-  override remove(payload: RemoveMessagePayload): Promise<MessagePayload> {
+  override remove(payload: RemoveMessagePayload): Promise<void> {
     throw new NotImplementedException({
       payload,
     });

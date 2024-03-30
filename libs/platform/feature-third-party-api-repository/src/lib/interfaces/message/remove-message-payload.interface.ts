@@ -1,1 +1,3 @@
-export interface RemoveMessagePayload {}
+export interface RemoveMessagePayload {
+  externalId: string;
+}

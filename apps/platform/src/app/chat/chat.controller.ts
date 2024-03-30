@@ -6,7 +6,7 @@ import {
   CreateChatDto,
   UpdateChatDto,
 } from '@zxcdesu/data-access-chat';
-import { ChatFactoryService } from '@zxcdesu/feature-chat-factory';
+import { ChatManager } from '@zxcdesu/feature-chat-manager';
 import { ProjectId } from '@zxcdesu/util-project';
 import { RmqService } from '@zxcdesu/util-rmq';
 
@@ -14,7 +14,7 @@ import { RmqService } from '@zxcdesu/util-rmq';
 export class ChatController {
   constructor(
     private readonly chatService: ChatService,
-    private readonly chatFactoryService: ChatFactoryService,
+    private readonly chatManager: ChatManager,
   ) {}
 
   @RmqService.rpc({
@@ -29,7 +29,7 @@ export class ChatController {
     @ProjectId() projectId: number,
     @RabbitPayload() payload: CreateChatDto,
   ) {
-    return this.chatFactoryService.create(projectId, payload);
+    return this.chatManager.create(projectId, payload);
   }
 
   @RmqService.rpc({
@@ -72,7 +72,7 @@ export class ChatController {
     @RabbitPayload('id', ParseIntPipe) id: number,
     @RabbitPayload() payload: UpdateChatDto,
   ) {
-    return this.chatFactoryService.update(projectId, id, payload);
+    return this.chatManager.update(projectId, id, payload);
   }
 
   @RmqService.rpc({
@@ -87,6 +87,6 @@ export class ChatController {
     @ProjectId() projectId: number,
     @RabbitPayload('id', ParseIntPipe) id: number,
   ) {
-    return this.chatFactoryService.remove(projectId, id);
+    return this.chatManager.remove(projectId, id);
   }
 }

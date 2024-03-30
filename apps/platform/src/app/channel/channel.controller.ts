@@ -1,5 +1,10 @@
 import { RabbitPayload } from '@golevelup/nestjs-rabbitmq';
-import { Controller, ParseIntPipe, SerializeOptions } from '@nestjs/common';
+import {
+  Controller,
+  NotImplementedException,
+  ParseIntPipe,
+  SerializeOptions,
+} from '@nestjs/common';
 import {
   ChannelDto,
   ChannelService,
@@ -7,7 +12,7 @@ import {
   HandleChannelDto,
   UpdateChannelDto,
 } from '@zxcdesu/data-access-channel';
-import { ChannelFactoryService } from '@zxcdesu/feature-channel-factory';
+import { ChannelManager } from '@zxcdesu/feature-channel-manager';
 import { ProjectId } from '@zxcdesu/util-project';
 import { RmqService } from '@zxcdesu/util-rmq';
 
@@ -15,7 +20,7 @@ import { RmqService } from '@zxcdesu/util-rmq';
 export class ChannelController {
   constructor(
     private readonly channelService: ChannelService,
-    private readonly channelFactoryService: ChannelFactoryService,
+    private readonly channelManager: ChannelManager,
   ) {}
 
   @RmqService.rpc({
@@ -30,7 +35,7 @@ export class ChannelController {
     @ProjectId() projectId: number,
     @RabbitPayload() payload: CreateChannelDto,
   ) {
-    return this.channelFactoryService.create(projectId, payload);
+    return this.channelManager.create(projectId, payload);
   }
 
   @RmqService.rpc({
@@ -73,7 +78,7 @@ export class ChannelController {
     @RabbitPayload('id', ParseIntPipe) id: number,
     @RabbitPayload() payload: UpdateChannelDto,
   ) {
-    return this.channelFactoryService.update(projectId, id, payload);
+    return this.channelManager.update(projectId, id, payload);
   }
 
   @RmqService.rpc({
@@ -88,7 +93,7 @@ export class ChannelController {
     @ProjectId() projectId: number,
     @RabbitPayload('id', ParseIntPipe) id: number,
   ) {
-    return this.channelFactoryService.remove(projectId, id);
+    return this.channelManager.remove(projectId, id);
   }
 
   @RmqService.subscribe({
@@ -96,7 +101,20 @@ export class ChannelController {
     routingKey: 'handleChannel',
     queue: 'handleChannel',
   })
-  handle(@RabbitPayload() payload: HandleChannelDto) {
-    return this.channelFactoryService.handle(payload);
+  handle(
+    @RabbitPayload('id', ParseIntPipe) id: number,
+    @RabbitPayload() payload: HandleChannelDto,
+  ) {
+    return this.channelManager.handle(
+      undefined,
+      id,
+      payload,
+      async (payload, channel) => {
+        throw new NotImplementedException({
+          payload,
+          channel,
+        });
+      },
+    );
   }
 }

@@ -22,7 +22,9 @@ export class MessageManager {
     Object.assign(
       payload,
       await this.thirdPartyApiRepository
-        .get(await this.channelService.findOne(projectId, chat.channelId))
+        .getOrThrow(
+          await this.channelService.findOne(projectId, chat.channelId),
+        )
         .factoryMessage()
         .create(payload),
     );
@@ -35,25 +37,36 @@ export class MessageManager {
     id: number,
     payload: UpdateMessageDto,
   ) {
-    const chat = await this.chatService.findOne(projectId, chatId);
-    Object.assign(
-      payload,
-      await this.thirdPartyApiRepository
-        .get(await this.channelService.findOne(projectId, chat.channelId))
-        .factoryMessage()
-        .update(
-          await this.messageService.update(projectId, chatId, id, payload),
-        ),
-    );
+    const [message, chat] = await Promise.all([
+      this.messageService.findOne(projectId, chatId, id),
+      this.chatService.findOne(projectId, chatId),
+    ]);
+    if (payload.content) {
+      Object.assign(
+        payload,
+        await this.thirdPartyApiRepository
+          .getOrThrow(
+            await this.channelService.findOne(projectId, chat.channelId),
+          )
+          .factoryMessage()
+          .update({
+            externalId: message.externalId,
+            content: payload.content,
+          }),
+      );
+    }
     return this.messageService.update(projectId, chatId, id, payload);
   }
 
   async remove(projectId: number, chatId: number, id: number) {
-    const chat = await this.chatService.findOne(projectId, chatId);
+    const [message, chat] = await Promise.all([
+      this.messageService.findOne(projectId, chatId, id),
+      this.chatService.findOne(projectId, chatId),
+    ]);
     await this.thirdPartyApiRepository
-      .get(await this.channelService.findOne(projectId, chat.channelId))
+      .getOrThrow(await this.channelService.findOne(projectId, chat.channelId))
       .factoryMessage()
-      .remove(await this.messageService.findOne(projectId, chatId, id));
+      .remove(message);
     return this.messageService.remove(projectId, chatId, id);
   }
 }

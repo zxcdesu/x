@@ -6,7 +6,7 @@ import {
   MessageService,
   UpdateMessageDto,
 } from '@zxcdesu/data-access-message';
-import { MessageFactoryService } from '@zxcdesu/feature-message-factory';
+import { MessageManager } from '@zxcdesu/feature-message-manager';
 import { ProjectId } from '@zxcdesu/util-project';
 import { RmqService } from '@zxcdesu/util-rmq';
 
@@ -14,7 +14,7 @@ import { RmqService } from '@zxcdesu/util-rmq';
 export class MessageController {
   constructor(
     private readonly messageService: MessageService,
-    private readonly messageFactoryService: MessageFactoryService,
+    private readonly messageManager: MessageManager,
   ) {}
 
   @RmqService.rpc({
@@ -30,7 +30,7 @@ export class MessageController {
     @RabbitPayload('chatId', ParseIntPipe) chatId: number,
     @RabbitPayload() payload: CreateMessageDto,
   ) {
-    return this.messageFactoryService.create(projectId, chatId, payload);
+    return this.messageManager.create(projectId, chatId, payload);
   }
 
   @RmqService.rpc({
@@ -62,7 +62,7 @@ export class MessageController {
     @RabbitPayload('id', ParseIntPipe) id: number,
     @RabbitPayload() payload: UpdateMessageDto,
   ) {
-    return this.messageFactoryService.update(projectId, chatId, id, payload);
+    return this.messageManager.update(projectId, chatId, id, payload);
   }
 
   @RmqService.rpc({
@@ -78,6 +78,6 @@ export class MessageController {
     @RabbitPayload('chatId', ParseIntPipe) chatId: number,
     @RabbitPayload('id', ParseIntPipe) id: number,
   ) {
-    return this.messageFactoryService.remove(projectId, chatId, id);
+    return this.messageManager.remove(projectId, chatId, id);
   }
 }

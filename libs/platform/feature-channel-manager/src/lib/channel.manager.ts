@@ -1,5 +1,7 @@
-import { Injectable, NotImplementedException } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
 import {
+  ChannelDto,
   ChannelService,
   CreateChannelDto,
   HandleChannelDto,
@@ -12,40 +14,45 @@ export class ChannelManager {
   constructor(
     private readonly channelService: ChannelService,
     private readonly thirdPartyApiRepository: ThirdPartyApiRepository,
+    private readonly configService: ConfigService,
   ) {}
 
   async create(projectId: number, payload: CreateChannelDto) {
+    const channel = await this.channelService.create(projectId, payload);
     Object.assign(
       payload,
       await this.thirdPartyApiRepository
-        .get(payload)
+        .getOrThrow(channel)
         .factoryChannel()
-        .create(payload),
+        .upsert({
+          gatewayUrl: this.configService.getOrThrow<string>('GATEWAY_URL'),
+          id: channel.id,
+          externalId: channel.externalId,
+        }),
     );
-    return this.channelService.create(projectId, payload);
+    return this.channelService.update(projectId, channel.id, payload);
   }
 
   async update(projectId: number, id: number, payload: UpdateChannelDto) {
     const channel = await this.channelService.findOne(projectId, id);
-    if (
-      typeof payload.externalId !== 'undefined' ||
-      typeof payload.token !== 'undefined'
-    ) {
-      Object.assign(
-        payload,
-        await this.thirdPartyApiRepository
-          .get(channel)
-          .factoryChannel()
-          .update(channel),
-      );
-    }
+    Object.assign(
+      payload,
+      await this.thirdPartyApiRepository
+        .getOrThrow(channel)
+        .factoryChannel()
+        .upsert({
+          gatewayUrl: this.configService.getOrThrow<string>('GATEWAY_URL'),
+          id: channel.id,
+          externalId: channel.externalId,
+        }),
+    );
     return this.channelService.update(projectId, id, payload);
   }
 
   async remove(projectId: number, id: number) {
     const channel = await this.channelService.remove(projectId, id);
     await this.thirdPartyApiRepository
-      .get(channel)
+      .getOrThrow(channel)
       .factoryChannel()
       .remove(channel);
     return channel;
@@ -55,17 +62,14 @@ export class ChannelManager {
     projectId: number | undefined,
     id: number,
     payload: HandleChannelDto,
+    handle: (payload: unknown, channel: ChannelDto) => Promise<void>,
   ) {
     const channel = await this.channelService.findOneOrNull(projectId, id);
     if (channel) {
       return this.thirdPartyApiRepository
-        .get(channel)
+        .getOrThrow(channel)
         .factoryChannel()
-        .handle(payload, async (payload) => {
-          throw new NotImplementedException({
-            payload,
-          });
-        });
+        .handle(payload, (payload) => handle(payload, channel));
     }
   }
 }

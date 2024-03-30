@@ -16,7 +16,7 @@ export class MessageService {
         // TODO: Благодаря Object.assign в feature-message-factory externalId и status
         // заполнятся реальными значениями
         externalId: randomUUID(),
-        status: MessageStatus.Sent,
+        status: MessageStatus.Submitted,
         ...payload,
         chat: {
           connect: {

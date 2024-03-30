@@ -1,17 +1,28 @@
-import { HttpService } from '@nestjs/axios';
+import { ConfigService } from '@nestjs/config';
 import {
   ChatPayload,
-  CreateChatPayload,
   RemoveChatPayload,
-  UpdateChatPayload,
+  UpsertChatPayload,
 } from '../interfaces';
+import { BaseClient } from './base.client';
 
 export abstract class BaseChatManager {
-  constructor(protected readonly httpService: HttpService) {}
+  constructor(
+    protected readonly client: BaseClient,
+    protected readonly configService: ConfigService,
+  ) {}
 
-  abstract create(payload: CreateChatPayload): Promise<ChatPayload>;
+  /**
+   * Для правильной инициализации чата на стороне внешнего api
+   *
+   * Например, вызов *optIn* в *gupshup*
+   */
+  abstract upsert(payload: UpsertChatPayload): Promise<ChatPayload>;
 
-  abstract update(payload: UpdateChatPayload): Promise<ChatPayload>;
-
-  abstract remove(payload: RemoveChatPayload): Promise<ChatPayload>;
+  /**
+   * Для правильной де-инициализации чата на стороне внешнего api
+   *
+   * Например, вызов *optOut* в *gupshup*
+   */
+  abstract remove(payload: RemoveChatPayload): Promise<void>;
 }

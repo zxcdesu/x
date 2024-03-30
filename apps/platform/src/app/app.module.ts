@@ -15,9 +15,9 @@ import { DataAccessFieldModule } from '@zxcdesu/data-access-field';
 import { DataAccessHsmModule } from '@zxcdesu/data-access-hsm';
 import { DataAccessMessageModule } from '@zxcdesu/data-access-message';
 import { DataAccessTagModule } from '@zxcdesu/data-access-tag';
-import { FeatureChannelFactoryModule } from '@zxcdesu/feature-channel-factory';
-import { FeatureChatFactoryModule } from '@zxcdesu/feature-chat-factory';
-import { FeatureMessageFactoryModule } from '@zxcdesu/feature-message-factory';
+import { FeatureChannelManagerModule } from '@zxcdesu/feature-channel-manager';
+import { FeatureChatManagerModule } from '@zxcdesu/feature-chat-manager';
+import { FeatureMessageManagerModule } from '@zxcdesu/feature-message-manager';
 import joi from 'joi';
 import { ChannelController } from './channel/channel.controller';
 import { ChatController } from './chat/chat.controller';
@@ -64,9 +64,9 @@ import { TagController } from './tag/tag.controller';
     DataAccessHsmModule,
     DataAccessMessageModule,
     DataAccessTagModule,
-    FeatureChannelFactoryModule,
-    FeatureChatFactoryModule,
-    FeatureMessageFactoryModule,
+    FeatureChannelManagerModule,
+    FeatureChatManagerModule,
+    FeatureMessageManagerModule,
   ],
   controllers: [
     ChannelController,

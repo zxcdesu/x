@@ -1,20 +1,31 @@
-import { HttpService } from '@nestjs/axios';
+import { ConfigService } from '@nestjs/config';
 import {
   ChannelPayload,
-  CreateChannelPayload,
   HandleChannelPayload,
   RemoveChannelPayload,
-  UpdateChannelPayload,
+  UpsertChannelPayload,
 } from '../interfaces';
+import { BaseClient } from './base.client';
 
 export abstract class BaseChannelManager<T = unknown> {
-  constructor(protected readonly httpService: HttpService) {}
+  constructor(
+    protected readonly client: BaseClient,
+    protected readonly configService: ConfigService,
+  ) {}
 
-  abstract create(payload: CreateChannelPayload): Promise<ChannelPayload>;
+  /**
+   * Для правильной инициализации канала на стороне внешнего api
+   *
+   * Например, вызов *setWebhook* в *telegram*
+   */
+  abstract upsert(payload: UpsertChannelPayload): Promise<ChannelPayload>;
 
-  abstract update(payload: UpdateChannelPayload): Promise<ChannelPayload>;
-
-  abstract remove(payload: RemoveChannelPayload): Promise<ChannelPayload>;
+  /**
+   * Для правильной де-инициализации канала на стороне внешнего api
+   *
+   * Например, вызов *removeWebhook* в *telegram*
+   */
+  abstract remove(payload: RemoveChannelPayload): Promise<void>;
 
   /**
    * Трансформация данных, полученных от стороннего api в формат платформы
