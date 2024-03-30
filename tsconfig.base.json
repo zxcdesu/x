@@ -82,11 +82,11 @@
       "@zxcdesu/data-access-webhook": [
         "libs/integrations/data-access-webhook/src/index.ts"
       ],
-      "@zxcdesu/feature-channel-factory": [
-        "libs/platform/feature-channel-factory/src/index.ts"
+      "@zxcdesu/feature-channel-manager": [
+        "libs/platform/feature-channel-manager/src/index.ts"
       ],
-      "@zxcdesu/feature-chat-factory": [
-        "libs/platform/feature-chat-factory/src/index.ts"
+      "@zxcdesu/feature-chat-manager": [
+        "libs/platform/feature-chat-manager/src/index.ts"
       ],
       "@zxcdesu/feature-invite-user-to-project": [
         "libs/auth/feature-invite-user-to-project/src/index.ts"
@@ -97,8 +97,8 @@
       "@zxcdesu/feature-mailing-worker": [
         "libs/mailings/feature-mailing-worker/src/index.ts"
       ],
-      "@zxcdesu/feature-message-factory": [
-        "libs/platform/feature-message-factory/src/index.ts"
+      "@zxcdesu/feature-message-manager": [
+        "libs/platform/feature-message-manager/src/index.ts"
       ],
       "@zxcdesu/feature-notification-sender": [
         "libs/notifications/feature-notification-sender/src/index.ts"
@@ -112,8 +112,8 @@
       "@zxcdesu/feature-project-auth": [
         "libs/auth/feature-project-auth/src/index.ts"
       ],
-      "@zxcdesu/feature-third-party-api-factory": [
-        "libs/platform/feature-third-party-api-factory/src/index.ts"
+      "@zxcdesu/feature-third-party-api-repository": [
+        "libs/platform/feature-third-party-api-repository/src/index.ts"
       ],
       "@zxcdesu/feature-user-auth": [
         "libs/auth/feature-user-auth/src/index.ts"

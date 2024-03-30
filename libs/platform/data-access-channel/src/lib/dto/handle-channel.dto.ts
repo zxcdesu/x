@@ -1,9 +1,6 @@
-import { IsDefined, IsInt } from 'class-validator';
+import { IsDefined } from 'class-validator';
 
 export class HandleChannelDto<T = unknown> {
-  @IsInt()
-  channelId: number;
-
   @IsDefined()
   value: T;
 }
