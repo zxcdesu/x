@@ -1,0 +1,39 @@
+generator client {
+  provider      = "prisma-client-js"
+  binaryTargets = ["native", "linux-musl"]
+  output          = "./generated"
+  previewFeatures = ["postgresqlExtensions", "relationJoins", "nativeDistinct"]
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Bot {
+  id          Int      @id @default(autoincrement())
+  projectId   Int
+  name        String
+  description String   @default("")
+  imageUrl    String?
+  flow        Json
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([projectId])
+}
+
+enum Category {
+  Other
+}
+
+model BotTemplate {
+  id          Int      @id @default(autoincrement())
+  name        String
+  description String
+  imageUrl    String
+  category    Category @default(Other)
+  flow        Json
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}

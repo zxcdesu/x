@@ -1,10 +1,12 @@
 import { RabbitPayload } from '@golevelup/nestjs-rabbitmq';
 import { Controller, ParseIntPipe, SerializeOptions } from '@nestjs/common';
+import {
+  BotTemplateDto,
+  BotTemplateService,
+  CreateBotTemplateDto,
+  UpdateBotTemplate,
+} from '@zxcdesu/data-access-bot-template';
 import { RmqService } from '@zxcdesu/util-rmq';
-import { BotTemplateService } from './bot-template.service';
-import { BotTemplateDto } from './dto/bot-template.dto';
-import { CreateBotTemplateDto } from './dto/create-bot-template.dto';
-import { UpdateBotTemplate } from './dto/update-bot-template.dto';
 
 @Controller()
 export class BotTemplateController {

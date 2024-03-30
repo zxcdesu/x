@@ -6,12 +6,11 @@ import {
 } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { APP_INTERCEPTOR, APP_PIPE } from '@nestjs/core';
+import { DataAccessBotModule } from '@zxcdesu/data-access-bot';
+import { DataAccessBotTemplateModule } from '@zxcdesu/data-access-bot-template';
 import joi from 'joi';
 import { BotTemplateController } from './bot-template/bot-template.controller';
-import { BotTemplateService } from './bot-template/bot-template.service';
 import { BotController } from './bot/bot.controller';
-import { BotService } from './bot/bot.service';
-import { PrismaService } from './prisma.service';
 
 @Module({
   imports: [
@@ -39,10 +38,11 @@ import { PrismaService } from './prisma.service';
         },
       }),
     }),
+    DataAccessBotModule,
+    DataAccessBotTemplateModule,
   ],
   controllers: [BotController, BotTemplateController],
   providers: [
-    PrismaService,
     {
       provide: APP_INTERCEPTOR,
       useClass: ClassSerializerInterceptor,
@@ -54,8 +54,6 @@ import { PrismaService } from './prisma.service';
         transform: true,
       }),
     },
-    BotService,
-    BotTemplateService,
   ],
 })
 export class AppModule {}
