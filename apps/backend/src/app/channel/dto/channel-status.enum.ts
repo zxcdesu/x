@@ -1,11 +1,8 @@
 import { registerEnumType } from '@nestjs/graphql';
-
-export enum ChannelStatus {
-  Connecting = 'Connecting',
-  Active = 'Active',
-  Failed = 'Failed',
-}
+import { ChannelStatus } from '@zxcdesu/prisma-platform';
 
 registerEnumType(ChannelStatus, {
   name: 'ChannelStatus',
 });
+
+export { ChannelStatus };

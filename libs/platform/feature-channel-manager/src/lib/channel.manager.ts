@@ -1,5 +1,4 @@
 import { Injectable } from '@nestjs/common';
-import { ConfigService } from '@nestjs/config';
 import {
   ChannelDto,
   ChannelService,
@@ -14,7 +13,6 @@ export class ChannelManager {
   constructor(
     private readonly channelService: ChannelService,
     private readonly thirdPartyApiRepository: ThirdPartyApiRepository,
-    private readonly configService: ConfigService,
   ) {}
 
   async create(projectId: number, payload: CreateChannelDto) {
@@ -25,9 +23,7 @@ export class ChannelManager {
         .getOrThrow(channel)
         .factoryChannel()
         .upsert({
-          gatewayUrl: this.configService.getOrThrow<string>('GATEWAY_URL'),
           id: channel.id,
-          externalId: channel.externalId,
         }),
     );
     return this.channelService.update(projectId, channel.id, payload);
@@ -41,9 +37,7 @@ export class ChannelManager {
         .getOrThrow(channel)
         .factoryChannel()
         .upsert({
-          gatewayUrl: this.configService.getOrThrow<string>('GATEWAY_URL'),
           id: channel.id,
-          externalId: channel.externalId,
         }),
     );
     return this.channelService.update(projectId, id, payload);
@@ -64,7 +58,7 @@ export class ChannelManager {
     payload: HandleChannelDto,
     handle: (payload: unknown, channel: ChannelDto) => Promise<void>,
   ) {
-    const channel = await this.channelService.findOneOrNull(projectId, id);
+    const channel = await this.channelService.findOneOrDefault(projectId, id);
     if (channel) {
       return this.thirdPartyApiRepository
         .getOrThrow(channel)

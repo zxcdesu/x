@@ -1,8 +1,7 @@
 generator client {
   provider      = "prisma-client-js"
+  output        = "./generated"
   binaryTargets = ["native", "linux-musl"]
-  output          = "./generated"
-  previewFeatures = ["postgresqlExtensions", "relationJoins", "nativeDistinct"]
 }
 
 datasource db {

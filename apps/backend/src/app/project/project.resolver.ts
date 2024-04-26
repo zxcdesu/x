@@ -1,17 +1,16 @@
 import { UseGuards } from '@nestjs/common';
-import { Args, Int, Mutation, Query, Resolver } from '@nestjs/graphql';
+import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
+import { ProjectRmq } from '@zxcdesu/data-access-project';
 import { BearerAuthDecorator } from '../auth/bearer-auth.decorator';
 import { BearerAuthGuard } from '../auth/bearer-auth.guard';
 import { BearerAuth } from '../auth/bearer-auth.interface';
-import { TokenDto } from '../auth/dto/token.dto';
 import { CreateProjectArgs } from './dto/create-project.args';
 import { ProjectObject } from './dto/project.object';
 import { UpdateProjectArgs } from './dto/update-project.args';
-import { ProjectRmq } from './project.rmq';
 
 @Resolver()
 export class ProjectResolver {
-  constructor(private readonly rmq: ProjectRmq) {}
+  constructor(private readonly rmq: ProjectRmq<ProjectObject>) {}
 
   @UseGuards(BearerAuthGuard)
   @Mutation(() => ProjectObject)
@@ -51,14 +50,5 @@ export class ProjectResolver {
     @BearerAuthDecorator() auth: Required<BearerAuth>,
   ): Promise<ProjectObject> {
     return this.rmq.remove(auth.id, auth.project.id);
-  }
-
-  @UseGuards(BearerAuthGuard)
-  @Mutation(() => TokenDto)
-  signInProject(
-    @BearerAuthDecorator() auth: BearerAuth,
-    @Args('id', { type: () => Int }) id: number,
-  ): Promise<TokenDto> {
-    return this.rmq.signIn(auth.id, id);
   }
 }

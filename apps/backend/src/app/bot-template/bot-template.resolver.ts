@@ -1,24 +1,24 @@
 import { ParseIntPipe, UseGuards } from '@nestjs/common';
 import { Args, Query, Resolver } from '@nestjs/graphql';
+import { BotTemplateRmq } from '@zxcdesu/data-access-bot-template';
 import { BearerAuthGuard } from '../auth/bearer-auth.guard';
-import { BotTemplateRmq } from './bot-template.rmq';
-import { BotTemplateDto } from './dto/bot-template.dto';
+import { BotTemplateObject } from './dto/bot-template.object';
 
 @Resolver()
 export class BotTemplateResolver {
-  constructor(private readonly rmq: BotTemplateRmq) {}
+  constructor(private readonly rmq: BotTemplateRmq<BotTemplateObject>) {}
 
   @UseGuards(BearerAuthGuard)
-  @Query(() => BotTemplateDto)
+  @Query(() => BotTemplateObject)
   botTemplateById(
     @Args('id', ParseIntPipe) id: number,
-  ): Promise<BotTemplateDto> {
+  ): Promise<BotTemplateObject> {
     return this.rmq.findOne(id);
   }
 
   @UseGuards(BearerAuthGuard)
-  @Query(() => [BotTemplateDto])
-  botTemplates(): Promise<BotTemplateDto[]> {
+  @Query(() => [BotTemplateObject])
+  botTemplates(): Promise<BotTemplateObject[]> {
     return this.rmq.findAll();
   }
 }

@@ -1,11 +1,8 @@
 import { registerEnumType } from '@nestjs/graphql';
-
-export enum ApprovalStatus {
-  Submitted = 'Submitted',
-  Approved = 'Approved',
-  Rejected = 'Rejected',
-}
+import { ApprovalStatus } from '@zxcdesu/prisma-platform';
 
 registerEnumType(ApprovalStatus, {
   name: 'ApprovalStatus',
 });
+
+export { ApprovalStatus };

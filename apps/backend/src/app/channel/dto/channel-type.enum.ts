@@ -1,14 +1,8 @@
 import { registerEnumType } from '@nestjs/graphql';
-
-export enum ChannelType {
-  Gupshup = 'Gupshup',
-  Instagram = 'Instagram',
-  Telegram = 'Telegram',
-  Viber = 'Viber',
-  Vkontakte = 'Vkontakte',
-  Web = 'Web',
-}
+import { ChannelType } from '@zxcdesu/prisma-platform';
 
 registerEnumType(ChannelType, {
   name: 'ChannelType',
 });
+
+export { ChannelType };

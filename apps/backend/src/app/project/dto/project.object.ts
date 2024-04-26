@@ -1,10 +1,9 @@
 import { Field, Int, ObjectType } from '@nestjs/graphql';
 import type { ProjectDto } from '@zxcdesu/data-access-project';
+import { StringifyDate } from '@zxcdesu/util-types';
 
 @ObjectType()
-export class ProjectObject
-  implements Omit<ProjectDto, 'createdAt' | 'updatedAt'>
-{
+export class ProjectObject implements StringifyDate<ProjectDto> {
   @Field(() => Int)
   id: number;
 

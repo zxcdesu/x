@@ -1,23 +1,22 @@
 import { RabbitPayload } from '@golevelup/nestjs-rabbitmq';
 import { Controller, ParseIntPipe, SerializeOptions } from '@nestjs/common';
+import { ProjectId } from '@zxcdesu/data-access-project';
 import {
   CreateTagDto,
   TagDto,
   TagService,
   UpdateTagDto,
 } from '@zxcdesu/data-access-tag';
-import { ProjectId } from '@zxcdesu/util-project';
-import { RmqService } from '@zxcdesu/util-rmq';
 
 @Controller()
 export class TagController {
   constructor(private readonly tagService: TagService) {}
 
-  @RmqService.rpc({
-    exchange: 'platform',
-    routingKey: 'createTag',
-    queue: 'createTag',
-  })
+  // @RmqService.rpc({
+  //   exchange: 'platform',
+  //   routingKey: 'createTag',
+  //   queue: 'createTag',
+  // })
   @SerializeOptions({
     type: TagDto,
   })
@@ -28,11 +27,11 @@ export class TagController {
     return this.tagService.create(projectId, payload);
   }
 
-  @RmqService.rpc({
-    exchange: 'platform',
-    routingKey: 'findOneTag',
-    queue: 'findOneTag',
-  })
+  // @RmqService.rpc({
+  //   exchange: 'platform',
+  //   routingKey: 'findOneTag',
+  //   queue: 'findOneTag',
+  // })
   @SerializeOptions({
     type: TagDto,
   })
@@ -43,11 +42,11 @@ export class TagController {
     return this.tagService.findOne(projectId, id);
   }
 
-  @RmqService.rpc({
-    exchange: 'platform',
-    routingKey: 'findAllTags',
-    queue: 'findAllTags',
-  })
+  // @RmqService.rpc({
+  //   exchange: 'platform',
+  //   routingKey: 'findAllTags',
+  //   queue: 'findAllTags',
+  // })
   @SerializeOptions({
     type: TagDto,
   })
@@ -55,11 +54,11 @@ export class TagController {
     return this.tagService.findAll(projectId);
   }
 
-  @RmqService.rpc({
-    exchange: 'platform',
-    routingKey: 'updateTag',
-    queue: 'updateTag',
-  })
+  // @RmqService.rpc({
+  //   exchange: 'platform',
+  //   routingKey: 'updateTag',
+  //   queue: 'updateTag',
+  // })
   @SerializeOptions({
     type: TagDto,
   })
@@ -71,11 +70,11 @@ export class TagController {
     return this.tagService.update(projectId, id, payload);
   }
 
-  @RmqService.rpc({
-    exchange: 'platform',
-    routingKey: 'removeTag',
-    queue: 'removeTag',
-  })
+  // @RmqService.rpc({
+  //   exchange: 'platform',
+  //   routingKey: 'removeTag',
+  //   queue: 'removeTag',
+  // })
   @SerializeOptions({
     type: TagDto,
   })

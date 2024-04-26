@@ -1,13 +1,8 @@
 import { registerEnumType } from '@nestjs/graphql';
-
-export enum MailingStatus {
-  Disabled = 'Disabled',
-  Scheduled = 'Scheduled',
-  Active = 'Active',
-  Finished = 'Finished',
-  Failed = 'Failed',
-}
+import { MailingStatus } from '@zxcdesu/prisma-mailings';
 
 registerEnumType(MailingStatus, {
   name: 'MailingStatus',
 });
+
+export { MailingStatus };

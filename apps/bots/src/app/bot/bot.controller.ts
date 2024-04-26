@@ -6,18 +6,17 @@ import {
   CreateBotDto,
   UpdateBotDto,
 } from '@zxcdesu/data-access-bot';
-import { ProjectId } from '@zxcdesu/util-project';
-import { RmqService } from '@zxcdesu/util-rmq';
+import { ProjectId } from '@zxcdesu/data-access-project';
 
 @Controller()
 export class BotController {
   constructor(private readonly botService: BotService) {}
 
-  @RmqService.rpc({
-    exchange: 'bots',
-    routingKey: 'createBot',
-    queue: 'createBot',
-  })
+  // @RmqService.rpc({
+  //   exchange: 'bots',
+  //   routingKey: 'createBot',
+  //   queue: 'createBot',
+  // })
   @SerializeOptions({
     type: BotDto,
   })
@@ -28,11 +27,11 @@ export class BotController {
     return this.botService.create(projectId, payload);
   }
 
-  @RmqService.rpc({
-    exchange: 'bots',
-    routingKey: 'findOneBot',
-    queue: 'findOneBot',
-  })
+  // @RmqService.rpc({
+  //   exchange: 'bots',
+  //   routingKey: 'findOneBot',
+  //   queue: 'findOneBot',
+  // })
   @SerializeOptions({
     type: BotDto,
   })
@@ -43,11 +42,11 @@ export class BotController {
     return this.botService.findOne(projectId, id);
   }
 
-  @RmqService.rpc({
-    exchange: 'bots',
-    routingKey: 'findAllBots',
-    queue: 'findAllBots',
-  })
+  // @RmqService.rpc({
+  //   exchange: 'bots',
+  //   routingKey: 'findAllBots',
+  //   queue: 'findAllBots',
+  // })
   @SerializeOptions({
     type: BotDto,
   })
@@ -55,11 +54,11 @@ export class BotController {
     return this.botService.findAll(projectId);
   }
 
-  @RmqService.rpc({
-    exchange: 'bots',
-    routingKey: 'updateBot',
-    queue: 'updateBot',
-  })
+  // @RmqService.rpc({
+  //   exchange: 'bots',
+  //   routingKey: 'updateBot',
+  //   queue: 'updateBot',
+  // })
   @SerializeOptions({
     type: BotDto,
   })
@@ -71,11 +70,11 @@ export class BotController {
     return this.botService.update(projectId, id, payload);
   }
 
-  @RmqService.rpc({
-    exchange: 'bots',
-    routingKey: 'removeBot',
-    queue: 'removeBot',
-  })
+  // @RmqService.rpc({
+  //   exchange: 'bots',
+  //   routingKey: 'removeBot',
+  //   queue: 'removeBot',
+  // })
   @SerializeOptions({
     type: BotDto,
   })

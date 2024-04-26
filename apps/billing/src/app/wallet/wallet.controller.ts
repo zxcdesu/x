@@ -1,22 +1,22 @@
 import { RabbitPayload } from '@golevelup/nestjs-rabbitmq';
 import { Controller, SerializeOptions } from '@nestjs/common';
+import { ProjectId } from '@zxcdesu/data-access-project';
 import {
   CreateWalletDto,
   UpdateWalletDto,
   WalletDto,
   WalletService,
 } from '@zxcdesu/data-access-wallet';
-import { ProjectId } from '@zxcdesu/util-project';
-import { RmqService } from '@zxcdesu/util-rmq';
+
 @Controller()
 export class WalletController {
   constructor(private readonly walletService: WalletService) {}
 
-  @RmqService.rpc({
-    exchange: 'billing',
-    routingKey: 'createWallet',
-    queue: 'createWallet',
-  })
+  // @RmqService.rpc({
+  //   exchange: 'billing',
+  //   routingKey: 'createWallet',
+  //   queue: 'createWallet',
+  // })
   @SerializeOptions({
     type: WalletDto,
   })
@@ -27,11 +27,11 @@ export class WalletController {
     return this.walletService.create(projectId, payload);
   }
 
-  @RmqService.rpc({
-    exchange: 'billing',
-    routingKey: 'findOneWallet',
-    queue: 'findOneWallet',
-  })
+  // @RmqService.rpc({
+  //   exchange: 'billing',
+  //   routingKey: 'findOneWallet',
+  //   queue: 'findOneWallet',
+  // })
   @SerializeOptions({
     type: WalletDto,
   })
@@ -39,11 +39,11 @@ export class WalletController {
     return this.walletService.findOne(projectId);
   }
 
-  @RmqService.rpc({
-    exchange: 'billing',
-    routingKey: 'updateWallet',
-    queue: 'updateWallet',
-  })
+  // @RmqService.rpc({
+  //   exchange: 'billing',
+  //   routingKey: 'updateWallet',
+  //   queue: 'updateWallet',
+  // })
   @SerializeOptions({
     type: WalletDto,
   })
@@ -54,11 +54,11 @@ export class WalletController {
     return this.walletService.update(projectId, payload);
   }
 
-  @RmqService.rpc({
-    exchange: 'billing',
-    routingKey: 'removeWallet',
-    queue: 'removeWallet',
-  })
+  // @RmqService.rpc({
+  //   exchange: 'billing',
+  //   routingKey: 'removeWallet',
+  //   queue: 'removeWallet',
+  // })
   @SerializeOptions({
     type: WalletDto,
   })

@@ -1,58 +1,58 @@
 import { ParseIntPipe, UseGuards } from '@nestjs/common';
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
+import { ChannelRmq } from '@zxcdesu/data-access-channel';
 import { BearerAuthDecorator } from '../auth/bearer-auth.decorator';
 import { BearerAuthGuard } from '../auth/bearer-auth.guard';
 import { BearerAuth } from '../auth/bearer-auth.interface';
-import { ChannelRmq } from './channel.rmq';
-import { ChannelDto } from './dto/channel.dto';
-import { CreateChannelDto } from './dto/create-channel.dto';
-import { UpdateChannelDto } from './dto/update-channel.dto';
+import { ChannelObject } from './dto/channel.object';
+import { CreateChannelArgs } from './dto/create-channel.args';
+import { UpdateChannelArgs } from './dto/update-channel.args';
 
 @Resolver()
 export class ChannelResolver {
-  constructor(private readonly rmq: ChannelRmq) {}
+  constructor(private readonly rmq: ChannelRmq<ChannelObject>) {}
 
   @UseGuards(BearerAuthGuard)
-  @Mutation(() => ChannelDto)
+  @Mutation(() => ChannelObject)
   createChannel(
     @BearerAuthDecorator() auth: Required<BearerAuth>,
-    @Args() payload: CreateChannelDto,
-  ): Promise<ChannelDto> {
+    @Args() payload: CreateChannelArgs,
+  ): Promise<ChannelObject> {
     return this.rmq.create(auth.project.id, payload);
   }
 
   @UseGuards(BearerAuthGuard)
-  @Query(() => ChannelDto)
+  @Query(() => ChannelObject)
   channelById(
     @BearerAuthDecorator() auth: Required<BearerAuth>,
     @Args('id', ParseIntPipe) id: number,
-  ): Promise<ChannelDto> {
+  ): Promise<ChannelObject> {
     return this.rmq.findOne(auth.project.id, id);
   }
 
   @UseGuards(BearerAuthGuard)
-  @Query(() => [ChannelDto])
+  @Query(() => [ChannelObject])
   channels(
     @BearerAuthDecorator() auth: Required<BearerAuth>,
-  ): Promise<ChannelDto[]> {
+  ): Promise<ChannelObject[]> {
     return this.rmq.findAll(auth.project.id);
   }
 
   @UseGuards(BearerAuthGuard)
-  @Mutation(() => ChannelDto)
+  @Mutation(() => ChannelObject)
   updateChannel(
     @BearerAuthDecorator() auth: Required<BearerAuth>,
-    @Args() payload: UpdateChannelDto,
-  ): Promise<ChannelDto> {
-    return this.rmq.update(auth.project.id, payload);
+    @Args() payload: UpdateChannelArgs,
+  ): Promise<ChannelObject> {
+    return this.rmq.update(auth.project.id, payload.id, payload);
   }
 
   @UseGuards(BearerAuthGuard)
-  @Mutation(() => ChannelDto)
+  @Mutation(() => ChannelObject)
   removeChannel(
     @BearerAuthDecorator() auth: Required<BearerAuth>,
     @Args('id', ParseIntPipe) id: number,
-  ): Promise<ChannelDto> {
+  ): Promise<ChannelObject> {
     return this.rmq.remove(auth.project.id, id);
   }
 }

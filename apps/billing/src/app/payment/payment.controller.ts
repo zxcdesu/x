@@ -1,13 +1,15 @@
 import { RabbitPayload } from '@golevelup/nestjs-rabbitmq';
 import { Controller, SerializeOptions } from '@nestjs/common';
-import { CreatePaymentDto } from '@zxcdesu/data-access-payment';
 import {
+  CreatePaymentDto,
   HandlePaymentDto,
+  PaymentRmq,
+} from '@zxcdesu/data-access-payment';
+import { ProjectId } from '@zxcdesu/data-access-project';
+import {
   PaymentProviderService,
   PaymentUrlDto,
 } from '@zxcdesu/feature-payment-provider';
-import { ProjectId } from '@zxcdesu/util-project';
-import { RmqService } from '@zxcdesu/util-rmq';
 
 @Controller()
 export class PaymentController {
@@ -15,11 +17,7 @@ export class PaymentController {
     private readonly paymentProviderService: PaymentProviderService,
   ) {}
 
-  @RmqService.rpc({
-    exchange: 'billing',
-    routingKey: 'createPayment',
-    queue: 'createPayment',
-  })
+  @PaymentRmq.create()
   @SerializeOptions({
     type: PaymentUrlDto,
   })
@@ -30,11 +28,7 @@ export class PaymentController {
     return this.paymentProviderService.create(projectId, payload);
   }
 
-  @RmqService.subscribe({
-    exchange: 'billing',
-    routingKey: 'handlePayment',
-    queue: 'handlePayment',
-  })
+  @PaymentRmq.handle()
   handle(@RabbitPayload() payload: HandlePaymentDto): Promise<void> {
     return this.paymentProviderService.handle(payload);
   }

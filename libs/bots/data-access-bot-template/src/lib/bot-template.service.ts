@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { Prisma, PrismaService } from '@zxcdesu/prisma-bots';
 import { CreateBotTemplateDto } from './dto/create-bot-template.dto';
-import { UpdateBotTemplate } from './dto/update-bot-template.dto';
+import { UpdateBotTemplateDto } from './dto/update-bot-template.dto';
 
 @Injectable()
 export class BotTemplateService {
@@ -25,7 +25,7 @@ export class BotTemplateService {
     return this.prismaService.botTemplate.findMany();
   }
 
-  update(id: number, payload: UpdateBotTemplate) {
+  update(id: number, payload: UpdateBotTemplateDto) {
     return this.prismaService.botTemplate.update({
       where: {
         id,

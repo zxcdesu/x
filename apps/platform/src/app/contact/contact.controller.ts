@@ -6,8 +6,7 @@ import {
   CreateContactDto,
   UpdateContactDto,
 } from '@zxcdesu/data-access-contact';
-import { ProjectId } from '@zxcdesu/util-project';
-import { RmqService } from '@zxcdesu/util-rmq';
+import { ProjectId } from '@zxcdesu/data-access-project';
 import { ContactAssignedToService } from './contact-assigned-to.service';
 import { CloseContactDto } from './dto/close-contact.dto';
 import { EnqueueContactDto } from './dto/enqueue-contact.dto';
@@ -19,11 +18,11 @@ export class ContactController {
     private readonly contactAssignedToService: ContactAssignedToService,
   ) {}
 
-  @RmqService.rpc({
-    exchange: 'platform',
-    routingKey: 'createContact',
-    queue: 'createContact',
-  })
+  // @RmqService.rpc({
+  //   exchange: 'platform',
+  //   routingKey: 'createContact',
+  //   queue: 'createContact',
+  // })
   @SerializeOptions({
     type: ContactDto,
   })
@@ -34,11 +33,11 @@ export class ContactController {
     return this.contactService.create(projectId, payload);
   }
 
-  @RmqService.rpc({
-    exchange: 'platform',
-    routingKey: 'findOneContact',
-    queue: 'findOneContact',
-  })
+  // @RmqService.rpc({
+  //   exchange: 'platform',
+  //   routingKey: 'findOneContact',
+  //   queue: 'findOneContact',
+  // })
   @SerializeOptions({
     type: ContactDto,
   })
@@ -49,11 +48,11 @@ export class ContactController {
     return this.contactService.findOne(projectId, id);
   }
 
-  @RmqService.rpc({
-    exchange: 'platform',
-    routingKey: 'findAllContacts',
-    queue: 'findAllContacts',
-  })
+  // @RmqService.rpc({
+  //   exchange: 'platform',
+  //   routingKey: 'findAllContacts',
+  //   queue: 'findAllContacts',
+  // })
   @SerializeOptions({
     type: ContactDto,
   })
@@ -61,11 +60,11 @@ export class ContactController {
     return this.contactService.findAll(projectId);
   }
 
-  @RmqService.rpc({
-    exchange: 'platform',
-    routingKey: 'updateContact',
-    queue: 'updateContact',
-  })
+  // @RmqService.rpc({
+  //   exchange: 'platform',
+  //   routingKey: 'updateContact',
+  //   queue: 'updateContact',
+  // })
   @SerializeOptions({
     type: ContactDto,
   })
@@ -77,11 +76,11 @@ export class ContactController {
     return this.contactService.update(projectId, id, payload);
   }
 
-  @RmqService.rpc({
-    exchange: 'platform',
-    routingKey: 'removeContact',
-    queue: 'removeContact',
-  })
+  // @RmqService.rpc({
+  //   exchange: 'platform',
+  //   routingKey: 'removeContact',
+  //   queue: 'removeContact',
+  // })
   @SerializeOptions({
     type: ContactDto,
   })
@@ -92,11 +91,11 @@ export class ContactController {
     return this.contactService.remove(projectId, id);
   }
 
-  @RmqService.rpc({
-    exchange: 'platform',
-    routingKey: 'enqueueContact',
-    queue: 'enqueueContact',
-  })
+  // @RmqService.rpc({
+  //   exchange: 'platform',
+  //   routingKey: 'enqueueContact',
+  //   queue: 'enqueueContact',
+  // })
   @SerializeOptions({
     type: ContactDto,
   })
@@ -108,11 +107,11 @@ export class ContactController {
     return this.contactAssignedToService.enqueue(projectId, id, payload);
   }
 
-  @RmqService.rpc({
-    exchange: 'platform',
-    routingKey: 'closeContact',
-    queue: 'closeContact',
-  })
+  // @RmqService.rpc({
+  //   exchange: 'platform',
+  //   routingKey: 'closeContact',
+  //   queue: 'closeContact',
+  // })
   @SerializeOptions({
     type: ContactDto,
   })

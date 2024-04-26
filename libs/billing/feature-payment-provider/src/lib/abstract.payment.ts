@@ -1,12 +1,13 @@
 import { HttpService } from '@nestjs/axios';
 import {
   CreatePaymentDto,
+  HandlePaymentDto,
   PaymentDto,
   PaymentService,
+  PaymentUrlDto,
 } from '@zxcdesu/data-access-payment';
 import { WalletService } from '@zxcdesu/data-access-wallet';
 import { PaymentStatus, PrismaService } from '@zxcdesu/prisma-billing';
-import { HandlePaymentDto, PaymentUrlDto } from './dto';
 import { PaymentProviderOptions } from './payment-provider-options.interface';
 
 export abstract class AbstractPayment<T = unknown> {

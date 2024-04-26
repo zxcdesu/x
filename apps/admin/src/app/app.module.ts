@@ -27,7 +27,7 @@ import { AdminController } from './admin/admin.controller';
         exchanges: [
           {
             name: 'admin',
-            type: 'topic',
+            type: 'direct',
           },
         ],
         prefetchCount: 1,

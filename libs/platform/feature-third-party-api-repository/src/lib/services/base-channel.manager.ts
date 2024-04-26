@@ -1,6 +1,6 @@
 import { ConfigService } from '@nestjs/config';
+import { Prisma } from '@zxcdesu/prisma-platform';
 import {
-  ChannelPayload,
   HandleChannelPayload,
   RemoveChannelPayload,
   UpsertChannelPayload,
@@ -18,7 +18,9 @@ export abstract class BaseChannelManager<T = unknown> {
    *
    * Например, вызов *setWebhook* в *telegram*
    */
-  abstract upsert(payload: UpsertChannelPayload): Promise<ChannelPayload>;
+  abstract upsert(
+    payload: UpsertChannelPayload,
+  ): Promise<Prisma.ChannelUpdateInput>;
 
   /**
    * Для правильной де-инициализации канала на стороне внешнего api

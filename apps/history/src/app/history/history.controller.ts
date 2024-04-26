@@ -5,19 +5,18 @@ import {
   HistoryDto,
   HistoryService,
 } from '@zxcdesu/data-access-history';
-import { ProjectId } from '@zxcdesu/util-project';
-import { RmqService } from '@zxcdesu/util-rmq';
-import { UserId } from '@zxcdesu/util-user';
+import { ProjectId } from '@zxcdesu/data-access-project';
+import { UserId } from '@zxcdesu/data-access-user';
 
 @Controller()
 export class HistoryController {
   constructor(private readonly historyService: HistoryService) {}
 
-  @RmqService.subscribe({
-    exchange: 'history',
-    routingKey: 'createHistory',
-    queue: 'createHistory',
-  })
+  // @RmqService.subscribe({
+  //   exchange: 'history',
+  //   routingKey: 'createHistory',
+  //   queue: 'createHistory',
+  // })
   @SerializeOptions({
     type: HistoryDto,
   })
@@ -25,11 +24,11 @@ export class HistoryController {
     return this.historyService.create(payload);
   }
 
-  @RmqService.rpc({
-    exchange: 'history',
-    routingKey: 'findAllHistories',
-    queue: 'findAllHistories',
-  })
+  // @RmqService.rpc({
+  //   exchange: 'history',
+  //   routingKey: 'findAllHistories',
+  //   queue: 'findAllHistories',
+  // })
   @SerializeOptions({
     type: HistoryDto,
   })

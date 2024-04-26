@@ -6,9 +6,8 @@ import {
   CreateChatDto,
   UpdateChatDto,
 } from '@zxcdesu/data-access-chat';
+import { ProjectId } from '@zxcdesu/data-access-project';
 import { ChatManager } from '@zxcdesu/feature-chat-manager';
-import { ProjectId } from '@zxcdesu/util-project';
-import { RmqService } from '@zxcdesu/util-rmq';
 
 @Controller()
 export class ChatController {
@@ -17,11 +16,11 @@ export class ChatController {
     private readonly chatManager: ChatManager,
   ) {}
 
-  @RmqService.rpc({
-    exchange: 'platform',
-    routingKey: 'createChat',
-    queue: 'createChat',
-  })
+  // @RmqService.rpc({
+  //   exchange: 'platform',
+  //   routingKey: 'createChat',
+  //   queue: 'createChat',
+  // })
   @SerializeOptions({
     type: ChatDto,
   })
@@ -32,11 +31,11 @@ export class ChatController {
     return this.chatManager.create(projectId, payload);
   }
 
-  @RmqService.rpc({
-    exchange: 'platform',
-    routingKey: 'findOneChat',
-    queue: 'findOneChat',
-  })
+  // @RmqService.rpc({
+  //   exchange: 'platform',
+  //   routingKey: 'findOneChat',
+  //   queue: 'findOneChat',
+  // })
   @SerializeOptions({
     type: ChatDto,
   })
@@ -47,11 +46,11 @@ export class ChatController {
     return this.chatService.findOne(projectId, id);
   }
 
-  @RmqService.rpc({
-    exchange: 'platform',
-    routingKey: 'findAllChats',
-    queue: 'findAllChats',
-  })
+  // @RmqService.rpc({
+  //   exchange: 'platform',
+  //   routingKey: 'findAllChats',
+  //   queue: 'findAllChats',
+  // })
   @SerializeOptions({
     type: ChatDto,
   })
@@ -59,11 +58,11 @@ export class ChatController {
     return this.chatService.findAll(projectId);
   }
 
-  @RmqService.rpc({
-    exchange: 'platform',
-    routingKey: 'updateChat',
-    queue: 'updateChat',
-  })
+  // @RmqService.rpc({
+  //   exchange: 'platform',
+  //   routingKey: 'updateChat',
+  //   queue: 'updateChat',
+  // })
   @SerializeOptions({
     type: ChatDto,
   })
@@ -75,11 +74,11 @@ export class ChatController {
     return this.chatManager.update(projectId, id, payload);
   }
 
-  @RmqService.rpc({
-    exchange: 'platform',
-    routingKey: 'removeChat',
-    queue: 'removeChat',
-  })
+  // @RmqService.rpc({
+  //   exchange: 'platform',
+  //   routingKey: 'removeChat',
+  //   queue: 'removeChat',
+  // })
   @SerializeOptions({
     type: ChatDto,
   })

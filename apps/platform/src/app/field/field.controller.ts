@@ -6,18 +6,17 @@ import {
   FieldService,
   UpdateFieldDto,
 } from '@zxcdesu/data-access-field';
-import { ProjectId } from '@zxcdesu/util-project';
-import { RmqService } from '@zxcdesu/util-rmq';
+import { ProjectId } from '@zxcdesu/data-access-project';
 
 @Controller()
 export class FieldController {
   constructor(private readonly fieldService: FieldService) {}
 
-  @RmqService.rpc({
-    exchange: 'platform',
-    routingKey: 'createField',
-    queue: 'createField',
-  })
+  // @RmqService.rpc({
+  //   exchange: 'platform',
+  //   routingKey: 'createField',
+  //   queue: 'createField',
+  // })
   @SerializeOptions({
     type: FieldDto,
   })
@@ -28,11 +27,11 @@ export class FieldController {
     return this.fieldService.create(projectId, payload);
   }
 
-  @RmqService.rpc({
-    exchange: 'platform',
-    routingKey: 'findOneField',
-    queue: 'findOneField',
-  })
+  // @RmqService.rpc({
+  //   exchange: 'platform',
+  //   routingKey: 'findOneField',
+  //   queue: 'findOneField',
+  // })
   @SerializeOptions({
     type: FieldDto,
   })
@@ -43,11 +42,11 @@ export class FieldController {
     return this.fieldService.findOne(projectId, id);
   }
 
-  @RmqService.rpc({
-    exchange: 'platform',
-    routingKey: 'findAllFields',
-    queue: 'findAllFields',
-  })
+  // @RmqService.rpc({
+  //   exchange: 'platform',
+  //   routingKey: 'findAllFields',
+  //   queue: 'findAllFields',
+  // })
   @SerializeOptions({
     type: FieldDto,
   })
@@ -55,11 +54,11 @@ export class FieldController {
     return this.fieldService.findAll(projectId);
   }
 
-  @RmqService.rpc({
-    exchange: 'platform',
-    routingKey: 'updateField',
-    queue: 'updateField',
-  })
+  // @RmqService.rpc({
+  //   exchange: 'platform',
+  //   routingKey: 'updateField',
+  //   queue: 'updateField',
+  // })
   @SerializeOptions({
     type: FieldDto,
   })
@@ -71,11 +70,11 @@ export class FieldController {
     return this.fieldService.update(projectId, id, payload);
   }
 
-  @RmqService.rpc({
-    exchange: 'platform',
-    routingKey: 'removeField',
-    queue: 'removeField',
-  })
+  // @RmqService.rpc({
+  //   exchange: 'platform',
+  //   routingKey: 'removeField',
+  //   queue: 'removeField',
+  // })
   @SerializeOptions({
     type: FieldDto,
   })

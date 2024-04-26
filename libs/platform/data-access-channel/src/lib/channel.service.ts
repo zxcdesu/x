@@ -24,7 +24,7 @@ export class ChannelService {
     });
   }
 
-  findOneOrNull(projectId: number | undefined, id: number) {
+  findOneOrDefault(projectId: number | undefined, id: number) {
     return this.prismaService.channel.findUnique({
       where: {
         projectId,

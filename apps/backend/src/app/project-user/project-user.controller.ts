@@ -1,15 +1,15 @@
 import { UseGuards } from '@nestjs/common';
 import { Args, Int, Mutation, Query, Resolver } from '@nestjs/graphql';
+import { ProjectUserRmq } from '@zxcdesu/data-access-project-user';
 import { BearerAuthDecorator } from '../auth/bearer-auth.decorator';
 import { BearerAuthGuard } from '../auth/bearer-auth.guard';
 import { BearerAuth } from '../auth/bearer-auth.interface';
 import { ProjectUserObject } from './dto/project-user.object';
 import { UpdateProjectUserArgs } from './dto/update-project-user.args';
-import { ProjectUserRmq } from './project-user.rmq';
 
 @Resolver()
 export class ProjectUserResolver {
-  constructor(private readonly rmq: ProjectUserRmq) {}
+  constructor(private readonly rmq: ProjectUserRmq<ProjectUserObject>) {}
 
   @UseGuards(BearerAuthGuard)
   @Query(() => ProjectUserObject)
@@ -34,7 +34,7 @@ export class ProjectUserResolver {
     @BearerAuthDecorator() auth: Required<BearerAuth>,
     @Args() payload: UpdateProjectUserArgs,
   ): Promise<ProjectUserObject> {
-    return this.rmq.update(auth.project.id, payload);
+    return this.rmq.update(auth.project.id, payload.userId, payload);
   }
 
   @UseGuards(BearerAuthGuard)

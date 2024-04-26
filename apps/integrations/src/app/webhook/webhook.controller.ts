@@ -1,5 +1,6 @@
 import { RabbitPayload } from '@golevelup/nestjs-rabbitmq';
 import { Controller, ParseIntPipe, SerializeOptions } from '@nestjs/common';
+import { ProjectId } from '@zxcdesu/data-access-project';
 import {
   CreateWebhookDto,
   UpdateWebhookDto,
@@ -10,8 +11,6 @@ import {
   SendWebhooksDto,
   WebhookSenderService,
 } from '@zxcdesu/feature-webhook-sender';
-import { ProjectId } from '@zxcdesu/util-project';
-import { RmqService } from '@zxcdesu/util-rmq';
 
 @Controller()
 export class WebhookController {
@@ -20,11 +19,11 @@ export class WebhookController {
     private readonly webhookSenderService: WebhookSenderService,
   ) {}
 
-  @RmqService.rpc({
-    exchange: 'integrations',
-    routingKey: 'createWebhook',
-    queue: 'createWebhook',
-  })
+  // @RmqService.rpc({
+  //   exchange: 'integrations',
+  //   routingKey: 'createWebhook',
+  //   queue: 'createWebhook',
+  // })
   @SerializeOptions({
     type: WebhookDto,
   })
@@ -35,11 +34,11 @@ export class WebhookController {
     return this.webhookService.create(projectId, payload);
   }
 
-  @RmqService.rpc({
-    exchange: 'integrations',
-    routingKey: 'findOneWebhook',
-    queue: 'findOneWebhook',
-  })
+  // @RmqService.rpc({
+  //   exchange: 'integrations',
+  //   routingKey: 'findOneWebhook',
+  //   queue: 'findOneWebhook',
+  // })
   @SerializeOptions({
     type: WebhookDto,
   })
@@ -50,11 +49,11 @@ export class WebhookController {
     return this.webhookService.findOne(projectId, id);
   }
 
-  @RmqService.rpc({
-    exchange: 'integrations',
-    routingKey: 'findAllWebhooks',
-    queue: 'findAllWebhooks',
-  })
+  // @RmqService.rpc({
+  //   exchange: 'integrations',
+  //   routingKey: 'findAllWebhooks',
+  //   queue: 'findAllWebhooks',
+  // })
   @SerializeOptions({
     type: WebhookDto,
   })
@@ -62,11 +61,11 @@ export class WebhookController {
     return this.webhookService.findAll(projectId);
   }
 
-  @RmqService.rpc({
-    exchange: 'integrations',
-    routingKey: 'updateWebhook',
-    queue: 'updateWebhook',
-  })
+  // @RmqService.rpc({
+  //   exchange: 'integrations',
+  //   routingKey: 'updateWebhook',
+  //   queue: 'updateWebhook',
+  // })
   @SerializeOptions({
     type: WebhookDto,
   })
@@ -78,11 +77,11 @@ export class WebhookController {
     return this.webhookService.update(projectId, id, payload);
   }
 
-  @RmqService.rpc({
-    exchange: 'integrations',
-    routingKey: 'removeWebhook',
-    queue: 'removeWebhook',
-  })
+  // @RmqService.rpc({
+  //   exchange: 'integrations',
+  //   routingKey: 'removeWebhook',
+  //   queue: 'removeWebhook',
+  // })
   @SerializeOptions({
     type: WebhookDto,
   })
@@ -93,11 +92,11 @@ export class WebhookController {
     return this.webhookService.remove(projectId, id);
   }
 
-  @RmqService.subscribe({
-    exchange: 'integrations',
-    routingKey: 'sendWebhooks',
-    queue: 'sendWebhooks',
-  })
+  // @RmqService.subscribe({
+  //   exchange: 'integrations',
+  //   routingKey: 'sendWebhooks',
+  //   queue: 'sendWebhooks',
+  // })
   send(
     @ProjectId() projectId: number,
     @RabbitPayload() payload: SendWebhooksDto,

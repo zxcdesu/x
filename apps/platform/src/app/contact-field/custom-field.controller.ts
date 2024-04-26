@@ -6,18 +6,17 @@ import {
   CreateContactFieldDto,
   RemoveContactFieldDto,
 } from '@zxcdesu/data-access-contact-field';
-import { ProjectId } from '@zxcdesu/util-project';
-import { RmqService } from '@zxcdesu/util-rmq';
+import { ProjectId } from '@zxcdesu/data-access-project';
 
 @Controller()
 export class CustomFieldController {
   constructor(private readonly contactFieldService: ContactFieldService) {}
 
-  @RmqService.rpc({
-    exchange: 'platform',
-    routingKey: 'createContactField',
-    queue: 'createContactField',
-  })
+  // @RmqService.rpc({
+  //   exchange: 'platform',
+  //   routingKey: 'createContactField',
+  //   queue: 'createContactField',
+  // })
   @SerializeOptions({
     type: ContactDto,
   })
@@ -28,11 +27,11 @@ export class CustomFieldController {
     return this.contactFieldService.create(projectId, payload);
   }
 
-  @RmqService.rpc({
-    exchange: 'platform',
-    routingKey: 'removeContactField',
-    queue: 'removeContactField',
-  })
+  // @RmqService.rpc({
+  //   exchange: 'platform',
+  //   routingKey: 'removeContactField',
+  //   queue: 'removeContactField',
+  // })
   @SerializeOptions({
     type: ContactDto,
   })

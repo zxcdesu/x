@@ -5,12 +5,11 @@ import {
   NotificationSubscriberDto,
   NotificationSubscriberService,
 } from '@zxcdesu/data-access-notification-subscriber';
+import { UserId } from '@zxcdesu/data-access-user';
 import {
   HandleNotificationSubscriberDto,
   NotificationSubscriberRepository,
 } from '@zxcdesu/feature-notification-subscriber-provider';
-import { RmqService } from '@zxcdesu/util-rmq';
-import { UserId } from '@zxcdesu/util-user';
 
 @Controller()
 export class NotificationSubscriberController {
@@ -19,11 +18,11 @@ export class NotificationSubscriberController {
     private readonly notificationSubscriberRepository: NotificationSubscriberRepository,
   ) {}
 
-  @RmqService.rpc({
-    exchange: 'notifications',
-    routingKey: 'createSubscriber',
-    queue: 'createSubscriber',
-  })
+  // @RmqService.rpc({
+  //   exchange: 'notifications',
+  //   routingKey: 'createSubscriber',
+  //   queue: 'createSubscriber',
+  // })
   @SerializeOptions({
     type: NotificationSubscriberDto,
   })
@@ -34,11 +33,11 @@ export class NotificationSubscriberController {
     return this.notificationSubscriberService.create(userId, payload);
   }
 
-  @RmqService.rpc({
-    exchange: 'notifications',
-    routingKey: 'findOneSubscriber',
-    queue: 'findOneSubscriber',
-  })
+  // @RmqService.rpc({
+  //   exchange: 'notifications',
+  //   routingKey: 'findOneSubscriber',
+  //   queue: 'findOneSubscriber',
+  // })
   @SerializeOptions({
     type: NotificationSubscriberDto,
   })
@@ -46,11 +45,11 @@ export class NotificationSubscriberController {
     return this.notificationSubscriberService.findAll(userId);
   }
 
-  @RmqService.rpc({
-    exchange: 'notifications',
-    routingKey: 'updateSubscriber',
-    queue: 'updateSubscriber',
-  })
+  // @RmqService.rpc({
+  //   exchange: 'notifications',
+  //   routingKey: 'updateSubscriber',
+  //   queue: 'updateSubscriber',
+  // })
   @SerializeOptions({
     type: NotificationSubscriberDto,
   })
@@ -62,11 +61,11 @@ export class NotificationSubscriberController {
     return this.notificationSubscriberService.update(userId, id, payload);
   }
 
-  @RmqService.rpc({
-    exchange: 'notifications',
-    routingKey: 'removeSubscriber',
-    queue: 'removeSubscriber',
-  })
+  // @RmqService.rpc({
+  //   exchange: 'notifications',
+  //   routingKey: 'removeSubscriber',
+  //   queue: 'removeSubscriber',
+  // })
   @SerializeOptions({
     type: NotificationSubscriberDto,
   })
@@ -77,11 +76,11 @@ export class NotificationSubscriberController {
     return this.notificationSubscriberService.remove(userId, id);
   }
 
-  @RmqService.subscribe({
-    exchange: 'notifications',
-    routingKey: 'handleSubscriber',
-    queue: 'handleSubscriber',
-  })
+  // @RmqService.subscribe({
+  //   exchange: 'notifications',
+  //   routingKey: 'handleSubscriber',
+  //   queue: 'handleSubscriber',
+  // })
   handleWebhook(@RabbitPayload() payload: HandleNotificationSubscriberDto) {
     return this.notificationSubscriberRepository
       .get(payload.provider)

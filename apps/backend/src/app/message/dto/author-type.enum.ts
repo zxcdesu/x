@@ -1,11 +1,8 @@
 import { registerEnumType } from '@nestjs/graphql';
-
-export enum AuthorType {
-  Bot = 'Bot',
-  Contact = 'Contact',
-  User = 'User',
-}
+import { AuthorType } from '@zxcdesu/prisma-platform';
 
 registerEnumType(AuthorType, {
   name: 'AuthorType',
 });
+
+export { AuthorType };

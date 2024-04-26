@@ -1,11 +1,8 @@
 import { registerEnumType } from '@nestjs/graphql';
-
-export enum ButtonType {
-  QuickReply = 'QuickReply',
-  Url = 'Url',
-  Phone = 'Phone',
-}
+import { ButtonType } from '@zxcdesu/data-access-message';
 
 registerEnumType(ButtonType, {
   name: 'ButtonType',
 });
+
+export { ButtonType };

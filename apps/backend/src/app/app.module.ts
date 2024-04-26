@@ -4,55 +4,54 @@ import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { GraphQLModule } from '@nestjs/graphql';
 import { JwtModule } from '@nestjs/jwt';
+import { AdminRmq } from '@zxcdesu/data-access-admin';
+import { BotRmq } from '@zxcdesu/data-access-bot';
+import { BotTemplateRmq } from '@zxcdesu/data-access-bot-template';
+import { ChannelRmq } from '@zxcdesu/data-access-channel';
+import { ChatRmq } from '@zxcdesu/data-access-chat';
+import { ContactRmq } from '@zxcdesu/data-access-contact';
+import { HsmRmq } from '@zxcdesu/data-access-hsm';
+import { IntegrationRmq } from '@zxcdesu/data-access-integration';
+import { InviteRmq } from '@zxcdesu/data-access-invite';
+import { MailingRmq } from '@zxcdesu/data-access-mailing';
+import { MessageRmq } from '@zxcdesu/data-access-message';
+import { NotificationSubscriberRmq } from '@zxcdesu/data-access-notification-subscriber';
+import { PaymentRmq } from '@zxcdesu/data-access-payment';
+import { ProjectRmq } from '@zxcdesu/data-access-project';
+import { ProjectUserRmq } from '@zxcdesu/data-access-project-user';
+import { SubscriptionRmq } from '@zxcdesu/data-access-subscription';
+import { TagRmq } from '@zxcdesu/data-access-tag';
+import { UserRmq } from '@zxcdesu/data-access-user';
+import { WalletRmq } from '@zxcdesu/data-access-wallet';
+import { WebhookRmq } from '@zxcdesu/data-access-webhook';
 import type { Request } from 'express';
 import joi from 'joi';
-import mapObject from 'map-obj';
-import { AdminRmq } from './admin/admin.rmq';
+import { mapValues } from 'lodash';
 import { BotTemplateResolver } from './bot-template/bot-template.resolver';
-import { BotTemplateRmq } from './bot-template/bot-template.rmq';
 import { BotResolver } from './bot/bot.resolver';
-import { BotRmq } from './bot/bot.rmq';
 import { ChannelResolver } from './channel/channel.resolver';
-import { ChannelRmq } from './channel/channel.rmq';
 import { ChatController } from './chat/chat.controller';
 import { ChatResolver } from './chat/chat.resolver';
-import { ChatRmq } from './chat/chat.rmq';
 import { ChatService } from './chat/chat.service';
 import { ContactResolver } from './contact/contact.resolver';
-import { ContactRmq } from './contact/contact.rmq';
 import { ContactService } from './contact/contact.service';
 import { ErrorFactoryService } from './error-factory.service';
 import { HsmResolver } from './hsm/hsm.resolver';
-import { HsmRmq } from './hsm/hsm.rmq';
 import { IntegrationResolver } from './integration/integration.resolver';
-import { IntegrationRmq } from './integration/integration.rmq';
 import { InviteResolver } from './invite/invite.controller';
-import { InviteRmq } from './invite/invite.rmq';
 import { MailingResolver } from './mailing/mailing.resolver';
-import { MailingRmq } from './mailing/mailing.rmq';
 import { MessageController } from './message/message.controller';
 import { MessageResolver } from './message/message.resolver';
-import { MessageRmq } from './message/message.rmq';
-import { NotificationRmq } from './notification/notification.rmq';
+import { SubscriberResolver } from './notification-subscriber/notification-subscriber.resolver';
 import { PaymentResolver } from './payment/payment.resolver';
-import { PaymentRmq } from './payment/payment.rmq';
 import { ProjectUserResolver } from './project-user/project-user.controller';
-import { ProjectUserRmq } from './project-user/project-user.rmq';
 import { ProjectResolver } from './project/project.resolver';
-import { ProjectRmq } from './project/project.rmq';
 import { PubSubService } from './pubsub.service';
-import { SubscriberResolver } from './subscriber/subscriber.resolver';
-import { SubscriberRmq } from './subscriber/subscriber.rmq';
 import { SubscriptionResolver } from './subscription/subscription.resolver';
-import { SubscriptionRmq } from './subscription/subscription.rmq';
 import { TagResolver } from './tag/tag.resolver';
-import { TagRmq } from './tag/tag.rmq';
 import { UserResolver } from './user/user.resolver';
-import { UserRmq } from './user/user.rmq';
 import { WalletResolver } from './wallet/wallet.resolver';
-import { WalletRmq } from './wallet/wallet.rmq';
 import { WebhookResolver } from './webhook/webhook.resolver';
-import { WebhookRmq } from './webhook/webhook.rmq';
 
 @Module({
   imports: [
@@ -113,13 +112,10 @@ import { WebhookRmq } from './webhook/webhook.rmq';
           req:
             connectionParams && extra
               ? Object.assign(extra.request, {
-                  headers: mapObject(
-                    connectionParams,
-                    (key, value) => [String(key).toLowerCase(), value],
-                    {
-                      deep: true,
-                    },
-                  ),
+                  headers: mapValues(connectionParams, (key, value) => [
+                    String(key).toLowerCase(),
+                    value,
+                  ]),
                 })
               : req,
         }),
@@ -159,11 +155,10 @@ import { WebhookRmq } from './webhook/webhook.rmq';
     InviteRmq.provide(ErrorFactoryService),
     MailingRmq.provide(ErrorFactoryService),
     MessageRmq.provide(ErrorFactoryService),
-    NotificationRmq.provide(ErrorFactoryService),
+    NotificationSubscriberRmq.provide(ErrorFactoryService),
     PaymentRmq.provide(ErrorFactoryService),
     ProjectRmq.provide(ErrorFactoryService),
     ProjectUserRmq.provide(ErrorFactoryService),
-    SubscriberRmq.provide(ErrorFactoryService),
     SubscriptionRmq.provide(ErrorFactoryService),
     TagRmq.provide(ErrorFactoryService),
     UserRmq.provide(ErrorFactoryService),

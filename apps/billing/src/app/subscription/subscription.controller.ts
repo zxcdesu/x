@@ -1,23 +1,22 @@
 import { RabbitPayload } from '@golevelup/nestjs-rabbitmq';
 import { Controller, SerializeOptions } from '@nestjs/common';
+import { ProjectId } from '@zxcdesu/data-access-project';
 import {
   CreateSubscriptionDto,
   SubscriptionDto,
   SubscriptionService,
   UpdateSubscriptionDto,
 } from '@zxcdesu/data-access-subscription';
-import { ProjectId } from '@zxcdesu/util-project';
-import { RmqService } from '@zxcdesu/util-rmq';
 
 @Controller()
 export class SubscriptionController {
   constructor(private readonly subscriptionService: SubscriptionService) {}
 
-  @RmqService.rpc({
-    exchange: 'billing',
-    routingKey: 'createSubscription',
-    queue: 'createSubscription',
-  })
+  // @RmqService.rpc({
+  //   exchange: 'billing',
+  //   routingKey: 'createSubscription',
+  //   queue: 'createSubscription',
+  // })
   @SerializeOptions({
     type: SubscriptionDto,
   })
@@ -28,11 +27,11 @@ export class SubscriptionController {
     return this.subscriptionService.create(projectId, payload);
   }
 
-  @RmqService.rpc({
-    exchange: 'billing',
-    routingKey: 'findOneSubscription',
-    queue: 'findOneSubscription',
-  })
+  // @RmqService.rpc({
+  //   exchange: 'billing',
+  //   routingKey: 'findOneSubscription',
+  //   queue: 'findOneSubscription',
+  // })
   @SerializeOptions({
     type: SubscriptionDto,
   })
@@ -40,11 +39,11 @@ export class SubscriptionController {
     return this.subscriptionService.findOne(projectId);
   }
 
-  @RmqService.rpc({
-    exchange: 'billing',
-    routingKey: 'updateSubscription',
-    queue: 'updateSubscription',
-  })
+  // @RmqService.rpc({
+  //   exchange: 'billing',
+  //   routingKey: 'updateSubscription',
+  //   queue: 'updateSubscription',
+  // })
   @SerializeOptions({
     type: SubscriptionDto,
   })
@@ -55,11 +54,11 @@ export class SubscriptionController {
     return this.subscriptionService.update(projectId, payload);
   }
 
-  @RmqService.rpc({
-    exchange: 'billing',
-    routingKey: 'removeSubscription',
-    queue: 'removeSubscription',
-  })
+  // @RmqService.rpc({
+  //   exchange: 'billing',
+  //   routingKey: 'removeSubscription',
+  //   queue: 'removeSubscription',
+  // })
   @SerializeOptions({
     type: SubscriptionDto,
   })

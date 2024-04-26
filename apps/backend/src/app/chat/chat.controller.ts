@@ -1,7 +1,6 @@
 import { RabbitPayload } from '@golevelup/nestjs-rabbitmq';
 import { Controller } from '@nestjs/common';
-import { ProjectId } from '@zxcdesu/util-project';
-import { RmqService } from '@zxcdesu/util-rmq';
+import { ProjectId } from '@zxcdesu/data-access-project';
 import { AssigneeType } from '../contact/dto/assignee-type.enum';
 import { PubSubService } from '../pubsub.service';
 import { HandleChatDto } from './dto/receive-chat.dto';
@@ -10,11 +9,11 @@ import { HandleChatDto } from './dto/receive-chat.dto';
 export class ChatController {
   constructor(private readonly pubSubService: PubSubService) {}
 
-  @RmqService.subscribe({
-    exchange: 'backend',
-    routingKey: 'handleChat',
-    queue: 'handleChat',
-  })
+  // @RmqService.subscribe({
+  //   exchange: 'backend',
+  //   routingKey: 'handleChat',
+  //   queue: 'handleChat',
+  // })
   handle(
     @ProjectId() projectId: number,
     @RabbitPayload() payload: HandleChatDto,

@@ -1,9 +1,8 @@
 import { registerEnumType } from '@nestjs/graphql';
-
-export enum Category {
-  Other = 'Other',
-}
+import { Category } from '@zxcdesu/prisma-bots';
 
 registerEnumType(Category, {
   name: 'Category',
 });
+
+export { Category };

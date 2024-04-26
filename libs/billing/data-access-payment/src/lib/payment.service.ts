@@ -15,7 +15,7 @@ export class PaymentService {
     });
   }
 
-  findOneOrNullByExternalId(provider: PaymentProvider, externalId: string) {
+  findOneOrDefaultByExternalId(provider: PaymentProvider, externalId: string) {
     return this.prismaService.payment.findUnique({
       where: {
         externalId_provider: {

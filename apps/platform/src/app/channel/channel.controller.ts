@@ -12,9 +12,8 @@ import {
   HandleChannelDto,
   UpdateChannelDto,
 } from '@zxcdesu/data-access-channel';
+import { ProjectId } from '@zxcdesu/data-access-project';
 import { ChannelManager } from '@zxcdesu/feature-channel-manager';
-import { ProjectId } from '@zxcdesu/util-project';
-import { RmqService } from '@zxcdesu/util-rmq';
 
 @Controller()
 export class ChannelController {
@@ -23,11 +22,11 @@ export class ChannelController {
     private readonly channelManager: ChannelManager,
   ) {}
 
-  @RmqService.rpc({
-    exchange: 'platform',
-    routingKey: 'createChannel',
-    queue: 'createChannel',
-  })
+  // @RmqService.rpc({
+  //   exchange: 'platform',
+  //   routingKey: 'createChannel',
+  //   queue: 'createChannel',
+  // })
   @SerializeOptions({
     type: ChannelDto,
   })
@@ -38,11 +37,11 @@ export class ChannelController {
     return this.channelManager.create(projectId, payload);
   }
 
-  @RmqService.rpc({
-    exchange: 'platform',
-    routingKey: 'findOneChannel',
-    queue: 'findOneChannel',
-  })
+  // @RmqService.rpc({
+  //   exchange: 'platform',
+  //   routingKey: 'findOneChannel',
+  //   queue: 'findOneChannel',
+  // })
   @SerializeOptions({
     type: ChannelDto,
   })
@@ -53,11 +52,11 @@ export class ChannelController {
     return this.channelService.findOne(projectId, id);
   }
 
-  @RmqService.rpc({
-    exchange: 'platform',
-    routingKey: 'findAllChannels',
-    queue: 'findAllChannels',
-  })
+  // @RmqService.rpc({
+  //   exchange: 'platform',
+  //   routingKey: 'findAllChannels',
+  //   queue: 'findAllChannels',
+  // })
   @SerializeOptions({
     type: ChannelDto,
   })
@@ -65,11 +64,11 @@ export class ChannelController {
     return this.channelService.findAll(projectId);
   }
 
-  @RmqService.rpc({
-    exchange: 'platform',
-    routingKey: 'updateChannel',
-    queue: 'updateChannel',
-  })
+  // @RmqService.rpc({
+  //   exchange: 'platform',
+  //   routingKey: 'updateChannel',
+  //   queue: 'updateChannel',
+  // })
   @SerializeOptions({
     type: ChannelDto,
   })
@@ -81,11 +80,11 @@ export class ChannelController {
     return this.channelManager.update(projectId, id, payload);
   }
 
-  @RmqService.rpc({
-    exchange: 'platform',
-    routingKey: 'removeChannel',
-    queue: 'removeChannel',
-  })
+  // @RmqService.rpc({
+  //   exchange: 'platform',
+  //   routingKey: 'removeChannel',
+  //   queue: 'removeChannel',
+  // })
   @SerializeOptions({
     type: ChannelDto,
   })
@@ -96,11 +95,11 @@ export class ChannelController {
     return this.channelManager.remove(projectId, id);
   }
 
-  @RmqService.subscribe({
-    exchange: 'platform',
-    routingKey: 'handleChannel',
-    queue: 'handleChannel',
-  })
+  // @RmqService.subscribe({
+  //   exchange: 'platform',
+  //   routingKey: 'handleChannel',
+  //   queue: 'handleChannel',
+  // })
   handle(
     @RabbitPayload('id', ParseIntPipe) id: number,
     @RabbitPayload() payload: HandleChannelDto,

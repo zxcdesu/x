@@ -1,56 +1,58 @@
 import { ParseIntPipe, UseGuards } from '@nestjs/common';
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
+import { BotRmq } from '@zxcdesu/data-access-bot';
 import { BearerAuthDecorator } from '../auth/bearer-auth.decorator';
 import { BearerAuthGuard } from '../auth/bearer-auth.guard';
 import { BearerAuth } from '../auth/bearer-auth.interface';
-import { BotRmq } from './bot.rmq';
-import { BotDto } from './dto/bot.dto';
-import { CreateBotDto } from './dto/create-bot.dto';
-import { UpdateBotDto } from './dto/update-bot.dto';
+import { BotObject } from './dto/bot.object';
+import { CreateBotArgs } from './dto/create-bot.args';
+import { UpdateBotArgs } from './dto/update-bot.args';
 
 @Resolver()
 export class BotResolver {
-  constructor(private readonly rmq: BotRmq) {}
+  constructor(private readonly rmq: BotRmq<BotObject>) {}
 
   @UseGuards(BearerAuthGuard)
-  @Mutation(() => BotDto)
+  @Mutation(() => BotObject)
   createBot(
     @BearerAuthDecorator() auth: Required<BearerAuth>,
-    @Args() payload: CreateBotDto,
-  ): Promise<BotDto> {
+    @Args() payload: CreateBotArgs,
+  ): Promise<BotObject> {
     return this.rmq.create(auth.project.id, payload);
   }
 
   @UseGuards(BearerAuthGuard)
-  @Query(() => BotDto)
+  @Query(() => BotObject)
   botById(
     @BearerAuthDecorator() auth: Required<BearerAuth>,
     @Args('id', ParseIntPipe) id: number,
-  ): Promise<BotDto> {
+  ): Promise<BotObject> {
     return this.rmq.findOne(auth.project.id, id);
   }
 
   @UseGuards(BearerAuthGuard)
-  @Query(() => [BotDto])
-  bots(@BearerAuthDecorator() auth: Required<BearerAuth>): Promise<BotDto[]> {
+  @Query(() => [BotObject])
+  bots(
+    @BearerAuthDecorator() auth: Required<BearerAuth>,
+  ): Promise<BotObject[]> {
     return this.rmq.findAll(auth.project.id);
   }
 
   @UseGuards(BearerAuthGuard)
-  @Mutation(() => BotDto)
+  @Mutation(() => BotObject)
   updateBot(
     @BearerAuthDecorator() auth: Required<BearerAuth>,
-    @Args() payload: UpdateBotDto,
-  ): Promise<BotDto> {
-    return this.rmq.update(auth.project.id, payload);
+    @Args() payload: UpdateBotArgs,
+  ): Promise<BotObject> {
+    return this.rmq.update(auth.project.id, payload.id, payload);
   }
 
   @UseGuards(BearerAuthGuard)
-  @Mutation(() => BotDto)
+  @Mutation(() => BotObject)
   removeBot(
     @BearerAuthDecorator() auth: Required<BearerAuth>,
     @Args('id', ParseIntPipe) id: number,
-  ): Promise<BotDto> {
+  ): Promise<BotObject> {
     return this.rmq.remove(auth.project.id, id);
   }
 }

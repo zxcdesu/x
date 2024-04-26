@@ -1,9 +1,9 @@
 import { Type } from 'class-transformer';
 import { ValidateNested } from 'class-validator';
-import { ChatDto } from './chat.dto';
+import { ChatObject } from './chat.object';
 
 export class HandleChatDto {
-  @Type(() => ChatDto)
+  @Type(() => ChatObject)
   @ValidateNested()
-  chat: ChatDto;
+  chat: ChatObject;
 }

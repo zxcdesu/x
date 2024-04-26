@@ -1,10 +1,8 @@
 import { registerEnumType } from '@nestjs/graphql';
-
-export enum AssigneeType {
-  Bot = 'Bot',
-  User = 'User',
-}
+import { AssigneeType } from '@zxcdesu/prisma-platform';
 
 registerEnumType(AssigneeType, {
   name: 'AssigneeType',
 });
+
+export { AssigneeType };

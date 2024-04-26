@@ -6,9 +6,8 @@ import {
   MessageService,
   UpdateMessageDto,
 } from '@zxcdesu/data-access-message';
+import { ProjectId } from '@zxcdesu/data-access-project';
 import { MessageManager } from '@zxcdesu/feature-message-manager';
-import { ProjectId } from '@zxcdesu/util-project';
-import { RmqService } from '@zxcdesu/util-rmq';
 
 @Controller()
 export class MessageController {
@@ -17,11 +16,11 @@ export class MessageController {
     private readonly messageManager: MessageManager,
   ) {}
 
-  @RmqService.rpc({
-    exchange: 'platform',
-    routingKey: 'createMessage',
-    queue: 'createMessage',
-  })
+  // @RmqService.rpc({
+  //   exchange: 'platform',
+  //   routingKey: 'createMessage',
+  //   queue: 'createMessage',
+  // })
   @SerializeOptions({
     type: MessageDto,
   })
@@ -33,11 +32,11 @@ export class MessageController {
     return this.messageManager.create(projectId, chatId, payload);
   }
 
-  @RmqService.rpc({
-    exchange: 'platform',
-    routingKey: 'findAllMessages',
-    queue: 'findAllMessages',
-  })
+  // @RmqService.rpc({
+  //   exchange: 'platform',
+  //   routingKey: 'findAllMessages',
+  //   queue: 'findAllMessages',
+  // })
   @SerializeOptions({
     type: MessageDto,
   })
@@ -48,11 +47,11 @@ export class MessageController {
     return this.messageService.findAll(projectId, chatId);
   }
 
-  @RmqService.rpc({
-    exchange: 'platform',
-    routingKey: 'updateMessage',
-    queue: 'updateMessage',
-  })
+  // @RmqService.rpc({
+  //   exchange: 'platform',
+  //   routingKey: 'updateMessage',
+  //   queue: 'updateMessage',
+  // })
   @SerializeOptions({
     type: MessageDto,
   })
@@ -65,11 +64,11 @@ export class MessageController {
     return this.messageManager.update(projectId, chatId, id, payload);
   }
 
-  @RmqService.rpc({
-    exchange: 'platform',
-    routingKey: 'removeMessage',
-    queue: 'removeMessage',
-  })
+  // @RmqService.rpc({
+  //   exchange: 'platform',
+  //   routingKey: 'removeMessage',
+  //   queue: 'removeMessage',
+  // })
   @SerializeOptions({
     type: MessageDto,
   })

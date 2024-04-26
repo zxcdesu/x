@@ -6,18 +6,17 @@ import {
   IntegrationService,
   UpdateIntegrationDto,
 } from '@zxcdesu/data-access-integration';
-import { ProjectId } from '@zxcdesu/util-project';
-import { RmqService } from '@zxcdesu/util-rmq';
+import { ProjectId } from '@zxcdesu/data-access-project';
 
 @Controller()
 export class IntegrationController {
   constructor(private readonly integrationService: IntegrationService) {}
 
-  @RmqService.rpc({
-    exchange: 'integrations',
-    routingKey: 'createIntegration',
-    queue: 'createIntegration',
-  })
+  // @RmqService.rpc({
+  //   exchange: 'integrations',
+  //   routingKey: 'createIntegration',
+  //   queue: 'createIntegration',
+  // })
   @SerializeOptions({
     type: IntegrationDto,
   })
@@ -28,11 +27,11 @@ export class IntegrationController {
     return this.integrationService.create(projectId, payload);
   }
 
-  @RmqService.rpc({
-    exchange: 'integrations',
-    routingKey: 'findOneIntegration',
-    queue: 'findOneIntegration',
-  })
+  // @RmqService.rpc({
+  //   exchange: 'integrations',
+  //   routingKey: 'findOneIntegration',
+  //   queue: 'findOneIntegration',
+  // })
   @SerializeOptions({
     type: IntegrationDto,
   })
@@ -43,11 +42,11 @@ export class IntegrationController {
     return this.integrationService.findOne(projectId, id);
   }
 
-  @RmqService.rpc({
-    exchange: 'integrations',
-    routingKey: 'findAllIntegrations',
-    queue: 'findAllIntegrations',
-  })
+  // @RmqService.rpc({
+  //   exchange: 'integrations',
+  //   routingKey: 'findAllIntegrations',
+  //   queue: 'findAllIntegrations',
+  // })
   @SerializeOptions({
     type: IntegrationDto,
   })
@@ -55,11 +54,11 @@ export class IntegrationController {
     return this.integrationService.findAll(projectId);
   }
 
-  @RmqService.rpc({
-    exchange: 'integrations',
-    routingKey: 'updateIntegration',
-    queue: 'updateIntegration',
-  })
+  // @RmqService.rpc({
+  //   exchange: 'integrations',
+  //   routingKey: 'updateIntegration',
+  //   queue: 'updateIntegration',
+  // })
   @SerializeOptions({
     type: IntegrationDto,
   })
@@ -71,11 +70,11 @@ export class IntegrationController {
     return this.integrationService.update(projectId, id, payload);
   }
 
-  @RmqService.rpc({
-    exchange: 'integrations',
-    routingKey: 'removeIntegration',
-    queue: 'removeIntegration',
-  })
+  // @RmqService.rpc({
+  //   exchange: 'integrations',
+  //   routingKey: 'removeIntegration',
+  //   queue: 'removeIntegration',
+  // })
   @SerializeOptions({
     type: IntegrationDto,
   })

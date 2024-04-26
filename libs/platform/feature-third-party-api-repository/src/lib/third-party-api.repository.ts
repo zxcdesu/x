@@ -1,6 +1,5 @@
 import { HttpService } from '@nestjs/axios';
 import { Injectable } from '@nestjs/common';
-import { ConfigService } from '@nestjs/config';
 import { ChannelType } from '@zxcdesu/prisma-platform';
 import { UnknownChannelException } from './exceptions';
 import { FactoryOptions } from './interfaces';
@@ -25,19 +24,12 @@ export class ThirdPartyApiRepository
   [ChannelType.Vkontakte] = VkontakteFactory;
   [ChannelType.Webapp] = WebappFactory;
 
-  constructor(
-    private readonly httpService: HttpService,
-    private readonly configService: ConfigService,
-  ) {}
+  constructor(private readonly httpService: HttpService) {}
 
   getOrThrow(options: FactoryOptions): BaseFactory {
     if (!this[options.type]) {
       throw new UnknownChannelException();
     }
-    return new this[options.type](
-      options,
-      this.configService,
-      this.httpService,
-    );
+    return new this[options.type](options, this.httpService);
   }
 }

@@ -7,7 +7,7 @@ import type { Provider, Type } from '@nestjs/common';
 import { ErrorFactory } from './error-factory.interface';
 import { replyErrorHandler } from './error-handlers/reply-error-handler';
 
-export class RmqService {
+export class RmqFactory {
   static rpc: typeof RabbitRPC = (config) =>
     RabbitRPC({
       errorHandler: replyErrorHandler,

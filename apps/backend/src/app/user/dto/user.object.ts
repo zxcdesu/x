@@ -1,10 +1,9 @@
 import { Field, Int, ObjectType } from '@nestjs/graphql';
 import type { UserDto } from '@zxcdesu/data-access-user';
+import { StringifyDate } from '@zxcdesu/util-types';
 
 @ObjectType()
-export class UserObject
-  implements Omit<UserDto, 'password' | 'createdAt' | 'updatedAt'>
-{
+export class UserObject implements Omit<StringifyDate<UserDto>, 'password'> {
   @Field(() => Int)
   id: number;
 

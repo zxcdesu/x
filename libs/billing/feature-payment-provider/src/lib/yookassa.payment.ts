@@ -32,7 +32,7 @@ export class YookassaPayment extends AbstractPayment<unknown> {
   async handleWebhook(
     payload: HandlePaymentDto<YookassaWebhook>,
   ): Promise<void> {
-    const payment = await this.paymentService.findOneOrNullByExternalId(
+    const payment = await this.paymentService.findOneOrDefaultByExternalId(
       payload.provider,
       payload.value.object.id,
     );

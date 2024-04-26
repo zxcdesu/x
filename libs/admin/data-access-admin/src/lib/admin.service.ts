@@ -5,7 +5,7 @@ import { PrismaService } from '@zxcdesu/prisma-admin';
 export class AdminService {
   constructor(private readonly prismaService: PrismaService) {}
 
-  async check(userId: number) {
+  async check(userId: number): Promise<boolean> {
     return Boolean(
       await this.prismaService.admin.findUnique({
         where: {

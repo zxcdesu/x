@@ -1,6 +1,9 @@
 import { Injectable } from '@nestjs/common';
-import { CreatePaymentDto, PaymentService } from '@zxcdesu/data-access-payment';
-import { HandlePaymentDto } from './dto';
+import {
+  CreatePaymentDto,
+  HandlePaymentDto,
+  PaymentService,
+} from '@zxcdesu/data-access-payment';
 import { PaymentRepository } from './payment.repository';
 
 @Injectable()

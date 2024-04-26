@@ -1,22 +1,23 @@
 import { Injectable } from '@nestjs/common';
 import { MessageStatus, Prisma, PrismaService } from '@zxcdesu/prisma-platform';
-import { randomUUID } from 'crypto';
+import { randomUUID } from 'node:crypto';
 import { CreateMessageDto, UpdateMessageDto } from './dto';
 
 @Injectable()
 export class MessageService {
   constructor(private readonly prismaService: PrismaService) {}
 
-  /**
-   * Не вызывать напрямую!
-   */
-  create(projectId: number, chatId: number, payload: CreateMessageDto) {
+  create(
+    projectId: number,
+    chatId: number,
+    payload: CreateMessageDto,
+    externalId = randomUUID(),
+    status = MessageStatus.Submitted,
+  ) {
     return this.prismaService.message.create({
       data: {
-        // TODO: Благодаря Object.assign в feature-message-factory externalId и status
-        // заполнятся реальными значениями
-        externalId: randomUUID(),
-        status: MessageStatus.Submitted,
+        externalId,
+        status,
         ...payload,
         chat: {
           connect: {

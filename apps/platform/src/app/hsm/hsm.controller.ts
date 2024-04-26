@@ -6,18 +6,17 @@ import {
   HsmService,
   UpdateHsmDto,
 } from '@zxcdesu/data-access-hsm';
-import { ProjectId } from '@zxcdesu/util-project';
-import { RmqService } from '@zxcdesu/util-rmq';
+import { ProjectId } from '@zxcdesu/data-access-project';
 
 @Controller()
 export class HsmController {
   constructor(private readonly hsmService: HsmService) {}
 
-  @RmqService.rpc({
-    exchange: 'platform',
-    routingKey: 'createHsm',
-    queue: 'createHsm',
-  })
+  // @RmqService.rpc({
+  //   exchange: 'platform',
+  //   routingKey: 'createHsm',
+  //   queue: 'createHsm',
+  // })
   @SerializeOptions({
     type: HsmDto,
   })
@@ -28,11 +27,11 @@ export class HsmController {
     return this.hsmService.create(projectId, payload);
   }
 
-  @RmqService.rpc({
-    exchange: 'platform',
-    routingKey: 'findOneHsm',
-    queue: 'findOneHsm',
-  })
+  // @RmqService.rpc({
+  //   exchange: 'platform',
+  //   routingKey: 'findOneHsm',
+  //   queue: 'findOneHsm',
+  // })
   @SerializeOptions({
     type: HsmDto,
   })
@@ -43,11 +42,11 @@ export class HsmController {
     return this.hsmService.findOne(projectId, id);
   }
 
-  @RmqService.rpc({
-    exchange: 'platform',
-    routingKey: 'findAllHsm',
-    queue: 'findAllHsm',
-  })
+  // @RmqService.rpc({
+  //   exchange: 'platform',
+  //   routingKey: 'findAllHsm',
+  //   queue: 'findAllHsm',
+  // })
   @SerializeOptions({
     type: HsmDto,
   })
@@ -55,11 +54,11 @@ export class HsmController {
     return this.hsmService.findAll(projectId);
   }
 
-  @RmqService.rpc({
-    exchange: 'platform',
-    routingKey: 'updateHsm',
-    queue: 'updateHsm',
-  })
+  // @RmqService.rpc({
+  //   exchange: 'platform',
+  //   routingKey: 'updateHsm',
+  //   queue: 'updateHsm',
+  // })
   @SerializeOptions({
     type: HsmDto,
   })
@@ -71,11 +70,11 @@ export class HsmController {
     return this.hsmService.update(projectId, id, payload);
   }
 
-  @RmqService.rpc({
-    exchange: 'platform',
-    routingKey: 'removeHsm',
-    queue: 'removeHsm',
-  })
+  // @RmqService.rpc({
+  //   exchange: 'platform',
+  //   routingKey: 'removeHsm',
+  //   queue: 'removeHsm',
+  // })
   @SerializeOptions({
     type: HsmDto,
   })

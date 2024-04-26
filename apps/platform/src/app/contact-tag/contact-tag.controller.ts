@@ -6,18 +6,17 @@ import {
   CreateContactTagDto,
   RemoveContactTagDto,
 } from '@zxcdesu/data-access-contact-tag';
-import { ProjectId } from '@zxcdesu/util-project';
-import { RmqService } from '@zxcdesu/util-rmq';
+import { ProjectId } from '@zxcdesu/data-access-project';
 
 @Controller()
 export class ContactTagController {
   constructor(private readonly contactTagService: ContactTagService) {}
 
-  @RmqService.rpc({
-    exchange: 'platform',
-    routingKey: 'createContactTag',
-    queue: 'createContactTag',
-  })
+  // @RmqService.rpc({
+  //   exchange: 'platform',
+  //   routingKey: 'createContactTag',
+  //   queue: 'createContactTag',
+  // })
   @SerializeOptions({
     type: ContactDto,
   })
@@ -28,11 +27,11 @@ export class ContactTagController {
     return this.contactTagService.create(projectId, payload);
   }
 
-  @RmqService.rpc({
-    exchange: 'platform',
-    routingKey: 'removeContactTag',
-    queue: 'removeContactTag',
-  })
+  // @RmqService.rpc({
+  //   exchange: 'platform',
+  //   routingKey: 'removeContactTag',
+  //   queue: 'removeContactTag',
+  // })
   @SerializeOptions({
     type: ContactDto,
   })

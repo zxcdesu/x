@@ -1,12 +1,8 @@
 import { registerEnumType } from '@nestjs/graphql';
-
-export enum AttachmentType {
-  Audio = 'Audio',
-  Document = 'Document',
-  Image = 'Image',
-  Video = 'Video',
-}
+import { AttachmentType } from '@zxcdesu/prisma-platform';
 
 registerEnumType(AttachmentType, {
   name: 'AttachmentType',
 });
+
+export { AttachmentType };

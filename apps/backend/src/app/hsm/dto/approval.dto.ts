@@ -1,11 +1,11 @@
 import { Field, ObjectType } from '@nestjs/graphql';
-import { ChannelDto } from '../../channel/dto/channel.dto';
+import { ChannelObject } from '../../channel/dto/channel.object';
 import { ApprovalStatus } from './approval-status.enum';
 
 @ObjectType()
 export class ApprovalDto {
-  @Field(() => ChannelDto)
-  channel: ChannelDto;
+  @Field(() => ChannelObject)
+  channel: ChannelObject;
 
   @Field(() => ApprovalStatus)
   status: ApprovalStatus;

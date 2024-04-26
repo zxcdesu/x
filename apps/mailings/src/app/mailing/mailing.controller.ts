@@ -6,9 +6,8 @@ import {
   MailingService,
   UpdateMailingDto,
 } from '@zxcdesu/data-access-mailing';
+import { ProjectId } from '@zxcdesu/data-access-project';
 import { MailingSchedulerService } from '@zxcdesu/feature-mailing-scheduler';
-import { ProjectId } from '@zxcdesu/util-project';
-import { RmqService } from '@zxcdesu/util-rmq';
 
 @Controller()
 export class MailingController {
@@ -17,11 +16,11 @@ export class MailingController {
     private readonly mailingSchedulerService: MailingSchedulerService,
   ) {}
 
-  @RmqService.rpc({
-    exchange: 'mailings',
-    routingKey: 'createMailing',
-    queue: 'createMailing',
-  })
+  // @RmqService.rpc({
+  //   exchange: 'mailings',
+  //   routingKey: 'createMailing',
+  //   queue: 'createMailing',
+  // })
   @SerializeOptions({
     type: MailingDto,
   })
@@ -34,11 +33,11 @@ export class MailingController {
     );
   }
 
-  @RmqService.rpc({
-    exchange: 'mailings',
-    routingKey: 'findOneMailing',
-    queue: 'findOneMailing',
-  })
+  // @RmqService.rpc({
+  //   exchange: 'mailings',
+  //   routingKey: 'findOneMailing',
+  //   queue: 'findOneMailing',
+  // })
   @SerializeOptions({
     type: MailingDto,
   })
@@ -49,11 +48,11 @@ export class MailingController {
     return this.mailingService.findOne(projectId, id);
   }
 
-  @RmqService.rpc({
-    exchange: 'mailings',
-    routingKey: 'findAllMailings',
-    queue: 'findAllMailings',
-  })
+  // @RmqService.rpc({
+  //   exchange: 'mailings',
+  //   routingKey: 'findAllMailings',
+  //   queue: 'findAllMailings',
+  // })
   @SerializeOptions({
     type: MailingDto,
   })
@@ -61,11 +60,11 @@ export class MailingController {
     return this.mailingService.findAll(projectId);
   }
 
-  @RmqService.rpc({
-    exchange: 'mailings',
-    routingKey: 'updateMailing',
-    queue: 'updateMailing',
-  })
+  // @RmqService.rpc({
+  //   exchange: 'mailings',
+  //   routingKey: 'updateMailing',
+  //   queue: 'updateMailing',
+  // })
   @SerializeOptions({
     type: MailingDto,
   })
@@ -79,11 +78,11 @@ export class MailingController {
     );
   }
 
-  @RmqService.rpc({
-    exchange: 'mailings',
-    routingKey: 'removeMailing',
-    queue: 'removeMailing',
-  })
+  // @RmqService.rpc({
+  //   exchange: 'mailings',
+  //   routingKey: 'removeMailing',
+  //   queue: 'removeMailing',
+  // })
   @SerializeOptions({
     type: MailingDto,
   })
