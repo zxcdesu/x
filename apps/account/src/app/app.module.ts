@@ -28,7 +28,7 @@ import { UserController } from './user/user.controller';
         uri: configService.getOrThrow<string>('BROKER_URL'),
         exchanges: [
           {
-            name: 'auth',
+            name: 'account',
             type: 'direct',
           },
         ],

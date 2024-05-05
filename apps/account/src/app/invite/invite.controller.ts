@@ -1,6 +1,10 @@
 import { RabbitPayload } from '@golevelup/nestjs-rabbitmq';
 import { Controller } from '@nestjs/common';
-import { CreateInviteDto, InviteRmq } from '@zxcdesu/data-access-invite';
+import {
+  CreateInviteDto,
+  InviteDto,
+  InviteRmq,
+} from '@zxcdesu/data-access-invite';
 import { ProjectId } from '@zxcdesu/data-access-project';
 import { ProjectUserInviteService } from '@zxcdesu/feature-project-user-invite';
 
@@ -14,7 +18,7 @@ export class InviteController {
   create(
     @ProjectId() projectId: number,
     @RabbitPayload() payload: CreateInviteDto,
-  ): Promise<boolean> {
+  ): Promise<InviteDto> {
     return this.projectUserInviteService.createInvite(projectId, payload);
   }
 }
