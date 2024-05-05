@@ -151,6 +151,7 @@
       "@zxcdesu/util-account-shared-decorators": [
         "libs/account/util-account-shared-decorators/src/index.ts"
       ],
+      "@zxcdesu/util-cache": ["libs/shared/util-cache/src/index.ts"],
       "@zxcdesu/util-gql": ["libs/shared/util-gql/src/index.ts"],
       "@zxcdesu/util-http": ["libs/shared/util-http/src/index.ts"],
       "@zxcdesu/util-pagination": ["libs/shared/util-pagination/src/index.ts"],
