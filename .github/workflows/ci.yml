@@ -28,13 +28,17 @@ jobs:
           username: ${{ secrets.DOCKER_HUB_USERNAME }}
           password: ${{ secrets.DOCKER_HUB_ACCESS_TOKEN }}
 
+      - uses: pnpm/action-setup@v3
+        with:
+          version: '8.15.8'
+
       - uses: actions/setup-node@v4
         with:
           node-version-file: .nvmrc
-          cache: npm
+          cache: pnpm
 
       - name: Installing dependencies
-        run: npm ci
+        run: pnmp install --frozen-lockfile
 
       - name: Derive appropriate SHAs for base and head for `nx affected` commands
         uses: nrwl/nx-set-shas@v4
@@ -42,4 +46,4 @@ jobs:
           main-branch-name: master
 
       - name: Run commands for affected projects
-        run: INPUT_GITHUB_TOKEN=${{ secrets.GITHUB_TOKEN }} npx nx affected --targets lint,test,container --parallel=2
+        run: INPUT_GITHUB_TOKEN=${{ secrets.GITHUB_TOKEN }} pnpx nx affected --targets lint,test,container --parallel=2
