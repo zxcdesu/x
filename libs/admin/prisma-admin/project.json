@@ -22,23 +22,76 @@
     "prisma-generate": {
       "executor": "nx:run-commands",
       "options": {
-        "command": "prisma generate",
-        "cwd": "libs/admin/prisma-admin"
+        "command": "prisma generate --schema libs/admin/prisma-admin/prisma/schema.prisma"
       }
     },
     "prisma-migrate": {
       "executor": "nx:run-commands",
       "options": {
-        "command": "prisma migrate dev",
-        "cwd": "libs/admin/prisma-admin",
+        "command": "prisma migrate dev --schema libs/admin/prisma-admin/prisma/schema.prisma",
+        "envFile": "apps/admin/.env"
+      }
+    },
+    "prisma-pull": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "prisma db pull --schema libs/admin/prisma-admin/prisma/schema.prisma",
+        "envFile": "apps/admin/.env"
+      }
+    },
+    "prisma-push": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "prisma db push --schema libs/admin/prisma-admin/prisma/schema.prisma",
         "envFile": "apps/admin/.env"
       }
     },
     "prisma-deploy": {
       "executor": "nx:run-commands",
       "options": {
-        "command": "prisma migrate deploy",
-        "cwd": "libs/admin/prisma-admin",
+        "command": "prisma migrate deploy --schema libs/admin/prisma-admin/prisma/schema.prisma",
+        "envFile": "apps/admin/.env"
+      }
+    },
+    "prisma-status": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "prisma migrate status --schema libs/admin/prisma-admin/prisma/schema.prisma",
+        "envFile": "apps/admin/.env"
+      }
+    },
+    "prisma-studio": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "prisma studio --schema libs/admin/prisma-admin/prisma/schema.prisma",
+        "envFile": "apps/admin/.env"
+      }
+    },
+    "prisma-reset": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "prisma migrate reset --schema libs/admin/prisma-admin/prisma/schema.prisma",
+        "envFile": "apps/admin/.env"
+      }
+    },
+    "prisma-resolve": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "prisma migrate resolve --schema libs/admin/prisma-admin/prisma/schema.prisma",
+        "envFile": "apps/admin/.env"
+      }
+    },
+    "prisma-seed": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "prisma db seed --schema libs/admin/prisma-admin/prisma/schema.prisma",
+        "envFile": "apps/admin/.env"
+      }
+    },
+    "prisma-validate": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "prisma validate --schema libs/admin/prisma-admin/prisma/schema.prisma",
         "envFile": "apps/admin/.env"
       }
     }

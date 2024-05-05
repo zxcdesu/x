@@ -16,7 +16,6 @@
         "main": "apps/bots/src/main.ts",
         "tsConfig": "apps/bots/tsconfig.app.json",
         "assets": ["apps/bots/src/assets"],
-        "isolatedConfig": true,
         "webpackConfig": "apps/bots/webpack.config.js",
         "generatePackageJson": true
       },
@@ -62,23 +61,12 @@
         }
       }
     },
-    "container": {
-      "executor": "@nx-tools/nx-container:build",
+    "docker": {
+      "executor": "nx:run-commands",
       "dependsOn": ["build"],
       "options": {
-        "engine": "docker",
-        "push": true,
-        "metadata": {
-          "images": ["xanede/bots"],
-          "load": true,
-          "tags": [
-            "type=schedule",
-            "type=ref,event=branch",
-            "type=ref,event=tag",
-            "type=ref,event=pr",
-            "type=sha,prefix=sha-"
-          ]
-        }
+        "commands": [],
+        "parallel": false
       }
     }
   },

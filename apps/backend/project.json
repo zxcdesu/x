@@ -8,6 +8,7 @@
       "executor": "@nx/webpack:webpack",
       "outputs": ["{options.outputPath}"],
       "defaultConfiguration": "production",
+      "dependsOn": ["^prisma-generate"],
       "options": {
         "target": "node",
         "compiler": "tsc",
@@ -15,7 +16,6 @@
         "main": "apps/backend/src/main.ts",
         "tsConfig": "apps/backend/tsconfig.app.json",
         "assets": ["apps/backend/src/assets"],
-        "isolatedConfig": true,
         "webpackConfig": "apps/backend/webpack.config.js",
         "generatePackageJson": true
       },
@@ -60,23 +60,12 @@
         }
       }
     },
-    "container": {
-      "executor": "@nx-tools/nx-container:build",
+    "docker": {
+      "executor": "nx:run-commands",
       "dependsOn": ["build"],
       "options": {
-        "engine": "docker",
-        "push": true,
-        "metadata": {
-          "images": ["xanede/backend"],
-          "load": true,
-          "tags": [
-            "type=schedule",
-            "type=ref,event=branch",
-            "type=ref,event=tag",
-            "type=ref,event=pr",
-            "type=sha,prefix=sha-"
-          ]
-        }
+        "commands": [],
+        "parallel": false
       }
     }
   },

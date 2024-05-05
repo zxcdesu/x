@@ -16,7 +16,6 @@
         "main": "apps/billing/src/main.ts",
         "tsConfig": "apps/billing/tsconfig.app.json",
         "assets": ["apps/billing/src/assets"],
-        "isolatedConfig": true,
         "webpackConfig": "apps/billing/webpack.config.js",
         "generatePackageJson": true
       },
@@ -62,23 +61,12 @@
         }
       }
     },
-    "container": {
-      "executor": "@nx-tools/nx-container:build",
+    "docker": {
+      "executor": "nx:run-commands",
       "dependsOn": ["build"],
       "options": {
-        "engine": "docker",
-        "push": true,
-        "metadata": {
-          "images": ["xanede/billing"],
-          "load": true,
-          "tags": [
-            "type=schedule",
-            "type=ref,event=branch",
-            "type=ref,event=tag",
-            "type=ref,event=pr",
-            "type=sha,prefix=sha-"
-          ]
-        }
+        "commands": [],
+        "parallel": false
       }
     }
   },

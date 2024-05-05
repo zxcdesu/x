@@ -20,69 +20,79 @@
       }
     },
     "prisma-generate": {
-      "executor": "@nx-tools/nx-prisma:generate",
+      "executor": "nx:run-commands",
       "options": {
-        "schema": "libs/notifications/prisma-notifications/prisma/schema.prisma"
+        "command": "prisma generate --schema libs/notifications/prisma-notifications/prisma/schema.prisma"
       }
     },
     "prisma-migrate": {
-      "executor": "@nx-tools/nx-prisma:migrate",
+      "executor": "nx:run-commands",
       "options": {
-        "schema": "libs/notifications/prisma-notifications/prisma/schema.prisma"
-      }
-    },
-    "prisma-deploy": {
-      "executor": "@nx-tools/nx-prisma:deploy",
-      "options": {
-        "schema": "libs/notifications/prisma-notifications/prisma/schema.prisma"
+        "command": "prisma migrate dev --schema libs/notifications/prisma-notifications/prisma/schema.prisma",
+        "envFile": "apps/notifications/.env"
       }
     },
     "prisma-pull": {
-      "executor": "@nx-tools/nx-prisma:pull",
+      "executor": "nx:run-commands",
       "options": {
-        "schema": "libs/notifications/prisma-notifications/prisma/schema.prisma"
+        "command": "prisma db pull --schema libs/notifications/prisma-notifications/prisma/schema.prisma",
+        "envFile": "apps/notifications/.env"
       }
     },
     "prisma-push": {
-      "executor": "@nx-tools/nx-prisma:push",
+      "executor": "nx:run-commands",
       "options": {
-        "schema": "libs/notifications/prisma-notifications/prisma/schema.prisma"
+        "command": "prisma db push --schema libs/notifications/prisma-notifications/prisma/schema.prisma",
+        "envFile": "apps/notifications/.env"
+      }
+    },
+    "prisma-deploy": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "prisma migrate deploy --schema libs/notifications/prisma-notifications/prisma/schema.prisma",
+        "envFile": "apps/notifications/.env"
       }
     },
     "prisma-status": {
-      "executor": "@nx-tools/nx-prisma:status",
+      "executor": "nx:run-commands",
       "options": {
-        "schema": "libs/notifications/prisma-notifications/prisma/schema.prisma"
+        "command": "prisma migrate status --schema libs/notifications/prisma-notifications/prisma/schema.prisma",
+        "envFile": "apps/notifications/.env"
       }
     },
     "prisma-studio": {
-      "executor": "@nx-tools/nx-prisma:studio",
+      "executor": "nx:run-commands",
       "options": {
-        "schema": "libs/notifications/prisma-notifications/prisma/schema.prisma"
+        "command": "prisma studio --schema libs/notifications/prisma-notifications/prisma/schema.prisma",
+        "envFile": "apps/notifications/.env"
       }
     },
     "prisma-reset": {
-      "executor": "@nx-tools/nx-prisma:reset",
+      "executor": "nx:run-commands",
       "options": {
-        "schema": "libs/notifications/prisma-notifications/prisma/schema.prisma"
+        "command": "prisma migrate reset --schema libs/notifications/prisma-notifications/prisma/schema.prisma",
+        "envFile": "apps/notifications/.env"
       }
     },
     "prisma-resolve": {
-      "executor": "@nx-tools/nx-prisma:resolve",
+      "executor": "nx:run-commands",
       "options": {
-        "schema": "libs/notifications/prisma-notifications/prisma/schema.prisma"
+        "command": "prisma migrate resolve --schema libs/notifications/prisma-notifications/prisma/schema.prisma",
+        "envFile": "apps/notifications/.env"
       }
     },
     "prisma-seed": {
-      "executor": "@nx-tools/nx-prisma:seed",
+      "executor": "nx:run-commands",
       "options": {
-        "schema": "libs/notifications/prisma-notifications/prisma/schema.prisma"
+        "command": "prisma db seed --schema libs/notifications/prisma-notifications/prisma/schema.prisma",
+        "envFile": "apps/notifications/.env"
       }
     },
     "prisma-validate": {
-      "executor": "@nx-tools/nx-prisma:validate",
+      "executor": "nx:run-commands",
       "options": {
-        "schema": "libs/notifications/prisma-notifications/prisma/schema.prisma"
+        "command": "prisma validate --schema libs/notifications/prisma-notifications/prisma/schema.prisma",
+        "envFile": "apps/notifications/.env"
       }
     }
   },

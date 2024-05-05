@@ -37,5 +37,13 @@
       "!{projectRoot}/.eslintrc.json"
     ],
     "sharedGlobals": []
-  }
+  },
+  "plugins": [
+    {
+      "plugin": "@nx/eslint/plugin",
+      "options": {
+        "targetName": "lint"
+      }
+    }
+  ]
 }
