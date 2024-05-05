@@ -52,7 +52,7 @@ jobs:
             ${{ runner.os }}-pnpm-store-
 
       - name: Installing dependencies
-        run: pnmp install --frozen-lockfile
+        run: pnpm install --frozen-lockfile
 
       - name: Derive appropriate SHAs for base and head for `nx affected` commands
         uses: nrwl/nx-set-shas@v4
