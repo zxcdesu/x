@@ -6,13 +6,13 @@ import { PaymentProvider, PrismaService } from '@zxcdesu/prisma-billing';
 import { AbstractPayment } from './abstract.payment';
 import { MODULE_OPTIONS_TOKEN } from './feature-payment-provider.module-definition';
 import { PaymentProviderOptions } from './payment-provider-options.interface';
-import { YookassaPayment } from './yookassa.payment';
+import { YookassaPayment } from './yookassa';
 
 @Injectable()
 export class PaymentRepository
   implements Record<PaymentProvider, typeof AbstractPayment<unknown>>
 {
-  [PaymentProvider.Yookassa] = YookassaPayment;
+  readonly [PaymentProvider.Yookassa] = YookassaPayment;
 
   constructor(
     @Inject(MODULE_OPTIONS_TOKEN)

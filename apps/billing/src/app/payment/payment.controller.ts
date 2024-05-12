@@ -3,13 +3,11 @@ import { Controller, SerializeOptions } from '@nestjs/common';
 import {
   CreatePaymentDto,
   HandlePaymentDto,
+  PaymentInPendingDto,
   PaymentRmq,
 } from '@zxcdesu/data-access-payment';
 import { ProjectId } from '@zxcdesu/data-access-project';
-import {
-  PaymentProviderService,
-  PaymentUrlDto,
-} from '@zxcdesu/feature-payment-provider';
+import { PaymentProviderService } from '@zxcdesu/feature-payment-provider';
 
 @Controller()
 export class PaymentController {
@@ -19,12 +17,12 @@ export class PaymentController {
 
   @PaymentRmq.create()
   @SerializeOptions({
-    type: PaymentUrlDto,
+    type: PaymentInPendingDto,
   })
   create(
     @ProjectId() projectId: number,
     @RabbitPayload() payload: CreatePaymentDto,
-  ): Promise<PaymentUrlDto> {
+  ): Promise<PaymentInPendingDto> {
     return this.paymentProviderService.create(projectId, payload);
   }
 

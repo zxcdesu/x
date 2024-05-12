@@ -5,6 +5,7 @@ import {
   CreateWalletDto,
   UpdateWalletDto,
   WalletDto,
+  WalletRmq,
   WalletService,
 } from '@zxcdesu/data-access-wallet';
 
@@ -12,11 +13,7 @@ import {
 export class WalletController {
   constructor(private readonly walletService: WalletService) {}
 
-  // @RmqService.rpc({
-  //   exchange: 'billing',
-  //   routingKey: 'createWallet',
-  //   queue: 'createWallet',
-  // })
+  @WalletRmq.create()
   @SerializeOptions({
     type: WalletDto,
   })
@@ -27,11 +24,7 @@ export class WalletController {
     return this.walletService.create(projectId, payload);
   }
 
-  // @RmqService.rpc({
-  //   exchange: 'billing',
-  //   routingKey: 'findOneWallet',
-  //   queue: 'findOneWallet',
-  // })
+  @WalletRmq.findOne()
   @SerializeOptions({
     type: WalletDto,
   })
@@ -39,11 +32,7 @@ export class WalletController {
     return this.walletService.findOne(projectId);
   }
 
-  // @RmqService.rpc({
-  //   exchange: 'billing',
-  //   routingKey: 'updateWallet',
-  //   queue: 'updateWallet',
-  // })
+  @WalletRmq.update()
   @SerializeOptions({
     type: WalletDto,
   })
@@ -54,11 +43,7 @@ export class WalletController {
     return this.walletService.update(projectId, payload);
   }
 
-  // @RmqService.rpc({
-  //   exchange: 'billing',
-  //   routingKey: 'removeWallet',
-  //   queue: 'removeWallet',
-  // })
+  @WalletRmq.remove()
   @SerializeOptions({
     type: WalletDto,
   })

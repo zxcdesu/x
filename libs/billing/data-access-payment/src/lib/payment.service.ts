@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { PaymentProvider, PrismaService } from '@zxcdesu/prisma-billing';
-import { CreatePaymentDto, UpdatePaymentDto } from './dto';
+import { CreatePaymentDto } from './dto';
 
 @Injectable()
 export class PaymentService {
@@ -15,24 +15,14 @@ export class PaymentService {
     });
   }
 
-  findOneOrDefaultByExternalId(provider: PaymentProvider, externalId: string) {
+  findOneOrDefaultByExternalId(externalId: string, provider: PaymentProvider) {
     return this.prismaService.payment.findUnique({
       where: {
         externalId_provider: {
-          provider,
           externalId,
+          provider,
         },
       },
-    });
-  }
-
-  update(projectId: number, id: number, payload: UpdatePaymentDto) {
-    return this.prismaService.payment.update({
-      where: {
-        projectId,
-        id,
-      },
-      data: payload,
     });
   }
 }

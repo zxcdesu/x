@@ -1,12 +1,10 @@
 import { Injectable } from '@nestjs/common';
 import { RmqFactory } from '@zxcdesu/util-rmq';
 import { StringifyDate } from '@zxcdesu/util-types';
-import { CreatePaymentDto, HandlePaymentDto, PaymentUrlDto } from './dto';
+import { CreatePaymentDto, HandlePaymentDto, PaymentInPendingDto } from './dto';
 
 @Injectable()
-export class PaymentRmq<
-  T extends Partial<StringifyDate<PaymentUrlDto>>,
-> extends RmqFactory {
+export class PaymentRmq extends RmqFactory {
   static create() {
     return this.rpc({
       exchange: 'billing',
@@ -15,7 +13,10 @@ export class PaymentRmq<
     });
   }
 
-  create(projectId: number, payload: CreatePaymentDto) {
+  create<T extends Partial<StringifyDate<PaymentInPendingDto>>>(
+    projectId: number,
+    payload: CreatePaymentDto,
+  ) {
     return this.request<T>({
       exchange: 'billing',
       routingKey: 'createPayment',

@@ -4,6 +4,7 @@ import { ProjectId } from '@zxcdesu/data-access-project';
 import {
   CreateSubscriptionDto,
   SubscriptionDto,
+  SubscriptionRmq,
   SubscriptionService,
   UpdateSubscriptionDto,
 } from '@zxcdesu/data-access-subscription';
@@ -12,11 +13,7 @@ import {
 export class SubscriptionController {
   constructor(private readonly subscriptionService: SubscriptionService) {}
 
-  // @RmqService.rpc({
-  //   exchange: 'billing',
-  //   routingKey: 'createSubscription',
-  //   queue: 'createSubscription',
-  // })
+  @SubscriptionRmq.create()
   @SerializeOptions({
     type: SubscriptionDto,
   })
@@ -27,11 +24,7 @@ export class SubscriptionController {
     return this.subscriptionService.create(projectId, payload);
   }
 
-  // @RmqService.rpc({
-  //   exchange: 'billing',
-  //   routingKey: 'findOneSubscription',
-  //   queue: 'findOneSubscription',
-  // })
+  @SubscriptionRmq.findOne()
   @SerializeOptions({
     type: SubscriptionDto,
   })
@@ -39,11 +32,7 @@ export class SubscriptionController {
     return this.subscriptionService.findOne(projectId);
   }
 
-  // @RmqService.rpc({
-  //   exchange: 'billing',
-  //   routingKey: 'updateSubscription',
-  //   queue: 'updateSubscription',
-  // })
+  @SubscriptionRmq.update()
   @SerializeOptions({
     type: SubscriptionDto,
   })
@@ -54,11 +43,7 @@ export class SubscriptionController {
     return this.subscriptionService.update(projectId, payload);
   }
 
-  // @RmqService.rpc({
-  //   exchange: 'billing',
-  //   routingKey: 'removeSubscription',
-  //   queue: 'removeSubscription',
-  // })
+  @SubscriptionRmq.remove()
   @SerializeOptions({
     type: SubscriptionDto,
   })
