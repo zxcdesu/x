@@ -2,6 +2,7 @@ import { RabbitMQModule } from '@golevelup/nestjs-rabbitmq';
 import { MailerModule } from '@nestjs-modules/mailer';
 import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
+import { DataAccessInviteModule } from '@zxcdesu/data-access-invite';
 import { DataAccessProjectModule } from '@zxcdesu/data-access-project';
 import { DataAccessProjectUserModule } from '@zxcdesu/data-access-project-user';
 import { DataAccessUserModule } from '@zxcdesu/data-access-user';
@@ -52,6 +53,7 @@ import { UserController } from './user/user.controller';
       },
       inject: [ConfigService],
     }),
+    DataAccessInviteModule,
     DataAccessProjectModule,
     DataAccessProjectUserModule,
     DataAccessUserModule,
