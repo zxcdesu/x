@@ -37,7 +37,7 @@ export class WebhookController {
   @HttpCode(200)
   handleTelegramWebhook(@Body() body: unknown) {
     return this.webhookService.handle(
-      'notifications',
+      'notification',
       {
         provider: 'Telegram',
         value: body,

@@ -1,0 +1,100 @@
+{
+  "name": "prisma-mailing",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/mailing/prisma-mailing/src",
+  "projectType": "library",
+  "targets": {
+    "lint": {
+      "executor": "@nx/eslint:lint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": ["libs/mailing/prisma-mailing/**/*.ts"]
+      }
+    },
+    "test": {
+      "executor": "@nx/jest:jest",
+      "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
+      "options": {
+        "jestConfig": "libs/mailing/prisma-mailing/jest.config.ts",
+        "passWithNoTests": true
+      }
+    },
+    "prisma-generate": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "prisma generate --schema libs/mailing/prisma-mailing/prisma/schema.prisma"
+      }
+    },
+    "prisma-migrate": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "prisma migrate dev --schema libs/mailing/prisma-mailing/prisma/schema.prisma",
+        "envFile": "apps/mailing/.env"
+      }
+    },
+    "prisma-pull": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "prisma db pull --schema libs/mailing/prisma-mailing/prisma/schema.prisma",
+        "envFile": "apps/mailing/.env"
+      }
+    },
+    "prisma-push": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "prisma db push --schema libs/mailing/prisma-mailing/prisma/schema.prisma",
+        "envFile": "apps/mailing/.env"
+      }
+    },
+    "prisma-deploy": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "prisma migrate deploy --schema libs/mailing/prisma-mailing/prisma/schema.prisma",
+        "envFile": "apps/mailing/.env"
+      }
+    },
+    "prisma-status": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "prisma migrate status --schema libs/mailing/prisma-mailing/prisma/schema.prisma",
+        "envFile": "apps/mailing/.env"
+      }
+    },
+    "prisma-studio": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "prisma studio --schema libs/mailing/prisma-mailing/prisma/schema.prisma",
+        "envFile": "apps/mailing/.env"
+      }
+    },
+    "prisma-reset": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "prisma migrate reset --schema libs/mailing/prisma-mailing/prisma/schema.prisma",
+        "envFile": "apps/mailing/.env"
+      }
+    },
+    "prisma-resolve": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "prisma migrate resolve --schema libs/mailing/prisma-mailing/prisma/schema.prisma",
+        "envFile": "apps/mailing/.env"
+      }
+    },
+    "prisma-seed": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "prisma db seed --schema libs/mailing/prisma-mailing/prisma/schema.prisma",
+        "envFile": "apps/mailing/.env"
+      }
+    },
+    "prisma-validate": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "prisma validate --schema libs/mailing/prisma-mailing/prisma/schema.prisma",
+        "envFile": "apps/mailing/.env"
+      }
+    }
+  },
+  "tags": []
+}

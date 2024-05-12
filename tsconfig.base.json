@@ -18,9 +18,9 @@
       "@zxcdesu/data-access-admin": [
         "libs/admin/data-access-admin/src/index.ts"
       ],
-      "@zxcdesu/data-access-bot": ["libs/bots/data-access-bot/src/index.ts"],
+      "@zxcdesu/data-access-bot": ["libs/bot/data-access-bot/src/index.ts"],
       "@zxcdesu/data-access-bot-template": [
-        "libs/bots/data-access-bot-template/src/index.ts"
+        "libs/bot/data-access-bot-template/src/index.ts"
       ],
       "@zxcdesu/data-access-channel": [
         "libs/platform/data-access-channel/src/index.ts"
@@ -47,22 +47,22 @@
         "libs/platform/data-access-hsm/src/index.ts"
       ],
       "@zxcdesu/data-access-integration": [
-        "libs/integrations/data-access-integration/src/index.ts"
+        "libs/integration/data-access-integration/src/index.ts"
       ],
       "@zxcdesu/data-access-invite": [
         "libs/account/data-access-invite/src/index.ts"
       ],
       "@zxcdesu/data-access-mailing": [
-        "libs/mailings/data-access-mailing/src/index.ts"
+        "libs/mailing/data-access-mailing/src/index.ts"
       ],
       "@zxcdesu/data-access-mailing-job": [
-        "libs/mailings/data-access-mailing-job/src/index.ts"
+        "libs/mailing/data-access-mailing-job/src/index.ts"
       ],
       "@zxcdesu/data-access-message": [
         "libs/platform/data-access-message/src/index.ts"
       ],
       "@zxcdesu/data-access-notification-subscriber": [
-        "libs/notifications/data-access-notification-subscriber/src/index.ts"
+        "libs/notification/data-access-notification-subscriber/src/index.ts"
       ],
       "@zxcdesu/data-access-payment": [
         "libs/billing/data-access-payment/src/index.ts"
@@ -86,13 +86,13 @@
         "libs/billing/data-access-wallet/src/index.ts"
       ],
       "@zxcdesu/data-access-webhook": [
-        "libs/integrations/data-access-webhook/src/index.ts"
+        "libs/integration/data-access-webhook/src/index.ts"
       ],
       "@zxcdesu/feature-bot-compiler": [
-        "libs/bots/feature-bot-compiler/src/index.ts"
+        "libs/bot/feature-bot-compiler/src/index.ts"
       ],
       "@zxcdesu/feature-bot-manager": [
-        "libs/bots/feature-bot-manager/src/index.ts"
+        "libs/bot/feature-bot-manager/src/index.ts"
       ],
       "@zxcdesu/feature-channel-manager": [
         "libs/platform/feature-channel-manager/src/index.ts"
@@ -101,19 +101,19 @@
         "libs/platform/feature-chat-manager/src/index.ts"
       ],
       "@zxcdesu/feature-mailing-scheduler": [
-        "libs/mailings/feature-mailing-scheduler/src/index.ts"
+        "libs/mailing/feature-mailing-scheduler/src/index.ts"
       ],
       "@zxcdesu/feature-mailing-worker": [
-        "libs/mailings/feature-mailing-worker/src/index.ts"
+        "libs/mailing/feature-mailing-worker/src/index.ts"
       ],
       "@zxcdesu/feature-message-manager": [
         "libs/platform/feature-message-manager/src/index.ts"
       ],
       "@zxcdesu/feature-notification-sender": [
-        "libs/notifications/feature-notification-sender/src/index.ts"
+        "libs/notification/feature-notification-sender/src/index.ts"
       ],
       "@zxcdesu/feature-notification-subscriber-provider": [
-        "libs/notifications/feature-notification-subscriber-provider/src/index.ts"
+        "libs/notification/feature-notification-subscriber-provider/src/index.ts"
       ],
       "@zxcdesu/feature-payment-provider": [
         "libs/billing/feature-payment-provider/src/index.ts"
@@ -128,22 +128,20 @@
         "libs/platform/feature-third-party-api-repository/src/index.ts"
       ],
       "@zxcdesu/feature-webhook-sender": [
-        "libs/integrations/feature-webhook-sender/src/index.ts"
+        "libs/integration/feature-webhook-sender/src/index.ts"
       ],
       "@zxcdesu/prisma-account": ["libs/account/prisma-account/src/index.ts"],
       "@zxcdesu/prisma-admin": ["libs/admin/prisma-admin/src/index.ts"],
       "@zxcdesu/prisma-auth": ["libs/auth/prisma-auth/src/index.ts"],
       "@zxcdesu/prisma-billing": ["libs/billing/prisma-billing/src/index.ts"],
-      "@zxcdesu/prisma-bots": ["libs/bots/prisma-bots/src/index.ts"],
+      "@zxcdesu/prisma-bot": ["libs/bot/prisma-bot/src/index.ts"],
       "@zxcdesu/prisma-history": ["libs/history/prisma-history/src/index.ts"],
-      "@zxcdesu/prisma-integrations": [
-        "libs/integrations/prisma-integrations/src/index.ts"
+      "@zxcdesu/prisma-integration": [
+        "libs/integration/prisma-integration/src/index.ts"
       ],
-      "@zxcdesu/prisma-mailings": [
-        "libs/mailings/prisma-mailings/src/index.ts"
-      ],
-      "@zxcdesu/prisma-notifications": [
-        "libs/notifications/prisma-notifications/src/index.ts"
+      "@zxcdesu/prisma-mailing": ["libs/mailing/prisma-mailing/src/index.ts"],
+      "@zxcdesu/prisma-notification": [
+        "libs/notification/prisma-notification/src/index.ts"
       ],
       "@zxcdesu/prisma-platform": [
         "libs/platform/prisma-platform/src/index.ts"

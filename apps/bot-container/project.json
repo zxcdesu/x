@@ -1,0 +1,73 @@
+{
+  "name": "bot-container",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "apps/bot-container/src",
+  "projectType": "application",
+  "targets": {
+    "build": {
+      "executor": "@nx/webpack:webpack",
+      "outputs": ["{options.outputPath}"],
+      "defaultConfiguration": "production",
+      "dependsOn": ["^prisma-generate"],
+      "options": {
+        "target": "node",
+        "compiler": "tsc",
+        "outputPath": "dist/apps/bot-container",
+        "main": "apps/bot-container/src/main.ts",
+        "tsConfig": "apps/bot-container/tsconfig.app.json",
+        "assets": ["apps/bot-container/src/assets"],
+        "webpackConfig": "apps/bot-container/webpack.config.js",
+        "generatePackageJson": true
+      },
+      "configurations": {
+        "development": {},
+        "production": {}
+      }
+    },
+    "serve": {
+      "executor": "@nx/js:node",
+      "defaultConfiguration": "development",
+      "options": {
+        "buildTarget": "bot-container:build"
+      },
+      "configurations": {
+        "development": {
+          "buildTarget": "bot-container:build:development"
+        },
+        "production": {
+          "buildTarget": "bot-container:build:production"
+        }
+      }
+    },
+    "lint": {
+      "executor": "@nx/linter:eslint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": ["apps/bot-container/**/*.ts"]
+      }
+    },
+    "test": {
+      "executor": "@nx/jest:jest",
+      "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
+      "options": {
+        "jestConfig": "apps/bot-container/jest.config.ts",
+        "passWithNoTests": true
+      },
+      "configurations": {
+        "ci": {
+          "ci": true,
+          "codeCoverage": true
+        }
+      }
+    },
+    "docker": {
+      "executor": "nx:run-commands",
+      "dependsOn": ["build"],
+      "options": {
+        "commands": [],
+        "parallel": false
+      }
+    }
+  },
+  "tags": []
+}

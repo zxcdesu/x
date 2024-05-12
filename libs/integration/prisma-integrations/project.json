@@ -1,0 +1,100 @@
+{
+  "name": "prisma-integration",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/integration/prisma-integration/src",
+  "projectType": "library",
+  "targets": {
+    "lint": {
+      "executor": "@nx/eslint:lint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": ["libs/integration/prisma-integration/**/*.ts"]
+      }
+    },
+    "test": {
+      "executor": "@nx/jest:jest",
+      "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
+      "options": {
+        "jestConfig": "libs/integration/prisma-integration/jest.config.ts",
+        "passWithNoTests": true
+      }
+    },
+    "prisma-generate": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "prisma generate --schema libs/integration/prisma-integration/prisma/schema.prisma"
+      }
+    },
+    "prisma-migrate": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "prisma migrate dev --schema libs/integration/prisma-integration/prisma/schema.prisma",
+        "envFile": "apps/integration/.env"
+      }
+    },
+    "prisma-pull": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "prisma db pull --schema libs/integration/prisma-integration/prisma/schema.prisma",
+        "envFile": "apps/integration/.env"
+      }
+    },
+    "prisma-push": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "prisma db push --schema libs/integration/prisma-integration/prisma/schema.prisma",
+        "envFile": "apps/integration/.env"
+      }
+    },
+    "prisma-deploy": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "prisma migrate deploy --schema libs/integration/prisma-integration/prisma/schema.prisma",
+        "envFile": "apps/integration/.env"
+      }
+    },
+    "prisma-status": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "prisma migrate status --schema libs/integration/prisma-integration/prisma/schema.prisma",
+        "envFile": "apps/integration/.env"
+      }
+    },
+    "prisma-studio": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "prisma studio --schema libs/integration/prisma-integration/prisma/schema.prisma",
+        "envFile": "apps/integration/.env"
+      }
+    },
+    "prisma-reset": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "prisma migrate reset --schema libs/integration/prisma-integration/prisma/schema.prisma",
+        "envFile": "apps/integration/.env"
+      }
+    },
+    "prisma-resolve": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "prisma migrate resolve --schema libs/integration/prisma-integration/prisma/schema.prisma",
+        "envFile": "apps/integration/.env"
+      }
+    },
+    "prisma-seed": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "prisma db seed --schema libs/integration/prisma-integration/prisma/schema.prisma",
+        "envFile": "apps/integration/.env"
+      }
+    },
+    "prisma-validate": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "prisma validate --schema libs/integration/prisma-integration/prisma/schema.prisma",
+        "envFile": "apps/integration/.env"
+      }
+    }
+  },
+  "tags": []
+}

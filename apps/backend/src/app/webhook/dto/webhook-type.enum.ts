@@ -1,5 +1,5 @@
 import { registerEnumType } from '@nestjs/graphql';
-import { WebhookType } from '@zxcdesu/prisma-integrations';
+import { WebhookType } from '@zxcdesu/prisma-integration';
 
 registerEnumType(WebhookType, {
   name: 'WebhookType',
