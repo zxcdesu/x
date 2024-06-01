@@ -121,11 +121,8 @@
       "@zxcdesu/feature-project-user-invite": [
         "libs/account/feature-project-user-invite/src/index.ts"
       ],
-      "@zxcdesu/feature-third-party-api": [
-        "libs/shared/feature-third-party-api/src/index.ts"
-      ],
       "@zxcdesu/feature-third-party-api-repository": [
-        "libs/platform/feature-third-party-api-repository/src/index.ts"
+        "libs/shared/feature-third-party-api-repository/src/index.ts"
       ],
       "@zxcdesu/feature-webhook-sender": [
         "libs/integration/feature-webhook-sender/src/index.ts"

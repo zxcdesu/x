@@ -18,6 +18,7 @@ import { DataAccessTagModule } from '@zxcdesu/data-access-tag';
 import { FeatureChannelManagerModule } from '@zxcdesu/feature-channel-manager';
 import { FeatureChatManagerModule } from '@zxcdesu/feature-chat-manager';
 import { FeatureMessageManagerModule } from '@zxcdesu/feature-message-manager';
+import { FeatureThirdPartyApiRepositoryModule } from '@zxcdesu/feature-third-party-api-repository';
 import joi from 'joi';
 import { ChannelController } from './channel/channel.controller';
 import { ChatController } from './chat/chat.controller';
@@ -67,6 +68,14 @@ import { TagController } from './tag/tag.controller';
     FeatureChannelManagerModule,
     FeatureChatManagerModule,
     FeatureMessageManagerModule,
+    FeatureThirdPartyApiRepositoryModule.forRootAsync({
+      useFactory: (configService: ConfigService) => ({
+        gatewayUrl: configService.getOrThrow<string>('GATEWAY_URL'),
+        handlers: [],
+      }),
+      inject: [ConfigService],
+      imports: [FeatureMessageManagerModule],
+    }),
   ],
   controllers: [
     ChannelController,

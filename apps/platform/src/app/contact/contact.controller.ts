@@ -7,7 +7,6 @@ import {
   UpdateContactDto,
 } from '@zxcdesu/data-access-contact';
 import { ProjectId } from '@zxcdesu/data-access-project';
-import { ContactAssignedToService } from './contact-assigned-to.service';
 import { CloseContactDto } from './dto/close-contact.dto';
 import { EnqueueContactDto } from './dto/enqueue-contact.dto';
 
@@ -15,7 +14,7 @@ import { EnqueueContactDto } from './dto/enqueue-contact.dto';
 export class ContactController {
   constructor(
     private readonly contactService: ContactService,
-    private readonly contactAssignedToService: ContactAssignedToService,
+    // private readonly contactAssignedToService: ContactAssignedToService,
   ) {}
 
   // @RmqService.rpc({
@@ -104,7 +103,7 @@ export class ContactController {
     @RabbitPayload('id', ParseIntPipe) id: number,
     @RabbitPayload() payload: EnqueueContactDto,
   ) {
-    return this.contactAssignedToService.enqueue(projectId, id, payload);
+    // return this.contactAssignedToService.enqueue(projectId, id, payload);
   }
 
   // @RmqService.rpc({
@@ -120,6 +119,6 @@ export class ContactController {
     @RabbitPayload('id', ParseIntPipe) id: number,
     @RabbitPayload() payload: CloseContactDto,
   ) {
-    return this.contactAssignedToService.close(projectId, id, payload);
+    // return this.contactAssignedToService.close(projectId, id, payload);
   }
 }
