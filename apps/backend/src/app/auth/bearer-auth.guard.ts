@@ -6,7 +6,8 @@ import {
 } from '@nestjs/common';
 import { GqlExecutionContext } from '@nestjs/graphql';
 import { JwtService } from '@nestjs/jwt';
-import type { Request } from 'express';
+import type { FastifyRequest } from 'fastify';
+import { mapKeys } from 'lodash';
 import { BearerAuth } from './bearer-auth.interface';
 
 @Injectable()
@@ -15,8 +16,8 @@ export class BearerAuthGuard implements CanActivate {
 
   async canActivate(context: ExecutionContext) {
     const { req } = GqlExecutionContext.create(context).getContext<{
-      req: Request & {
-        user: BearerAuth;
+      req: FastifyRequest & {
+        auth: BearerAuth;
       };
     }>();
 
@@ -26,7 +27,7 @@ export class BearerAuthGuard implements CanActivate {
     }
 
     try {
-      req.user = await this.jwtService.verifyAsync(token);
+      req.auth = await this.jwtService.verifyAsync(token);
     } catch {
       throw new UnauthorizedException();
     }
@@ -34,9 +35,13 @@ export class BearerAuthGuard implements CanActivate {
     return true;
   }
 
-  private extractTokenFromHeader(request: Request) {
-    if (request.headers.authorization) {
-      const [type, token] = request.headers.authorization.split(' ');
+  private extractTokenFromHeader(request: FastifyRequest) {
+    const headers = mapKeys(request.headers, (_, header) => {
+      return header.toLowerCase();
+    });
+
+    if (typeof headers.authorization === 'string') {
+      const [type, token] = headers.authorization.split(' ');
       if (type.toLowerCase() === 'bearer') {
         return token;
       }

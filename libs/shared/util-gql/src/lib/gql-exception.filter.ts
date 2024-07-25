@@ -1,14 +1,21 @@
-import { ArgumentsHost, Catch } from '@nestjs/common';
+import { ArgumentsHost, Catch, ExceptionFilter } from '@nestjs/common';
 import { GqlContextType } from '@nestjs/graphql';
-import { ApolloError } from 'apollo-server-express';
+import { ErrorWithProps } from 'mercurius';
 
 @Catch()
-export class CommonExceptionFilter {
+export class GqlExceptionFilter implements ExceptionFilter {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   catch(exception: any, host: ArgumentsHost) {
     switch (host.getType<GqlContextType>()) {
       case 'graphql':
-        throw new ApolloError(exception?.message, exception?.status, exception);
+        throw new ErrorWithProps(
+          exception?.message,
+          exception,
+          exception?.statusCode,
+        );
+
+      default:
+        throw exception;
     }
   }
 }

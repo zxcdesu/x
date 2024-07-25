@@ -1,17 +1,14 @@
 import { RabbitMQModule } from '@golevelup/nestjs-rabbitmq';
-import { MailerModule } from '@nestjs-modules/mailer';
-import { Module } from '@nestjs/common';
+import {
+  ClassSerializerInterceptor,
+  Module,
+  ValidationPipe,
+} from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
-import { DataAccessInviteModule } from '@zxcdesu/data-access-invite';
-import { DataAccessProjectModule } from '@zxcdesu/data-access-project';
-import { DataAccessProjectUserModule } from '@zxcdesu/data-access-project-user';
-import { DataAccessUserModule } from '@zxcdesu/data-access-user';
-import { FeatureProjectUserInviteModule } from '@zxcdesu/feature-project-user-invite';
+import { APP_INTERCEPTOR, APP_PIPE } from '@nestjs/core';
+import { DataAccessAccountModule } from '@zxcdesu/data-access-account';
 import joi from 'joi';
-import { InviteController } from './invite/invite.controller';
-import { ProjectUserController } from './project-user/project-user.controller';
-import { ProjectController } from './project/project.controller';
-import { UserController } from './user/user.controller';
+import { AccountController } from './account/account.controller';
 
 @Module({
   imports: [
@@ -20,12 +17,10 @@ import { UserController } from './user/user.controller';
       validationSchema: joi.object({
         DATABASE_URL: joi.string().uri().required(),
         BROKER_URL: joi.string().uri().required(),
-        MAILER_TRANSPORT: joi.string().required(),
       }),
     }),
     RabbitMQModule.forRootAsync(RabbitMQModule, {
       useFactory: (configService: ConfigService) => ({
-        enableControllerDiscovery: true,
         uri: configService.getOrThrow<string>('BROKER_URL'),
         exchanges: [
           {
@@ -40,30 +35,21 @@ import { UserController } from './user/user.controller';
       }),
       inject: [ConfigService],
     }),
-    MailerModule.forRootAsync({
-      useFactory: (configService: ConfigService) => {
-        const transport = configService.getOrThrow<string>('MAILER_TRANSPORT');
-        const { host, username } = new URL(transport);
-        return {
-          transport,
-          defaults: {
-            from: `"${host}" <${username}>`,
-          },
-        };
-      },
-      inject: [ConfigService],
-    }),
-    DataAccessInviteModule,
-    DataAccessProjectModule,
-    DataAccessProjectUserModule,
-    DataAccessUserModule,
-    FeatureProjectUserInviteModule,
+    DataAccessAccountModule,
   ],
-  controllers: [
-    InviteController,
-    ProjectController,
-    ProjectUserController,
-    UserController,
+  providers: [
+    {
+      provide: APP_INTERCEPTOR,
+      useClass: ClassSerializerInterceptor,
+    },
+    {
+      provide: APP_PIPE,
+      useValue: new ValidationPipe({
+        whitelist: true,
+        transform: true,
+      }),
+    },
+    AccountController,
   ],
 })
 export class AppModule {}

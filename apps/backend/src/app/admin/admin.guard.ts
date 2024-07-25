@@ -8,6 +8,6 @@ export class AdminGuard implements CanActivate {
 
   canActivate(context: ExecutionContext) {
     const { req } = GqlExecutionContext.create(context).getContext();
-    return this.adminRmq.check(req.user.id);
+    return this.adminRmq.validate(req.user.id);
   }
 }

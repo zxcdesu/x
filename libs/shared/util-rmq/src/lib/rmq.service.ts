@@ -3,16 +3,19 @@ import {
   RabbitRPC,
   RabbitSubscribe,
 } from '@golevelup/nestjs-rabbitmq';
-import type { Provider, Type } from '@nestjs/common';
+import {
+  applyDecorators,
+  Provider,
+  Type,
+  UseInterceptors,
+} from '@nestjs/common';
 import { ErrorFactory } from './error-factory.interface';
-import { replyErrorHandler } from './error-handlers/reply-error-handler';
+import { ResponseInterceptor } from './interceptors/response.interceptor';
 
 export class RmqFactory {
   static rpc: typeof RabbitRPC = (config) =>
-    RabbitRPC({
-      errorHandler: replyErrorHandler,
-      ...config,
-    });
+    applyDecorators(RabbitRPC(config), UseInterceptors(ResponseInterceptor));
+
   static subscribe = RabbitSubscribe;
 
   static provide(errorFactory: Type<ErrorFactory>): Provider {
@@ -28,7 +31,7 @@ export class RmqFactory {
 
   protected constructor(
     protected readonly amqpConnection: AmqpConnection,
-    private readonly errorFactory: ErrorFactory<unknown>,
+    private readonly errorFactory: ErrorFactory,
   ) {}
 
   protected async request<T>(
@@ -39,10 +42,11 @@ export class RmqFactory {
         status?: 'error';
       }
     >(...args);
-    if (response.status === 'error' && 'error' in response) {
-      delete response.status;
-      throw this.errorFactory.errorFactory(response);
+
+    if ('error' in response) {
+      throw this.errorFactory.errorFactory(response.error);
     }
+
     return response;
   }
 

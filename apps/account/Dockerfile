@@ -6,6 +6,11 @@ WORKDIR /usr/src/app
 COPY dist/apps/account/package*.json ./
 RUN npm install --omit=dev
 
+# corepack enable pnpm
+# corepack use pnpm@8.15.8
+
+# pnmp install --prod --frozen-lockfile
+
 # Production image, copy all the files and run nest
 FROM docker.io/node:20.12.2-alpine as runner
 RUN apk add --no-cache dumb-init

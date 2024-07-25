@@ -3,18 +3,18 @@ import { RmqFactory } from '@zxcdesu/util-rmq';
 
 @Injectable()
 export class AdminRmq<T extends boolean> extends RmqFactory {
-  static check() {
+  static validate() {
     return this.rpc({
       exchange: 'admin',
-      routingKey: 'checkAdmin',
-      queue: 'checkAdmin',
+      routingKey: 'validateAdmin',
+      queue: 'validateAdmin',
     });
   }
 
-  check(userId: number) {
+  validate(userId: number): Promise<T> {
     return this.request<T>({
       exchange: 'admin',
-      routingKey: 'checkAdmin',
+      routingKey: 'validateAdmin',
       payload: {
         userId,
       },

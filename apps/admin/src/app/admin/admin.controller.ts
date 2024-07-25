@@ -1,13 +1,15 @@
-import { Controller } from '@nestjs/common';
+import { RabbitPayload } from '@golevelup/nestjs-rabbitmq';
+import { Controller, ParseUUIDPipe } from '@nestjs/common';
 import { AdminRmq, AdminService } from '@zxcdesu/data-access-admin';
-import { UserId } from '@zxcdesu/data-access-user';
 
 @Controller()
 export class AdminController {
   constructor(private readonly adminService: AdminService) {}
 
-  @AdminRmq.check()
-  check(@UserId() userId: number): Promise<boolean> {
-    return this.adminService.check(userId);
+  @AdminRmq.validate()
+  validate(
+    @RabbitPayload('userId', ParseUUIDPipe) userId: number,
+  ): Promise<boolean> {
+    return this.adminService.validate(userId);
   }
 }

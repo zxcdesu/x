@@ -15,6 +15,9 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
+      "@zxcdesu/data-access-account": [
+        "libs/account/data-access-account/src/index.ts"
+      ],
       "@zxcdesu/data-access-admin": [
         "libs/admin/data-access-admin/src/index.ts"
       ],
@@ -49,9 +52,6 @@
       "@zxcdesu/data-access-integration": [
         "libs/integration/data-access-integration/src/index.ts"
       ],
-      "@zxcdesu/data-access-invite": [
-        "libs/account/data-access-invite/src/index.ts"
-      ],
       "@zxcdesu/data-access-mailing": [
         "libs/mailing/data-access-mailing/src/index.ts"
       ],
@@ -67,20 +67,11 @@
       "@zxcdesu/data-access-payment": [
         "libs/billing/data-access-payment/src/index.ts"
       ],
-      "@zxcdesu/data-access-project": [
-        "libs/account/data-access-project/src/index.ts"
-      ],
-      "@zxcdesu/data-access-project-user": [
-        "libs/account/data-access-project-user/src/index.ts"
-      ],
       "@zxcdesu/data-access-subscription": [
         "libs/billing/data-access-subscription/src/index.ts"
       ],
       "@zxcdesu/data-access-tag": [
         "libs/platform/data-access-tag/src/index.ts"
-      ],
-      "@zxcdesu/data-access-user": [
-        "libs/account/data-access-user/src/index.ts"
       ],
       "@zxcdesu/data-access-wallet": [
         "libs/billing/data-access-wallet/src/index.ts"
@@ -118,9 +109,6 @@
       "@zxcdesu/feature-payment-provider": [
         "libs/billing/feature-payment-provider/src/index.ts"
       ],
-      "@zxcdesu/feature-project-user-invite": [
-        "libs/account/feature-project-user-invite/src/index.ts"
-      ],
       "@zxcdesu/feature-third-party-api-repository": [
         "libs/shared/feature-third-party-api-repository/src/index.ts"
       ],
@@ -151,7 +139,10 @@
       "@zxcdesu/util-http": ["libs/shared/util-http/src/index.ts"],
       "@zxcdesu/util-pagination": ["libs/shared/util-pagination/src/index.ts"],
       "@zxcdesu/util-rmq": ["libs/shared/util-rmq/src/index.ts"],
-      "@zxcdesu/util-types": ["libs/shared/util-types/src/index.ts"]
+      "@zxcdesu/util-transformer": [
+        "libs/shared/util-transformer/src/index.ts"
+      ],
+      "@zxcdesu/util-validator": ["libs/shared/util-validator/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]
