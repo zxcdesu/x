@@ -1,4 +1,8 @@
-import { Channel, ChannelStatus, ChannelType } from '@zxcdesu/prisma-platform';
+import type {
+  Channel,
+  ChannelStatus,
+  ChannelType,
+} from '@zxcdesu/prisma-platform';
 import { Exclude } from 'class-transformer';
 
 export class ChannelDto implements Channel {

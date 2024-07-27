@@ -1,9 +1,9 @@
 import { Field, Int, ObjectType } from '@nestjs/graphql';
 import type { ProjectDto } from '@zxcdesu/data-access-project';
-import { StringifyDate } from '@zxcdesu/util-types';
+import { Type } from 'class-transformer';
 
 @ObjectType()
-export class ProjectObject implements StringifyDate<ProjectDto> {
+export class ProjectObject implements ProjectDto {
   @Field(() => Int)
   id: number;
 
@@ -13,9 +13,11 @@ export class ProjectObject implements StringifyDate<ProjectDto> {
   @Field(() => String, { nullable: true })
   imageUrl: string | null;
 
+  @Type(() => Date)
   @Field(() => String)
-  createdAt: string;
+  createdAt: Date;
 
+  @Type(() => Date)
   @Field(() => String)
-  updatedAt: string;
+  updatedAt: Date;
 }

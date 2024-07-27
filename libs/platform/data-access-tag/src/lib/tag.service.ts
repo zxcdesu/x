@@ -1,72 +1,56 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from '@zxcdesu/prisma-platform';
-import { CreateTagDto, UpdateTagDto } from './dto';
+import { CreateTagDto, TagDto, UpdateTagDto } from './dto';
 
 @Injectable()
 export class TagService {
   constructor(private readonly prismaService: PrismaService) {}
 
-  create(projectId: number, payload: CreateTagDto) {
+  create(projectId: number, payload: CreateTagDto): Promise<TagDto> {
     return this.prismaService.tag.create({
       data: {
         projectId,
         ...payload,
       },
-      include: {
-        children: true,
-        parent: true,
-      },
     });
   }
 
-  findOne(projectId: number, id: number) {
+  findOne(projectId: number, id: number): Promise<TagDto> {
     return this.prismaService.tag.findUniqueOrThrow({
       where: {
         projectId,
         id,
       },
-      include: {
-        children: true,
-        parent: true,
-      },
     });
   }
 
-  findAll(projectId: number) {
+  findAll(projectId: number): Promise<TagDto[]> {
     return this.prismaService.tag.findMany({
       where: {
         projectId,
       },
-      include: {
-        children: true,
-        parent: true,
-      },
     });
   }
 
-  update(projectId: number, id: number, payload: UpdateTagDto) {
+  update(
+    projectId: number,
+    id: number,
+    payload: UpdateTagDto,
+  ): Promise<TagDto> {
     return this.prismaService.tag.update({
       where: {
         projectId,
         id,
       },
       data: payload,
-      include: {
-        children: true,
-        parent: true,
-      },
     });
   }
 
-  remove(projectId: number, id: number) {
+  remove(projectId: number, id: number): Promise<TagDto> {
     return this.prismaService.tag.delete({
       where: {
         projectId,
         id,
-      },
-      include: {
-        children: true,
-        parent: true,
       },
     });
   }

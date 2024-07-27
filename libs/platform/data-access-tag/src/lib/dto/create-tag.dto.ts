@@ -1,5 +1,5 @@
 import { Prisma } from '@zxcdesu/prisma-platform';
-import { Transform } from 'class-transformer';
+import { Trim } from '@zxcdesu/util-transformer';
 import {
   IsHexColor,
   IsInt,
@@ -11,21 +11,22 @@ import {
 export class CreateTagDto
   implements Omit<Prisma.TagUncheckedCreateInput, 'projectId'>
 {
-  @Transform(({ value }) => value?.trim())
+  @Trim()
   @IsString()
-  @Length(1, 20)
+  @Length(1, 120)
   name: string;
 
-  @Transform(({ value }) => value?.trim())
+  @Trim()
   @IsOptional()
   @IsString()
   @Length(1, 1000)
   description?: string;
 
+  @Trim()
   @IsHexColor()
   color: string;
 
   @IsOptional()
   @IsInt()
-  parentId?: number | null;
+  parentId?: number;
 }

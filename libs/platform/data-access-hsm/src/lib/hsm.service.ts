@@ -1,87 +1,56 @@
 import { Injectable } from '@nestjs/common';
-import { Prisma, PrismaService } from '@zxcdesu/prisma-platform';
-import { CreateHsmDto, UpdateHsmDto } from './dto';
+import { PrismaService } from '@zxcdesu/prisma-platform';
+import { CreateHsmDto, HsmDto, UpdateHsmDto } from './dto';
 
 @Injectable()
 export class HsmService {
   constructor(private readonly prismaService: PrismaService) {}
 
-  create(projectId: number, payload: CreateHsmDto) {
+  create(projectId: number, payload: CreateHsmDto): Promise<HsmDto> {
     return this.prismaService.hsm.create({
       data: {
         projectId,
         ...payload,
-      } as unknown as Prisma.HsmCreateInput,
-      include: {
-        approval: {
-          include: {
-            channel: true,
-          },
-        },
       },
     });
   }
 
-  findOne(projectId: number, id: number) {
+  findOne(projectId: number, id: number): Promise<HsmDto> {
     return this.prismaService.hsm.findUniqueOrThrow({
       where: {
         projectId,
         id,
       },
-      include: {
-        approval: {
-          include: {
-            channel: true,
-          },
-        },
-      },
     });
   }
 
-  findAll(projectId: number) {
+  findAll(projectId: number): Promise<HsmDto[]> {
     return this.prismaService.hsm.findMany({
       where: {
         projectId,
       },
-      include: {
-        approval: {
-          include: {
-            channel: true,
-          },
-        },
-      },
     });
   }
 
-  update(projectId: number, id: number, payload: UpdateHsmDto) {
+  update(
+    projectId: number,
+    id: number,
+    payload: UpdateHsmDto,
+  ): Promise<HsmDto> {
     return this.prismaService.hsm.update({
       where: {
         projectId,
         id,
       },
-      data: payload as unknown as Prisma.HsmUpdateInput,
-      include: {
-        approval: {
-          include: {
-            channel: true,
-          },
-        },
-      },
+      data: payload,
     });
   }
 
-  remove(projectId: number, id: number) {
+  remove(projectId: number, id: number): Promise<HsmDto> {
     return this.prismaService.hsm.delete({
       where: {
         projectId,
         id,
-      },
-      include: {
-        approval: {
-          include: {
-            channel: true,
-          },
-        },
       },
     });
   }

@@ -9,13 +9,13 @@ import { APP_FILTER, APP_INTERCEPTOR, APP_PIPE } from '@nestjs/core';
 import { GraphQLModule } from '@nestjs/graphql';
 import { JwtModule } from '@nestjs/jwt';
 import { MercuriusDriver, MercuriusDriverConfig } from '@nestjs/mercurius';
-import { AccountRmq } from '@zxcdesu/data-access-account';
 import { AdminRmq } from '@zxcdesu/data-access-admin';
+import { UserRmq } from '@zxcdesu/data-access-user';
 import { GqlExceptionFilter } from '@zxcdesu/util-gql';
 import joi from 'joi';
-import { AccountResolver } from './account/account.resolver';
 import { ErrorFactoryService } from './error-factory.service';
 import { PubSubService } from './pubsub.service';
+import { userResolver } from './user/user.resolver';
 
 @Module({
   imports: [
@@ -81,9 +81,9 @@ import { PubSubService } from './pubsub.service';
       useClass: GqlExceptionFilter,
     },
     PubSubService,
-    AccountResolver,
+    userResolver,
     ErrorFactoryService,
-    AccountRmq.provide(ErrorFactoryService),
+    UserRmq.provide(ErrorFactoryService),
     AdminRmq.provide(ErrorFactoryService),
   ],
 })

@@ -1,12 +1,9 @@
 import { Injectable } from '@nestjs/common';
 import { RmqFactory } from '@zxcdesu/util-rmq';
-import { StringifyDate } from '@zxcdesu/util-types';
 import { CreateTagDto, TagDto, UpdateTagDto } from './dto';
 
 @Injectable()
-export class TagRmq<
-  T extends Partial<StringifyDate<TagDto>>,
-> extends RmqFactory {
+export class TagRmq<T extends Partial<TagDto>> extends RmqFactory {
   static create() {
     return this.rpc({
       exchange: 'platform',
@@ -15,7 +12,7 @@ export class TagRmq<
     });
   }
 
-  create(projectId: number, payload: CreateTagDto) {
+  create(projectId: number, payload: CreateTagDto): Promise<T> {
     return this.request<T>({
       exchange: 'platform',
       routingKey: 'createTag',
@@ -34,7 +31,7 @@ export class TagRmq<
     });
   }
 
-  findOne(projectId: number, id: number) {
+  findOne(projectId: number, id: number): Promise<T> {
     return this.request<T>({
       exchange: 'platform',
       routingKey: 'findOneTag',
@@ -53,8 +50,8 @@ export class TagRmq<
     });
   }
 
-  findAll(projectId: number) {
-    return this.request<T>({
+  findAll(projectId: number): Promise<T[]> {
+    return this.request<T[]>({
       exchange: 'platform',
       routingKey: 'findAllTags',
       payload: {
@@ -66,15 +63,15 @@ export class TagRmq<
   static update() {
     return this.rpc({
       exchange: 'platform',
-      routingKey: 'findOneTag',
-      queue: 'findOneTag',
+      routingKey: 'updateTag',
+      queue: 'updateTag',
     });
   }
 
-  update(projectId: number, id: number, payload: UpdateTagDto) {
+  update(projectId: number, id: number, payload: UpdateTagDto): Promise<T> {
     return this.request<T>({
       exchange: 'platform',
-      routingKey: 'findOneTag',
+      routingKey: 'updateTag',
       payload: {
         projectId,
         id,
@@ -91,7 +88,7 @@ export class TagRmq<
     });
   }
 
-  remove(projectId: number, id: number) {
+  remove(projectId: number, id: number): Promise<T> {
     return this.request<T>({
       exchange: 'platform',
       routingKey: 'removeTag',

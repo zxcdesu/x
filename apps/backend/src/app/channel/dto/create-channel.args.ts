@@ -15,6 +15,5 @@ export class CreateChannelArgs implements CreateChannelDto {
   externalId: string;
 
   @Field(() => GraphQLJSON)
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   token: any;
 }

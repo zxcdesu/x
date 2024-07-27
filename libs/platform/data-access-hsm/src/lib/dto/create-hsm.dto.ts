@@ -1,35 +1,37 @@
-import {
-  CreateAttachmentDto,
-  CreateButtonDto,
-} from '@zxcdesu/data-access-message';
 import { Prisma } from '@zxcdesu/prisma-platform';
-import { Transform, Type } from 'class-transformer';
-import { IsOptional, IsString, Length, ValidateNested } from 'class-validator';
+import { Trim } from '@zxcdesu/util-transformer';
+import {
+  IsArray,
+  IsOptional,
+  IsString,
+  Length,
+  ValidateNested,
+} from 'class-validator';
 
 export class CreateHsmDto
-  implements
-    Omit<
-      Prisma.HsmUncheckedCreateInput,
-      'projectId' | 'attachments' | 'buttons'
-    >
+  implements Omit<Prisma.HsmUncheckedCreateInput, 'projectId'>
 {
-  @Transform(({ value }) => value?.trim())
+  @Trim()
   @IsString()
-  @Length(1, 20)
+  @Length(1, 120)
   name: string;
 
-  @Transform(({ value }) => value?.trim())
+  @Trim()
   @IsString()
-  @Length(1, 1000)
+  @Length(1, 120)
   text: string;
 
-  @Type(() => CreateAttachmentDto)
+  // @Type(() => MediaDto)
   @IsOptional()
+  @IsArray()
   @ValidateNested({ each: true })
-  attachments?: CreateAttachmentDto[];
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  media?: any;
 
-  @Type(() => CreateButtonDto)
+  // @Type(() => ButtonDto)
   @IsOptional()
+  @IsArray()
   @ValidateNested({ each: true })
-  buttons?: CreateButtonDto[];
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  buttons?: any;
 }

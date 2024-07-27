@@ -1,5 +1,5 @@
 import { ChannelType, Prisma } from '@zxcdesu/prisma-platform';
-import { Transform } from 'class-transformer';
+import { Trim } from '@zxcdesu/util-transformer';
 import {
   IsDefined,
   IsEnum,
@@ -11,7 +11,7 @@ import {
 export class CreateChannelDto
   implements Omit<Prisma.ChannelUncheckedCreateInput, 'projectId'>
 {
-  @Transform(({ value }) => value?.trim())
+  @Trim()
   @IsString()
   @Length(1, 120)
   name: string;

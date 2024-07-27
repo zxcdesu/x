@@ -1,10 +1,22 @@
-import { Type } from 'class-transformer';
-import { TagWithoutParentAndChildrenDto } from './tag-without-parent-and-children.dto';
+import type { Tag } from '@zxcdesu/prisma-platform';
+import { Exclude } from 'class-transformer';
 
-export class TagDto extends TagWithoutParentAndChildrenDto {
-  @Type(() => TagWithoutParentAndChildrenDto)
-  parent?: TagWithoutParentAndChildrenDto;
+export class TagDto implements Tag {
+  id: number;
 
-  @Type(() => TagWithoutParentAndChildrenDto)
-  children: TagWithoutParentAndChildrenDto[];
+  @Exclude()
+  projectId: number;
+
+  name: string;
+
+  description: string;
+
+  color: string;
+
+  @Exclude()
+  parentId: number | null;
+
+  createdAt: Date;
+
+  updatedAt: Date;
 }

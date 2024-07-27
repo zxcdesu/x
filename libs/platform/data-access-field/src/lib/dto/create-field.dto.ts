@@ -1,21 +1,22 @@
 import { Prisma } from '@zxcdesu/prisma-platform';
-import { Transform } from 'class-transformer';
-import { IsOptional, IsString, Length } from 'class-validator';
+import { Trim } from '@zxcdesu/util-transformer';
+import { IsString, Length } from 'class-validator';
 
 export class CreateFieldDto
-  implements Omit<Prisma.FieldCreateWithoutContactsInput, 'projectId'>
+  implements Omit<Prisma.FieldUncheckedCreateInput, 'projectId'>
 {
-  @Transform(({ value }) => value?.trim())
+  @Trim()
   @IsString()
-  @Length(1, 20)
+  @Length(1, 120)
   name: string;
 
-  @Transform(({ value }) => value?.trim())
+  @Trim()
   @IsString()
   @Length(1, 1000)
   description?: string;
 
-  @IsOptional()
+  @Trim()
   @IsString()
+  @Length(1, 1000)
   value?: string;
 }

@@ -1,12 +1,9 @@
 import { Injectable } from '@nestjs/common';
 import { RmqFactory } from '@zxcdesu/util-rmq';
-import { StringifyDate } from '@zxcdesu/util-types';
 import { ChannelDto, CreateChannelDto, UpdateChannelDto } from './dto';
 
 @Injectable()
-export class ChannelRmq<
-  T extends Partial<StringifyDate<ChannelDto>>,
-> extends RmqFactory {
+export class ChannelRmq<T extends Partial<ChannelDto>> extends RmqFactory {
   static create() {
     return this.rpc({
       exchange: 'platform',
@@ -15,7 +12,7 @@ export class ChannelRmq<
     });
   }
 
-  create(projectId: number, payload: CreateChannelDto) {
+  create(projectId: number, payload: CreateChannelDto): Promise<T> {
     return this.request<T>({
       exchange: 'platform',
       routingKey: 'createChannel',
@@ -34,7 +31,7 @@ export class ChannelRmq<
     });
   }
 
-  findOne(projectId: number, id: number) {
+  findOne(projectId: number, id: number): Promise<T> {
     return this.request<T>({
       exchange: 'platform',
       routingKey: 'findOneChannel',
@@ -53,7 +50,7 @@ export class ChannelRmq<
     });
   }
 
-  findAll(projectId: number) {
+  findAll(projectId: number): Promise<T[]> {
     return this.request<T[]>({
       exchange: 'platform',
       routingKey: 'findAllChannels',
@@ -66,15 +63,15 @@ export class ChannelRmq<
   static update() {
     return this.rpc({
       exchange: 'platform',
-      routingKey: 'findOneChannel',
-      queue: 'findOneChannel',
+      routingKey: 'updateChannel',
+      queue: 'updateChannel',
     });
   }
 
-  update(projectId: number, id: number, payload: UpdateChannelDto) {
+  update(projectId: number, id: number, payload: UpdateChannelDto): Promise<T> {
     return this.request<T>({
       exchange: 'platform',
-      routingKey: 'findOneChannel',
+      routingKey: 'updateChannel',
       payload: {
         projectId,
         id,
@@ -91,7 +88,7 @@ export class ChannelRmq<
     });
   }
 
-  remove(projectId: number, id: number) {
+  remove(projectId: number, id: number): Promise<T> {
     return this.request<T>({
       exchange: 'platform',
       routingKey: 'removeChannel',
@@ -99,6 +96,21 @@ export class ChannelRmq<
         projectId,
         id,
       },
+    });
+  }
+
+  static handle() {
+    return this.subscribe({
+      exchange: 'platform',
+      routingKey: 'handleChannel',
+      queue: 'handleChannel',
+    });
+  }
+
+  handle(projectId: number, id: number): Promise<boolean> {
+    return this.publish('platform', 'handleChannel', {
+      projectId,
+      id,
     });
   }
 }

@@ -1,9 +1,10 @@
 import { Message, MessageStatus } from '@zxcdesu/prisma-platform';
-import { Exclude, Type } from 'class-transformer';
+import { Exclude } from 'class-transformer';
 import { AuthorDto } from './author.dto';
-import { ContentDto } from './content.dto';
+import { ButtonDto } from './button.dto';
+import { MediaDto } from './media.dto';
 
-export class MessageDto implements Message {
+export class MessageDto implements Omit<Message, 'buttons'> {
   id: number;
 
   @Exclude()
@@ -12,15 +13,17 @@ export class MessageDto implements Message {
   @Exclude()
   externalId: string;
 
+  text: string | null;
+
+  buttons: ButtonDto[];
+
+  media: MediaDto[];
+
   status: MessageStatus;
 
   failedReason: string | null;
 
-  @Type(() => AuthorDto)
   author: AuthorDto;
-
-  @Type(() => ContentDto)
-  content: ContentDto[];
 
   createdAt: Date;
 

@@ -1,12 +1,12 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from '@zxcdesu/prisma-platform';
-import { CreateFieldDto, UpdateFieldDto } from './dto';
+import { CreateFieldDto, FieldDto, UpdateFieldDto } from './dto';
 
 @Injectable()
 export class FieldService {
   constructor(private readonly prismaService: PrismaService) {}
 
-  create(projectId: number, payload: CreateFieldDto) {
+  create(projectId: number, payload: CreateFieldDto): Promise<FieldDto> {
     return this.prismaService.field.create({
       data: {
         projectId,
@@ -15,7 +15,7 @@ export class FieldService {
     });
   }
 
-  findOne(projectId: number, id: number) {
+  findOne(projectId: number, id: number): Promise<FieldDto> {
     return this.prismaService.field.findUniqueOrThrow({
       where: {
         projectId,
@@ -24,7 +24,7 @@ export class FieldService {
     });
   }
 
-  findAll(projectId: number) {
+  findAll(projectId: number): Promise<FieldDto[]> {
     return this.prismaService.field.findMany({
       where: {
         projectId,
@@ -32,7 +32,11 @@ export class FieldService {
     });
   }
 
-  update(projectId: number, id: number, payload: UpdateFieldDto) {
+  update(
+    projectId: number,
+    id: number,
+    payload: UpdateFieldDto,
+  ): Promise<FieldDto> {
     return this.prismaService.field.update({
       where: {
         projectId,
@@ -42,7 +46,7 @@ export class FieldService {
     });
   }
 
-  remove(projectId: number, id: number) {
+  remove(projectId: number, id: number): Promise<FieldDto> {
     return this.prismaService.field.delete({
       where: {
         projectId,

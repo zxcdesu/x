@@ -1,12 +1,9 @@
 import { Injectable } from '@nestjs/common';
 import { RmqFactory } from '@zxcdesu/util-rmq';
-import { StringifyDate } from '@zxcdesu/util-types';
 import { CreateHsmDto, HsmDto, UpdateHsmDto } from './dto';
 
 @Injectable()
-export class HsmRmq<
-  T extends Partial<StringifyDate<HsmDto>>,
-> extends RmqFactory {
+export class HsmRmq<T extends Partial<HsmDto>> extends RmqFactory {
   static create() {
     return this.rpc({
       exchange: 'platform',
@@ -15,7 +12,7 @@ export class HsmRmq<
     });
   }
 
-  create(projectId: number, payload: CreateHsmDto) {
+  create(projectId: number, payload: CreateHsmDto): Promise<T> {
     return this.request<T>({
       exchange: 'platform',
       routingKey: 'createHsm',
@@ -34,7 +31,7 @@ export class HsmRmq<
     });
   }
 
-  findOne(projectId: number, id: number) {
+  findOne(projectId: number, id: number): Promise<T> {
     return this.request<T>({
       exchange: 'platform',
       routingKey: 'findOneHsm',
@@ -53,8 +50,8 @@ export class HsmRmq<
     });
   }
 
-  findAll(projectId: number) {
-    return this.request<T>({
+  findAll(projectId: number): Promise<T[]> {
+    return this.request<T[]>({
       exchange: 'platform',
       routingKey: 'findAllHsms',
       payload: {
@@ -66,15 +63,15 @@ export class HsmRmq<
   static update() {
     return this.rpc({
       exchange: 'platform',
-      routingKey: 'findOneHsm',
-      queue: 'findOneHsm',
+      routingKey: 'updateHsm',
+      queue: 'updateHsm',
     });
   }
 
-  update(projectId: number, id: number, payload: UpdateHsmDto) {
+  update(projectId: number, id: number, payload: UpdateHsmDto): Promise<T> {
     return this.request<T>({
       exchange: 'platform',
-      routingKey: 'findOneHsm',
+      routingKey: 'updateHsm',
       payload: {
         projectId,
         id,
@@ -91,7 +88,7 @@ export class HsmRmq<
     });
   }
 
-  remove(projectId: number, id: number) {
+  remove(projectId: number, id: number): Promise<T> {
     return this.request<T>({
       exchange: 'platform',
       routingKey: 'removeHsm',

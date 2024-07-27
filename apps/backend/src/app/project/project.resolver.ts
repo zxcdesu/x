@@ -1,54 +1,55 @@
-import { UseGuards } from '@nestjs/common';
-import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
+import { ParseIntPipe, UseGuards } from '@nestjs/common';
+import { Args, Mutation, Resolver } from '@nestjs/graphql';
 import { ProjectRmq } from '@zxcdesu/data-access-project';
-import { BearerAuthDecorator } from '../auth/bearer-auth.decorator';
 import { BearerAuthGuard } from '../auth/bearer-auth.guard';
-import { BearerAuth } from '../auth/bearer-auth.interface';
-import { CreateProjectArgs } from './dto/create-project.args';
-import { ProjectObject } from './dto/project.object';
-import { UpdateProjectArgs } from './dto/update-project.args';
+import { CreateProjectArgs, ProjectObject, UpdateProjectArgs } from './dto';
 
 @Resolver()
 export class ProjectResolver {
-  constructor(private readonly rmq: ProjectRmq<ProjectObject>) {}
+  constructor(private readonly projectRmq: ProjectRmq<ProjectObject>) {}
 
   @UseGuards(BearerAuthGuard)
   @Mutation(() => ProjectObject)
   createProject(
-    @BearerAuthDecorator() auth: BearerAuth,
+    @Args('userId', ParseIntPipe) userId: number,
     @Args() payload: CreateProjectArgs,
   ): Promise<ProjectObject> {
-    return this.rmq.create(auth.id, payload);
+    return this.projectRmq.create(userId, payload);
   }
 
   @UseGuards(BearerAuthGuard)
-  @Query(() => ProjectObject)
-  project(
-    @BearerAuthDecorator() auth: Required<BearerAuth>,
+  @Mutation(() => ProjectObject)
+  projectById(
+    @Args('userId', ParseIntPipe) userId: number,
+    @Args('id') id: number,
   ): Promise<ProjectObject> {
-    return this.rmq.findOne(auth.id, auth.project.id);
+    return this.projectRmq.findOne(userId, id);
   }
 
   @UseGuards(BearerAuthGuard)
-  @Query(() => [ProjectObject])
-  projects(@BearerAuthDecorator() auth: BearerAuth): Promise<ProjectObject[]> {
-    return this.rmq.findAll(auth.id);
+  @Mutation(() => ProjectObject)
+  projects(
+    @Args('userId', ParseIntPipe) userId: number,
+  ): Promise<ProjectObject[]> {
+    return this.projectRmq.findAll(userId);
   }
 
   @UseGuards(BearerAuthGuard)
   @Mutation(() => ProjectObject)
   updateProject(
-    @BearerAuthDecorator() auth: Required<BearerAuth>,
+    @Args('userId', ParseIntPipe) userId: number,
+    @Args('id') id: number,
     @Args() payload: UpdateProjectArgs,
   ): Promise<ProjectObject> {
-    return this.rmq.update(auth.id, auth.project.id, payload);
+    return this.projectRmq.update(userId, id, payload);
   }
 
   @UseGuards(BearerAuthGuard)
   @Mutation(() => ProjectObject)
   removeProject(
-    @BearerAuthDecorator() auth: Required<BearerAuth>,
+    @Args('userId', ParseIntPipe) userId: number,
+    @Args('id') id: number,
   ): Promise<ProjectObject> {
-    return this.rmq.remove(auth.id, auth.project.id);
+    return this.projectRmq.remove(userId, id);
   }
 }

@@ -1,4 +1,4 @@
-import { Field } from '@zxcdesu/prisma-platform';
+import type { Field } from '@zxcdesu/prisma-platform';
 import { Exclude } from 'class-transformer';
 
 export class FieldDto implements Field {

@@ -1,4 +1,4 @@
-import { Transform } from 'class-transformer';
+import { Trim } from '@zxcdesu/util-transformer';
 import {
   IsEnum,
   IsPhoneNumber,
@@ -13,16 +13,16 @@ export class CreateButtonDto {
   @IsEnum(ButtonType)
   type: ButtonType;
 
-  @Transform(({ value }) => value?.trim())
+  @Trim()
   @IsString()
   @Length(1, 20)
   text: string;
 
-  @ValidateIf((object: CreateButtonDto) => object.type === ButtonType.Url)
+  @ValidateIf(({ type }: CreateButtonDto) => type === ButtonType.Url)
   @IsUrl()
   url?: string;
 
-  @ValidateIf((object: CreateButtonDto) => object.type === ButtonType.Phone)
+  @ValidateIf(({ type }: CreateButtonDto) => type === ButtonType.Phone)
   @IsPhoneNumber()
   phone?: string;
 }

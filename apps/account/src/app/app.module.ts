@@ -6,9 +6,9 @@ import {
 } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { APP_INTERCEPTOR, APP_PIPE } from '@nestjs/core';
-import { DataAccessAccountModule } from '@zxcdesu/data-access-account';
+import { DataAccessUserModule } from '@zxcdesu/data-access-user';
 import joi from 'joi';
-import { AccountController } from './account/account.controller';
+import { UserController } from './user/user.controller';
 
 @Module({
   imports: [
@@ -24,7 +24,7 @@ import { AccountController } from './account/account.controller';
         uri: configService.getOrThrow<string>('BROKER_URL'),
         exchanges: [
           {
-            name: 'account',
+            name: 'user',
             type: 'direct',
           },
         ],
@@ -35,7 +35,7 @@ import { AccountController } from './account/account.controller';
       }),
       inject: [ConfigService],
     }),
-    DataAccessAccountModule,
+    DataAccessUserModule,
   ],
   providers: [
     {
@@ -49,7 +49,7 @@ import { AccountController } from './account/account.controller';
         transform: true,
       }),
     },
-    AccountController,
+    UserController,
   ],
 })
 export class AppModule {}

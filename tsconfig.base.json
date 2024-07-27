@@ -15,9 +15,6 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
-      "@zxcdesu/data-access-account": [
-        "libs/account/data-access-account/src/index.ts"
-      ],
       "@zxcdesu/data-access-admin": [
         "libs/admin/data-access-admin/src/index.ts"
       ],
@@ -67,11 +64,23 @@
       "@zxcdesu/data-access-payment": [
         "libs/billing/data-access-payment/src/index.ts"
       ],
+      "@zxcdesu/data-access-project": [
+        "libs/platform/data-access-project/src/index.ts"
+      ],
+      "@zxcdesu/data-access-role": [
+        "libs/platform/data-access-role/src/index.ts"
+      ],
+      "@zxcdesu/data-access-role-user": [
+        "libs/platform/data-access-role-user/src/index.ts"
+      ],
       "@zxcdesu/data-access-subscription": [
         "libs/billing/data-access-subscription/src/index.ts"
       ],
       "@zxcdesu/data-access-tag": [
         "libs/platform/data-access-tag/src/index.ts"
+      ],
+      "@zxcdesu/data-access-user": [
+        "libs/account/data-access-user/src/index.ts"
       ],
       "@zxcdesu/data-access-wallet": [
         "libs/billing/data-access-wallet/src/index.ts"
@@ -85,20 +94,11 @@
       "@zxcdesu/feature-bot-manager": [
         "libs/bot/feature-bot-manager/src/index.ts"
       ],
-      "@zxcdesu/feature-channel-manager": [
-        "libs/platform/feature-channel-manager/src/index.ts"
-      ],
-      "@zxcdesu/feature-chat-manager": [
-        "libs/platform/feature-chat-manager/src/index.ts"
-      ],
       "@zxcdesu/feature-mailing-scheduler": [
         "libs/mailing/feature-mailing-scheduler/src/index.ts"
       ],
       "@zxcdesu/feature-mailing-worker": [
         "libs/mailing/feature-mailing-worker/src/index.ts"
-      ],
-      "@zxcdesu/feature-message-manager": [
-        "libs/platform/feature-message-manager/src/index.ts"
       ],
       "@zxcdesu/feature-notification-sender": [
         "libs/notification/feature-notification-sender/src/index.ts"
@@ -117,7 +117,6 @@
       ],
       "@zxcdesu/prisma-account": ["libs/account/prisma-account/src/index.ts"],
       "@zxcdesu/prisma-admin": ["libs/admin/prisma-admin/src/index.ts"],
-      "@zxcdesu/prisma-auth": ["libs/auth/prisma-auth/src/index.ts"],
       "@zxcdesu/prisma-billing": ["libs/billing/prisma-billing/src/index.ts"],
       "@zxcdesu/prisma-bot": ["libs/bot/prisma-bot/src/index.ts"],
       "@zxcdesu/prisma-history": ["libs/history/prisma-history/src/index.ts"],

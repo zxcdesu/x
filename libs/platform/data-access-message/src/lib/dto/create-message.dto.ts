@@ -1,14 +1,22 @@
-import { Type } from 'class-transformer';
-import { ValidateNested } from 'class-validator';
+import { Prisma } from '@zxcdesu/prisma-platform';
 import { CreateAuthorDto } from './create-author.dto';
-import { CreateContentDto } from './create-content.dto';
+import { CreateButtonDto } from './create-button.dto';
+import { CreateMediaDto } from './create-media.dto';
 
-export class CreateMessageDto {
-  @Type(() => CreateAuthorDto)
-  @ValidateNested()
-  author: CreateAuthorDto;
+export class CreateMessageDto
+  implements
+    Omit<
+      Prisma.MessageUncheckedCreateInput,
+      'externalId' | 'status' | 'buttons' | 'media' | 'author'
+    >
+{
+  chatId: number;
 
-  @Type(() => CreateContentDto)
-  @ValidateNested()
-  content: CreateContentDto;
+  text?: string;
+
+  buttons?: CreateButtonDto[];
+
+  media?: CreateMediaDto[];
+
+  author?: CreateAuthorDto;
 }

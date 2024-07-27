@@ -1,4 +1,4 @@
-import { Author, AuthorType } from '@zxcdesu/prisma-platform';
+import type { Author, AuthorType } from '@zxcdesu/prisma-platform';
 import { Exclude } from 'class-transformer';
 
 export class AuthorDto implements Author {

@@ -1,58 +1,55 @@
 import { ParseIntPipe, UseGuards } from '@nestjs/common';
-import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
+import { Args, Mutation, Resolver } from '@nestjs/graphql';
 import { ChannelRmq } from '@zxcdesu/data-access-channel';
-import { BearerAuthDecorator } from '../auth/bearer-auth.decorator';
 import { BearerAuthGuard } from '../auth/bearer-auth.guard';
-import { BearerAuth } from '../auth/bearer-auth.interface';
-import { ChannelObject } from './dto/channel.object';
-import { CreateChannelArgs } from './dto/create-channel.args';
-import { UpdateChannelArgs } from './dto/update-channel.args';
+import { ChannelObject, CreateChannelArgs, UpdateChannelArgs } from './dto';
 
 @Resolver()
 export class ChannelResolver {
-  constructor(private readonly rmq: ChannelRmq<ChannelObject>) {}
+  constructor(private readonly channelRmq: ChannelRmq<ChannelObject>) {}
 
   @UseGuards(BearerAuthGuard)
   @Mutation(() => ChannelObject)
   createChannel(
-    @BearerAuthDecorator() auth: Required<BearerAuth>,
+    @Args('projectId', ParseIntPipe) projectId: number,
     @Args() payload: CreateChannelArgs,
   ): Promise<ChannelObject> {
-    return this.rmq.create(auth.project.id, payload);
+    return this.channelRmq.create(projectId, payload);
   }
 
   @UseGuards(BearerAuthGuard)
-  @Query(() => ChannelObject)
+  @Mutation(() => ChannelObject)
   channelById(
-    @BearerAuthDecorator() auth: Required<BearerAuth>,
-    @Args('id', ParseIntPipe) id: number,
+    @Args('projectId', ParseIntPipe) projectId: number,
+    @Args('id') id: number,
   ): Promise<ChannelObject> {
-    return this.rmq.findOne(auth.project.id, id);
+    return this.channelRmq.findOne(projectId, id);
   }
 
   @UseGuards(BearerAuthGuard)
-  @Query(() => [ChannelObject])
+  @Mutation(() => ChannelObject)
   channels(
-    @BearerAuthDecorator() auth: Required<BearerAuth>,
+    @Args('projectId', ParseIntPipe) projectId: number,
   ): Promise<ChannelObject[]> {
-    return this.rmq.findAll(auth.project.id);
+    return this.channelRmq.findAll(projectId);
   }
 
   @UseGuards(BearerAuthGuard)
   @Mutation(() => ChannelObject)
   updateChannel(
-    @BearerAuthDecorator() auth: Required<BearerAuth>,
+    @Args('projectId', ParseIntPipe) projectId: number,
+    @Args('id') id: number,
     @Args() payload: UpdateChannelArgs,
   ): Promise<ChannelObject> {
-    return this.rmq.update(auth.project.id, payload.id, payload);
+    return this.channelRmq.update(projectId, id, payload);
   }
 
   @UseGuards(BearerAuthGuard)
   @Mutation(() => ChannelObject)
   removeChannel(
-    @BearerAuthDecorator() auth: Required<BearerAuth>,
-    @Args('id', ParseIntPipe) id: number,
+    @Args('projectId', ParseIntPipe) projectId: number,
+    @Args('id') id: number,
   ): Promise<ChannelObject> {
-    return this.rmq.remove(auth.project.id, id);
+    return this.channelRmq.remove(projectId, id);
   }
 }

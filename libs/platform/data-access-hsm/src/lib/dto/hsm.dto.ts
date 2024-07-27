@@ -1,12 +1,7 @@
-import {
-  CreateAttachmentDto,
-  CreateButtonDto,
-} from '@zxcdesu/data-access-message';
-import { Hsm } from '@zxcdesu/prisma-platform';
-import { Exclude, Type } from 'class-transformer';
-import { ApprovalDto } from './approval.dto';
+import type { Hsm } from '@zxcdesu/prisma-platform';
+import { Exclude } from 'class-transformer';
 
-export class HsmDto implements Omit<Hsm, 'attachments' | 'buttons'> {
+export class HsmDto implements Hsm {
   id: number;
 
   @Exclude()
@@ -16,14 +11,11 @@ export class HsmDto implements Omit<Hsm, 'attachments' | 'buttons'> {
 
   text: string;
 
-  @Type(() => CreateAttachmentDto)
-  attachments: CreateAttachmentDto[];
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  buttons: any;
 
-  @Type(() => CreateButtonDto)
-  buttons: CreateButtonDto[];
-
-  @Type(() => ApprovalDto)
-  approval: ApprovalDto[];
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  media: any;
 
   createdAt: Date;
 

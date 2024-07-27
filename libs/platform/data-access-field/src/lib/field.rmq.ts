@@ -1,12 +1,9 @@
 import { Injectable } from '@nestjs/common';
 import { RmqFactory } from '@zxcdesu/util-rmq';
-import { StringifyDate } from '@zxcdesu/util-types';
 import { CreateFieldDto, FieldDto, UpdateFieldDto } from './dto';
 
 @Injectable()
-export class FieldRmq<
-  T extends Partial<StringifyDate<FieldDto>>,
-> extends RmqFactory {
+export class FieldRmq<T extends Partial<FieldDto>> extends RmqFactory {
   static create() {
     return this.rpc({
       exchange: 'platform',
@@ -15,7 +12,7 @@ export class FieldRmq<
     });
   }
 
-  create(projectId: number, payload: CreateFieldDto) {
+  create(projectId: number, payload: CreateFieldDto): Promise<T> {
     return this.request<T>({
       exchange: 'platform',
       routingKey: 'createField',
@@ -34,7 +31,7 @@ export class FieldRmq<
     });
   }
 
-  findOne(projectId: number, id: number) {
+  findOne(projectId: number, id: number): Promise<T> {
     return this.request<T>({
       exchange: 'platform',
       routingKey: 'findOneField',
@@ -53,8 +50,8 @@ export class FieldRmq<
     });
   }
 
-  findAll(projectId: number) {
-    return this.request<T>({
+  findAll(projectId: number): Promise<T[]> {
+    return this.request<T[]>({
       exchange: 'platform',
       routingKey: 'findAllFields',
       payload: {
@@ -66,15 +63,15 @@ export class FieldRmq<
   static update() {
     return this.rpc({
       exchange: 'platform',
-      routingKey: 'findOneField',
-      queue: 'findOneField',
+      routingKey: 'updateField',
+      queue: 'updateField',
     });
   }
 
-  update(projectId: number, id: number, payload: UpdateFieldDto) {
+  update(projectId: number, id: number, payload: UpdateFieldDto): Promise<T> {
     return this.request<T>({
       exchange: 'platform',
-      routingKey: 'findOneField',
+      routingKey: 'updateField',
       payload: {
         projectId,
         id,
@@ -91,7 +88,7 @@ export class FieldRmq<
     });
   }
 
-  remove(projectId: number, id: number) {
+  remove(projectId: number, id: number): Promise<T> {
     return this.request<T>({
       exchange: 'platform',
       routingKey: 'removeField',
