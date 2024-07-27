@@ -1,10 +1,13 @@
 import { Logger, ValidationPipe } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { NestFactory } from '@nestjs/core';
+import { FastifyAdapter } from '@nestjs/platform-fastify';
 import { AppModule } from './app/app.module';
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
+  const fastifyAdapter = new FastifyAdapter();
+
+  const app = await NestFactory.create(AppModule, fastifyAdapter);
 
   app.useGlobalPipes(
     new ValidationPipe({
